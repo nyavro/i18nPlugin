@@ -1,8 +1,10 @@
 package com.eny.i18n.plugin
 
+import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonObject
 import com.intellij.json.psi.JsonStringLiteral
 import com.intellij.psi.PsiElement
+import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 
 /**
@@ -37,5 +39,24 @@ interface CompositeKeyResolver {
         return compositeKey.fold(root) {
             node, key -> if (node != null && node is JsonObject) node.findProperty(key)?.value else node
         }
+    }
+
+    private fun String.unQuote(): String =
+        if (this.endsWith('\"') && this.startsWith('\"')) this.substring(1, this.length - 1)
+        else this
+
+    fun listCompositeKeyVariants(compositeKey: List<String>, fileNode: PsiElement, substringSearch: Boolean): List<String> {
+        val searchPrefix = if (substringSearch) compositeKey.last() else ""
+        val fixedKey = if (substringSearch) {
+            compositeKey.dropLast(1)
+        } else compositeKey
+        return resolveCompositeKeyProperty(fixedKey, fileNode)?.
+                    node?.
+                    getChildren(TokenSet.create(JsonElementTypes.PROPERTY))?.
+                    asList()?.
+                    map { node -> node.firstChildNode.text.unQuote()}?.
+                    filter { key -> key.startsWith(searchPrefix)}?.
+                    map { key -> key.substringAfter(searchPrefix)} ?:
+            listOf()
     }
 }

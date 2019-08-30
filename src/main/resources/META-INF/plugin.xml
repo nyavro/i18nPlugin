@@ -16,6 +16,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.CompositeKeyAnnotator"/>
         <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.I18nReferenceContributor"/>
+        <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.I18nCompositeKeyCompletionContributor"/>
     </extensions>
 
     <actions/>

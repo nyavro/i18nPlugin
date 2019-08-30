@@ -6,8 +6,8 @@ package com.eny.i18n.plugin
 data class I18nFullKey(val fileName: String?, val compositeKey: List<String>) {
 
     companion object {
-        private const val FileNameSeparator = ":"
-        private const val CompositeKeySeparator = "."
+        const val FileNameSeparator = ":"
+        const val CompositeKeySeparator = "."
 
         /**
          * Parses string of form "SampleJsonFileName:RootKey.SubKey.Etc" to i18nFullKey
