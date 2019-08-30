@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>com.eny.i18n</id>
+    <name>i18n support</name>
+    <vendor email="e.nyavro@gmail.com" url="https://github.com/nyavro/i18nPlugin">i18nPlugin</vendor>
+
+    <description><![CDATA[
+    <h4>i18next TypeScript/JavaScript plugin</h4>
+    i18n plugin provides:
+    <ul>
+        <li>annotation of invalid i18n keys</li>
+        <li>navigation to i18n property value definition</li>
+    </ul>
+    ]]></description>
+
+    <depends>JavaScript</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.CompositeKeyAnnotator"/>
+        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.I18nReferenceContributor"/>
+    </extensions>
+
+    <actions/>
+</idea-plugin>
