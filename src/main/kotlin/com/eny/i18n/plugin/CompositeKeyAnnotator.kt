@@ -45,15 +45,11 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
  * Annotator for i18n keys
  */
 class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
-    private val isAnnotated = Key<Boolean>("annotated")
     private val jsUtil = JavaScriptUtil()
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val i18nKeyLiteral = extractI18nKeyLiteral(element)
         if (i18nKeyLiteral != null) {
-            pathToParentTemplateExpression(element)?.forEach{
-                item -> item.manager.putUserData(isAnnotated, true)
-            }
             annotateI18nLiteral(i18nKeyLiteral, element, holder)
         }
     }
@@ -64,21 +60,11 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
     private fun isTemplateExpression(element: PsiElement):Boolean = element.node?.elementType.toString() == "JS:STRING_TEMPLATE_EXPRESSION"
 
     /**
-     * Collects parent elements until reaching outer template expression
-     */
-    private fun pathToParentTemplateExpression(element: PsiElement?): List<PsiElement>? =
-        when {
-            element == null -> listOf()
-            isTemplateExpression(element) -> listOf(element)
-            else -> pathToParentTemplateExpression(element.parent)?.plus(element)
-        }
-
-    /**
      * Converts element to it's literal value, if possible
      */
     private fun extractI18nKeyLiteral(element: PsiElement): String? {
-        // Template expression, not annotated
-        if (isTemplateExpression(element) && !isAnnotated(element)) {
+        // Template expression
+        if (isTemplateExpression(element)) {
             return jsUtil.resolveTemplateExpression(element)
         }
         // String literal
@@ -90,11 +76,6 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
         }
         return null
     }
-
-    /**
-     * Checks if element is already annotated
-     */
-    private fun isAnnotated(element: PsiElement) = element.manager.getUserData(isAnnotated) ?: false
 
     private fun annotateI18nLiteral(value: String, element: PsiElement, holder: AnnotationHolder) {
         val fullKey = I18nFullKey.parse(value)
