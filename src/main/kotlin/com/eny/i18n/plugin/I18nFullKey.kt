@@ -8,7 +8,7 @@ data class I18nFullKey(val fileName: String?, val compositeKey: List<String>) {
     companion object {
         const val FileNameSeparator = ":"
         const val CompositeKeySeparator = "."
-        private val FullKeyPattern = "(\\w+)${FileNameSeparator}(\\w+(\\${CompositeKeySeparator}\\w+)*)".toPattern()
+        private val FullKeyPattern = "(\\w+)${FileNameSeparator}((\\w+\\${CompositeKeySeparator}?)+)".toPattern()
 
         /**
          * Parses string of form "SampleJsonFileName:RootKey.SubKey.Etc" to i18nFullKey

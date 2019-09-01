@@ -8,6 +8,7 @@ class I18nFullKeyTest {
     @Test
     fun parse() {
         assertNotNull(I18nFullKey.parse("sample:key1.key2"))
+        assertNotNull(I18nFullKey.parse("samplv:root.key4.key5."))
     }
 
     @Test
@@ -18,7 +19,6 @@ class I18nFullKeyTest {
     @Test
     fun invalidCompositeKey() {
         assertNull(I18nFullKey.parse("sample:root.key0,key2"))
-        assertNull(I18nFullKey.parse("samplv:root.key4.key5."))
     }
 
     @Test
