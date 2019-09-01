@@ -1,12 +1,14 @@
 package com.eny.i18n.plugin
 
+import com.eny.i18n.plugin.utils.CompositeKeyResolver
+import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 
-class I18nCompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver {
+class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver {
 
     fun String.unQuote(): String {
         return listOf('\'', '\"', '`').fold(this) {

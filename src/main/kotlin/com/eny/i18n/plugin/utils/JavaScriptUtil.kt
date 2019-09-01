@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin
+package com.eny.i18n.plugin.utils
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement

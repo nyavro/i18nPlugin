@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin
 
+import com.eny.i18n.plugin.utils.CompositeKeyResolver
+import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns

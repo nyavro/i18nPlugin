@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin
+package com.eny.i18n.plugin.utils
 
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonObject

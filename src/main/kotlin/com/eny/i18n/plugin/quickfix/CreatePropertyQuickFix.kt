@@ -1,13 +1,14 @@
-package com.eny.i18n.plugin
+package com.eny.i18n.plugin.quickfix
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 
-class Create18nJsonFileQuickFix(fileName: String) : BaseIntentionAction() {
+class CreatePropertyQuickFix(fileName: String?, compositeKey: List<String>) : BaseIntentionAction() {
+
     override fun getFamilyName(): String {
-        return "i18n plugin"
+        return "i18n resource"
     }
 
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean {
@@ -16,4 +17,5 @@ class Create18nJsonFileQuickFix(fileName: String) : BaseIntentionAction() {
 
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
     }
+
 }

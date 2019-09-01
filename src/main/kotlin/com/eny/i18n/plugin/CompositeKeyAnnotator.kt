@@ -1,10 +1,14 @@
 package com.eny.i18n.plugin
 
+import com.eny.i18n.plugin.quickfix.CreateJsonFileQuickFix
+import com.eny.i18n.plugin.quickfix.CreatePropertyQuickFix
+import com.eny.i18n.plugin.utils.CompositeKeyResolver
+import com.eny.i18n.plugin.utils.JavaScriptUtil
+import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.json.psi.JsonStringLiteral
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
@@ -29,7 +33,7 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
                 element.textRange.startOffset + (fileName?.let{name -> name.length+2} ?: 1),
                 element.textRange.endOffset - 1
             ), text
-        ).registerFix(CreateI18nPropertyQuickFix (fileName, compositeKey))
+        ).registerFix(CreatePropertyQuickFix(fileName, compositeKey))
     }
     fun annotateFileUnresolved(fileName: String, text: String) {
         holder.createErrorAnnotation(
@@ -37,7 +41,7 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
                 element.textRange.startOffset + 1,
                 element.textRange.startOffset + fileName.length + 1
             ), text
-        ).registerFix(Create18nJsonFileQuickFix (fileName))
+        ).registerFix(CreateJsonFileQuickFix(fileName))
     }
 }
 
