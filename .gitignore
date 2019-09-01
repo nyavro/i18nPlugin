@@ -1,5 +1,5 @@
 /*.iml
 /.idea/**
 /.gradle/**
-/.build/**
+/build/**
 /out/**
