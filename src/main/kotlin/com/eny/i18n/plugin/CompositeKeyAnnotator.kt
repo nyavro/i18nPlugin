@@ -52,33 +52,10 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
     private val jsUtil = JavaScriptUtil()
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        val i18nKeyLiteral = extractI18nKeyLiteral(element)
+        val i18nKeyLiteral = jsUtil.extractI18nKeyLiteral(element)
         if (i18nKeyLiteral != null) {
             annotateI18nLiteral(i18nKeyLiteral, element, holder)
         }
-    }
-
-    /**
-     * Checks if element is template expression, i.e. `literal ${reference} etc`
-     */
-    private fun isTemplateExpression(element: PsiElement):Boolean = element.node?.elementType.toString() == "JS:STRING_TEMPLATE_EXPRESSION"
-
-    /**
-     * Converts element to it's literal value, if possible
-     */
-    private fun extractI18nKeyLiteral(element: PsiElement): String? {
-        // Template expression
-        if (isTemplateExpression(element)) {
-            return jsUtil.resolveTemplateExpression(element)
-        }
-        // String literal
-        else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
-            val value: Any? = element.value
-            if (value is String) {
-                return value
-            }
-        }
-        return null
     }
 
     private fun annotateI18nLiteral(value: String, element: PsiElement, holder: AnnotationHolder) {
