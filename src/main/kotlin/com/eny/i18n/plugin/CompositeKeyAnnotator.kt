@@ -11,8 +11,6 @@ import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiLiteralValue
-import com.intellij.psi.xml.XmlElementType
 
 /**
  * Annotation helper methods
@@ -27,13 +25,15 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
             ), null
         ).textAttributes = DefaultLanguageHighlighterColors.LINE_COMMENT
     }
-    fun annotateUnresolved(fileName: String?, compositeKey: List<String>, text: String) {
+    fun annotateUnresolved(fullKey: I18nFullKey, resolvedPath: List<String>, text: String) {
         holder.createErrorAnnotation(
             TextRange (
-                element.textRange.startOffset + (fileName?.let{name -> name.length+2} ?: 1),
+                element.textRange.startOffset +
+                        (fullKey.fileName?.let{name -> name.length+I18nFullKey.FileNameSeparator.length} ?: 0) +
+                        resolvedPath.joinToString(I18nFullKey.CompositeKeySeparator, postfix = I18nFullKey.CompositeKeySeparator).length + 1,
                 element.textRange.endOffset - 1
             ), text
-        ).registerFix(CreatePropertyQuickFix(fileName, compositeKey))
+        ).registerFix(CreatePropertyQuickFix(fullKey))
     }
     fun annotateFileUnresolved(fileName: String, text: String) {
         holder.createErrorAnnotation(
@@ -71,7 +71,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
                         .first()
                 if (mostResolvedReference.element != null && mostResolvedReference.element is JsonStringLiteral) {
                     annotationHelper.annotateResolved(fullKey.fileName)
-                } else annotationHelper.annotateUnresolved(fullKey.fileName, mostResolvedReference.path, "Unresolved property")
+                } else annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path, "Unresolved property")
             }
         }
     }

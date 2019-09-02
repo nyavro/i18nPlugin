@@ -6,9 +6,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 
 class CreateJsonFileQuickFix(fileName: String) : BaseIntentionAction() {
-    override fun getFamilyName(): String {
-        return "i18n plugin"
-    }
+    override fun getFamilyName(): String = "i18n plugin"
+
+    override fun getText(): String = "Create translation file"
 
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean {
         return true
