@@ -18,6 +18,10 @@ intellij {
     pluginName 'i18n'
 }
 
+patchPluginXml {
+    sinceBuild '191'
+}
+
 group 'com.eny'
 version '1.0'
 
