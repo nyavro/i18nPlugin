@@ -2,7 +2,6 @@ package com.eny.i18n.plugin.utils
 
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonObject
-import com.intellij.json.psi.JsonStringLiteral
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
@@ -24,14 +23,35 @@ interface CompositeKeyResolver {
         return compositeKey.fold(PropertyReference(listOf(), root, listOf())) { propertyReference, key ->
             if (propertyReference.element is JsonObject) {
                 val value = propertyReference.element.findProperty(key)?.value
-                val path = if (value != null) propertyReference.path + key else propertyReference.path
-                val unresolved = if (value != null) propertyReference.unresolved else propertyReference.unresolved + key
-                val newValue = if (value != null) value else propertyReference.element
-                PropertyReference(path, newValue, unresolved)
-            } else if (propertyReference.element is JsonStringLiteral) {
-                propertyReference.copy(unresolved = propertyReference.unresolved + key)
+                if (value == null) propertyReference.copy(unresolved = propertyReference.unresolved + key)
+                else propertyReference.copy(path = propertyReference.path + key, element = value)
             } else propertyReference.copy(unresolved = propertyReference.unresolved + key)
         }
+    }
+
+    /**
+     * Fix for plural key reference.
+     * #
+     * Consider composite key 'sample:root.key.plural'
+     * and corresponding tree in sample.json:
+     * "root": {
+     *   "key": {
+     *      "plural-1": "plu1",
+     *      "plural-2": "plu2",
+     *      "plural-5": "plu5",
+     *   }
+     * }
+     * PropertyReference for this case is PropertyReference(path = ["root", "key"], element[key], unresolved = ["plural"])
+     */
+    fun tryToResolvePlural(propertyReference: PropertyReference): List<PropertyReference> {
+        return if (propertyReference.unresolved.size == 1 && propertyReference.element is JsonObject) {
+            val singleUnresolvedKey = propertyReference.unresolved.get(0)
+            listOf("1","2","5").mapNotNull {
+                pluralIndex -> propertyReference.element.findProperty("$singleUnresolvedKey-$pluralIndex")
+            }.map {
+                plural -> PropertyReference(propertyReference.path + singleUnresolvedKey, plural, listOf())
+            }
+        } else listOf(propertyReference)
     }
 
     /**

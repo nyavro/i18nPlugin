@@ -6,23 +6,27 @@ import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.PsiReference
 import com.intellij.psi.xml.XmlElementType
 
+data class I18nKeyLiteral(val literal: String, val isTemplate: Boolean)
+
 class JavaScriptUtil {
 
     private val ResolveReferenceMaxDepth = 10
 
+    private val DUMMY_PROPERTY_VALUE = "6zZzq1Dw2Pe3Zuo4BiE5zxNvpVyDzNxBcbFxEV1vze9azDerVsWdaFfvBzEm"
+
     /**
      * Converts element to it's literal value, if possible
      */
-    fun extractI18nKeyLiteral(element: PsiElement): String? {
+    fun extractI18nKeyLiteral(element: PsiElement): I18nKeyLiteral? {
         // Template expression
         if (isTemplateExpression(element)) {
-            return resolveTemplateExpression(element)
+            return I18nKeyLiteral(resolveTemplateExpression(element), true)
         }
         // String literal
         else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
             val value: Any? = element.value
             if (value is String) {
-                return value
+                return I18nKeyLiteral(value, false)
             }
         }
         return null
@@ -40,15 +44,15 @@ class JavaScriptUtil {
      * const key = 'element';
      * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
      */
-    private fun resolveTemplateExpression(element: PsiElement): String? {
+    private fun resolveTemplateExpression(element: PsiElement): String {
         val transformed = element.node.getChildren(null).map {
             item ->
-            if (item.elementType.toString().contains("REFERENCE"))
-                resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth)
+            if (item.elementType.toString().contains("REFERENCE")) {
+                resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth) ?: DUMMY_PROPERTY_VALUE.take(item.textLength)
+            }
             else item.text
         }
-        return if (transformed.contains(null)) null
-        else transformed.joinToString("").filterDollarBracesWrappers()
+        return transformed.joinToString("").filterDollarBracesWrappers()
     }
 
     /**

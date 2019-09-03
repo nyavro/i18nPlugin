@@ -15,7 +15,7 @@
     <depends>JavaScript</depends>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.CompositeKeyAnnotator"/>
-        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.I18nReferenceContributor"/>
+        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ReferenceContributor"/>
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.CompositeKeyCompletionContributor"/>
     </extensions>
 

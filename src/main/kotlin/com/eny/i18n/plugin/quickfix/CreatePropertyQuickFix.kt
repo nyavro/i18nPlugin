@@ -6,20 +6,12 @@ import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.fileChooser.FileChooser.chooseFile
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.JBMenuItem
 import com.intellij.openapi.ui.JBPopupMenu
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiFileFactory
-import com.sun.java.accessibility.util.AWTEventMonitor.addActionListener
-import com.intellij.openapi.command.UndoConfirmationPolicy
-import com.intellij.openapi.fileEditor.FileEditorManager
-
-
 
 class CreatePropertyQuickFix(val fullKey: I18nFullKey) : BaseIntentionAction(), CompositeKeyResolver {
 

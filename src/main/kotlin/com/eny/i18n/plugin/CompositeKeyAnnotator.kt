@@ -3,6 +3,7 @@ package com.eny.i18n.plugin
 import com.eny.i18n.plugin.quickfix.CreateJsonFileQuickFix
 import com.eny.i18n.plugin.quickfix.CreatePropertyQuickFix
 import com.eny.i18n.plugin.utils.CompositeKeyResolver
+import com.eny.i18n.plugin.utils.I18nKeyLiteral
 import com.eny.i18n.plugin.utils.JavaScriptUtil
 import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.json.psi.JsonStringLiteral
@@ -23,24 +24,22 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
                 element.textRange.startOffset + fileName.length + 1,
                 element.textRange.endOffset
             ), null
-        ).textAttributes = DefaultLanguageHighlighterColors.LINE_COMMENT
+        ).textAttributes = DefaultLanguageHighlighterColors.CONSTANT
     }
     fun annotateReferenceToJson(fullKey: I18nFullKey) {
-        val compositeKeyStartOffset = element.textRange.startOffset +
-            (fullKey.fileName?.let { name -> name.length + I18nFullKey.FileNameSeparator.length } ?: 0) + 1
+        val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
         holder.createErrorAnnotation(
             TextRange (
                     compositeKeyStartOffset,
                     element.textRange.endOffset - 1
             ),
             "Reference to Json object"
-        )
+        ).textAttributes = DefaultLanguageHighlighterColors.CONSTANT
     }
     fun annotateUnresolved(fullKey: I18nFullKey, resolvedPath: List<String>) {
-        val compositeKeyStartOffset = element.textRange.startOffset +
-                (fullKey.fileName?.let { name -> name.length + I18nFullKey.FileNameSeparator.length } ?: 0) + 1
+        val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
         val unresolvedStartOffset = compositeKeyStartOffset +
-                resolvedPath.joinToString(I18nFullKey.CompositeKeySeparator, postfix = I18nFullKey.CompositeKeySeparator).length
+                resolvedPathLength(resolvedPath)
         val unresolvedEndOffset = element.textRange.endOffset - 1
         holder.createErrorAnnotation(
             TextRange (
@@ -50,6 +49,28 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
             "Unresolved property"
         ).registerFix(CreatePropertyQuickFix(fullKey))
     }
+    fun annotatePartiallyResolved(fullKey: I18nFullKey, resolvedPath: List<String>) {
+        val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
+        val unresolvedStartOffset = compositeKeyStartOffset +
+                resolvedPathLength(resolvedPath)
+        holder.createInfoAnnotation (
+                TextRange (
+                        compositeKeyStartOffset,
+                        unresolvedStartOffset
+                ),
+                "Partially resolved"
+        ).textAttributes = DefaultLanguageHighlighterColors.CONSTANT
+    }
+
+    private fun resolvedPathLength(resolvedPath: List<String>) =
+            if (resolvedPath.isEmpty()) 0
+            else resolvedPath.joinToString(I18nFullKey.CompositeKeySeparator, postfix = I18nFullKey.CompositeKeySeparator).length
+
+    private fun compositeKeyStartOffset(fullKey: I18nFullKey): Int {
+        return element.textRange.startOffset +
+            (fullKey.fileName?.let { name -> name.length + I18nFullKey.FileNameSeparator.length } ?: 0) + 1
+    }
+
     fun annotateFileUnresolved(fileName: String, text: String) {
         holder.createErrorAnnotation(
             TextRange (
@@ -73,8 +94,8 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
         }
     }
 
-    private fun annotateI18nLiteral(value: String, element: PsiElement, holder: AnnotationHolder) {
-        val fullKey = I18nFullKey.parse(value)
+    private fun annotateI18nLiteral(value: I18nKeyLiteral, element: PsiElement, holder: AnnotationHolder) {
+        val fullKey = I18nFullKey.parse(value.literal)
         if (fullKey?.fileName != null) {
             val annotationHelper = AnnotationHelper(element, holder)
             val files = JsonSearchUtil(element.project).findFilesByName(fullKey.fileName)
@@ -82,11 +103,11 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
             else {
                 val mostResolvedReference = files
                         .map { jsonFile -> resolveCompositeKey(fullKey.compositeKey, jsonFile) }
-                        .sortedByDescending { v -> v.path.size }
-                        .first()
+                        .maxBy { v -> v.path.size }!!
                 when {
                     mostResolvedReference.element is JsonStringLiteral -> annotationHelper.annotateResolved(fullKey.fileName)
                     mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
+                    value.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                     else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)
                 }
             }
