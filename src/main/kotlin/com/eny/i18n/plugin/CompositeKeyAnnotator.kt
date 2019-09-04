@@ -102,7 +102,11 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
             if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey.fileName, "Unresolved file")
             else {
                 val mostResolvedReference = files
-                        .map { jsonFile -> resolveCompositeKey(fullKey.compositeKey, jsonFile) }
+                        .flatMap { jsonFile ->
+                            tryToResolvePlural(
+                                resolveCompositeKey(fullKey.compositeKey, jsonFile)
+                            )
+                        }
                         .maxBy { v -> v.path.size }!!
                 when {
                     mostResolvedReference.element is JsonStringLiteral -> annotationHelper.annotateResolved(fullKey.fileName)
