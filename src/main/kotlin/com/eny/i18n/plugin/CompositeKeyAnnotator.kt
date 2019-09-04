@@ -1,7 +1,5 @@
 package com.eny.i18n.plugin
 
-import com.eny.i18n.plugin.quickfix.CreateJsonFileQuickFix
-import com.eny.i18n.plugin.quickfix.CreatePropertyQuickFix
 import com.eny.i18n.plugin.utils.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.I18nKeyLiteral
 import com.eny.i18n.plugin.utils.JavaScriptUtil
@@ -17,14 +15,14 @@ import com.intellij.psi.PsiElement
  * Annotation helper methods
  */
 class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
-
+    private val RESOLVED_COLOR = DefaultLanguageHighlighterColors.LINE_COMMENT
     fun annotateResolved(fileName: String) {
         holder.createInfoAnnotation(
             TextRange(
                 element.textRange.startOffset + fileName.length + 1,
                 element.textRange.endOffset
             ), null
-        ).textAttributes = DefaultLanguageHighlighterColors.CONSTANT
+        ).textAttributes = RESOLVED_COLOR
     }
     fun annotateReferenceToJson(fullKey: I18nFullKey) {
         val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
@@ -34,7 +32,7 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
                     element.textRange.endOffset - 1
             ),
             "Reference to Json object"
-        ).textAttributes = DefaultLanguageHighlighterColors.CONSTANT
+        ).textAttributes = RESOLVED_COLOR
     }
     fun annotateUnresolved(fullKey: I18nFullKey, resolvedPath: List<String>) {
         val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
@@ -47,7 +45,7 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
                     unresolvedEndOffset
             ),
             "Unresolved property"
-        ).registerFix(CreatePropertyQuickFix(fullKey))
+        )//.registerFix(CreatePropertyQuickFix(fullKey))
     }
     fun annotatePartiallyResolved(fullKey: I18nFullKey, resolvedPath: List<String>) {
         val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
@@ -59,7 +57,7 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
                         unresolvedStartOffset
                 ),
                 "Partially resolved"
-        ).textAttributes = DefaultLanguageHighlighterColors.CONSTANT
+        ).textAttributes = RESOLVED_COLOR
     }
 
     private fun resolvedPathLength(resolvedPath: List<String>) =
@@ -77,7 +75,7 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
                 element.textRange.startOffset + 1,
                 element.textRange.startOffset + fileName.length + 1
             ), text
-        ).registerFix(CreateJsonFileQuickFix(fileName))
+        )//.registerFix(CreateJsonFileQuickFix(fileName))
     }
 }
 
