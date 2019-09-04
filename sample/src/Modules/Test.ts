@@ -15,9 +15,9 @@ class Test {
         console.log(i18n.t('sample:ROOT.Key1'));                                   //Reference to Json object
         console.log(i18n.t('sample:ROOT.Key1.plurals.value', {count: 2})); //Reference to plural key
         const sub0 = 'Key1';
-        const suju = sub0;
-        console.log(i18n.t(`sample:ROOT.${sub}.key31`));                           //Resolved simple expression
-        console.log(i18n.t(`sample:ROOT.${suju}.key314`));                         //Unresolved simple expression
+        const sub = sub0;
+        console.log(i18n.t(`sample:ROOT.${sub}.Key1`));                           //Resolved simple expression
+        console.log(i18n.t(`sample:ROOT.${sub}.key314`));                          //Unresolved simple expression
         console.log(i18n.t(`sample:ROOT.Key1.${unknownInCompileTime}`));           //Goto to json object
     }
 }
