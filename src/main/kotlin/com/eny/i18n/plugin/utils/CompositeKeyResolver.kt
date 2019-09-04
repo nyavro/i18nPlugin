@@ -46,11 +46,12 @@ interface CompositeKeyResolver {
     fun tryToResolvePlural(propertyReference: PropertyReference): List<PropertyReference> {
         return if (propertyReference.unresolved.size == 1 && propertyReference.element is JsonObject) {
             val singleUnresolvedKey = propertyReference.unresolved.get(0)
-            listOf("1","2","5").mapNotNull {
+            val plurals = listOf("1","2","5").mapNotNull {
                 pluralIndex -> propertyReference.element.findProperty("$singleUnresolvedKey-$pluralIndex")
             }.map {
                 plural -> PropertyReference(propertyReference.path + singleUnresolvedKey, plural, listOf())
             }
+            if (plurals.isEmpty()) listOf(propertyReference) else plurals
         } else listOf(propertyReference)
     }
 
