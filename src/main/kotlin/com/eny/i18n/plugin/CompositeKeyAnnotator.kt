@@ -25,13 +25,20 @@ class AnnotationHelper(val element: PsiElement, val holder: AnnotationHolder) {
         ).textAttributes = RESOLVED_COLOR
     }
     fun annotateReferenceToJson(fullKey: I18nFullKey) {
-        val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
         holder.createErrorAnnotation(
             TextRange (
-                    compositeKeyStartOffset,
+                    compositeKeyStartOffset(fullKey),
                     element.textRange.endOffset - 1
             ),
             "Reference to Json object"
+        )
+    }
+    fun annotateReferenceToPlural(fullKey: I18nFullKey) {
+        holder.createInfoAnnotation(
+            TextRange (
+                compositeKeyStartOffset(fullKey),
+                element.textRange.endOffset - 1
+            ),"Reference to plural value"
         ).textAttributes = RESOLVED_COLOR
     }
     fun annotateUnresolved(fullKey: I18nFullKey, resolvedPath: List<String>) {
@@ -108,6 +115,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
                         .maxBy { v -> v.path.size }!!
                 when {
                     mostResolvedReference.element is JsonStringLiteral -> annotationHelper.annotateResolved(fullKey.fileName)
+                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
                     mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
                     value.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                     else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)

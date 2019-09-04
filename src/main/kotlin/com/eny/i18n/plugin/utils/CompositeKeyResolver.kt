@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 /**
  * Property reference represents PsiElement and it's path from Json file root
  */
-data class PropertyReference(val path: List<String>, val element: PsiElement?, val unresolved: List<String>)
+data class PropertyReference(val path: List<String>, val element: PsiElement?, val unresolved: List<String>, val isPlural: Boolean = false)
 
 interface CompositeKeyResolver {
 
@@ -49,7 +49,7 @@ interface CompositeKeyResolver {
             val plurals = listOf("1","2","5").mapNotNull {
                 pluralIndex -> propertyReference.element.findProperty("$singleUnresolvedKey-$pluralIndex")
             }.map {
-                plural -> PropertyReference(propertyReference.path + singleUnresolvedKey, plural, listOf())
+                plural -> PropertyReference(propertyReference.path + singleUnresolvedKey, plural, listOf(), isPlural = true)
             }
             if (plurals.isEmpty()) listOf(propertyReference) else plurals
         } else listOf(propertyReference)
