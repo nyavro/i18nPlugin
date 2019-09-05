@@ -1,7 +1,9 @@
 # i18nPlugin
 Intellij idea i18next support plugin
 
-##Features
+ ##Features
+
+ ####Annotations
 
 - Annotates correct i18n keys:
 
@@ -18,3 +20,17 @@ Intellij idea i18next support plugin
 - References to plural values:
 
     ![Reference to plural value](docs/img/p5.png) 
+    
+ 
+ ####Navigation
+ 
+- I18nPlugin provides navigation from key to its definition in Json resource    
+
+   ![Reference to plural value](docs/img/p6.png)
+   
+- and to partially resolved keys:
+
+   ![Reference to plural value](docs/img/p7.png)
+
+     
+    
