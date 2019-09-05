@@ -1,9 +1,9 @@
 # i18nPlugin
 Intellij idea i18next support plugin
 
- ##Features
+## Features
 
- ####Annotations
+ #### Annotations
 
 - Annotates correct i18n keys:
 
