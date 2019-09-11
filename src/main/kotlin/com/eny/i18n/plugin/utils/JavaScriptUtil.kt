@@ -6,8 +6,6 @@ import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.PsiReference
 import com.intellij.psi.xml.XmlElementType
 
-data class I18nKeyLiteral(val literal: String, val isTemplate: Boolean)
-
 class JavaScriptUtil {
 
     private val ResolveReferenceMaxDepth = 10
@@ -45,14 +43,18 @@ class JavaScriptUtil {
      * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
      */
     private fun resolveTemplateExpression(element: PsiElement): String {
-        val transformed = element.node.getChildren(null).map {
-            item ->
-            if (item.elementType.toString().contains("REFERENCE")) {
-                resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth) ?: DUMMY_PROPERTY_VALUE.take(item.textLength)
-            }
-            else item.text
+        val transformed = element.node.getChildren(null).mapNotNull {
+            item -> if (item.elementType.toString().contains("REFERENCE")) {
+                KeyElement(
+                    item.text,
+                    resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth) ?: DUMMY_PROPERTY_VALUE.take(item.textLength),
+                    KeyElementType.TEMPLATE
+                )
+            } else //if (item is PsiLiteralValue) {
+                KeyElement.fromLiteral(item.text)
+//            } else null
         }
-        return transformed.joinToString("").filterDollarBracesWrappers()
+        return transformed.mapNotNull {element -> element.resolvedTo}.joinToString(".")
     }
 
     /**

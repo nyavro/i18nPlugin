@@ -35,7 +35,7 @@ class AnnotationHelper(val textRange: TextRange, val holder: AnnotationHolder) {
             ),"Reference to plural value"
         ).textAttributes = RESOLVED_COLOR
     }
-    fun annotateUnresolved(fullKey: I18nFullKey, resolvedPath: List<String>) {
+    fun annotateUnresolved(fullKey: I18nFullKey, resolvedPath: List<KeyElement>) {
         val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
         val unresolvedStartOffset = compositeKeyStartOffset +
                 resolvedPathLength(resolvedPath)
@@ -48,7 +48,7 @@ class AnnotationHelper(val textRange: TextRange, val holder: AnnotationHolder) {
             "Unresolved property"
         )//.registerFix(CreatePropertyQuickFix(fullKey))
     }
-    fun annotatePartiallyResolved(fullKey: I18nFullKey, resolvedPath: List<String>) {
+    fun annotatePartiallyResolved(fullKey: I18nFullKey, resolvedPath: List<KeyElement>) {
         val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
         val unresolvedStartOffset = compositeKeyStartOffset +
                 resolvedPathLength(resolvedPath)
@@ -70,9 +70,9 @@ class AnnotationHelper(val textRange: TextRange, val holder: AnnotationHolder) {
         )//.registerFix(CreateJsonFileQuickFix(fileName))
     }
 
-    private fun resolvedPathLength(resolvedPath: List<String>) =
+    private fun resolvedPathLength(resolvedPath: List<KeyElement>) =
         if (resolvedPath.isEmpty()) 0
-        else resolvedPath.joinToString(I18nFullKey.CompositeKeySeparator, postfix = I18nFullKey.CompositeKeySeparator).length
+        else resolvedPath.map{item -> item.text}.joinToString(I18nFullKey.CompositeKeySeparator, postfix = I18nFullKey.CompositeKeySeparator).length
 
     private fun compositeKeyStartOffset(fullKey: I18nFullKey): Int {
         return textRange.startOffset +

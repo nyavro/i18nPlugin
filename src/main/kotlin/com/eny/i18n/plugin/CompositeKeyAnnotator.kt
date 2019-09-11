@@ -20,21 +20,23 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
     }
 
     private fun annotateI18nLiteral(value: I18nKeyLiteral, element: PsiElement, holder: AnnotationHolder) {
-        val fullKey = I18nFullKey.parse(value.literal)
-        if (fullKey?.fileName != null) {
+        val fullKey = value.fullKey()
+        val fileName = fullKey?.fileName
+        val compositeKey = fullKey?.compositeKey
+        if (fileName != null && compositeKey != null) {
             val annotationHelper = AnnotationHelper(element.textRange, holder)
-            val files = JsonSearchUtil(element.project).findFilesByName(fullKey.fileName)
-            if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey.fileName)
+            val files = JsonSearchUtil(element.project).findFilesByName(fileName)
+            if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fileName)
             else {
                 val mostResolvedReference = files
                         .flatMap { jsonFile ->
                             tryToResolvePlural(
-                                resolveCompositeKey(fullKey.compositeKey, jsonFile)
+                                resolveCompositeKey(compositeKey, jsonFile)
                             )
                         }
                         .maxBy { v -> v.path.size }!!
                 when {
-                    mostResolvedReference.element is JsonStringLiteral -> annotationHelper.annotateResolved(fullKey.fileName)
+                    mostResolvedReference.element is JsonStringLiteral -> annotationHelper.annotateResolved(fileName)
                     mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
                     mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
                     value.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)

@@ -1,9 +1,11 @@
 package com.eny.i18n.plugin
 
+import com.eny.i18n.plugin.utils.KeyElement
+
 /**
  * Represents i18n full key, i.e. fileName and composite key
  */
-data class I18nFullKey(val fileName: String?, val compositeKey: List<String>) {
+data class I18nFullKey(val fileName: String?, val compositeKey: List<KeyElement>) {
 
     companion object {
         const val FileNameSeparator = ":"
@@ -22,8 +24,8 @@ data class I18nFullKey(val fileName: String?, val compositeKey: List<String>) {
             } else null
         }
 
-        private fun parseCompositeKey(compositeKey: String): List<String> {
-            return compositeKey.split(CompositeKeySeparator).toList()
+        private fun parseCompositeKey(compositeKey: String): List<KeyElement> {
+            return compositeKey.split(CompositeKeySeparator).toList().map {text -> KeyElement.fromLiteral(text)}
         }
     }
 }
