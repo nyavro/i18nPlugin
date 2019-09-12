@@ -6,27 +6,50 @@ enum class KeyElementType {
     LITERAL, TEMPLATE
 }
 
-interface Token {
-    fun text(): String
-    fun resolved(): String? = text()
+enum class TokenType {
+    Literal, Template, KeySeparator, NsSeparator, Asterisk
 }
 
-data class FileNameSeparator(val separator: String): Token {
+interface Token {
+    fun text(): String
+    fun resolved(): List<Token> = listOf()
+    fun getParent(): Token? = null
+    fun type(): TokenType
+}
+
+data class NsSeparator(val separator: String): Token {
     override fun text() = separator
+    override fun type() = TokenType.NsSeparator
 }
 
 data class KeySeparator(val separator: String): Token {
     override fun text(): String = separator
+    override fun type() = TokenType.KeySeparator
 }
 
-data class Literal(val literal: String): Token {
+data class Literal(private val literal: String): Token {
     override fun text(): String = literal
+    override fun type() = TokenType.Literal
 }
 
-data class TemplateExpression(val expression: String, val resolvedTo: String?): Token {
-    override fun text(): String = expression
-    override fun resolved(): String? = resolvedTo
+data class ChildToken(private val value: Token, private val parent: TemplateExpression): Token {
+    override fun text(): String = value.text()
+    override fun resolved(): List<Token> = value.resolved()
+    override fun getParent(): Token? = parent
+    override fun type() = value.type()
+    override fun toString(): String = "ChildToken <${text()}>"
+}
 
+data class TemplateExpression(private val expression: String, private val resolvedTo: List<Token>): Token {
+    val resolved = resolvedTo.map {token -> ChildToken(token, this)}
+    override fun text(): String = expression
+    override fun resolved(): List<Token> = resolved
+    override fun type() = TokenType.Template
+}
+
+object Asterisk: Token {
+    override fun text(): String = "*"
+    override fun type(): TokenType = TokenType.Asterisk
 }
 
 data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyElementType) {

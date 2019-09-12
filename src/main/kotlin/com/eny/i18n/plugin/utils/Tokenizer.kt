@@ -1,33 +1,27 @@
 package com.eny.i18n.plugin.utils
 
-class Tokenizer {
+import java.util.*
 
-    private fun <T>join(list: List<T>, separator: T): List<T> {
-        return if (list.size > 1) list.drop(1).fold(listOf(list[0])) { s, i -> s + separator + i}
-        else list
-    }
+class Tokenizer(val nsSeparator: String, val keySeparator: String) {
 
-    private fun <T>join2(list: List<List<T>>, separator: T): List<T> {
-        return if (list.size > 1) list.drop(1).fold(list[0]) { s, i -> s + separator + i}
-        else list.flatten()
-    }
+    fun tokenizeAll(elements: List<KeyElement>): List<Token> = elements.flatMap {item -> tokenize(item)}
 
     fun tokenize(element: KeyElement): List<Token> {
-        if (element.type == KeyElementType.LITERAL) {
-            return join2(
-                    element.text.split(":").toList().map {
-                item -> join(item.split(".").toList().map {value -> Literal(value)}, KeySeparator("."))
-            }, FileNameSeparator(":"))
-        } else {
-            if (element.resolvedTo != null) {
-                return join2(
-                        element.text.split(":").toList().map {
-                            item -> join(item.split(".").toList().map {value -> Literal(value)}, KeySeparator("."))
-                        }, FileNameSeparator(":"))
-            }
-            else {
-                return listOf(TemplateExpression(element.text, element.resolvedTo))
-            }
+        return when {
+            element.type == KeyElementType.LITERAL -> tokenizeLiteral(element.text)
+            element.resolvedTo != null -> listOf(TemplateExpression(element.text, tokenizeLiteral(element.resolvedTo)))
+            else -> listOf(Asterisk)
+        }
+    }
+
+    private fun tokenizeLiteral(literal: String): List<Token> {
+        return StringTokenizer(literal, nsSeparator + keySeparator, true).toList().map {
+            token ->
+                when (token) {
+                    nsSeparator -> NsSeparator(nsSeparator)
+                    keySeparator -> KeySeparator(keySeparator)
+                    else -> Literal(token.toString())
+                }
         }
     }
 }
