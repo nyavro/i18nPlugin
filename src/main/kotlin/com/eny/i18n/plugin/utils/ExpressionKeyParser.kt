@@ -33,18 +33,24 @@ class WaitingFileName: State {
                 state, item -> state.next(item)
             }
         } else {
-            return WaitingNsKs(token)
+            return WaitingNsKsLiteral(listOf(token))
         }
     }
 }
 
-class WaitingNsKs(val maybeFile: Token) : State {
+class WaitingNsKsLiteral(val maybeFile: List<Token>) : State {
     override fun next(token: Token): State {
         if (token.type() == TokenType.NsSeparator) {
             return FullKeyWaitingKey(maybeFile, listOf())
         } else if (token.type() == TokenType.KeySeparator) {
-            return DefaultWaitingLiteral(listOf(maybeFile))
-        } else return Error("Invalid ns separator position (0)")
+            return DefaultWaitingLiteral(maybeFile)
+        } else if (token.type() == TokenType.Literal) {
+            return WaitingNsKsLiteral(maybeFile + token)
+        } else if (token.type() == TokenType.Template) {
+            return unwrapTemplateExpression(token as TemplateExpression)
+        } else {
+            return Error("Invalid ns separator position (0)")
+        }
     }
 }
 
@@ -69,7 +75,7 @@ class DefaultWaitingKs(val keys: List<Token>) : State {
     override fun fullKey(): FullKey? = FullKey(listOf(), keys)
 }
 
-class FullKeyWaitingKey(val file: Token, val key: List<Token>) : State {
+class FullKeyWaitingKey(val file: List<Token>, val key: List<Token>) : State {
     override fun next(token: Token): State {
         if (token == Asterisk) {
             return FullKeyWaitingKS(file, listOf(token))
@@ -83,7 +89,7 @@ class FullKeyWaitingKey(val file: Token, val key: List<Token>) : State {
     }
 }
 
-class FullKeyWaitingKS(val file: Token, val key: List<Token>) : State {
+class FullKeyWaitingKS(val file: List<Token>, val key: List<Token>) : State {
     override fun next(token: Token): State {
         if(token.type() == TokenType.KeySeparator) {
             return FullKeyWaitingKey(file, key)
@@ -91,7 +97,7 @@ class FullKeyWaitingKS(val file: Token, val key: List<Token>) : State {
             return Error("Invalid token " + token.text())
         }
     }
-    override fun fullKey(): FullKey? = FullKey(listOf(file), key)
+    override fun fullKey(): FullKey? = FullKey(file, key)
 }
 
 class IncompleteNs(val tokens: List<Token>): State {
