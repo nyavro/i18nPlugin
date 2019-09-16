@@ -42,24 +42,27 @@ data class Literal(private val literal: String): Token {
         if (token is Literal) {
             return Literal(literal + token.literal)
         } else if (token is ChildToken) {
-            return token.copy(value = this.merge(token.value))
+            return token.copy(value = this.merge(token.value), len = textLength() + token.len)// token.copy(value = this.merge(token.value))
         } else {
             TODO()
         }
     }
 }
 
-data class ChildToken(val value: Token, private val parent: TemplateExpression): Token {
+data class ChildToken(val value: Token, private val parent: TemplateExpression, val len: Int): Token {
     override fun text(): String = value.text()
     override fun resolved(): List<Token> = value.resolved()
     override fun getParent(): Token? = parent
     override fun type() = value.type()
     override fun toString(): String = "ChildToken <${text()}>"
-    override fun merge(token: Token): Token = ChildToken(value.merge(token), parent)
+    override fun merge(token: Token): Token = ChildToken(value.merge(token), parent, len)
+    override fun textLength(): Int {
+        return len
+    }
 }
 
 data class TemplateExpression(private val expression: String, private val resolvedTo: List<Token>): Token {
-    val resolved = resolvedTo.map {token -> ChildToken(token, this)}
+    val resolved = resolvedTo.mapIndexed {index, token -> ChildToken(token, this, if (index == 0) expression.length else 0 )}
     override fun text(): String = expression
     override fun resolved(): List<Token> = resolved
     override fun type() = TokenType.Template
