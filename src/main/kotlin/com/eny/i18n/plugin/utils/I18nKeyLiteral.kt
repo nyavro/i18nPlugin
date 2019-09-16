@@ -15,6 +15,14 @@ interface Token {
     fun resolved(): List<Token> = listOf()
     fun getParent(): Token? = null
     fun type(): TokenType
+    fun merge(token: Token): Token = this
+    fun textLength(): Int {
+        val parent = getParent()
+        if (parent != null) {
+            return parent.text().length
+        }
+        return text().length
+    }
 }
 
 data class NsSeparator(val separator: String): Token {
@@ -30,14 +38,24 @@ data class KeySeparator(val separator: String): Token {
 data class Literal(private val literal: String): Token {
     override fun text(): String = literal
     override fun type() = TokenType.Literal
+    override fun merge(token: Token): Token {
+        if (token is Literal) {
+            return Literal(literal + token.literal)
+        } else if (token is ChildToken) {
+            return token.copy(value = this.merge(token.value))
+        } else {
+            TODO()
+        }
+    }
 }
 
-data class ChildToken(private val value: Token, private val parent: TemplateExpression): Token {
+data class ChildToken(val value: Token, private val parent: TemplateExpression): Token {
     override fun text(): String = value.text()
     override fun resolved(): List<Token> = value.resolved()
     override fun getParent(): Token? = parent
     override fun type() = value.type()
     override fun toString(): String = "ChildToken <${text()}>"
+    override fun merge(token: Token): Token = ChildToken(value.merge(token), parent)
 }
 
 data class TemplateExpression(private val expression: String, private val resolvedTo: List<Token>): Token {
@@ -50,6 +68,11 @@ data class TemplateExpression(private val expression: String, private val resolv
 object Asterisk: Token {
     override fun text(): String = "*"
     override fun type(): TokenType = TokenType.Asterisk
+    override fun merge(token: Token): Token {
+        if (token.type() == TokenType.Literal)
+            return Literal(text() + token.text())
+        else return this
+    }
 }
 
 data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyElementType) {

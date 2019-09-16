@@ -1,11 +1,12 @@
 package utils
 
 import com.eny.i18n.plugin.utils.*
+import org.junit.Ignore
 import org.junit.Test
 import kotlin.test.assertNull
 
-class InvalidExpressionTest {
-    fun extractTexts(list: List<Token>) = list.map {token -> token.text()}
+@Ignore
+class InvalidExpressionTest : TestBase {
 
     @Test
     fun parseInvalidFilenameInLiteral() {
@@ -20,6 +21,42 @@ class InvalidExpressionTest {
     fun parseInvalidKeySeparatorInLiteral() {
         val invalidExpression = listOf(
                 KeyElement.fromLiteral("invalid:literal..key.ROOT.Key1.Key31")
+        )
+        val parser = ExpressionKeyParser()
+        assertNull(parser.parse(invalidExpression))
+    }
+
+    @Test
+    fun parseInvalidDefaultNsKeySeparatorInLiteral() {
+        val invalidExpression = listOf(
+                KeyElement.fromLiteral("invalid.literal..key.ROOT.Key1.Key31")
+        )
+        val parser = ExpressionKeyParser()
+        assertNull(parser.parse(invalidExpression))
+    }
+
+    @Test
+    fun parseInvalidDefaultNsKeySeparatorInLiteral2() {
+        val invalidExpression = listOf(
+                KeyElement.fromLiteral("invalid.literal.test:.key.ROOT.Key1.Key31")
+        )
+        val parser = ExpressionKeyParser()
+        assertNull(parser.parse(invalidExpression))
+    }
+
+    @Test
+    fun parseInvalidStart() {
+        val invalidExpression = listOf(
+                KeyElement.fromLiteral(".invalid.start.test")
+        )
+        val parser = ExpressionKeyParser()
+        assertNull(parser.parse(invalidExpression))
+    }
+
+    @Test
+    fun parseInvalidStart2() {
+        val invalidExpression = listOf(
+                KeyElement.fromLiteral(":invalid.start.test")
         )
         val parser = ExpressionKeyParser()
         assertNull(parser.parse(invalidExpression))
