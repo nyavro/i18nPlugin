@@ -72,15 +72,6 @@ class ExpressionKeyParserTest : TestBase {
     }
 
 //${fileExpr}postfix:ROOT.Key4.Key5         / sample                / samplepostfix{18}:ROOT{4}.Key4{4}.Key5{4}
-//prefix${fileExpr}postfix:ROOT.Key4.Key5   / sample                / prefixsamplepostfix{24}:ROOT{4}.Key4{4}.Key5{4}
-//prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey      / prefixpartFile{17}:partKeypostfix{6}.ROOT{4}.Key4{4}.Key5{4}
-//filename:${key}                           / Key0.Key2.Key21       / filename{8}:Key0{5}.Key2{0}.Key21{0}
-//filename:${key}item                       / Key0.Key2.Key21.      / filename{8}:Key0{5}.Key2{0}.Key21{0}.item{3}
-//filename:${key}.item                      / Key0.Key2.Key21       / filename{8}:Key0{5}.Key2{0}.Key21{0}.item{4}
-//filename:${key}item                       / Key0.Key2.Key21       / filename{8}:Key0{5}.Key2{0}.Key21item{3}
-//filename:root.${key}                      / Key0.Key2.Key21       / filename{8}:root{4}.Key0{5}.Key2{0}.Key21{0}
-//filename:root${key}                       / .Key0.Key2.Key21      / filename{8}:root{4}.Key0{4}.Key2{0}.Key21{0}
-//filename:root${key}                       / Key0.Key2.Key21       / filename{8}:rootKey0{9}.Key2{0}.Key21{0}
     @Test
     fun parsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
@@ -101,8 +92,8 @@ class ExpressionKeyParserTest : TestBase {
         assertEquals(listOf(4, 4, 4), textLengths)
     }
 
-    //prefix${fileExpr}postfix:ROOT.Key4.Key5  / sample
-//    @Test
+//prefix${fileExpr}postfix:ROOT.Key4.Key5   / sample                / prefixsamplepostfix{24}:ROOT{4}.Key4{4}.Key5{4}
+    @Test
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
                 KeyElement("prefix", "prefix", KeyElementType.LITERAL),
@@ -114,12 +105,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("prefixsamplepostfix")
         val expectedKey = listOf("ROOT", "Key4", "Key5")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(24, parsed?.nsLength)
+        assertEquals(14, parsed?.keyLength)
+        assertEquals(39, parsed?.length)
+        assertEquals(listOf(4, 4, 4), textLengths)
     }
 
-    //prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey
-//    @Test
+//prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey      / prefixpartFile{17}:partKeypostfix{6}.ROOT{4}.Key4{4}.Key5{4}
+    @Test
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
                 KeyElement("prefix", "prefix", KeyElementType.LITERAL),
@@ -131,12 +127,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("prefixpartFile")
         val expectedKey = listOf("partKeypostfix", "ROOT", "Key4", "Key5")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(17, parsed?.nsLength)
+        assertEquals(11, parsed?.keyLength)
+        assertEquals(39, parsed?.length)
+        assertEquals(listOf(6, 4, 4, 4), textLengths)
     }
 
-    //filename:${key}   / Key0.Key2.Key21
-//    @Test
+//filename:${key}                           / Key0.Key2.Key21       / filename{8}:Key0{6}.Key2{0}.Key21{0}
+    @Test
     fun parseExpressionWithKeyInTemplate() {
         val elements = listOf(
             KeyElement("filename:", "filename:", KeyElementType.LITERAL),
@@ -146,12 +147,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("filename")
         val expectedKey = listOf("Key0", "Key2", "Key21")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(8, parsed?.nsLength)
+        assertEquals(6, parsed?.keyLength)
+        assertEquals(15, parsed?.length)
+        assertEquals(listOf(6, 0, 0), textLengths)
     }
 
-//    filename:${key}item   / Key0.Key2.Key21.
-//    @Test
+//filename:${key}item                       / Key0.Key2.Key21.      / filename{8}:Key0{6}.Key2{0}.Key21{0}.item{4}
+    @Test
     fun parseExpressionWithKeyInTemplate2() {
         val elements = listOf(
                 KeyElement("filename:", "filename:", KeyElementType.LITERAL),
@@ -162,12 +168,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("filename")
         val expectedKey = listOf("Key0", "Key2", "Key21", "item")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-    }
+        assertEquals(8, parsed?.nsLength)
+        assertEquals(10, parsed?.keyLength)
+        assertEquals(19, parsed?.length)
+        assertEquals(listOf(6, 0, 0, 4), textLengths)
+}
 
-    //filename:${key}.item   / Key0.Key2.Key21
-//    @Test
+//filename:${key}.item                      / Key0.Key2.Key21       / filename{8}:Key0{6}.Key2{0}.Key21{0}.item{4}
+    @Test
     fun parseExpressionWithKeyInTemplate3() {
         val elements = listOf(
                 KeyElement("filename:", "filename:", KeyElementType.LITERAL),
@@ -178,12 +189,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("filename")
         val expectedKey = listOf("Key0", "Key2", "Key21", "item")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(8, parsed?.nsLength)
+        assertEquals(11, parsed?.keyLength)
+        assertEquals(20, parsed?.length)
+        assertEquals(listOf(6, 0, 0, 4), textLengths)
     }
 
-    //filename:${key}item   / Key0.Key2.Key21
-//    @Test
+//filename:${key}item                       / Key0.Key2.Key21       / filename{8}:Key0{6}.Key2{0}.Key21item{3}
+    @Test
     fun parseExpressionWithKeyInTemplate4() {
         val elements = listOf(
                 KeyElement("filename:", "filename:", KeyElementType.LITERAL),
@@ -194,12 +210,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("filename")
         val expectedKey = listOf("Key0", "Key2", "Key21item")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(8, parsed?.nsLength)
+        assertEquals(10, parsed?.keyLength)
+        assertEquals(19, parsed?.length)
+        assertEquals(listOf(6, 0, 4), textLengths)
     }
 
-    //filename:root.${key}  / Key0.Key2.Key21
-//    @Test
+//filename:root.${key}                      / Key0.Key2.Key21       / filename{8}:root{4}.Key0{6}.Key2{0}.Key21{0}
+    @Test
     fun partOfKeyIsExpression() {
         val elements = listOf(
             KeyElement("filename:root.", "filename:root.", KeyElementType.LITERAL),
@@ -209,12 +230,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("filename")
         val expectedKey = listOf("root", "Key0", "Key2", "Key21")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(8, parsed?.nsLength)
+        assertEquals(11, parsed?.keyLength)
+        assertEquals(20, parsed?.length)
+        assertEquals(listOf(4, 6, 0, 0), textLengths)
     }
 
-    //filename:root${key}   / .Key0.Key2.Key21
-//    @Test
+//filename:root${key}                       / .Key0.Key2.Key21      / filename{8}:root{4}.Key0{6}.Key2{0}.Key21{0}
+    @Test
     fun partOfKeyIsExpression2() {
         val elements = listOf(
                 KeyElement("filename:root", "filename:root", KeyElementType.LITERAL),
@@ -224,12 +250,17 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("filename")
         val expectedKey = listOf("root", "Key0", "Key2", "Key21")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(8, parsed?.nsLength)
+        assertEquals(10, parsed?.keyLength)
+        assertEquals(19, parsed?.length)
+        assertEquals(listOf(4, 6, 0, 0), textLengths)
     }
 
-    //filename:root${key}   / Key0.Key2.Key21
-//    @Test
+//filename:root${key}                       / Key0.Key2.Key21       / filename{8}:rootKey0{9}.Key2{0}.Key21{0}
+    @Test
     fun partOfKeyIsExpression3() {
         val elements = listOf(
                 KeyElement("filename:root", "filename:root", KeyElementType.LITERAL),
@@ -239,8 +270,13 @@ class ExpressionKeyParserTest : TestBase {
         val expectedFileName = listOf("filename")
         val expectedKey = listOf("rootKey0", "Key2", "Key21")
         val parsed = parser.parse(elements)
+        val textLengths = extractLengths(parsed?.compositeKey)
         assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        assertEquals(8, parsed?.nsLength)
+        assertEquals(10, parsed?.keyLength)
+        assertEquals(19, parsed?.length)
+        assertEquals(listOf(10, 0, 0), textLengths)
     }
 }
 

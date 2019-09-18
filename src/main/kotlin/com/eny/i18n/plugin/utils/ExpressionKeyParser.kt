@@ -7,7 +7,11 @@ data class FullKey(val fileName:List<Token>, val compositeKey:List<Token>) {
         get() = field
     val length = nsLength + keyLength + if (nsLength > 0) 1 else 0
         get() = field
-    private fun ln(tokens: List<Token>) = tokens.map { n -> n.textLength()}.sum() + (if (tokens.isEmpty()) 0 else (tokens.size - 1))
+    private fun ln(tokens: List<Token>):Int {
+        val lengths = tokens.map { n -> n.textLength()}.filter { v -> v > 0}
+        val dotCorrection = tokens.map { n -> n.dotCorrection()}.sum()
+        return lengths.sum() + (if (lengths.isEmpty()) 0 else (lengths.size - 1)) - dotCorrection
+    }
 }
 
 interface State {
