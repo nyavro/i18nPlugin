@@ -86,7 +86,7 @@ class TokenizerTest {
         val keyElement = KeyElement("\${ref}", null, KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
-            listOf(Asterisk),
+            listOf(TemplateExpression("\${ref}", listOf(Asterisk))),
             tokenizer.tokenize(keyElement)
         )
     }

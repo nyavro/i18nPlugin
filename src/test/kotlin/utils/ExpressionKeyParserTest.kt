@@ -9,25 +9,11 @@ class ExpressionKeyParserTest : TestBase {
 //fileName:ROOT.Key2.Key3                   /                       / fileName{8}:ROOT{4}.Key2{4}.Key3{4}
     @Test
     fun parseSimpleLiteral() {
-        val literal = listOf(
-                KeyElement.fromLiteral("fileName:ROOT.Key2.Key3")
+        val elements = listOf(
+            KeyElement.fromLiteral("fileName:ROOT.Key2.Key3")
         )
-        val parser = ExpressionKeyParser()
-        val expected = FullKey(
-                listOf(Literal("fileName")),
-                listOf(
-                        Literal("ROOT"),
-                        Literal("Key2"),
-                        Literal("Key3")
-                )
-        )
-        val actual = parser.parse(literal)
-        val textLengths = extractLengths(actual?.compositeKey)
-        assertEquals(expected, actual)
-        assertEquals(23, actual?.length)
-        assertEquals(8, actual?.nsLength)
-        assertEquals(14, actual?.keyLength)
-        assertEquals(listOf(4, 4, 4), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("fileName{8}:ROOT{4}.Key2{4}.Key3{4}", toTestString(parsed))
     }
 
 //${fileExpr}:ROOT.Key1.Key31               / sample                / sample{11}:ROOT{4}.Key1{4}.Key31{5}
@@ -37,17 +23,8 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
             KeyElement(":ROOT.Key1.Key31", ":ROOT.Key1.Key31", KeyElementType.LITERAL)
         )
-        val parser = ExpressionKeyParser()
-        val expectedFileName = listOf("sample")
-        val expectedKey = listOf("ROOT", "Key1", "Key31")
-        val parsed = parser.parse(elements)
-        val textLengths = extractLengths(parsed?.compositeKey)
-        assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-        assertEquals(27, parsed?.length)
-        assertEquals(11, parsed?.nsLength)
-        assertEquals(15, parsed?.keyLength)
-        assertEquals(listOf(4, 4, 5), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
 //prefix${fileExpr}:ROOT.Key4.Key5          / sample                / prefixsample{11}:ROOT{4}.Key4{4}.Key5{4}
@@ -58,17 +35,8 @@ class ExpressionKeyParserTest : TestBase {
                 KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
                 KeyElement(":ROOT.Key4.Key5", ":ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
-        val parser = ExpressionKeyParser()
-        val expectedFileName = listOf("prefixsample")
-        val expectedKey = listOf("ROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        val textLengths = extractLengths(parsed?.compositeKey)
-        assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-        assertEquals(17, parsed?.nsLength)
-        assertEquals(14, parsed?.keyLength)
-        assertEquals(32, parsed?.length)
-        assertEquals(listOf(4, 4, 4), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
 //${fileExpr}postfix:ROOT.Key4.Key5         / sample                / samplepostfix{18}:ROOT{4}.Key4{4}.Key5{4}
@@ -79,17 +47,8 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement("postfix", "postfix", KeyElementType.LITERAL),
             KeyElement(":ROOT.Key4.Key5", ":ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
-        val parser = ExpressionKeyParser()
-        val expectedFileName = listOf("samplepostfix")
-        val expectedKey = listOf("ROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        val textLengths = extractLengths(parsed?.compositeKey)
-        assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-        assertEquals(18, parsed?.nsLength)
-        assertEquals(14, parsed?.keyLength)
-        assertEquals(33, parsed?.length)
-        assertEquals(listOf(4, 4, 4), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
 //prefix${fileExpr}postfix:ROOT.Key4.Key5   / sample                / prefixsamplepostfix{24}:ROOT{4}.Key4{4}.Key5{4}
@@ -101,39 +60,20 @@ class ExpressionKeyParserTest : TestBase {
                 KeyElement("postfix", "postfix", KeyElementType.LITERAL),
                 KeyElement(":ROOT.Key4.Key5", ":ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
-        val parser = ExpressionKeyParser()
-        val expectedFileName = listOf("prefixsamplepostfix")
-        val expectedKey = listOf("ROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        val textLengths = extractLengths(parsed?.compositeKey)
-        assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-        assertEquals(24, parsed?.nsLength)
-        assertEquals(14, parsed?.keyLength)
-        assertEquals(39, parsed?.length)
-        assertEquals(listOf(4, 4, 4), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
-//prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey      / prefixpartFile{17}:partKeypostfix{6}.ROOT{4}.Key4{4}.Key5{4}
+//prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey      / prefixpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
                 KeyElement("prefix", "prefix", KeyElementType.LITERAL),
                 KeyElement("\${fileExpr}", "partFile:partKey", KeyElementType.TEMPLATE),
-                KeyElement("postfix", "postfix", KeyElementType.LITERAL),
-                KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
+                KeyElement("postfix.ROOT.Key4.Key5", "postfix.ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
-        val parser = ExpressionKeyParser()
-        val expectedFileName = listOf("prefixpartFile")
-        val expectedKey = listOf("partKeypostfix", "ROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        val textLengths = extractLengths(parsed?.compositeKey)
-        assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-        assertEquals(17, parsed?.nsLength)
-        assertEquals(11, parsed?.keyLength)
-        assertEquals(39, parsed?.length)
-        assertEquals(listOf(6, 4, 4, 4), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
 //filename:${key}                           / Key0.Key2.Key21       / filename{8}:Key0{6}.Key2{0}.Key21{0}
@@ -143,17 +83,8 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement("filename:", "filename:", KeyElementType.LITERAL),
             KeyElement("\${key}", "Key0.Key2.Key21", KeyElementType.TEMPLATE)
         )
-        val parser = ExpressionKeyParser()
-        val expectedFileName = listOf("filename")
-        val expectedKey = listOf("Key0", "Key2", "Key21")
-        val parsed = parser.parse(elements)
-        val textLengths = extractLengths(parsed?.compositeKey)
-        assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-        assertEquals(8, parsed?.nsLength)
-        assertEquals(6, parsed?.keyLength)
-        assertEquals(15, parsed?.length)
-        assertEquals(listOf(6, 0, 0), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}:Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
 //filename:${key}item                       / Key0.Key2.Key21.      / filename{8}:Key0{6}.Key2{0}.Key21{0}.item{4}
@@ -164,17 +95,8 @@ class ExpressionKeyParserTest : TestBase {
                 KeyElement("\${key}", "Key0.Key2.Key21.", KeyElementType.TEMPLATE),
                 KeyElement("item", "item", KeyElementType.LITERAL)
         )
-        val parser = ExpressionKeyParser()
-        val expectedFileName = listOf("filename")
-        val expectedKey = listOf("Key0", "Key2", "Key21", "item")
-        val parsed = parser.parse(elements)
-        val textLengths = extractLengths(parsed?.compositeKey)
-        assertEquals(expectedFileName, extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
-        assertEquals(8, parsed?.nsLength)
-        assertEquals(10, parsed?.keyLength)
-        assertEquals(19, parsed?.length)
-        assertEquals(listOf(6, 0, 0, 4), textLengths)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
 }
 
 //filename:${key}.item                      / Key0.Key2.Key21       / filename{8}:Key0{6}.Key2{0}.Key21{0}.item{4}

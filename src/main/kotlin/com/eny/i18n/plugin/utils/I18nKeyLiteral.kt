@@ -44,6 +44,8 @@ data class Literal(private val literal: String): Token {
             return Literal(literal + token.literal)
         } else if (token is ChildToken) {
             return token.copy(value = this.merge(token.value), len = textLength() + token.len)// token.copy(value = this.merge(token.value))
+        } else if (token is Asterisk) {
+            return Literal(literal + token.text())
         } else {
             TODO()
         }
@@ -76,7 +78,7 @@ data class TemplateExpression(private val expression: String, private val resolv
             Pair (
                 isFirstLiteralSet || token is Literal,
                 list + ChildToken(token, this,
-                    if (!isFirstLiteralSet && token is Literal) {
+                    if (!isFirstLiteralSet && (token is Literal || token is Asterisk)) {
                         expression.length
                     } else 0,
                     dotCorrection

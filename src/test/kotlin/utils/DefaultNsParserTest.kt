@@ -5,7 +5,7 @@ import org.junit.Ignore
 import org.junit.Test
 import kotlin.test.assertEquals
 
-@Ignore
+//@Ignore
 class DefaultNsParserTest : TestBase{
 
     //    ROOT.Key2.Key3
@@ -47,10 +47,10 @@ class DefaultNsParserTest : TestBase{
         val elements = listOf(
                 KeyElement("prefix", "prefix", KeyElementType.LITERAL),
                 KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
-                KeyElement("ROOT.Key4.Key5", "ROOT.Key4.Key5", KeyElementType.LITERAL)
+                KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
         val parser = ExpressionKeyParser()
-        val expectedKey = listOf("prefix", "sample", "ROOT", "Key4", "Key5")
+        val expectedKey = listOf("prefixsample", "ROOT", "Key4", "Key5")
         val parsed = parser.parse(elements)
         assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
@@ -65,7 +65,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
         val parser = ExpressionKeyParser()
-        val expectedKey = listOf("sample", "postfix", "ROOT", "Key4", "Key5")
+        val expectedKey = listOf("samplepostfix", "ROOT", "Key4", "Key5")
         val parsed = parser.parse(elements)
         assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
@@ -81,7 +81,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement("ROOT.Key4.Key5", "ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
         val parser = ExpressionKeyParser()
-        val expectedKey = listOf("prefix", "sample", "postfix", "ROOT", "Key4", "Key5")
+        val expectedKey = listOf("prefixsamplepostfixROOT", "Key4", "Key5")
         val parsed = parser.parse(elements)
         assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
@@ -97,7 +97,7 @@ class DefaultNsParserTest : TestBase{
             KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
         )
         val parser = ExpressionKeyParser()
-        val expectedKey = listOf("prefix", "partFile", "partKeypostfix", "ROOT", "Key4", "Key5")
+        val expectedKey = listOf("prefixpartFile", "partKeypostfix", "ROOT", "Key4", "Key5")
         val parsed = parser.parse(elements)
         assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
         assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
