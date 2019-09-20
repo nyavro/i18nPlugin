@@ -10,7 +10,7 @@ class Tokenizer(val nsSeparator: String, val keySeparator: String) {
         return when {
             element.type == KeyElementType.LITERAL -> tokenizeLiteral(element.text)
             element.resolvedTo != null -> listOf(TemplateExpression(element.text, tokenizeLiteral(element.resolvedTo)))
-            else -> listOf(TemplateExpression(element.text, listOf(Asterisk)))
+            else -> listOf(TemplateExpression(element.text, listOf(Literal("*", 1, 0))))
         }
     }
 
@@ -20,7 +20,7 @@ class Tokenizer(val nsSeparator: String, val keySeparator: String) {
                 when (token) {
                     nsSeparator -> NsSeparator(nsSeparator)
                     keySeparator -> KeySeparator(keySeparator)
-                    else -> Literal(token.toString())
+                    else -> Literal(token.toString(), token.toString().length, 0)
                 }
         }
     }

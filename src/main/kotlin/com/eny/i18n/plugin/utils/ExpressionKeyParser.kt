@@ -1,11 +1,11 @@
 package com.eny.i18n.plugin.utils
 
-data class FullKey(val fileName:List<Token>, val compositeKey:List<Token>, val nsCorr: Boolean = false) {
-    val nsLength = ln(fileName, false, true)
+data class FullKey(val ns:Token?, val compositeKey:List<Token>) {
+    val nsLength = ns?.textLength() ?: 0
         get() = field
     val keyLength = ln(compositeKey, true, false)
         get() = field
-    val length = nsLength + keyLength + (if (nsLength > 0) 1 else 0) + (if (nsCorr) 1 else 0)
+    val length = nsLength + keyLength + (if (nsLength > 0) 1 else 0)
         get() = field
     private fun ln(tokens: List<Token>, correctDots: Boolean, correctNs: Boolean):Int {
         val lengths = tokens.map { n -> n.textLength()}.filter { v -> v > 0}
@@ -30,116 +30,54 @@ class Error(val msg: String): State {
     override fun toString(): String = "Error <$msg>"
 }
 
-class WaitingFileName: State {
+class Start(val init: Token?) : State {
+    private fun merge(token: Token): Token {
+        return when {
+            init != null -> init.merge(token)
+            else -> token
+        }
+    }
     override fun next(token: Token): State {
-        if (token.type() == TokenType.NsSeparator) {
-            return Error("Invalid ns separator position (0)")
-        } else if (token.type() == TokenType.KeySeparator) {
-            return Error("Invalid key separator position (0)")
-        } else if (token.type() == TokenType.Template) {
-            return token.resolved().fold(this as State) {
-                state, item -> state.next(item)
+        return when {
+            token.type() == TokenType.NsSeparator && init != null  -> WaitingLiteral(init, listOf())
+            token.type() == TokenType.KeySeparator && init != null -> WaitingLiteral(null, listOf(init))
+            token.type() == TokenType.Literal  -> Start(merge(token))
+            token.type() == TokenType.Template -> unwrapTemplateExpression(token as TemplateExpression)
+            else -> Error("Invalid ns separator position (0)") // Never get here
+        }
+    }
+}
+
+class WaitingLiteral(val file: Token?, val key: List<Token>) : State {
+    override fun next(token: Token): State {
+        return when {
+            token.type() == TokenType.Literal ->  WaitingLiteralOrSeparator(file, key + token)
+            token.type() == TokenType.Template -> unwrapTemplateExpression(token as TemplateExpression)
+            else -> Error("Invalid token " + token.text())
+        }
+    }
+}
+
+class WaitingLiteralOrSeparator(val file: Token?, val key: List<Token>) : State {
+    override fun next(token: Token): State {
+        return when {
+            token.type() == TokenType.KeySeparator -> WaitingLiteral(file, key)
+            token.type() == TokenType.Literal -> {
+                val last = key.last().merge(token)
+                val init = key.dropLast(1)
+                WaitingLiteralOrSeparator(file, init + last)
             }
-        } else {
-            return WaitingNsKsLiteral(listOf(token))
+            token.type() == TokenType.Template -> unwrapTemplateExpression(token as TemplateExpression)
+            else -> Error("Invalid token " + token.text())
         }
     }
-}
-
-class WaitingNsKsLiteral(val maybeFile: List<Token>) : State {
-    override fun next(token: Token): State {
-        if (token.type() == TokenType.NsSeparator) {
-            return FullKeyWaitingKey(maybeFile, listOf())
-        } else if (token.type() == TokenType.KeySeparator) {
-            return DefaultWaitingLiteral(maybeFile)
-        } else if (token.type() == TokenType.Literal) {
-            val last = maybeFile.last().merge(token)
-            val init = maybeFile.dropLast(1)
-            return WaitingNsKsLiteral(init + last)
-        } else if (token.type() == TokenType.Template) {
-            return unwrapTemplateExpression(token as TemplateExpression)
-        } else if (token.type() == TokenType.Asterisk) {
-            val last = maybeFile.last().merge(token)
-            val init = maybeFile.dropLast(1)
-            return WaitingNsKsLiteral(init + last)
-        } else {
-            return Error("Invalid ns separator position (0)") // Never get here
-        }
-    }
-}
-
-class DefaultWaitingLiteral(val keys: List<Token>) : State {
-    override fun next(token: Token): State {
-        if (token.type() == TokenType.Literal) {
-            return DefaultWaitingKs(keys + token)
-        } else {
-            return Error("Invalid token " + token.text())
-        }
-    }
-}
-
-class DefaultWaitingKs(val keys: List<Token>) : State {
-    override fun next(token: Token): State {
-        if (token is KeySeparator) {
-            return DefaultWaitingLiteral(keys)
-        } else if(token.type() == TokenType.Literal) {
-            val last = keys.last().merge(token)
-            val init = keys.dropLast(1)
-            return DefaultWaitingKs(init + last)
-        } else {
-            return Error("Ivalid token " + token.text())
-        }
-    }
-    override fun fullKey(): FullKey? = FullKey(listOf(), keys, false)
-}
-
-class FullKeyWaitingKey(val file: List<Token>, val key: List<Token>) : State {
-    override fun next(token: Token): State {
-        if (token.type() == TokenType.Asterisk) {
-            return FullKeyWaitingKS(file, key + token)
-        } else if (token.type() == TokenType.Literal) {
-            return FullKeyWaitingKS(file, key + token)
-        } else if (token.type() == TokenType.Template) {
-            return unwrapTemplateExpression(token as TemplateExpression)
-        } else {
-            return Error("Invalid token " + token.text())
-        }
-    }
-}
-
-class FullKeyWaitingKS(val file: List<Token>, val key: List<Token>) : State {
-    override fun next(token: Token): State {
-        if(token.type() == TokenType.KeySeparator) {
-            return FullKeyWaitingKey(file, key)
-        }
-        if(token.type() == TokenType.Literal) {
-            val last = key.last().merge(token)
-            val init = key.dropLast(1)
-            return FullKeyWaitingKS(file, init + last)
-        }
-        else if (token.type() == TokenType.Asterisk) {
-            val last = key.last().merge(token)
-            val init = key.dropLast(1)
-            return FullKeyWaitingKS(file, init + last)
-            //return FullKeyWaitingKS(file, key + token)
-        }
-        if(token.type() == TokenType.Template) {
-            return unwrapTemplateExpression(token as TemplateExpression)
-        }
-        else {
-            return Error("Invalid token " + token.text())
-        }
-    }
-    override fun fullKey(): FullKey? = FullKey(file, key, false)
+    override fun fullKey(): FullKey? = FullKey(file, key)
 }
 
 class ExpressionKeyParser {
-    val FILENAME_SEPARATOR = ":"
-    val COMPOSITE_KEY_SEPARATOR = "."
-
     fun parse(elements: List<KeyElement>): FullKey? {
         val tokens = Tokenizer(":", ".").tokenizeAll(elements)
-        return tokens.fold(WaitingFileName() as State) {
+        return tokens.fold(Start(null) as State) {
             state, token -> state.next(token)
         }.fullKey()
     }

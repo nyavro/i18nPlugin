@@ -51,7 +51,7 @@ class JavaScriptUtil {
                     KeyElementType.TEMPLATE
                 )
             } else //if (item is PsiLiteralValue) {
-                KeyElement.fromLiteral(item.text)
+                KeyElement.literal(item.text)
 //            } else null
         }
         return transformed.mapNotNull {element -> element.resolvedTo}.joinToString(".")

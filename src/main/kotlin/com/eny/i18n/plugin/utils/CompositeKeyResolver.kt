@@ -79,7 +79,7 @@ interface CompositeKeyResolver {
                     asList()?.
                     map { node -> node.firstChildNode.text.unQuote()}?.
                     filter { key -> key.startsWith(searchPrefix)}?.
-                    map { key -> KeyElement.fromLiteral(key.substringAfter(searchPrefix))} ?:
+                    map { key -> KeyElement.literal(key.substringAfter(searchPrefix))} ?:
             listOf()
     }
 

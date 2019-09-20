@@ -25,7 +25,7 @@ data class I18nFullKey(val fileName: String?, val compositeKey: List<KeyElement>
         }
 
         private fun parseCompositeKey(compositeKey: String): List<KeyElement> {
-            return compositeKey.split(CompositeKeySeparator).toList().map {text -> KeyElement.fromLiteral(text)}
+            return compositeKey.split(CompositeKeySeparator).toList().map {text -> KeyElement.literal(text)}
         }
     }
 }

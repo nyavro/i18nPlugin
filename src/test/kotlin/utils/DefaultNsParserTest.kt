@@ -1,105 +1,172 @@
 package utils
 
 import com.eny.i18n.plugin.utils.*
-import org.junit.Ignore
 import org.junit.Test
 import kotlin.test.assertEquals
 
 //@Ignore
 class DefaultNsParserTest : TestBase{
 
-    //    ROOT.Key2.Key3
+//ROOT.Key2.Key3                            /                   / ROOT{4}.Key2{4}.Key3{4}
     @Test
     fun parseDefaultFileLiteral() {
-        val literal = listOf(
-                KeyElement.fromLiteral("ROOT.Key2.Key3")
+        val elements = listOf(
+            KeyElement.literal("ROOT.Key2.Key3")
         )
-        val parser = ExpressionKeyParser()
-        val expected = FullKey(
-                listOf(),
-                listOf(
-                        Literal("ROOT"),
-                        Literal("Key2"),
-                        Literal("Key3")
-                )
-        )
-        val parseOld = parser.parse(literal)
-        assertEquals(expected, parseOld)
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("ROOT{4}.Key2{4}.Key3{4}", toTestString(parsed))
     }
 
-    //${fileExpr}.ROOT.Key1.Key31       / sample
+//${fileExpr}.ROOT.Key1.Key31               / sample            / sample{11}.ROOT{4}.Key1{4}.Key31{5}
     @Test
     fun parseExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
-                KeyElement(".ROOT.Key1.Key31", ".ROOT.Key1.Key31", KeyElementType.LITERAL)
+            KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
+            KeyElement.literal(".ROOT.Key1.Key31")
         )
-        val parser = ExpressionKeyParser()
-        val expectedKey = listOf("sample", "ROOT", "Key1", "Key31")
-        val parsed = parser.parse(elements)
-        assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("sample{11}.ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
-    //prefix${fileExpr}.ROOT.Key4.Key5  / sample
+//prefix${fileExpr}.ROOT.Key4.Key5          / sample            / prefixsample{17}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement("prefix", "prefix", KeyElementType.LITERAL),
-                KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
-                KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
+                KeyElement.literal("prefix"),
+                KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
+                KeyElement.literal(".ROOT.Key4.Key5")
         )
-        val parser = ExpressionKeyParser()
-        val expectedKey = listOf("prefixsample", "ROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("prefixsample{17}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-    //${fileExpr}postfix.ROOT.Key4.Key5  / sample
+//${fileExpr}postfix.ROOT.Key4.Key5         / sample            / samplepostfix{18}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
-                KeyElement("postfix", "postfix", KeyElementType.LITERAL),
-                KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
+                KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
+                KeyElement.literal("postfix"),
+                KeyElement.literal(".ROOT.Key4.Key5")
         )
-        val parser = ExpressionKeyParser()
-        val expectedKey = listOf("samplepostfix", "ROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("samplepostfix{18}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-    //prefix${fileExpr}postfix.ROOT.Key4.Key5  / sample
+//prefix${fileExpr}postfix.ROOT.Key4.Key5   / sample            / prefixsamplepostfix{24}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement("prefix", "prefix", KeyElementType.LITERAL),
-                KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
-                KeyElement("postfix", "postfix", KeyElementType.LITERAL),
-                KeyElement("ROOT.Key4.Key5", "ROOT.Key4.Key5", KeyElementType.LITERAL)
+            KeyElement.literal("prefix"),
+            KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
+            KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
-        val parser = ExpressionKeyParser()
-        val expectedKey = listOf("prefixsamplepostfixROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("prefixsamplepostfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-    //prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile.partKey
+//prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile.partKey  / prefixpartFile{17}.partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
-            KeyElement("prefix", "prefix", KeyElementType.LITERAL),
-            KeyElement("\${fileExpr}", "partFile.partKey", KeyElementType.TEMPLATE),
-            KeyElement("postfix", "postfix", KeyElementType.LITERAL),
-            KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
+            KeyElement.literal("prefix"),
+            KeyElement.resolvedTemplate("\${fileExpr}", "partFile.partKey"),
+            KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
-        val parser = ExpressionKeyParser()
-        val expectedKey = listOf("prefixpartFile", "partKeypostfix", "ROOT", "Key4", "Key5")
-        val parsed = parser.parse(elements)
-        assertEquals(listOf(), extractTexts(parsed?.fileName ?: listOf()))
-        assertEquals(expectedKey, extractTexts(parsed?.compositeKey ?: listOf()))
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("prefixpartFile{17}.partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+    }
+
+//root.start${key}                          / *                     / root{4}.start*{11}
+    @Test
+    fun parseKeyInExpression() {
+        val elements = listOf(
+            KeyElement.literal("root.start"),
+            KeyElement.unresolvedTemplate("\${key}")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("root{4}.start*{11}", toTestString(parsed))
+    }
+
+//root.start${key}                          / .Key0.Key2.Key21      / root{4}.start{5}.Key0{6}.Key2{0}.Key21{0}
+    @Test
+    fun parseKeyInExpression2() {
+        val elements = listOf(
+            KeyElement.literal("root.start"),
+            KeyElement.resolvedTemplate("\${key}", ".Key0.Key2.Key21")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("root{4}.start{5}.Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))
+    }
+
+//root.start${key}                          / Key0.Key2.Key21       / root{4}.startKey0{11}.Key2{0}.Key21{0}
+    @Test
+    fun parseKeyInExpression3() {
+        val elements = listOf(
+            KeyElement.literal("root.start"),
+            KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("root{4}.startKey0{11}.Key2{0}.Key21{0}", toTestString(parsed))
+    }
+
+//filename:${key}                           / *         filename{8}.*{6}
+    @Test
+    fun parseExpressionWithKeyInTemplate() {
+        val elements = listOf(
+                KeyElement.literal("filename."),
+                KeyElement.unresolvedTemplate("\${key}")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}.*{6}", toTestString(parsed))
+    }
+
+//filename.root.${key}                      / *         filename{8}.root{4}.*{6}
+    @Test
+    fun partOfKeyIsExpression() {
+        val elements = listOf(
+                KeyElement.literal("filename.root."),
+                KeyElement.unresolvedTemplate("\${key}")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}.root{4}.*{6}", toTestString(parsed))
+    }
+
+//filename.${key}item                       / *         filename{8}.*item{10}
+    @Test
+    fun parseExpressionWithKeyInTemplate2() {
+        val elements = listOf(
+                KeyElement.literal("filename."),
+                KeyElement.unresolvedTemplate("\${key}"),
+                KeyElement.literal("item")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}.*item{10}", toTestString(parsed))
+    }
+
+//filename.${key}.item                      / *         filename{8}.*{6}.item{4}
+    @Test
+    fun parseExpressionWithKeyInTemplate3() {
+        val elements = listOf(
+                KeyElement.literal("filename."),
+                KeyElement.unresolvedTemplate("\${key}"),
+                KeyElement.literal(".item")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}.*{6}.item{4}", toTestString(parsed))
+    }
+
+//filename.${key}item                       / Key0.Key2.Key21       / filename{8}.Key0{6}.Key2{0}.Key21item{4}
+    @Test
+    fun parseExpressionWithKeyInTemplate4() {
+        val elements = listOf(
+                KeyElement.literal("filename."),
+                KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21"),
+                KeyElement.literal("item")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}.Key0{6}.Key2{0}.Key21item{4}", toTestString(parsed))
     }
 }
+
+
+

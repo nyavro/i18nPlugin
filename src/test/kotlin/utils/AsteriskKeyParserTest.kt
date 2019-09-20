@@ -11,8 +11,8 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parseExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement("\${fileExpr}", null, KeyElementType.TEMPLATE),
-            KeyElement(":ROOT.Key1.Key31", ":ROOT.Key1.Key31", KeyElementType.LITERAL)
+            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.literal(":ROOT.Key1.Key31")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("*{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
@@ -22,9 +22,9 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement("prefix", "prefix", KeyElementType.LITERAL),
-            KeyElement("\${fileExpr}", null, KeyElementType.TEMPLATE),
-            KeyElement(":ROOT.Key4.Key5", ":ROOT.Key4.Key5", KeyElementType.LITERAL)
+            KeyElement.literal("prefix"),
+            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.literal(":ROOT.Key4.Key5")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("prefix*{17}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
@@ -34,9 +34,9 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement("\${fileExpr}", null, KeyElementType.TEMPLATE),
-            KeyElement("postfix", "postfix", KeyElementType.LITERAL),
-            KeyElement(":ROOT.Key4.Key5", ":ROOT.Key4.Key5", KeyElementType.LITERAL)
+            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.literal("postfix"),
+            KeyElement.literal(":ROOT.Key4.Key5")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("*postfix{18}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
@@ -46,10 +46,10 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement("prefix", "prefix", KeyElementType.LITERAL),
-                KeyElement("\${fileExpr}", null, KeyElementType.TEMPLATE),
-                KeyElement("postfix", "postfix", KeyElementType.LITERAL),
-                KeyElement(":ROOT.Key4.Key5", ":ROOT.Key4.Key5", KeyElementType.LITERAL)
+            KeyElement.literal("prefix"),
+            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.literal("postfix"),
+            KeyElement.literal(":ROOT.Key4.Key5")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("prefix*postfix{24}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
@@ -59,10 +59,10 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
-                KeyElement("prefix", "prefix", KeyElementType.LITERAL),
-                KeyElement("\${fileExpr}", null, KeyElementType.TEMPLATE),
-                KeyElement("postfix", "postfix", KeyElementType.LITERAL),
-                KeyElement(".ROOT.Key4.Key5", ".ROOT.Key4.Key5", KeyElementType.LITERAL)
+            KeyElement.literal("prefix"),
+            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.literal("postfix"),
+            KeyElement.literal(".ROOT.Key4.Key5")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("prefix*postfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
@@ -72,8 +72,8 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parseExpressionWithKeyInTemplate() {
         val elements = listOf(
-            KeyElement("filename:", "filename:", KeyElementType.LITERAL),
-            KeyElement("\${key}", null, KeyElementType.TEMPLATE)
+            KeyElement.literal("filename:"),
+            KeyElement.unresolvedTemplate("\${key}")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("filename{8}:*{6}", toTestString(parsed))
@@ -83,9 +83,9 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parseExpressionWithKeyInTemplate2() {
         val elements = listOf(
-                KeyElement("filename:", "filename:", KeyElementType.LITERAL),
-                KeyElement("\${key}", null, KeyElementType.TEMPLATE),
-                KeyElement("item", "item", KeyElementType.LITERAL)
+            KeyElement.literal("filename:"),
+            KeyElement.unresolvedTemplate("\${key}"),
+            KeyElement.literal("item")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("filename{8}:*item{10}", toTestString(parsed))
@@ -95,9 +95,9 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun parseExpressionWithKeyInTemplate3() {
         val elements = listOf(
-                KeyElement("filename:", "filename:", KeyElementType.LITERAL),
-                KeyElement("\${key}", null, KeyElementType.TEMPLATE),
-                KeyElement(".item", ".item", KeyElementType.LITERAL)
+            KeyElement.literal("filename:"),
+            KeyElement.unresolvedTemplate("\${key}"),
+            KeyElement.literal(".item")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("filename{8}:*{6}.item{4}", toTestString(parsed))
@@ -107,8 +107,8 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun partOfKeyIsExpression() {
         val elements = listOf(
-            KeyElement("filename:root.", "filename:root.", KeyElementType.LITERAL),
-            KeyElement("\${key}", null, KeyElementType.TEMPLATE)
+            KeyElement.literal("filename:root."),
+            KeyElement.unresolvedTemplate("\${key}")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("filename{8}:root{4}.*{6}", toTestString(parsed))
@@ -118,8 +118,8 @@ class AsteriskKeyParserTest : TestBase {
     @Test
     fun partOfKeyIsExpression2() {
         val elements = listOf(
-                KeyElement("filename:root", "filename:root", KeyElementType.LITERAL),
-                KeyElement("\${key}", null, KeyElementType.TEMPLATE)
+            KeyElement.literal("filename:root"),
+            KeyElement.unresolvedTemplate("\${key}")
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("filename{8}:root*{10}", toTestString(parsed))

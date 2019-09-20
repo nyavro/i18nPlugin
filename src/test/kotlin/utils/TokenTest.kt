@@ -8,8 +8,8 @@ import kotlin.test.assertEquals
 class TokenTest {
     @Test
     fun mergeTwoLiterals() {
-        val a = Literal("first")
-        val b = Literal("Second")
+        val a = Literal("first", 5, 0)
+        val b = Literal("Second", 6, 0)
         val ab = a.merge(b)
         assertEquals("firstSecond", ab.text())
         assertEquals(11, ab.textLength())
@@ -17,8 +17,8 @@ class TokenTest {
 
     @Test
     fun mergeLiteralWithTemplate() {
-        val a = Literal("first")
-        val b = TemplateExpression("\${v}", listOf(Literal("Second"), Literal("Third"))).resolved.get(0)
+        val a = Literal("first", 5, 0)
+        val b = TemplateExpression("\${v}", listOf(Literal("Second", 6, 0), Literal("Third", 5, 0))).resolved.get(0)
         val ab = a.merge(b)
         assertEquals("firstSecond", ab.text())
         assertEquals(9, ab.textLength())
