@@ -12,19 +12,21 @@ class JavaScriptUtil {
 
     private val DUMMY_PROPERTY_VALUE = "6zZzq1Dw2Pe3Zuo4BiE5zxNvpVyDzNxBcbFxEV1vze9azDerVsWdaFfvBzEm"
 
+    private val parser: ExpressionKeyParser = ExpressionKeyParser()
+
     /**
      * Converts element to it's literal value, if possible
      */
-    fun extractI18nKeyLiteral(element: PsiElement): I18nKeyLiteral? {
+    fun extractI18nKeyLiteral(element: PsiElement): FullKey? {
         // Template expression
         if (isTemplateExpression(element)) {
-            return I18nKeyLiteral(resolveTemplateExpression(element), true)
+            return resolveTemplateExpression(element, true)
         }
         // String literal
         else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
             val value: Any? = element.value
             if (value is String) {
-                return I18nKeyLiteral(value, false)
+                return parser.parse(listOf(KeyElement.literal(value)))
             }
         }
         return null
@@ -42,7 +44,7 @@ class JavaScriptUtil {
      * const key = 'element';
      * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
      */
-    private fun resolveTemplateExpression(element: PsiElement): String {
+    private fun resolveTemplateExpression(element: PsiElement, isTemplate: Boolean): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
             item -> if (item.elementType.toString().contains("REFERENCE")) {
                 KeyElement(
@@ -54,7 +56,7 @@ class JavaScriptUtil {
                 KeyElement.literal(item.text)
 //            } else null
         }
-        return transformed.mapNotNull {element -> element.resolvedTo}.joinToString(".")
+        return parser.parse(parser.reduce(transformed.mapNotNull {element -> element}), isTemplate)
     }
 
     /**

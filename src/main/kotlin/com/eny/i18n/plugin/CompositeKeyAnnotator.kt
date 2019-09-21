@@ -19,11 +19,10 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
         }
     }
 
-    private fun annotateI18nLiteral(value: I18nKeyLiteral, element: PsiElement, holder: AnnotationHolder) {
-        val fullKey = value.fullKey()
-        val fileName = fullKey?.fileName
-        val compositeKey = fullKey?.compositeKey
-        if (fileName != null && compositeKey != null) {
+    private fun annotateI18nLiteral(fullKey: FullKey, element: PsiElement, holder: AnnotationHolder) {
+        val fileName = fullKey.ns?.text
+        val compositeKey = fullKey.compositeKey
+        if (fileName != null) {
             val annotationHelper = AnnotationHelper(element.textRange, holder)
             val files = JsonSearchUtil(element.project).findFilesByName(fileName)
             if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fileName)
@@ -39,7 +38,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
                     mostResolvedReference.element is JsonStringLiteral -> annotationHelper.annotateResolved(fileName)
                     mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
                     mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
-                    value.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
+                    fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                     else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)
                 }
             }

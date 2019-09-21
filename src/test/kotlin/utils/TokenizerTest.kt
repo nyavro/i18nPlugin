@@ -10,19 +10,19 @@ class TokenizerTest {
     fun tokenizeLiteral() {
         val keyElement = KeyElement.literal("item.value:some.test:another")
         val tokenizer = Tokenizer(":", ".")
-        val keySeparator = KeySeparator(".")
-        val nsSeparator = NsSeparator(":")
+        val keySeparator = KeySeparator
+        val nsSeparator = NsSeparator
         assertEquals(
             listOf(
-                    Literal("item", 4, 0),
-                    keySeparator,
-                    Literal("value", 5, 0),
-                    nsSeparator,
-                    Literal("some", 4, 0),
-                    keySeparator,
-                    Literal("test", 4, 0),
-                    nsSeparator,
-                    Literal("another", 7, 0)
+                Literal("item", 4, 0),
+                keySeparator,
+                Literal("value", 5, 0),
+                nsSeparator,
+                Literal("some", 4, 0),
+                keySeparator,
+                Literal("test", 4, 0),
+                nsSeparator,
+                Literal("another", 7, 0)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -33,7 +33,7 @@ class TokenizerTest {
         val keyElement = KeyElement.literal(":::")
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
-            listOf(NsSeparator(":"), NsSeparator(":"), NsSeparator(":")),
+            listOf(NsSeparator, NsSeparator, NsSeparator),
             tokenizer.tokenize(keyElement)
         )
     }
@@ -43,8 +43,8 @@ class TokenizerTest {
         val keyElement = KeyElement.literal(":.:.:")
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
-                listOf(NsSeparator(":"), KeySeparator("."), NsSeparator(":"), KeySeparator("."), NsSeparator(":")),
-                tokenizer.tokenize(keyElement)
+            listOf(NsSeparator, KeySeparator, NsSeparator, KeySeparator, NsSeparator),
+            tokenizer.tokenize(keyElement)
         )
     }
 
@@ -53,8 +53,8 @@ class TokenizerTest {
         val keyElement = KeyElement.literal("...")
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
-                listOf(KeySeparator("."), KeySeparator("."), KeySeparator(".")),
-                tokenizer.tokenize(keyElement)
+            listOf(KeySeparator, KeySeparator, KeySeparator),
+            tokenizer.tokenize(keyElement)
         )
     }
 
@@ -63,29 +63,43 @@ class TokenizerTest {
         val keyElement = KeyElement.literal(".some.")
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
-                listOf(KeySeparator("."), Literal("some", 4, 0), KeySeparator(".")),
-                tokenizer.tokenize(keyElement)
+            listOf(KeySeparator, Literal("some", 4, 0), KeySeparator),
+            tokenizer.tokenize(keyElement)
         )
     }
 
     @Test
     fun tokenizeTemplate() {
-        val keyElement = KeyElement("\${ref}", ".abc.def:ghi", KeyElementType.TEMPLATE)
+        val keyElement = KeyElement("\${ref}", "abc.def:ghi", KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer(":", ".")
-        val keySeparator = KeySeparator(".")
-        val nsSeparator = NsSeparator(":")
+        val keySeparator = KeySeparator
+        val nsSeparator = NsSeparator
         assertEquals(
             listOf(
-                TemplateExpression("\${ref}",
-                    listOf(
-                        keySeparator,
-                        Literal("abc", 3, 0),
-                        keySeparator,
-                        Literal("def", 3, 0),
-                        nsSeparator,
-                        Literal("ghi", 3, 0)
-                    )
-                )
+                Literal("abc", 6, 0),
+                keySeparator,
+                Literal("def", 0, 0),
+                nsSeparator,
+                Literal("ghi", 0, 0)
+            ),
+            tokenizer.tokenize(keyElement)
+        )
+    }
+
+    @Test
+    fun tokenizeTemplateWithDotCorrection() {
+        val keyElement = KeyElement("\${ref}", ".abc.def:ghi", KeyElementType.TEMPLATE)
+        val tokenizer = Tokenizer(":", ".")
+        val keySeparator = KeySeparator
+        val nsSeparator = NsSeparator
+        assertEquals(
+            listOf(
+                keySeparator,
+                Literal("abc", 6, 1),
+                keySeparator,
+                Literal("def", 0, 0),
+                nsSeparator,
+                Literal("ghi", 0, 0)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -96,7 +110,9 @@ class TokenizerTest {
         val keyElement = KeyElement("\${ref}", null, KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
-            listOf(TemplateExpression("\${ref}", listOf(Literal("*", 1, 0)))),
+            listOf(
+                Literal("*", 6, 0)
+            ),
             tokenizer.tokenize(keyElement)
         )
     }

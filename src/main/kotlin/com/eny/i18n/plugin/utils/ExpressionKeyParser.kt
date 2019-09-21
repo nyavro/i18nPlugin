@@ -1,84 +1,66 @@
 package com.eny.i18n.plugin.utils
 
-data class FullKey(val ns:Token?, val compositeKey:List<Token>) {
-    val nsLength = ns?.textLength() ?: 0
-        get() = field
-    val keyLength = ln(compositeKey, true, false)
-        get() = field
-    val length = nsLength + keyLength + (if (nsLength > 0) 1 else 0)
-        get() = field
-    private fun ln(tokens: List<Token>, correctDots: Boolean, correctNs: Boolean):Int {
-        val lengths = tokens.map { n -> n.textLength()}.filter { v -> v > 0}
-        val dotCorrection = if (correctDots) tokens.map { n -> n.dotCorrection()}.sum() else 0
-        return lengths.sum() + (if (lengths.isEmpty()) 0 else (lengths.size - 1)) - dotCorrection
-    }
-}
-
 interface State {
     fun next(token: Token): State
-    fun fullKey(): FullKey? {
-        return null
-    }
-    fun unwrapTemplateExpression(token: TemplateExpression): State = token.resolved().fold(this) {
-        state, item -> state.next(item)
-    }
+    fun fullKey(isTemplate: Boolean): FullKey? = null
 }
 
 class Error(val msg: String): State {
     override fun next(token: Token): State = this
-    override fun fullKey(): FullKey? = null
     override fun toString(): String = "Error <$msg>"
 }
 
-class Start(val init: Token?) : State {
-    private fun merge(token: Token): Token {
-        return when {
-            init != null -> init.merge(token)
-            else -> token
-        }
-    }
-    override fun next(token: Token): State {
-        return when {
-            token.type() == TokenType.NsSeparator && init != null  -> WaitingLiteral(init, listOf())
-            token.type() == TokenType.KeySeparator && init != null -> WaitingLiteral(null, listOf(init))
-            token.type() == TokenType.Literal  -> Start(merge(token))
-            token.type() == TokenType.Template -> unwrapTemplateExpression(token as TemplateExpression)
+class Start(val init: Literal?) : State {
+    override fun next(token: Token): State =
+        when {
+            token is NsSeparator && init != null  -> WaitingLiteral(init, listOf())
+            token is KeySeparator && init != null -> WaitingLiteral(null, listOf(init))
+            token is Literal  -> Start(if (init != null) init.merge(token) else token)
             else -> Error("Invalid ns separator position (0)") // Never get here
         }
-    }
 }
 
-class WaitingLiteral(val file: Token?, val key: List<Token>) : State {
-    override fun next(token: Token): State {
-        return when {
-            token.type() == TokenType.Literal ->  WaitingLiteralOrSeparator(file, key + token)
-            token.type() == TokenType.Template -> unwrapTemplateExpression(token as TemplateExpression)
-            else -> Error("Invalid token " + token.text())
+class WaitingLiteral(val file: Literal?, val key: List<Literal>) : State {
+    override fun next(token: Token): State =
+        when {
+            token is Literal ->  WaitingLiteralOrSeparator(file, key + token)
+            else -> Error("Invalid token " + token)
         }
-    }
 }
 
-class WaitingLiteralOrSeparator(val file: Token?, val key: List<Token>) : State {
-    override fun next(token: Token): State {
-        return when {
-            token.type() == TokenType.KeySeparator -> WaitingLiteral(file, key)
-            token.type() == TokenType.Literal -> {
+class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : State {
+    override fun next(token: Token): State =
+        when {
+            token is KeySeparator -> WaitingLiteral(file, key)
+            token is Literal -> {
                 val last = key.last().merge(token)
                 val init = key.dropLast(1)
                 WaitingLiteralOrSeparator(file, init + last)
             }
-            token.type() == TokenType.Template -> unwrapTemplateExpression(token as TemplateExpression)
-            else -> Error("Invalid token " + token.text())
+            else -> Error("Invalid token " + token)
         }
-    }
-    override fun fullKey(): FullKey? = FullKey(file, key)
+    override fun fullKey(isTemplate: Boolean): FullKey? = FullKey(file, key, isTemplate)
 }
 
 class ExpressionKeyParser {
-    fun parse(elements: List<KeyElement>): FullKey? {
-        val tokens = Tokenizer(":", ".").tokenizeAll(elements)
-        return tokens.fold(Start(null) as State) {
-            state, token -> state.next(token)
-        }.fullKey()
+    private val dropItems = listOf("`", "{", "}", "$")
+    fun reduce(elements: List<KeyElement>): List<KeyElement> {
+        return elements.mapNotNull {
+            item -> when {
+                dropItems.contains(item.text) -> null
+                item.type == KeyElementType.TEMPLATE -> item.copy(text="\${${item.text}}")
+                else -> item
+            }
+        }
     }
+
+    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false): FullKey? =
+        Tokenizer(":", ".")
+            .tokenizeAll(elements)
+            .fold(Start(null) as State) {
+                state, token -> state.next(token)
+            }
+            .fullKey(isTemplate)
+
+    fun parseLiteral(text: String): FullKey? = parse(listOf(KeyElement.literal(text)))
 }

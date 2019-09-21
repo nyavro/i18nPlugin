@@ -153,4 +153,28 @@ class ExpressionKeyParserTest : TestBase {
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("filename{8}:rootKey0{10}.Key2{0}.Key21{0}", toTestString(parsed))
     }
+
+//filename:root${key}Postfix                / .Key0                 / filename{8}:root{4}.Key0Postfix{13}
+    @Test
+    fun partOfKeyIsExpression4() {
+        val elements = listOf(
+                KeyElement.literal("filename:root"),
+                KeyElement.resolvedTemplate("\${key}", ".Key0"),
+                KeyElement.literal("Postfix")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}:root{4}.Key0Postfix{13}", toTestString(parsed))
+    }
+
+//filename:root${key}.Postfix                / .Key0                / filename{8}:root{4}.Key0{6}.Postfix{7}
+    @Test
+    fun partOfKeyIsExpression5() {
+        val elements = listOf(
+                KeyElement.literal("filename:root"),
+                KeyElement.resolvedTemplate("\${key}", ".Key0"),
+                KeyElement.literal(".Postfix")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}:root{4}.Key0{6}.Postfix{7}", toTestString(parsed))
+    }
 }

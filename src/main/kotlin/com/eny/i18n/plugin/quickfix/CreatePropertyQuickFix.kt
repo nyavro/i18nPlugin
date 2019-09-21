@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.quickfix
 
-import com.eny.i18n.plugin.I18nFullKey
 import com.eny.i18n.plugin.utils.CompositeKeyResolver
+import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.icons.AllIcons
@@ -13,7 +13,7 @@ import com.intellij.openapi.ui.JBPopupMenu
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 
-class CreatePropertyQuickFix(val fullKey: I18nFullKey) : BaseIntentionAction(), CompositeKeyResolver {
+class CreatePropertyQuickFix(val fullKey: FullKey) : BaseIntentionAction(), CompositeKeyResolver {
 
 //    private const
 
@@ -26,9 +26,9 @@ class CreatePropertyQuickFix(val fullKey: I18nFullKey) : BaseIntentionAction(), 
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         ApplicationManager.getApplication().invokeLater(object : Runnable {
             override fun run() {
-                if (fullKey.fileName != null && editor != null) {
+                if (fullKey.ns != null && editor != null) {
                     val search = JsonSearchUtil(project)
-                    val jsonFiles = search.findFilesByName(fullKey.fileName)
+                    val jsonFiles = search.findFilesByName(fullKey.ns.text)
                     if (jsonFiles.size == 1) {
                         createPropertyInFile(project, jsonFiles.get(0))
                     } else if (jsonFiles.size > 1) {

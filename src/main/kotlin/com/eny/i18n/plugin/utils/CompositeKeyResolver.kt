@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 /**
  * Property reference represents PsiElement and it's path from Json file root
  */
-data class PropertyReference(val path: List<KeyElement>, val element: PsiElement?, val unresolved: List<KeyElement>, val isPlural: Boolean = false)
+data class PropertyReference(val path: List<Literal>, val element: PsiElement?, val unresolved: List<Literal>, val isPlural: Boolean = false)
 
 interface CompositeKeyResolver {
 
@@ -18,7 +18,7 @@ interface CompositeKeyResolver {
      * @param {PsiElement} fileNode Root element to find property from
      * Returns PropertyReference by composite key
      */
-    fun resolveCompositeKey(compositeKey: List<KeyElement>, fileNode: PsiElement): PropertyReference {
+    fun resolveCompositeKey(compositeKey: List<Literal>, fileNode: PsiElement): PropertyReference {
         val root: PsiElement? = PsiTreeUtil.getChildOfType(fileNode, JsonObject::class.java)
         return compositeKey.fold(PropertyReference(listOf(), root, listOf())) { propertyReference, key ->
             if (propertyReference.element is JsonObject) {
@@ -58,7 +58,7 @@ interface CompositeKeyResolver {
     /**
      * Returns PsiElement by composite key from file's root node
      */
-    fun resolveCompositeKeyProperty(compositeKey: List<KeyElement>, fileNode: PsiElement): PsiElement? {
+    fun resolveCompositeKeyProperty(compositeKey: List<Literal>, fileNode: PsiElement): PsiElement? {
         val root: PsiElement? = PsiTreeUtil.getChildOfType(fileNode, JsonObject::class.java)
         return compositeKey.fold(root) {
             node, key -> if (node != null && node is JsonObject) node.findProperty(key.text)?.value else node
@@ -68,7 +68,7 @@ interface CompositeKeyResolver {
     /**
      * Returns keys at current composite key position
      */
-    fun listCompositeKeyVariants(compositeKey: List<KeyElement>, fileNode: PsiElement, substringSearch: Boolean): List<KeyElement> {
+    fun listCompositeKeyVariants(compositeKey: List<Literal>, fileNode: PsiElement, substringSearch: Boolean): List<Literal> {
         val searchPrefix = if (substringSearch) compositeKey.last().text else ""
         val fixedKey = if (substringSearch) {
             compositeKey.dropLast(1)
@@ -79,7 +79,7 @@ interface CompositeKeyResolver {
                     asList()?.
                     map { node -> node.firstChildNode.text.unQuote()}?.
                     filter { key -> key.startsWith(searchPrefix)}?.
-                    map { key -> KeyElement.literal(key.substringAfter(searchPrefix))} ?:
+                    map { key -> Literal(key.substringAfter(searchPrefix), key.substringAfter(searchPrefix).length, 0)} ?:
             listOf()
     }
 
