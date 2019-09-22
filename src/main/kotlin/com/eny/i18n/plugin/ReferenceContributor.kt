@@ -1,21 +1,27 @@
 package com.eny.i18n.plugin
 
+import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.tree.Tree
+import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.json.psi.JsonObject
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 
-class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: FullKey) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference, CompositeKeyResolver {
+class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: FullKey) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference, CompositeKeyResolver<PsiElement> {
     private val search = JsonSearchUtil(element.project)
 
-    private fun findProperties(): List<PsiElement> {
+    private fun findProperties(): List<Tree<PsiElement>> {
         return if (i18nFullKey.ns != null) {
             search
                 .findFilesByName(i18nFullKey.ns.text)
-                .mapNotNull { jsonRoot -> resolveCompositeKey(i18nFullKey.compositeKey, jsonRoot).element }
+                .mapNotNull { jsonRoot ->
+                    resolveCompositeKey(i18nFullKey.compositeKey, PsiTreeUtil.getChildOfType(jsonRoot, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot) }).element
+                }
         } else listOf()
     }
 
@@ -31,23 +37,24 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
         findProperties()
             .map {property ->
                 PsiElementResolveResult(
-                    if (property is JsonObject) {
-                        val parent = property.parent
+                    if (property.isTree()) {
+                        val parent = property.value().parent
                         if (parent is PsiFile) parent
                         else parent.firstChild
                     }
-                    else property
+                    else property.value()
                 )
             }
             .toTypedArray()
 
     override fun getVariants(): Array<Any> =
         findProperties()
-            .map {property -> LookupElementBuilder
-                    .create(property.text)
+            .map {property ->
+                LookupElementBuilder
+                    .create(property.value().text)
                     .withTypeText(
-                (property.containingFile.parent?.name ?: "" + "/") + property.containingFile.name)
-                    }
+                        (property.value().containingFile.parent?.name ?: "" + "/") + property.value().containingFile.name)
+            }
             .toTypedArray()
 }
 

@@ -1,15 +1,18 @@
 package com.eny.i18n.plugin
 
+import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
-import com.intellij.json.psi.JsonStringLiteral
+import com.intellij.json.psi.JsonObject
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 
 /**
  * Annotator for i18n keys
  */
-class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
+class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
     private val jsUtil = JavaScriptUtil()
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -30,15 +33,15 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver {
                 val mostResolvedReference = files
                         .flatMap { jsonFile ->
                             tryToResolvePlural(
-                                resolveCompositeKey(compositeKey, jsonFile)
+                                resolveCompositeKey(compositeKey, PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot) })
                             )
                         }
                         .maxBy { v -> v.path.size }!!
                 when {
-                    mostResolvedReference.element is JsonStringLiteral -> annotationHelper.annotateResolved(fileName)
+                    mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fileName)
                     mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
+                    mostResolvedReference.unresolved.isEmpty() && fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                     mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
-                    fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                     else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)
                 }
             }

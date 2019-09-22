@@ -1,15 +1,20 @@
 package com.eny.i18n.plugin
 
-import com.eny.i18n.plugin.utils.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.ExpressionKeyParser
 import com.eny.i18n.plugin.utils.JsonSearchUtil
+import com.eny.i18n.plugin.utils.Literal
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.json.JsonElementTypes
+import com.intellij.json.psi.JsonObject
+import com.intellij.psi.PsiElement
+import com.intellij.psi.tree.TokenSet
+import com.intellij.psi.util.PsiTreeUtil
 
-class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver {
+class CompositeKeyCompletionContributor: CompletionContributor() {
 
     private val CompositeKeySeparator = "."
     private val NsSeparator = ":"
@@ -41,5 +46,33 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
                 }
             }
         }
+    }
+
+    /**
+     * Returns PsiElement by composite key from file's root node
+     */
+    private fun resolveCompositeKeyProperty(compositeKey: List<Literal>, fileNode: PsiElement): PsiElement? {
+        val root: PsiElement? = PsiTreeUtil.getChildOfType(fileNode, JsonObject::class.java)
+        return compositeKey.fold(root) {
+            node, key -> if (node != null && node is JsonObject) node.findProperty(key.text)?.value else node
+        }
+    }
+
+    /**
+     * Returns keys at current composite key position
+     */
+    private fun listCompositeKeyVariants(compositeKey: List<Literal>, fileNode: PsiElement, substringSearch: Boolean): List<Literal> {
+        val searchPrefix = if (substringSearch) compositeKey.last().text else ""
+        val fixedKey = if (substringSearch) {
+            compositeKey.dropLast(1)
+        } else compositeKey
+        return resolveCompositeKeyProperty(fixedKey, fileNode)?.
+                node?.
+                getChildren(TokenSet.create(JsonElementTypes.PROPERTY))?.
+                asList()?.
+                map { node -> node.firstChildNode.text.unQuote()}?.
+                filter { key -> key.startsWith(searchPrefix)}?.
+                map { key -> Literal(key.substringAfter(searchPrefix), key.substringAfter(searchPrefix).length, 0) } ?:
+        listOf()
     }
 }
