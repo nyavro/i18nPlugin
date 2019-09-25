@@ -10,8 +10,6 @@ class JavaScriptUtil {
 
     private val ResolveReferenceMaxDepth = 10
 
-    private val DUMMY_PROPERTY_VALUE = "6zZzq1Dw2Pe3Zuo4BiE5zxNvpVyDzNxBcbFxEV1vze9azDerVsWdaFfvBzEm"
-
     private val parser: ExpressionKeyParser = ExpressionKeyParser()
 
     /**
@@ -20,7 +18,7 @@ class JavaScriptUtil {
     fun extractI18nKeyLiteral(element: PsiElement): FullKey? {
         // Template expression
         if (isTemplateExpression(element)) {
-            return resolveTemplateExpression(element, true)
+            return resolveTemplateExpression(element)
         }
         // String literal
         else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
@@ -44,19 +42,18 @@ class JavaScriptUtil {
      * const key = 'element';
      * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
      */
-    private fun resolveTemplateExpression(element: PsiElement, isTemplate: Boolean): FullKey? {
+    private fun resolveTemplateExpression(element: PsiElement): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
-            item -> if (item.elementType.toString().contains("REFERENCE")) {
-                KeyElement(
-                    item.text,
-                    resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth) ?: DUMMY_PROPERTY_VALUE.take(item.textLength),
-                    KeyElementType.TEMPLATE
-                )
-            } else //if (item is PsiLiteralValue) {
-                KeyElement.literal(item.text)
-//            } else null
+            item ->
+                if (item.elementType.toString().contains("REFERENCE")) {
+                    KeyElement(
+                        item.text,
+                        resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth),
+                        KeyElementType.TEMPLATE
+                    )
+                } else KeyElement.literal(item.text)
         }
-        return parser.parse(parser.reduce(transformed.mapNotNull {element -> element}), isTemplate)
+        return parser.parse(parser.reduce(transformed), true)
     }
 
     /**
@@ -76,13 +73,5 @@ class JavaScriptUtil {
             return resolveStringLiteralReference(resolved.node, chain + item, maxDepth)
         }
         return null
-    }
-
-    /**
-     * Removes symbols `${}` from string
-     */
-    private fun String.filterDollarBracesWrappers(): String {
-        val toRemove = setOf('$', '{', '}', '`')
-        return this.filter {ch -> ch !in toRemove}
     }
 }

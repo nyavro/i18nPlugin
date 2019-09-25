@@ -7,45 +7,20 @@ import com.intellij.openapi.util.TextRange
 /**
  * Annotation helper methods
  */
-class AnnotationHelper(val textRange: TextRange, val holder: AnnotationHolder) {
+class AnnotationHelper(val textRange: TextRange, val holder: AnnotationHolder, val facade: AnnotationFacade) {
     private val RESOLVED_COLOR = DefaultLanguageHighlighterColors.LINE_COMMENT
-    fun annotateResolved(fileName: String) {
-        holder.createInfoAnnotation(
-            TextRange(
-                textRange.startOffset + fileName.length + 1,
-                textRange.endOffset - 1
-            ), null
-        ).textAttributes = RESOLVED_COLOR
+    fun annotateResolved(fullKey: FullKey) {
+        holder.createInfoAnnotation(facade.compositeKeyFullBounds(fullKey), null).textAttributes = RESOLVED_COLOR
     }
     fun annotateReferenceToJson(fullKey: FullKey) {
-        holder.createErrorAnnotation(
-            TextRange(
-                compositeKeyStartOffset(fullKey),
-                textRange.endOffset - 1
-            ),
-            "Reference to Json object"
-        )
+        holder.createErrorAnnotation(facade.compositeKeyFullBounds(fullKey), "Reference to Json object")
     }
     fun annotateReferenceToPlural(fullKey: FullKey) {
-        holder.createInfoAnnotation(
-            TextRange(
-                compositeKeyStartOffset(fullKey),
-                textRange.endOffset - 1
-            ),"Reference to plural value"
+        holder.createInfoAnnotation(facade.compositeKeyFullBounds(fullKey),"Reference to plural value"
         ).textAttributes = RESOLVED_COLOR
     }
     fun annotateUnresolved(fullKey: FullKey, resolvedPath: List<Literal>) {
-        val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)
-        val unresolvedStartOffset = compositeKeyStartOffset + 1 +
-                resolvedPathLength(resolvedPath)
-        val unresolvedEndOffset = textRange.endOffset - 1
-        holder.createErrorAnnotation(
-            TextRange(
-                unresolvedStartOffset,
-                unresolvedEndOffset
-            ),
-            "Unresolved property"
-        )//.registerFix(CreatePropertyQuickFix(fullKey))
+        holder.createErrorAnnotation(facade.unresolved(fullKey, resolvedPath), "Unresolved property")//.registerFix(CreatePropertyQuickFix(fullKey))
     }
     fun annotatePartiallyResolved(fullKey: FullKey, resolvedPath: List<Literal>) {
         val compositeKeyStartOffset = compositeKeyStartOffset(fullKey)

@@ -45,8 +45,7 @@ interface CompositeKeyResolver<T> {
             val plurals = listOf("1","2","5").mapNotNull {
                 pluralIndex -> propertyReference.element.findChild("${singleUnresolvedKey.text}-$pluralIndex")
             }.map {
-                plural ->
-                PropertyReference(propertyReference.path + singleUnresolvedKey, plural, listOf(), isPlural = true)
+                plural -> PropertyReference(propertyReference.path + singleUnresolvedKey, plural, listOf(), isPlural = true)
             }
             if (plurals.isEmpty()) listOf(propertyReference) else plurals
         } else listOf(propertyReference)

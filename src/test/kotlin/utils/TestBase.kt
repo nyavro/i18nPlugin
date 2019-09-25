@@ -11,4 +11,6 @@ interface TestBase {
             listOf(textWithLength(fullKey.ns), extractTextWithLength(fullKey.compositeKey)).filter { v -> v.isNotEmpty()}.joinToString(":")
         else ""
     }
+
+    fun literalsList(vararg text: String): List<Literal> = text.toList().map {item -> Literal(item)}
 }

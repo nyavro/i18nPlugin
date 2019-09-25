@@ -13,6 +13,7 @@ import com.intellij.psi.util.PsiTreeUtil
  * Annotator for i18n keys
  */
 class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
+
     private val jsUtil = JavaScriptUtil()
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -26,19 +27,19 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
         if (fileName != null) {
-            val annotationHelper = AnnotationHelper(element.textRange, holder)
+            val annotationHelper = AnnotationHelper(element.textRange, holder, AnnotationHolderFacade(holder, element.textRange))
             val files = JsonSearchUtil(element.project).findFilesByName(fileName)
             if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fileName)
             else {
                 val mostResolvedReference = files
-                        .flatMap { jsonFile ->
-                            tryToResolvePlural(
-                                resolveCompositeKey(compositeKey, PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot) })
-                            )
-                        }
-                        .maxBy { v -> v.path.size }!!
+                    .flatMap { jsonFile ->
+                        tryToResolvePlural(
+                            resolveCompositeKey(compositeKey, PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot) })
+                        )
+                    }
+                    .maxBy { v -> v.path.size }!!
                 when {
-                    mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fileName)
+                    mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
                     mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
                     mostResolvedReference.unresolved.isEmpty() && fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                     mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
