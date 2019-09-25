@@ -18,8 +18,8 @@ class Test {
         const sub = sub0;
         console.log(i18n.t(`sample:ROOT.${sub}.key31`));                           //Resolved simple expression
         console.log(i18n.t(`sample:ROOT.${sub}.key314`));                          //Unresolved simple expression
-        console.log(i18n.t(`sample:ROOT.Key1.${unknownInCompileTime}`));           //Goto to json object
-        const fileExpr = "sample";
-        console.log(`${fileExpr}:ROOT.Key1.Key31`)
+        // console.log(i18n.t(`sample:ROOT.Key1.${unknownInCompileTime}`));           //Goto to json object
+        // const fileExpr = "sample";
+        // console.log(`${fileExpr}:ROOT.Key1.Key31`)
     }
 }

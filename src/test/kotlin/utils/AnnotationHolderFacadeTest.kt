@@ -30,7 +30,10 @@ class AnnotationHolderFacadeTest : TestBase {
     @Test
     fun measureTotallyUnresolvedKey() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 55))
-        val range = facade.compositeKeyFullBounds(FullKey(Literal("sample"), literalsList("ROOT", "Key1", "key31")))
+        val range = facade.unresolvedKey(
+            FullKey(Literal("sample"), literalsList("ROOT", "Key1", "key31")),
+            listOf()
+        )
         assertEquals(TextRange(27, 54), range)
     }
 
@@ -38,7 +41,7 @@ class AnnotationHolderFacadeTest : TestBase {
     @Test
     fun measureUnresolvedKey() {
         val facade = AnnotationHolderFacade(null, TextRange(26, 55))
-        val range = facade.unresolved(
+        val range = facade.unresolvedKey(
             FullKey(Literal("sample"), literalsList("ROOT", "Key1", "missingKey")),
             literalsList("ROOT", "Key1")
         )
@@ -49,7 +52,7 @@ class AnnotationHolderFacadeTest : TestBase {
     @Test
     fun measureUnresolvedKey2() {
         val facade = AnnotationHolderFacade(null, TextRange(26, 56))
-        val range = facade.unresolved(
+        val range = facade.unresolvedKey(
             FullKey(Literal("sample"), literalsList("ROOT", "Key1", "missing", "Key")),
             literalsList("ROOT", "Key1")
         )
@@ -60,18 +63,27 @@ class AnnotationHolderFacadeTest : TestBase {
     @Test
     fun measureUnresolvedKey3() {
         val facade = AnnotationHolderFacade(null, TextRange(26, 61))
-        val range = facade.unresolved(
+        val range = facade.unresolvedKey(
             FullKey(Literal("sample"), literalsList("ROOT", "Key1", "Key2", "missing", "Key")),
             literalsList("ROOT", "Key1", "Key2")
         )
         assertEquals(TextRange(49, 60), range)
+    }
+
+    //console.log('MissingFile:Ex.Sub.Val');                                          //Unresolved File
+    @Test
+    fun measureUnresolvedFile() {
+        val facade = AnnotationHolderFacade(null, TextRange(19, 43))
+        val range = facade.unresolvedNs(
+            FullKey(Literal("MissingFile"), literalsList("Ex", "Sub", "Val"))
+        )
+        assertEquals(TextRange(20, 31), range)
     }
 }
 
 
 
 
-//console.log('MissingFile:Ex.Sub.Val');                                          //Unresolved File
 //console.log(i18n.t('sample:ROOT.Key1'));                                   //Reference to Json object
 //console.log(i18n.t('sample:ROOT.Key1.plurals.value', {count: 2})); //Reference to plural key
 //const sub0 = 'Key1.key31';

@@ -5,19 +5,23 @@ import com.intellij.openapi.util.TextRange
 
 interface AnnotationFacade {
     fun compositeKeyFullBounds(fullKey: FullKey): TextRange
-    fun unresolved(fullKey: FullKey, resolvedPath: List<Literal>): TextRange
+    fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange
+    fun unresolvedNs(fullKey: FullKey): TextRange
 }
 
 class AnnotationHolderFacade(val annotationHolder: AnnotationHolder?, val textRange: TextRange) : AnnotationFacade {
 
-    override fun unresolved(fullKey: FullKey, resolvedPath: List<Literal>): TextRange {
-        val compositeKeyStartOffset = fullKey.compositeKeyStartOffset()
-        val unresolvedStartOffset = compositeKeyStartOffset + 1 + tokensLength(resolvedPath)
-        return TextRange(
-            unresolvedStartOffset,
+    override fun unresolvedNs(fullKey: FullKey): TextRange =
+        TextRange(
+            1,
+            fullKey.ns?.let { text -> text.length + 1} ?: 1
+        )
+
+    override fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange =
+        TextRange(
+            fullKey.compositeKeyStartOffset() + tokensLength(resolvedPath) + (if (resolvedPath.size > 0) 1 else 0),
             textRange.endOffset - 1
         )
-    }
 
     override fun compositeKeyFullBounds(fullKey: FullKey) =
         TextRange(
