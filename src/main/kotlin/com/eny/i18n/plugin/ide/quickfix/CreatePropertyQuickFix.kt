@@ -1,10 +1,12 @@
-package com.eny.i18n.plugin.quickfix
+package com.eny.i18n.plugin.ide.quickfix
 
-import com.eny.i18n.plugin.I18nFullKey
-import com.eny.i18n.plugin.utils.CompositeKeyResolver
+import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.JsonSearchUtil
+import com.eny.i18n.plugin.tree.PsiElementTree
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.icons.AllIcons
+import com.intellij.json.psi.JsonObject
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -12,8 +14,9 @@ import com.intellij.openapi.ui.JBMenuItem
 import com.intellij.openapi.ui.JBPopupMenu
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.PsiTreeUtil
 
-class CreatePropertyQuickFix(val fullKey: I18nFullKey) : BaseIntentionAction(), CompositeKeyResolver {
+class CreatePropertyQuickFix(val fullKey: FullKey) : BaseIntentionAction(), CompositeKeyResolver<PsiElement> {
 
 //    private const
 
@@ -26,9 +29,9 @@ class CreatePropertyQuickFix(val fullKey: I18nFullKey) : BaseIntentionAction(), 
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         ApplicationManager.getApplication().invokeLater(object : Runnable {
             override fun run() {
-                if (fullKey.fileName != null && editor != null) {
+                if (fullKey.ns != null && editor != null) {
                     val search = JsonSearchUtil(project)
-                    val jsonFiles = search.findFilesByName(fullKey.fileName)
+                    val jsonFiles = search.findFilesByName(fullKey.ns.text)
                     if (jsonFiles.size == 1) {
                         createPropertyInFile(project, jsonFiles.get(0))
                     } else if (jsonFiles.size > 1) {
@@ -40,7 +43,7 @@ class CreatePropertyQuickFix(val fullKey: I18nFullKey) : BaseIntentionAction(), 
     }
 
     private fun createPropertyInFile(project: Project, target: PsiFile): Unit {
-        val ref = resolveCompositeKey(fullKey.compositeKey, target)
+        val ref = resolveCompositeKey(fullKey.compositeKey, PsiTreeUtil.getChildOfType(target, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot) })
 //        if (ref.element != null) {
 //            CommandProcessor.getInstance().executeCommand(project, {
 //                    createPropertiesChain(project, ref.element, ref.unresolved)

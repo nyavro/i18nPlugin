@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.quickfix
+package com.eny.i18n.plugin.ide.quickfix
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.openapi.editor.Editor
