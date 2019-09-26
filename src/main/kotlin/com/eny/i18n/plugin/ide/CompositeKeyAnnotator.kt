@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin
+package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
@@ -29,7 +29,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         if (fileName != null) {
             val annotationHelper = AnnotationHelper(element.textRange, holder, AnnotationHolderFacade(holder, element.textRange))
             val files = JsonSearchUtil(element.project).findFilesByName(fileName)
-            if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fileName)
+            if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey)
             else {
                 val mostResolvedReference = files
                     .flatMap { jsonFile ->
@@ -37,9 +37,9 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
                             resolveCompositeKey(compositeKey, PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot) })
                         )
                     }
-                    .maxBy { v -> v.path.size }!!
+                    .maxBy {v -> v.path.size}!!
                 when {
-                    mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
+                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
                     mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
                     mostResolvedReference.unresolved.isEmpty() && fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                     mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)

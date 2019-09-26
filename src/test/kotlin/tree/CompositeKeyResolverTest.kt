@@ -250,6 +250,31 @@ class CompositeKeyResolverTest {
         assertTrue(property.element?.isTree() ?: false)
         assertEquals("sub5", property.element?.value())
         assertTrue(property.unresolved.isEmpty())
-        assertEquals(property.path, listOf(Literal("base3"), Literal("sub5")))
+        assertEquals(listOf(Literal("base3"), Literal("sub5")), property.path)
+    }
+
+    @Test
+    fun stopResolvingAfterFirstFailure2() {
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val property = resolver.resolveCompositeKey(
+            listOf(Literal("ROOT"), Literal("Key1", 6), Literal("key3", 0), Literal("key31", 5)),
+            root(
+                TestTree("ROOT",
+                    listOf(
+                        TestTree("Key1",
+                            listOf(
+                                TestTree("key2"),
+                                TestTree("key31")
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        assertNotNull(property.element)
+        assertTrue(property.element?.isTree() ?: false)
+        assertEquals("Key1", property.element?.value())
+        assertEquals(listOf(Literal("key3", 0), Literal("key31", 5)), property.unresolved)
+        assertEquals(listOf(Literal("ROOT"), Literal("Key1", 6)), property.path)
     }
 }

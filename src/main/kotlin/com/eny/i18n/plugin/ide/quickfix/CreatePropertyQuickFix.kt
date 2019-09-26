@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.quickfix
+package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.FullKey

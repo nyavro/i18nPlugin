@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin
+package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.utils.ExpressionKeyParser
 import com.eny.i18n.plugin.utils.JsonSearchUtil

@@ -17,7 +17,7 @@ interface CompositeKeyResolver<T> {
     fun resolveCompositeKey(compositeKey: List<Literal>, root: Tree<T>?): PropertyReference<T> {
         return compositeKey.fold(PropertyReference(listOf(), root, listOf())) {
             propertyReference, key ->
-                if (propertyReference.element != null && propertyReference.element.isTree()) {
+                if (propertyReference.element != null && propertyReference.element.isTree() && propertyReference.unresolved.isEmpty()) {
                     val value = propertyReference.element.findChild(key.text)
                     if (value == null) propertyReference.copy(unresolved = propertyReference.unresolved + key)
                     else propertyReference.copy(path = propertyReference.path + key, element = value)
