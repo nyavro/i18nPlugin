@@ -22,9 +22,9 @@ Intellij idea i18next support plugin
     ![Reference to plural value](docs/img/p5.png) 
     
  
- ####Navigation
+ #### Navigation
  
-- I18nPlugin provides navigation from key to its definition in Json resource    
+- I18nPlugin provides navigation from key to its declaration in Json resource    
 
    ![Reference to plural value](docs/img/p6.png)
    
