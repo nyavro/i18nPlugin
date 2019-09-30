@@ -7,10 +7,10 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class TestTree(val value: String, val children: List<TestTree> = listOf()) : Tree<String> {
-
     override fun findChild(name: String) = children.find {item -> item.value==name}
     override fun isTree() = children.isNotEmpty()
     override fun value() = value
+    override fun findChildren(searchPrefix: String): List<Tree<String>> = children.filter {item -> item.value.startsWith(searchPrefix)}
 }
 
 fun root(tree: TestTree) = TestTree("", listOf(tree))
@@ -276,5 +276,60 @@ class CompositeKeyResolverTest {
         assertEquals("Key1", property.element?.value())
         assertEquals(listOf(Literal("key3", 0), Literal("key31", 5)), property.unresolved)
         assertEquals(listOf(Literal("ROOT"), Literal("Key1", 6)), property.path)
+    }
+
+    @Test
+    fun resolveProperty() {
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val property = resolver.resolveCompositeKeyProperty(
+            listOf(Literal("main1"), Literal("submain1"), Literal("subsub2")),
+            root(
+                TestTree("main1",
+                    listOf(
+                        TestTree("submain0", listOf(TestTree("subsub0"))),
+                        TestTree("submain1", listOf(TestTree("subsub1"), TestTree("subsub2"))),
+                        TestTree("submain2", listOf(TestTree("subsub3")))
+                    )
+                )
+            )
+        )
+        assertTrue(property?.isLeaf() ?: false)
+        assertEquals("subsub2", property?.value())
+    }
+
+    @Test
+    fun unresolvedPathIsNull() {
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val property = resolver.resolveCompositeKeyProperty(
+            listOf(Literal("main2"), Literal("submain4"), Literal("unresolved")),
+            root(
+                TestTree("main2",
+                    listOf(
+                        TestTree("submain3", listOf(TestTree("subsub4"))),
+                        TestTree("submain4", listOf(TestTree("subsub5"), TestTree("subsub6"))),
+                        TestTree("submain5", listOf(TestTree("subsub7")))
+                    )
+                )
+            )
+        )
+        assertNull(property)
+    }
+
+    @Test
+    fun unresolvedPathIsNull2() {
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val property = resolver.resolveCompositeKeyProperty(
+            listOf(Literal("main3"), Literal("submain6"), Literal("subsub8"), Literal("subsub12")),
+            root(
+                TestTree("main3",
+                    listOf(
+                        TestTree("submain6", listOf(TestTree("subsub8"))),
+                        TestTree("submain7", listOf(TestTree("subsub9"), TestTree("subsub10"))),
+                        TestTree("submain8", listOf(TestTree("subsub11")))
+                    )
+                )
+            )
+        )
+        assertNull(property)
     }
 }
