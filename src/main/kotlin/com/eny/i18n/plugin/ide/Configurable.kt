@@ -11,7 +11,12 @@ import com.intellij.openapi.options.SearchableConfigurable
  */
 class Configurable : SearchableConfigurable {
 
-//    internal var gui: Configurable? = null
+    internal var gui: ConfigurablePanel? = null
+
+    override fun createComponent(): JComponent {
+        gui = ConfigurablePanel()
+        return gui!!.getRootPanel()
+    }
 
     @Nls
     override fun getDisplayName(): String {
@@ -30,10 +35,6 @@ class Configurable : SearchableConfigurable {
         return null
     }
 
-    override fun createComponent(): JComponent? {
-        return null
-    }
-
     override fun isModified(): Boolean {
         return false
     }
@@ -46,6 +47,6 @@ class Configurable : SearchableConfigurable {
     }
 
     override fun disposeUIResources() {
-
+        gui = null
     }
 }
