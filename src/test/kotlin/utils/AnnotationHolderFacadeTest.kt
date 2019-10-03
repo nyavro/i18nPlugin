@@ -15,7 +15,9 @@ class AnnotationHolderFacadeTest : TestBase {
     @Test
     fun measureTotallyResolvedKey() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 43))
-        val range = facade.compositeKeyFullBounds(FullKey(Literal("sample"), literalsList("ROOT", "Key1", "key31")))
+        val range = facade.compositeKeyFullBounds(
+            FullKey("sample:ROOT.Key1.key31", Literal("sample"), literalsList("ROOT", "Key1", "key31"))
+        )
         assertEquals(TextRange(27, 42), range)
     }
 
@@ -23,7 +25,9 @@ class AnnotationHolderFacadeTest : TestBase {
     @Test
     fun measureTotallyResolvedKeyWithDefaultNS() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 36))
-        val range = facade.compositeKeyFullBounds(FullKey(null, literalsList("ROOT", "Key1", "key31")))
+        val range = facade.compositeKeyFullBounds(
+            FullKey("ROOT.Key1.key31",null, literalsList("ROOT", "Key1", "key31"))
+        )
         assertEquals(TextRange(20, 35), range)
     }
 
@@ -32,7 +36,9 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureTotallyUnresolvedKey() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 55))
         val range = facade.unresolvedKey(
-            FullKey(Literal("sample"), literalsList("ROOT", "Key1", "key31")),
+            FullKey(
+                "sample:missing.whole.composite.key", Literal("sample"), literalsList("ROOT", "Key1", "key31")
+            ),
             listOf()
         )
         assertEquals(TextRange(27, 54), range)
@@ -43,7 +49,7 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureUnresolvedKey() {
         val facade = AnnotationHolderFacade(null, TextRange(26, 55))
         val range = facade.unresolvedKey(
-            FullKey(Literal("sample"), literalsList("ROOT", "Key1", "missingKey")),
+            FullKey("sample:ROOT.Key1.missingKey", Literal("sample"), literalsList("ROOT", "Key1", "missingKey")),
             literalsList("ROOT", "Key1")
         )
         assertEquals(TextRange(44, 54), range)
@@ -54,7 +60,7 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureUnresolvedKey2() {
         val facade = AnnotationHolderFacade(null, TextRange(26, 56))
         val range = facade.unresolvedKey(
-            FullKey(Literal("sample"), literalsList("ROOT", "Key1", "missing", "Key")),
+            FullKey("sample:ROOT.Key1.missing.Key", Literal("sample"), literalsList("ROOT", "Key1", "missing", "Key")),
             literalsList("ROOT", "Key1")
         )
         assertEquals(TextRange(44, 55), range)
@@ -65,7 +71,7 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureUnresolvedKey3() {
         val facade = AnnotationHolderFacade(null, TextRange(26, 61))
         val range = facade.unresolvedKey(
-            FullKey(Literal("sample"), literalsList("ROOT", "Key1", "Key2", "missing", "Key")),
+            FullKey("sample:ROOT.Key1.Key2.missing.Key", Literal("sample"), literalsList("ROOT", "Key1", "Key2", "missing", "Key")),
             literalsList("ROOT", "Key1", "Key2")
         )
         assertEquals(TextRange(49, 60), range)
@@ -76,7 +82,7 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureUnresolvedFile() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 43))
         val range = facade.unresolvedNs(
-            FullKey(Literal("MissingFile"), literalsList("Ex", "Sub", "Val"))
+            FullKey("MissingFile:Ex.Sub.Val", Literal("MissingFile"), literalsList("Ex", "Sub", "Val"))
         )
         assertEquals(TextRange(20, 31), range)
     }
@@ -86,7 +92,7 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureUnresolvedNsResolvedTemplate() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 43))
         val range = facade.unresolvedNs(
-            FullKey(Literal("sample", 11), literalsList("ROOT", "Key1", "Key31"))
+            FullKey("\${fileExpr}:ROOT.Key1.Key31", Literal("sample", 11), literalsList("ROOT", "Key1", "Key31"))
         )
         assertEquals(TextRange(20, 31), range)
     }
@@ -96,7 +102,7 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureUnresolvedNsUnresolvedTemplate() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 43))
         val range = facade.unresolvedNs(
-            FullKey(Literal("*", 11), literalsList("ROOT", "Key1", "Key31"))
+            FullKey("\${fileExpr}:ROOT.Key1.Key31", Literal("*", 11), literalsList("ROOT", "Key1", "Key31"))
         )
         assertEquals(TextRange(20, 31), range)
     }
@@ -106,7 +112,7 @@ class AnnotationHolderFacadeTest : TestBase {
     fun measureUnresolvedFileDefault() {
         val facade = AnnotationHolderFacade(null, TextRange(19, 43))
         val range = facade.unresolvedNs(
-            FullKey(null, literalsList("Ex", "Sub", "Val"))
+            FullKey("Ex.Sub.Val",null, literalsList("Ex", "Sub", "Val"))
         )
         assertEquals(TextRange(20, 20), range)
     }
@@ -117,6 +123,7 @@ class AnnotationHolderFacadeTest : TestBase {
         val facade = AnnotationHolderFacade(null, TextRange(26, 52))
         val range = facade.unresolvedKey(
             FullKey(
+                "sample:ROOT.\${sub}.key31",
                 Literal("sample"),
                 listOf(
                     Literal("ROOT"),
@@ -140,6 +147,7 @@ class AnnotationHolderFacadeTest : TestBase {
         val facade = AnnotationHolderFacade(null, TextRange(26, 68))
         val range = facade.unresolvedKey(
             FullKey(
+                "sample:ROOT.Key1.\${unknownInCompileTime}",
                 Literal("sample"),
                 listOf(
                     Literal("ROOT"),
@@ -161,6 +169,7 @@ class AnnotationHolderFacadeTest : TestBase {
         val facade = AnnotationHolderFacade(null, TextRange(26, 52))
         val range = facade.unresolvedKey(
             FullKey(
+                "sample:ROOT.\${sub}.key31",
                 Literal("sample"),
                 listOf(
                     Literal("ROOT"),

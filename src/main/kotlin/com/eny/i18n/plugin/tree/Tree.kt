@@ -5,6 +5,6 @@ interface Tree<T> {
     fun isLeaf(): Boolean = !isTree()
     fun isTree(): Boolean
     fun value(): T
-    fun findChildren(searchPrefix: String): List<Tree<T>>
+    fun findChildren(regex: Regex): List<Tree<T>>
 }
 

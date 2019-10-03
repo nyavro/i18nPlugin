@@ -1,11 +1,6 @@
 package com.eny.i18n.plugin.tree
 
 import com.eny.i18n.plugin.utils.Literal
-import com.intellij.json.JsonElementTypes
-import com.intellij.json.psi.JsonObject
-import com.intellij.psi.PsiElement
-import com.intellij.psi.tree.TokenSet
-import com.intellij.psi.util.PsiTreeUtil
 
 /**
  * Property reference represents PsiElement and it's path from Json file root
@@ -71,9 +66,7 @@ interface CompositeKeyResolver<T> {
     /**
      * Returns keys at current composite key position
      */
-    fun listCompositeKeyVariants(compositeKey: List<Literal>, root: Tree<T>?, substringSearch: Boolean): List<Tree<T>> {
-        val searchPrefix = if (substringSearch) compositeKey.last().text else ""
-        val fixedKey = if (substringSearch) compositeKey.dropLast(1) else compositeKey
-        return resolveCompositeKeyProperty(fixedKey, root)?.findChildren(searchPrefix) ?: listOf()
+    fun listCompositeKeyVariants(fixedKey: List<Literal>, root: Tree<T>?, regex: Regex): List<Tree<T>> {
+        return resolveCompositeKeyProperty(fixedKey, root)?.findChildren(regex) ?: listOf()
     }
 }

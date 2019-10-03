@@ -27,6 +27,10 @@ class JavaScriptUtil {
                 return parser.parse(listOf(KeyElement.literal(value)))
             }
         }
+        else if (element.node?.elementType.toString() == "JS:STRING_LITERAL") {
+            val value = element.text.unQuote()
+            return parser.parse(listOf(KeyElement.literal(value)))
+        }
         return null
     }
 
@@ -53,7 +57,8 @@ class JavaScriptUtil {
                     )
                 } else KeyElement.literal(item.text)
         }
-        return parser.parse(parser.reduce(transformed), true)
+        val elements = parser.reduce(transformed)
+        return parser.parse(elements, true)
     }
 
     /**

@@ -14,6 +14,7 @@ class ExpressionKeyParserTest : TestBase {
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("fileName{8}:ROOT{4}.Key2{4}.Key3{4}", toTestString(parsed))
+        assertEquals("fileName:ROOT.Key2.Key3", parsed?.source)
     }
 
 //${fileExpr}:ROOT.Key1.Key31               / sample                / sample{11}:ROOT{4}.Key1{4}.Key31{5}
@@ -25,6 +26,7 @@ class ExpressionKeyParserTest : TestBase {
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
+        assertEquals("\${fileExpr}:ROOT.Key1.Key31", parsed?.source)
     }
 
 //prefix${fileExpr}:ROOT.Key4.Key5          / sample                / prefixsample{17}:ROOT{4}.Key4{4}.Key5{4}
@@ -37,6 +39,7 @@ class ExpressionKeyParserTest : TestBase {
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("prefixsample{17}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefix\${fileExpr}:ROOT.Key4.Key5", parsed?.source)
     }
 
 //${fileExpr}postfix:ROOT.Key4.Key5         / sample                / samplepostfix{18}:ROOT{4}.Key4{4}.Key5{4}
@@ -48,6 +51,7 @@ class ExpressionKeyParserTest : TestBase {
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("samplepostfix{18}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("\${fileExpr}postfix:ROOT.Key4.Key5", parsed?.source)
     }
 
 //prefix${fileExpr}postfix:ROOT.Key4.Key5   / sample                / prefixsamplepostfix{24}:ROOT{4}.Key4{4}.Key5{4}
@@ -60,6 +64,7 @@ class ExpressionKeyParserTest : TestBase {
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("prefixsamplepostfix{24}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefix\${fileExpr}postfix:ROOT.Key4.Key5", parsed?.source)
     }
 
 //prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey      / prefixpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}
@@ -72,6 +77,7 @@ class ExpressionKeyParserTest : TestBase {
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("prefixpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefix\${fileExpr}postfix.ROOT.Key4.Key5", parsed?.source)
     }
 
 //filename:${key}                           / Key0.Key2.Key21       / filename{8}:Key0{6}.Key2{0}.Key21{0}

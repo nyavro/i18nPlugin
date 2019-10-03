@@ -4,7 +4,8 @@ enum class KeyElementType {
     LITERAL, TEMPLATE
 }
 
-data class FullKey(val ns:Literal?, val compositeKey:List<Literal>, val isTemplate: Boolean = false) {
+data class FullKey(val source: String, val ns:Literal?, val compositeKey:List<Literal>, val isTemplate: Boolean = false) {
+
     val nsLength = ns?.length ?: 0
         get() = field
     val keyLength = tokensLength(compositeKey)

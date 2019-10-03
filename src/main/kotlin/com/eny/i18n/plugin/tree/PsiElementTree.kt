@@ -12,24 +12,12 @@ class PsiElementTree(val element: PsiElement) : Tree<PsiElement> {
     override fun findChild(name: String): PsiElementTree? =
         if (element is JsonObject) element.findProperty(name)?.value?.let { child -> PsiElementTree(child) }
         else null
-    override fun findChildren(searchPrefix: String): List<Tree<PsiElement>> =
+    override fun findChildren(regex: Regex): List<Tree<PsiElement>> =
         element
             .node
             .getChildren(TokenSet.create(JsonElementTypes.PROPERTY))
             .asList()
             .map {item -> item.firstChildNode.psi}
-            .filter {item -> item != null && item.text.unQuote().startsWith(searchPrefix)}
+            .filter {item -> item != null && item.text.unQuote().matches(regex)}
             .map {item -> PsiElementTree(item)}
-
-
-    /**
-     *
-    resolveCompositeKeyProperty(fixedKey, fileNode)?.
-        node?.
-        getChildren(TokenSet.create(JsonElementTypes.PROPERTY))?.
-        asList()?.
-        map { node -> node.firstChildNode.text.unQuote()}?.
-        filter { key -> key.startsWith(searchPrefix)}?.
-        map { key -> Literal(key.substringAfter(searchPrefix), key.substringAfter(searchPrefix).length, 0) } ?:
-     */
 }

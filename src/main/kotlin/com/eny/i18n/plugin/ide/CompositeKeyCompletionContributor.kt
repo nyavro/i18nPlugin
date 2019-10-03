@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.ExpressionKeyParser
+import com.eny.i18n.plugin.utils.JavaScriptUtil
 import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor
@@ -15,28 +15,44 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 
 class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver<PsiElement> {
+    private val jsUtil = JavaScriptUtil()
 
-    private val CompositeKeySeparator = "."
-    private val NsSeparator = ":"
-
-    private val parser = ExpressionKeyParser()
+    private fun groupPlurals(set: Set<String>):List<String> =
+        set
+            .groupBy {it.substringBeforeLast("-")}
+            .entries.flatMap {
+            entry -> if(entry.value.size == 3 && entry.value.containsAll(listOf(1,2,5).map{entry.key+"-"+it})) {
+            listOf(entry.key)} else entry.value
+        }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
         super.fillCompletionVariants(parameters, result)
-        val text = parameters.position.text.unQuote().substringBefore(CompletionInitializationContext.DUMMY_IDENTIFIER)
-        val endsWithKeySeparator = text.endsWith(CompositeKeySeparator)
-        val endsWithFileNameSeparator = text.endsWith(NsSeparator)
-        val fixed = if (endsWithFileNameSeparator || endsWithKeySeparator) {
-            text.substring(0, text.length - 1)
-        } else text
-        val fullKey = parser.parseLiteral(fixed)
-        if (fullKey?.ns != null) {
-            val files = JsonSearchUtil(parameters.position.project).findFilesByName(fullKey.ns.text)
-            files.forEach {
-                file -> listCompositeKeyVariants(fullKey.compositeKey, PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot)}, !endsWithKeySeparator).forEach {
-                    key -> result.addElement(LookupElementBuilder.create(text + key))
-                }
-            }
+        val fullKey = jsUtil.extractI18nKeyLiteral(
+            if (parameters.position.toString().contains("JS:STRING_TEMPLATE_PART")) parameters.position.parent
+            else parameters.position
+        )
+        val compositeKey = fullKey?.compositeKey
+        val fixedKey = compositeKey?.dropLast(1)
+        val last = compositeKey?.last()
+        val fixedPart = last?.text?.substringBefore(CompletionInitializationContext.DUMMY_IDENTIFIER)
+        val fixedPart2 = last?.text?.substringAfter(CompletionInitializationContext.DUMMY_IDENTIFIER)
+        val search = Regex(fixedPart + ".*" + fixedPart2)
+        val source = fullKey?.source?.replace(fixedPart + CompletionInitializationContext.DUMMY_IDENTIFIER + fixedPart2, "")
+        if (fullKey?.ns != null && fixedKey != null) {
+            val elements =
+                groupPlurals(
+                    JsonSearchUtil(parameters.position.project).findFilesByName(fullKey.ns.text).flatMap {
+                        file ->
+                            listCompositeKeyVariants(
+                                fixedKey,
+                                PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot)},
+                                search
+                            )
+                    }.map {key -> key.value().text.unQuote()}.toSet()
+                )
+            result.addAllElements(
+                elements.map {item -> LookupElementBuilder.create(source + item)}
+            )
         }
     }
 }

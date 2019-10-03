@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.utils
 
 interface State {
     fun next(token: Token): State
-    fun fullKey(isTemplate: Boolean): FullKey? = null
+    fun fullKey(isTemplate: Boolean, source: String): FullKey? = null
 }
 
 class Error(val msg: String): State {
@@ -39,7 +39,7 @@ class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : St
             }
             else -> Error("Invalid token " + token)
         }
-    override fun fullKey(isTemplate: Boolean): FullKey? = FullKey(file, key, isTemplate)
+    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key, isTemplate)
 }
 
 class ExpressionKeyParser {
@@ -54,13 +54,15 @@ class ExpressionKeyParser {
         }
     }
 
-    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false): FullKey? =
-        Tokenizer(":", ".")
+    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false): FullKey? {
+        val source = elements.fold(""){acc, item -> acc + item.text}
+        return Tokenizer(":", ".")
             .tokenizeAll(elements)
-            .fold(Start(null) as State) {
-                state, token -> state.next(token)
+            .fold(Start(null) as State) { state, token ->
+                state.next(token)
             }
-            .fullKey(isTemplate)
+            .fullKey(isTemplate, source)
+    }
 
     fun parseLiteral(text: String): FullKey? = parse(listOf(KeyElement.literal(text)))
 }

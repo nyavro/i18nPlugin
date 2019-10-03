@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
@@ -15,13 +16,24 @@ import com.intellij.util.ProcessingContext
 class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: FullKey) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference, CompositeKeyResolver<PsiElement> {
     private val search = JsonSearchUtil(element.project)
 
+    private fun filterMostResolved(list: List<PropertyReference<PsiElement>>): List<PropertyReference<PsiElement>> {
+        val mostResolved = list.maxBy {ref -> ref.path.size}?.path?.size
+        return if (mostResolved != null)
+            list.filter { ref -> ref.path.size == mostResolved}
+        else
+            list
+
+    }
+
     private fun findProperties(): List<Tree<PsiElement>> {
         return if (i18nFullKey.ns != null) {
-            search
-                .findFilesByName(i18nFullKey.ns.text)
-                .mapNotNull { jsonRoot ->
-                    resolveCompositeKey(i18nFullKey.compositeKey, PsiTreeUtil.getChildOfType(jsonRoot, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot) }).element
-                }
+            filterMostResolved(
+                search
+                    .findFilesByName(i18nFullKey.ns.text)
+                    .map { jsonRoot ->
+                        resolveCompositeKey(i18nFullKey.compositeKey, PsiTreeUtil.getChildOfType(jsonRoot, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot)})
+                    }
+            ).mapNotNull {item -> item.element}
         } else listOf()
     }
 
