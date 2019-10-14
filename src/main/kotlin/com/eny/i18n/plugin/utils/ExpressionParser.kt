@@ -1,7 +1,5 @@
 package com.eny.i18n.plugin.utils
 
-import java.util.*
-
 class ExpressionParser {
     private val dropItems = listOf("`", "{", "}", "$")
     fun parse(elements: List<KeyElement>): List<KeyElement> {

@@ -5,15 +5,10 @@ enum class KeyElementType {
 }
 
 data class FullKey(val source: String, val ns:Literal?, val compositeKey:List<Literal>, val isTemplate: Boolean = false) {
-
-    val nsLength = ns?.length ?: 0
-        get() = field
-    val keyLength = tokensLength(compositeKey)
-        get() = field
-    val length = nsLength + keyLength + (if (nsLength > 0) 1 else 0)
-        get() = field
-    val hasAsterisk = ns?.text?.contains("*") ?: false || compositeKey.any { literal -> literal.text.contains("*") }
-        get() = field
+//    private val nsLength = ns?.length ?: 0
+//    private val keyLength = tokensLength(compositeKey)
+//    val length = nsLength + keyLength + (if (nsLength > 0) 1 else 0)
+//    val hasAsterisk = ns?.text?.contains("*") ?: false || compositeKey.any { literal -> literal.text.contains("*") }
 }
 
 data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyElementType) {
@@ -23,8 +18,3 @@ data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyEl
         fun resolvedTemplate(expression: String, resolvedTo: String): KeyElement = KeyElement(expression, resolvedTo, KeyElementType.TEMPLATE)
     }
 }
-
-//data class I18nKeyLiteral(val literal: String, val isTemplate: Boolean) {
-//    private val fullKey: I18nFullKey? = I18nFullKey.parse(literal)
-//    fun fullKey(): I18nFullKey? = fullKey
-//}

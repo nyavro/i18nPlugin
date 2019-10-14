@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.utils
 
-import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.openapi.util.TextRange
+import kotlin.math.max
 
 interface AnnotationFacade {
     fun compositeKeyFullBounds(fullKey: FullKey): TextRange
@@ -9,7 +9,7 @@ interface AnnotationFacade {
     fun unresolvedNs(fullKey: FullKey): TextRange
 }
 
-class AnnotationHolderFacade(val annotationHolder: AnnotationHolder?, val textRange: TextRange) : AnnotationFacade {
+class AnnotationHolderFacade(private val textRange: TextRange) : AnnotationFacade {
 
     override fun unresolvedNs(fullKey: FullKey): TextRange =
         safeRange(
@@ -19,7 +19,7 @@ class AnnotationHolderFacade(val annotationHolder: AnnotationHolder?, val textRa
 
     override fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange =
         safeRange(
-            fullKey.compositeKeyStartOffset() + tokensLength(resolvedPath) + (if (resolvedPath.size > 0) 1 else 0),
+            fullKey.compositeKeyStartOffset() + tokensLength(resolvedPath) + (if (resolvedPath.isNotEmpty()) 1 else 0),
             textRange.endOffset - 1
         )
 
@@ -32,5 +32,5 @@ class AnnotationHolderFacade(val annotationHolder: AnnotationHolder?, val textRa
     private fun FullKey.compositeKeyStartOffset(): Int =
         textRange.startOffset + (this.ns?.let { text -> text.length + 1 } ?: 0) + 1
 
-    private fun safeRange(start: Int, end: Int): TextRange = TextRange(start, Math.max(end, start))
+    private fun safeRange(start: Int, end: Int): TextRange = TextRange(start, max(end, start))
 }

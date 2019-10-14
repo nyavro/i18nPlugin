@@ -68,7 +68,7 @@ class JavaScriptUtil {
         if (item in chain || chain.size >= maxDepth) {
             return null
         }
-        val resolved = item.getPsi()?.reference?.resolve()?.lastChild
+        val resolved = item.psi?.reference?.resolve()?.lastChild
         if (resolved is PsiLiteralValue) {
             val v = resolved.value
             if (v is String)

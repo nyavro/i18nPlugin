@@ -5,39 +5,39 @@ interface State {
     fun fullKey(isTemplate: Boolean, source: String): FullKey? = null
 }
 
-class Error(val msg: String): State {
+class Error(private val msg: String): State {
     override fun next(token: Token): State = this
     override fun toString(): String = "Error <$msg>"
 }
 
-class Start(val init: Literal?) : State {
+class Start(private val init: Literal?) : State {
     override fun next(token: Token): State =
         when {
             token is NsSeparator && init != null  -> WaitingLiteral(init, listOf())
             token is KeySeparator && init != null -> WaitingLiteral(null, listOf(init))
-            token is Literal  -> Start(if (init != null) init.merge(token) else token)
+            token is Literal  -> Start(init?.merge(token) ?: token)
             else -> Error("Invalid ns separator position (0)") // Never get here
         }
 }
 
-class WaitingLiteral(val file: Literal?, val key: List<Literal>) : State {
+class WaitingLiteral(private val file: Literal?, val key: List<Literal>) : State {
     override fun next(token: Token): State =
-        when {
-            token is Literal ->  WaitingLiteralOrSeparator(file, key + token)
-            else -> Error("Invalid token " + token)
+        when (token) {
+            is Literal -> WaitingLiteralOrSeparator(file, key + token)
+            else -> Error("Invalid token $token")
         }
 }
 
 class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : State {
     override fun next(token: Token): State =
-        when {
-            token is KeySeparator -> WaitingLiteral(file, key)
-            token is Literal -> {
+        when (token) {
+            is KeySeparator -> WaitingLiteral(file, key)
+            is Literal -> {
                 val last = key.last().merge(token)
                 val init = key.dropLast(1)
                 WaitingLiteralOrSeparator(file, init + last)
             }
-            else -> Error("Invalid token " + token)
+            else -> Error("Invalid token $token")
         }
     override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key, isTemplate)
 }
@@ -63,6 +63,4 @@ class ExpressionKeyParser {
             }
             .fullKey(isTemplate, source)
     }
-
-    fun parseLiteral(text: String): FullKey? = parse(listOf(KeyElement.literal(text)))
 }

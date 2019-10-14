@@ -41,9 +41,9 @@ interface CompositeKeyResolver<T> {
      */
     fun tryToResolvePlural(propertyReference: PropertyReference<T>): List<PropertyReference<T>> {
         return if (propertyReference.unresolved.size == 1 && propertyReference.element != null && propertyReference.element.isTree()) {
-            val singleUnresolvedKey = propertyReference.unresolved.get(0)
+            val singleUnresolvedKey = propertyReference.unresolved[0]
             val plurals = listOf("1","2","5").mapNotNull {
-                pluralIndex -> propertyReference.element.findChild("${singleUnresolvedKey.text}-$pluralIndex")
+                pluralIndex -> propertyReference.element?.findChild("${singleUnresolvedKey.text}-$pluralIndex")
             }.map {
                 plural -> PropertyReference(propertyReference.path + singleUnresolvedKey, plural, listOf(), isPlural = true)
             }

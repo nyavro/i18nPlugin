@@ -11,7 +11,7 @@ data class Literal(val text: String, val length: Int = text.length, val dot: Int
     fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length)
 }
 
-class Tokenizer(val nsSeparator: String, val keySeparator: String) {
+class Tokenizer(private val nsSeparator: String, private val keySeparator: String) {
 
     fun tokenizeAll(elements: List<KeyElement>): List<Token> = elements.flatMap {item -> tokenize(item)}
 
@@ -53,7 +53,6 @@ class Tokenizer(val nsSeparator: String, val keySeparator: String) {
                         )
                     )
                 else Pair (isFirstLiteralSet, result + token)
-
         }.second
     }
 }

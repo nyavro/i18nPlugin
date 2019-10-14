@@ -8,7 +8,7 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 
-class JsonSearchUtil(val project: Project) {
+class JsonSearchUtil(private val project: Project) {
 
     /**
      * Finds json roots by json file name

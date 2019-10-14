@@ -27,7 +27,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
         if (fileName != null) {
-            val annotationHelper = AnnotationHelper(element.textRange, holder, AnnotationHolderFacade(holder, element.textRange))
+            val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange))
             val files = JsonSearchUtil(element.project).findFilesByName(fileName)
             if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey)
             else {
