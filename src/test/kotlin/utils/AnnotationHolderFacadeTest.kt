@@ -14,7 +14,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log('sample:ROOT.Key1.key31');
     @Test
     fun measureTotallyResolvedKey() {
-        val facade = AnnotationHolderFacade(null, TextRange(19, 43))
+        val facade = AnnotationHolderFacade(TextRange(19, 43))
         val range = facade.compositeKeyFullBounds(
             FullKey("sample:ROOT.Key1.key31", Literal("sample"), literalsList("ROOT", "Key1", "key31"))
         )
@@ -24,7 +24,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log('ROOT.Key1.key31');
     @Test
     fun measureTotallyResolvedKeyWithDefaultNS() {
-        val facade = AnnotationHolderFacade(null, TextRange(19, 36))
+        val facade = AnnotationHolderFacade(TextRange(19, 36))
         val range = facade.compositeKeyFullBounds(
             FullKey("ROOT.Key1.key31",null, literalsList("ROOT", "Key1", "key31"))
         )
@@ -34,7 +34,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log('sample:missing.whole.composite.key');
     @Test
     fun measureTotallyUnresolvedKey() {
-        val facade = AnnotationHolderFacade(null, TextRange(19, 55))
+        val facade = AnnotationHolderFacade(TextRange(19, 55))
         val range = facade.unresolvedKey(
             FullKey(
                 "sample:missing.whole.composite.key", Literal("sample"), literalsList("ROOT", "Key1", "key31")
@@ -47,7 +47,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(i18n.t('sample:ROOT.Key1.missingKey'));
     @Test
     fun measureUnresolvedKey() {
-        val facade = AnnotationHolderFacade(null, TextRange(26, 55))
+        val facade = AnnotationHolderFacade(TextRange(26, 55))
         val range = facade.unresolvedKey(
             FullKey("sample:ROOT.Key1.missingKey", Literal("sample"), literalsList("ROOT", "Key1", "missingKey")),
             literalsList("ROOT", "Key1")
@@ -58,7 +58,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(i18n.t('sample:ROOT.Key1.missing.Key'));
     @Test
     fun measureUnresolvedKey2() {
-        val facade = AnnotationHolderFacade(null, TextRange(26, 56))
+        val facade = AnnotationHolderFacade(TextRange(26, 56))
         val range = facade.unresolvedKey(
             FullKey("sample:ROOT.Key1.missing.Key", Literal("sample"), literalsList("ROOT", "Key1", "missing", "Key")),
             literalsList("ROOT", "Key1")
@@ -69,7 +69,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(i18n.t('sample:ROOT.Key1.Key2.missing.Key'));
     @Test
     fun measureUnresolvedKey3() {
-        val facade = AnnotationHolderFacade(null, TextRange(26, 61))
+        val facade = AnnotationHolderFacade(TextRange(26, 61))
         val range = facade.unresolvedKey(
             FullKey("sample:ROOT.Key1.Key2.missing.Key", Literal("sample"), literalsList("ROOT", "Key1", "Key2", "missing", "Key")),
             literalsList("ROOT", "Key1", "Key2")
@@ -80,7 +80,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log('MissingFile:Ex.Sub.Val');
     @Test
     fun measureUnresolvedFile() {
-        val facade = AnnotationHolderFacade(null, TextRange(19, 43))
+        val facade = AnnotationHolderFacade(TextRange(19, 43))
         val range = facade.unresolvedNs(
             FullKey("MissingFile:Ex.Sub.Val", Literal("MissingFile"), literalsList("Ex", "Sub", "Val"))
         )
@@ -90,7 +90,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(`${fileExpr}:ROOT.Key1.Key31`)                //"sample"
     @Test
     fun measureUnresolvedNsResolvedTemplate() {
-        val facade = AnnotationHolderFacade(null, TextRange(19, 43))
+        val facade = AnnotationHolderFacade(TextRange(19, 43))
         val range = facade.unresolvedNs(
             FullKey("\${fileExpr}:ROOT.Key1.Key31", Literal("sample", 11), literalsList("ROOT", "Key1", "Key31"))
         )
@@ -100,7 +100,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(`${fileExpr}:ROOT.Key1.Key31`)                //*
     @Test
     fun measureUnresolvedNsUnresolvedTemplate() {
-        val facade = AnnotationHolderFacade(null, TextRange(19, 43))
+        val facade = AnnotationHolderFacade(TextRange(19, 43))
         val range = facade.unresolvedNs(
             FullKey("\${fileExpr}:ROOT.Key1.Key31", Literal("*", 11), literalsList("ROOT", "Key1", "Key31"))
         )
@@ -110,7 +110,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log('Ex.Sub.Val');
     @Test
     fun measureUnresolvedFileDefault() {
-        val facade = AnnotationHolderFacade(null, TextRange(19, 43))
+        val facade = AnnotationHolderFacade(TextRange(19, 43))
         val range = facade.unresolvedNs(
             FullKey("Ex.Sub.Val",null, literalsList("Ex", "Sub", "Val"))
         )
@@ -120,7 +120,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(i18n.t(`sample:ROOT.${sub}.key31`));                           //'Key1.key31'
     @Test
     fun measureResolvedTemplateKey() {
-        val facade = AnnotationHolderFacade(null, TextRange(26, 52))
+        val facade = AnnotationHolderFacade(TextRange(26, 52))
         val range = facade.unresolvedKey(
             FullKey(
                 "sample:ROOT.\${sub}.key31",
@@ -144,7 +144,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(i18n.t(`sample:ROOT.Key1.${unknownInCompileTime}`));
     @Test
     fun measureUnresolvedTemplateKey() {
-        val facade = AnnotationHolderFacade(null, TextRange(26, 68))
+        val facade = AnnotationHolderFacade(TextRange(26, 68))
         val range = facade.unresolvedKey(
             FullKey(
                 "sample:ROOT.Key1.\${unknownInCompileTime}",
@@ -166,7 +166,7 @@ class AnnotationHolderFacadeTest : TestBase {
     //console.log(i18n.t(`sample:ROOT.${sub}.key31`));  //'Key1.key3'
     @Test
     fun measureUnresolvedTemplateKey2() {
-        val facade = AnnotationHolderFacade(null, TextRange(26, 52))
+        val facade = AnnotationHolderFacade(TextRange(26, 52))
         val range = facade.unresolvedKey(
             FullKey(
                 "sample:ROOT.\${sub}.key31",
