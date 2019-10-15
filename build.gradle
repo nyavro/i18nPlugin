@@ -15,6 +15,7 @@ apply plugin: 'kotlin'
 
 intellij {
     version 'IU-2019.2'
+    type "IC"
     pluginName 'i18n'
 }
 
@@ -23,7 +24,7 @@ patchPluginXml {
 }
 
 group 'com.eny'
-version '1.0'
+version '1.1'
 
 repositories {
     mavenCentral()

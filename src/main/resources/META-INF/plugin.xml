@@ -2,7 +2,7 @@
     <id>com.eny.i18n</id>
     <name>i18n support</name>
     <vendor email="e.nyavro@gmail.com" url="https://github.com/nyavro/i18nPlugin">i18nPlugin</vendor>
-
+    <depends>com.intellij.modules.platform</depends>
     <description><![CDATA[
     <h4>i18next TypeScript/JavaScript plugin</h4>
     i18n plugin provides:
@@ -20,6 +20,4 @@
         <projectService serviceInterface="com.eny.i18n.plugin.ide.Settings" serviceImplementation="com.eny.i18n.plugin.ide.Settings"/>
         <applicationConfigurable groupId="tools" displayName="i18n Plugin" id="preferences.SingleFileExecutionConfigurable" instance="com.eny.i18n.plugin.ide.Configurable"/>
     </extensions>
-
-    <actions/>
 </idea-plugin>
