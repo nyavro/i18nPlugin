@@ -1,8 +1,9 @@
 package com.eny.i18n.plugin.ide
 
-import javax.swing.JComponent
-import org.jetbrains.annotations.Nls
 import com.intellij.openapi.options.SearchableConfigurable
+import org.jetbrains.annotations.Nls
+import javax.swing.JComponent
+import javax.swing.JPanel
 
 
 /**
@@ -11,11 +12,11 @@ import com.intellij.openapi.options.SearchableConfigurable
  */
 class Configurable : SearchableConfigurable {
 
-    internal var gui: ConfigurablePanel? = null
+    internal var gui: JPanel? = null
 
     override fun createComponent(): JComponent {
-        gui = ConfigurablePanel()
-        return gui!!.getRootPanel()
+        gui = JPanel()
+        return gui!!
     }
 
     @Nls
