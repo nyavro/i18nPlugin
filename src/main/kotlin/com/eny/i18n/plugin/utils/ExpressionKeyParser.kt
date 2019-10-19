@@ -26,6 +26,7 @@ class WaitingLiteral(private val file: Literal?, val key: List<Literal>) : State
             is Literal -> WaitingLiteralOrSeparator(file, key + token)
             else -> Error("Invalid token $token")
         }
+    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key + Literal(""), isTemplate)
 }
 
 class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : State {

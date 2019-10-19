@@ -1,6 +1,7 @@
 package utils
 
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.ExpressionKeyParser
+import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -15,6 +16,17 @@ class ExpressionKeyParserTest : TestBase {
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("fileName{8}:ROOT{4}.Key2{4}.Key3{4}", toTestString(parsed))
         assertEquals("fileName:ROOT.Key2.Key3", parsed?.source)
+    }
+
+//fileName:ROOT.Key2.Key3.                  /                       / fileName{8}:ROOT{4}.Key2{4}.Key3{4}.{0}
+    @Test
+    fun parseSimpleLiteral2() {
+        val elements = listOf(
+            KeyElement.literal("fileName:ROOT.Key2.Key3.")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("fileName{8}:ROOT{4}.Key2{4}.Key3{4}.{0}", toTestString(parsed))
+        assertEquals("fileName:ROOT.Key2.Key3.", parsed?.source)
     }
 
 //${fileExpr}:ROOT.Key1.Key31               / sample                / sample{11}:ROOT{4}.Key1{4}.Key31{5}
@@ -182,5 +194,17 @@ class ExpressionKeyParserTest : TestBase {
         )
         val parsed = ExpressionKeyParser().parse(elements)
         assertEquals("filename{8}:root{4}.Key0{6}.Postfix{7}", toTestString(parsed))
+    }
+
+//filename:root${key}.Postfix.               / .Key0                / filename{8}:root{4}.Key0{6}.Postfix{7}.{0}
+    @Test
+    fun partOfKeyIsExpression6() {
+        val elements = listOf(
+                KeyElement.literal("filename:root"),
+                KeyElement.resolvedTemplate("\${key}", ".Key0"),
+                KeyElement.literal(".Postfix.")
+        )
+        val parsed = ExpressionKeyParser().parse(elements)
+        assertEquals("filename{8}:root{4}.Key0{6}.Postfix{7}.{0}", toTestString(parsed))
     }
 }
