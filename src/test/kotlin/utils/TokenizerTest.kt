@@ -116,4 +116,14 @@ class TokenizerTest {
             tokenizer.tokenize(keyElement)
         )
     }
+
+    @Test
+    fun tokenizeReferenceToEmptyValue() {
+        val keyElement = KeyElement.resolvedTemplate("\${ref}", "")
+        val tokenizer = Tokenizer(":", ".")
+        assertEquals(
+            listOf(),
+            tokenizer.tokenize(keyElement)
+        )
+    }
 }

@@ -39,8 +39,8 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
         }
 
     private fun setChildLengths(expression: String, resolved: List<Token>): List<Token> {
-        val endsWithSeparator = resolved.last() is KeySeparator
-        val startsWithSeparator = resolved.first() is KeySeparator
+        val endsWithSeparator = resolved.takeLast(1).contains(KeySeparator)
+        val startsWithSeparator = resolved.take(1).contains(KeySeparator)
         return resolved.foldIndexed(Pair(false, listOf<Token>())) {
             index, (isFirstLiteralSet, result), token ->
                 if (token is Literal)
