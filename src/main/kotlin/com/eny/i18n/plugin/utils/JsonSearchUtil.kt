@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.utils
 
+import com.eny.i18n.plugin.ide.Settings
 import com.intellij.json.JsonFileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
@@ -9,6 +10,8 @@ import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 
 class JsonSearchUtil(private val project: Project) {
+
+    val settings = Settings.getInstance(project)
 
     /**
      * Finds json roots by json file name
@@ -23,7 +26,11 @@ class JsonSearchUtil(private val project: Project) {
      */
     private fun findVirtualFilesByName(fileName: String) =
         FileTypeIndex
-            .getFiles(JsonFileType.INSTANCE, GlobalSearchScope.allScope(project))
+            .getFiles(
+                JsonFileType.INSTANCE,
+                if (settings.searchInProjectOnly) GlobalSearchScope.projectScope(project)
+                else GlobalSearchScope.allScope(project)
+            )
             .filter {file -> file.name == "$fileName.json"}
 
     /**

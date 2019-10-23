@@ -3,17 +3,14 @@ package com.eny.i18n.plugin.ide
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
 
-@State(name = "i18nSettings")
+@State(name = "i18nSettings", storages = [Storage("i18nSettings.xml")])
 class Settings : PersistentStateComponent<Settings> {
 
-    private var word: String = ""
-
-    fun setWord(w: String) {
-        this.word = w
-    }
+    var searchInProjectOnly = true
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
