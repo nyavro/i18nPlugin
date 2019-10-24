@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide
 
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.JavaScriptUtil
@@ -17,16 +18,17 @@ import com.intellij.psi.util.PsiTreeUtil
 class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver<PsiElement> {
     private val jsUtil = JavaScriptUtil()
 
-    private fun groupPlurals(set: Set<String>):List<String> =
+    private fun groupPlurals(set: Set<String>, pluralIndexSeparator: String):List<String> =
         set
-            .groupBy {it.substringBeforeLast("-")}
+            .groupBy {it.substringBeforeLast(pluralIndexSeparator)}
             .entries.flatMap {
-            entry -> if(entry.value.size == 3 && entry.value.containsAll(listOf(1,2,5).map{entry.key+"-"+it})) {
+            entry -> if(entry.value.size == 3 && entry.value.containsAll(listOf(1,2,5).map{entry.key+pluralIndexSeparator+it})) {
             listOf(entry.key)} else entry.value
         }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
         super.fillCompletionVariants(parameters, result)
+        val settings = Settings.getInstance(parameters.position.project)
         val fullKey = jsUtil.extractI18nKeyLiteral(
             if (parameters.position.toString().contains("JS:STRING_TEMPLATE_PART")) parameters.position.parent
             else parameters.position
@@ -48,7 +50,8 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
                                 PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot)},
                                 search
                             )
-                    }.map {key -> key.value().text.unQuote()}.toSet()
+                    }.map {key -> key.value().text.unQuote()}.toSet(),
+                    settings.pluralIndexSeparator
                 )
             result.addAllElements(
                 elements.map {item -> LookupElementBuilder.create(source + item)}

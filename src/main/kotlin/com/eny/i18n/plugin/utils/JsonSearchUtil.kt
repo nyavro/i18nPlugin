@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.utils
 
-import com.eny.i18n.plugin.ide.Settings
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.json.JsonFileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile

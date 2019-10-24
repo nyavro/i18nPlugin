@@ -17,7 +17,7 @@
         <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
         <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
-        <projectService serviceInterface="com.eny.i18n.plugin.ide.Settings" serviceImplementation="com.eny.i18n.plugin.ide.Settings"/>
-        <projectConfigurable groupId="tools" displayName="i18n Plugin" instance="com.eny.i18n.plugin.ide.Configurable"/>
+        <projectService serviceInterface="com.eny.i18n.plugin.ide.settings.Settings" serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
+        <projectConfigurable groupId="tools" displayName="i18n Plugin" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
     </extensions>
 </idea-plugin>

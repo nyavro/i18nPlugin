@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide
+package com.eny.i18n.plugin.ide.settings
 
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
@@ -11,6 +11,12 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 class Settings : PersistentStateComponent<Settings> {
 
     var searchInProjectOnly = true
+
+    val nsSeparator = ":"
+
+    val keySeparator = "."
+
+    val pluralIndexSeparator = "-"
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 

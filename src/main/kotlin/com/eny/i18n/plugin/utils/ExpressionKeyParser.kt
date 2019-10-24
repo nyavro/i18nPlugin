@@ -55,9 +55,9 @@ class ExpressionKeyParser {
         }
     }
 
-    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false): FullKey? {
+    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = "."): FullKey? {
         val source = elements.fold(""){acc, item -> acc + item.text}
-        return Tokenizer(":", ".")
+        return Tokenizer(nsSeparator, keySeparator)
             .tokenizeAll(elements)
             .fold(Start(null) as State) { state, token ->
                 state.next(token)

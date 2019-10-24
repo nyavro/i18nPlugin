@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide
+package com.eny.i18n.plugin.ide.settings
 
 import com.jgoodies.forms.factories.DefaultComponentFactory
 import net.miginfocom.swing.MigLayout

@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.utils
 
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
@@ -16,20 +17,21 @@ class JavaScriptUtil {
      * Converts element to it's literal value, if possible
      */
     fun extractI18nKeyLiteral(element: PsiElement): FullKey? {
+        val settings = Settings.getInstance(element.project)
         // Template expression
         if (isTemplateExpression(element)) {
-            return resolveTemplateExpression(element)
+            return resolveTemplateExpression(element, settings)
         }
         // String literal
         else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
             val value: Any? = element.value
             if (value is String) {
-                return parser.parse(listOf(KeyElement.literal(value)))
+                return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
             }
         }
         else if (element.node?.elementType.toString() == "JS:STRING_LITERAL") {
             val value = element.text.unQuote()
-            return parser.parse(listOf(KeyElement.literal(value)))
+            return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
         }
         return null
     }
@@ -46,7 +48,7 @@ class JavaScriptUtil {
      * const key = 'element';
      * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
      */
-    private fun resolveTemplateExpression(element: PsiElement): FullKey? {
+    private fun resolveTemplateExpression(element: PsiElement, settings: Settings): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
             item ->
                 if (item.elementType.toString().contains("REFERENCE")) {
@@ -58,7 +60,7 @@ class JavaScriptUtil {
                 } else KeyElement.literal(item.text)
         }
         val elements = parser.reduce(transformed)
-        return parser.parse(elements, true)
+        return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator)
     }
 
     /**
