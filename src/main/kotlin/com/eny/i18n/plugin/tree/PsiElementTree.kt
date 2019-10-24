@@ -1,12 +1,14 @@
 package com.eny.i18n.plugin.tree
 
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonObject
+import com.intellij.json.psi.JsonProperty
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
-import com.eny.i18n.plugin.utils.unQuote
 
-class PsiElementTree(val element: PsiElement) : Tree<PsiElement> {
+class PsiElementTree(val element: PsiElement) : Tree<PsiElement>, FlippedTree<PsiElement> {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is JsonObject
     override fun findChild(name: String): PsiElementTree? =
@@ -20,4 +22,12 @@ class PsiElementTree(val element: PsiElement) : Tree<PsiElement> {
             .map {item -> item.firstChildNode.psi}
             .filter {item -> item != null && item.text.unQuote().matches(regex)}
             .map {item -> PsiElementTree(item)}
+    override fun getParent(): FlippedTree<PsiElement>? {
+        fun findParent(current: PsiElement): PsiElement? =
+            if (current is JsonProperty) current
+            else if (current is PsiFile) null
+            else findParent(current.parent)
+        return findParent(element)?.let { parent -> PsiElementTree(parent)}
+    }
+    override fun name(): String = element.firstChild.text.unQuote()
 }
