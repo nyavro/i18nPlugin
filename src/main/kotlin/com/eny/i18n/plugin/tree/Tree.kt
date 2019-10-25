@@ -9,7 +9,8 @@ interface Tree<T> {
 }
 
 interface FlippedTree<T> {
-    fun getParent(): FlippedTree<T>?
     fun name(): String
+    fun isRoot(): Boolean
+    fun ancestors(): List<FlippedTree<T>>
 }
 

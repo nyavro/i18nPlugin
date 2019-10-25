@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
 
-class PsiElementTree(val element: PsiElement) : Tree<PsiElement>, FlippedTree<PsiElement> {
+class PsiElementTree(val element: PsiElement): Tree<PsiElement> {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is JsonObject
     override fun findChild(name: String): PsiElementTree? =
@@ -22,12 +22,21 @@ class PsiElementTree(val element: PsiElement) : Tree<PsiElement>, FlippedTree<Ps
             .map {item -> item.firstChildNode.psi}
             .filter {item -> item != null && item.text.unQuote().matches(regex)}
             .map {item -> PsiElementTree(item)}
-    override fun getParent(): FlippedTree<PsiElement>? {
-        fun findParent(current: PsiElement): PsiElement? =
-            if (current is JsonProperty) current
-            else if (current is PsiFile) null
-            else findParent(current.parent)
-        return findParent(element)?.let { parent -> PsiElementTree(parent)}
+}
+class PsiRoot(val element: PsiFile): FlippedTree<PsiElement> {
+    override fun name() = element.containingFile.name
+    override fun isRoot() = true
+    override fun ancestors(): List<FlippedTree<PsiElement>> = listOf()
+}
+class PsiProperty(val element: JsonProperty): FlippedTree<PsiElement> {
+    override fun name() = element.firstChild.text.unQuote()
+    override fun isRoot() = false
+    override fun ancestors(): List<FlippedTree<PsiElement>> {
+        fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> {
+            if (item is PsiFile) return listOf(PsiRoot(item))
+            else if(item is JsonProperty) return allAncestors(item.parent) + PsiProperty(item)
+            else return allAncestors(item.parent)
+        }
+        return allAncestors(element)
     }
-    override fun name(): String = element.firstChild.text.unQuote()
 }
