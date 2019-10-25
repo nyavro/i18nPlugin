@@ -28,15 +28,13 @@ class PsiRoot(val element: PsiFile): FlippedTree<PsiElement> {
     override fun isRoot() = true
     override fun ancestors(): List<FlippedTree<PsiElement>> = listOf()
 }
-class PsiProperty(val element: JsonProperty): FlippedTree<PsiElement> {
+class PsiProperty(val element: PsiElement): FlippedTree<PsiElement> {
     override fun name() = element.firstChild.text.unQuote()
     override fun isRoot() = false
-    override fun ancestors(): List<FlippedTree<PsiElement>> {
-        fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> {
-            if (item is PsiFile) return listOf(PsiRoot(item))
-            else if(item is JsonProperty) return allAncestors(item.parent) + PsiProperty(item)
-            else return allAncestors(item.parent)
-        }
-        return allAncestors(element)
+    override fun ancestors(): List<FlippedTree<PsiElement>> = allAncestors(element)
+    protected fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> {
+        if (item is PsiFile) return listOf(PsiRoot(item))
+        else if(item is JsonProperty) return allAncestors(item.parent) + PsiProperty(item)
+        else return allAncestors(item.parent)
     }
 }
