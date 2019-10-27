@@ -24,7 +24,7 @@ class PsiElementTree(val element: PsiElement): Tree<PsiElement> {
             .map {item -> PsiElementTree(item)}
 }
 class PsiRoot(val element: PsiFile): FlippedTree<PsiElement> {
-    override fun name() = element.containingFile.name
+    override fun name() = element.containingFile.name.substringBeforeLast(".")
     override fun isRoot() = true
     override fun ancestors(): List<FlippedTree<PsiElement>> = listOf()
 }

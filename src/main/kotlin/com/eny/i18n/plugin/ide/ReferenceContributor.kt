@@ -2,9 +2,11 @@ package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.tree.Tree
+import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.utils.JavaScriptUtil
+import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.json.psi.JsonObject
 import com.intellij.openapi.util.TextRange
@@ -22,7 +24,6 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
             list.filter { ref -> ref.path.size == mostResolved}
         else
             list
-
     }
 
     private fun findProperties(): List<Tree<PsiElement>> {
