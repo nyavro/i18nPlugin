@@ -1,8 +1,8 @@
 package utils
 
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.ExpressionKeyParser
+import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 //@Ignore
@@ -22,7 +22,7 @@ class InvalidExpressionTest : TestBase {
     @Test
     fun parseInvalidKeySeparatorInLiteral() {
         val invalidExpression = listOf(
-                KeyElement.literal("invalid:literal..key.ROOT.Key1.Key31")
+            KeyElement.literal("invalid:literal..key.ROOT.Key1.Key31")
         )
         val parser = ExpressionKeyParser()
         assertNull(parser.parse(invalidExpression))
@@ -32,7 +32,7 @@ class InvalidExpressionTest : TestBase {
     @Test
     fun parseInvalidDefaultNsKeySeparatorInLiteral() {
         val invalidExpression = listOf(
-                KeyElement.literal("invalid.literal..key.ROOT.Key1.Key31")
+            KeyElement.literal("invalid.literal..key.ROOT.Key1.Key31")
         )
         val parser = ExpressionKeyParser()
         assertNull(parser.parse(invalidExpression))
@@ -42,7 +42,7 @@ class InvalidExpressionTest : TestBase {
     @Test
     fun parseInvalidDefaultNsKeySeparatorInLiteral2() {
         val invalidExpression = listOf(
-                KeyElement.literal("invalid.literal.test:.key.ROOT.Key1.Key31")
+            KeyElement.literal("invalid.literal.test:.key.ROOT.Key1.Key31")
         )
         val parser = ExpressionKeyParser()
         assertNull(parser.parse(invalidExpression))
@@ -52,7 +52,7 @@ class InvalidExpressionTest : TestBase {
     @Test
     fun parseInvalidStart() {
         val invalidExpression = listOf(
-                KeyElement.literal(".invalid.start.test")
+            KeyElement.literal(".invalid.start.test")
         )
         val parser = ExpressionKeyParser()
         assertNull(parser.parse(invalidExpression))
@@ -62,7 +62,7 @@ class InvalidExpressionTest : TestBase {
     @Test
     fun parseInvalidStart2() {
         val invalidExpression = listOf(
-                KeyElement.literal(":invalid.start.test")
+            KeyElement.literal(":invalid.start.test")
         )
         val parser = ExpressionKeyParser()
         assertNull(parser.parse(invalidExpression))
@@ -93,11 +93,21 @@ class InvalidExpressionTest : TestBase {
     @Test
     fun partOfKeyIsExpression5() {
         val elements = listOf(
-                KeyElement.literal("filename:root"),
-                KeyElement.resolvedTemplate("\${key}", ".Key0."),
-                KeyElement.literal(".Postfix")
+            KeyElement.literal("filename:root"),
+            KeyElement.resolvedTemplate("\${key}", ".Key0."),
+            KeyElement.literal(".Postfix")
         )
         val parser = ExpressionKeyParser()
         assertNull(parser.parse(elements))
+    }
+
+//invalid:file:literal.ROOT.Key1.Key31
+    @Test
+    fun notAKey() {
+        val invalidExpression = listOf(
+            KeyElement.literal(" invalid:ROOT.Key1.Key31")
+        )
+        val parser = ExpressionKeyParser()
+        assertNull(parser.parse(invalidExpression))
     }
 }

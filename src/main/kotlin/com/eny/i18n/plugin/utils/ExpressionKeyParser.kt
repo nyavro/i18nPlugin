@@ -57,6 +57,8 @@ class ExpressionKeyParser {
 
     fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = "."): FullKey? {
         val source = elements.fold(""){acc, item -> acc + item.text}
+        val regex = "[\\w\$}{]+:([\\w\$}{]+)?(\\.[\\w\$}{]+)*\\.?|([\\w\$}{]+)(\\.[\\w\$}{]+)+\\.?".toRegex()
+        if (!source.matches(regex)) return null
         return Tokenizer(nsSeparator, keySeparator)
             .tokenizeAll(elements)
             .fold(Start(null) as State) { state, token ->
