@@ -31,12 +31,11 @@ class JsonI18nReference(element: PsiElement, textRange: TextRange, val composedK
     fun findRefs(): List<PsiElement> {
         val project = element.project
         val settings = Settings.getInstance(project)
-        val searchHelper = PsiSearchHelper.getInstance(project)
         val searchScope = settings.searchScope(project)
         val list = mutableListOf<PsiElement>()
-        if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES==searchHelper.isCheapEnoughToSearch(composedKey, searchScope, null, null)) {
-            searchHelper.processElementsWithWord(processSearchEntry(list), searchScope, composedKey, UsageSearchContext.IN_STRINGS, true)
-        }
+        PsiSearchHelper.getInstance(project).processElementsWithWord(
+                processSearchEntry(list), searchScope, composedKey, UsageSearchContext.IN_CODE, true
+        )
         return list
     }
 
@@ -81,7 +80,11 @@ class JsonReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElemen
                         val project = element.project
                         val settings = Settings.getInstance(project)
                         val key = composeKey(PsiProperty(element), settings.nsSeparator, settings.keySeparator)
-                        return arrayOf(JsonI18nReference(element, TextRange(1, element.textLength - 1), key))
+                        if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES==
+                                PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, settings.searchScope(project), null, null)) {
+                            return arrayOf(JsonI18nReference(element, TextRange(1, element.textLength - 1), key))
+                        }
+                        return PsiReference.EMPTY_ARRAY
                     }
                     return PsiReference.EMPTY_ARRAY
                 }
