@@ -4,7 +4,6 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.PsiProperty
 import com.eny.i18n.plugin.utils.searchScope
-import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.json.psi.JsonStringLiteral
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
@@ -15,55 +14,37 @@ import com.intellij.util.ProcessingContext
 
 class JsonI18nReference(element: PsiElement, textRange: TextRange, val composedKey: String) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
 
-    fun processSearchEntry(list: MutableList<PsiElement>) = {
-//        val stopTypes = listOf(
-//            "FILE", "JS:CALL_EXPRESSION", "JS:EXPRESSION_STATEMENT", "JS:END_OF_LINE_COMMENT", "JS:ARGUMENT_LIST",
-//            "BLOCK_STATEMENT", "JS:TYPESCRIPT_FUNCTION", "JS:TYPESCRIPT_CLASS"
-//        )
+    fun processSearchEntry(list: MutableCollection<PsiElement>) = {
         entry: PsiElement, offset:Int ->
-            if (listOf("JS:STRING_LITERAL", "JS_STRING_TEMPLATE_PART").contains(entry.node.elementType.toString())) {
+            val typeName = entry.node.elementType.toString()
+            if (typeName == "JS:STRING_LITERAL") {
                 list.add(entry)
-            } else {
+            } else if (typeName == "JS:STRING_TEMPLATE_PART") {
+                list.add(entry.parent)
+            } else if (typeName == "JS:STRING_TEMPLATE_EXPRESSION"){
+                list.add(entry)
             }
             true
     }
 
-    fun findRefs(): List<PsiElement> {
+    fun findRefs(): Collection<PsiElement> {
         val project = element.project
-        val settings = Settings.getInstance(project)
-        val searchScope = settings.searchScope(project)
-        val list = mutableListOf<PsiElement>()
+        val set = mutableSetOf<PsiElement>()
         PsiSearchHelper.getInstance(project).processElementsWithWord(
-                processSearchEntry(list), searchScope, composedKey, UsageSearchContext.IN_CODE, true
+            processSearchEntry(set), Settings.getInstance(project).searchScope(project), composedKey, UsageSearchContext.ANY, true
         )
-        return list
+        return set
     }
 
     override fun resolve(): PsiElement? {
         val res = multiResolve(false)
-        return if (res.size == 1) {
-            res.firstOrNull()?.element
-        }
-        else null
+        return if (res.size == 1) res.firstOrNull()?.element else null
     }
 
-    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val findRefs = findRefs()
-        return findRefs
+    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> =
+        findRefs()
             .map {property -> PsiElementResolveResult(property)}
             .toTypedArray()
-    }
-
-    override fun getVariants(): Array<Any> {
-        val findRefs = findRefs()
-        return findRefs
-                .map { property ->
-                    LookupElementBuilder
-                            .create(property.text)
-                            .withTypeText(property.containingFile.name + " " + property.text)
-                }
-                .toTypedArray()
-    }
 }
 
 /**
