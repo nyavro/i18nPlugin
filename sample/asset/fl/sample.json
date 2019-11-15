@@ -1,0 +1,11 @@
+{
+  "ROOT.Key1.key2": "значение 1174",
+  "ROOT.Key1.key31": "ввв",
+  "ROOT.Key1.plurals.value-1": "сундук",
+  "ROOT.Key1.plurals.value-2": "сундука",
+  "ROOT.Key1.plurals.value-5": "сундуков",
+  "ROOT.Key1.plurals.other": "другой",
+  "ROOT.ExtraKey.Val1": "знач11",
+  "ROOT.ExtraKey.Val2": "Знач22",
+  "v": [{"rr": 4}]
+}
