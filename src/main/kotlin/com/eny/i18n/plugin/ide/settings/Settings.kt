@@ -16,7 +16,7 @@ class Settings : PersistentStateComponent<Settings> {
 
     var keySeparator = "."
 
-    var pluralIndexSeparator = "-"
+    var pluralSeparator = "-"
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 

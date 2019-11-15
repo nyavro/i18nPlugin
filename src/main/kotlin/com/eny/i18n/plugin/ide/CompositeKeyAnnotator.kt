@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide
 
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
@@ -31,10 +32,15 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
             val files = JsonSearchUtil(element.project).findFilesByName(fileName)
             if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey)
             else {
+                val pluralSeparator = Settings.getInstance(element.project).pluralSeparator
                 val mostResolvedReference = files
                     .flatMap { jsonFile ->
                         tryToResolvePlural(
-                            resolveCompositeKey(compositeKey, PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot) })
+                            resolveCompositeKey(
+                                compositeKey,
+                                PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot)}
+                            ),
+                            pluralSeparator
                         )
                     }
                     .maxBy {v -> v.path.size}!!

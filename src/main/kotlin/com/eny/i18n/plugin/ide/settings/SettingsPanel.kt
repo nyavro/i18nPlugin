@@ -53,7 +53,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         val panel = JPanel()
         panel.layout = BorderLayout()
         panel.add(JLabel(label), BorderLayout.WEST)
-        val control = LimitedTextField(property.get(), 1, {txt->property.set(txt)}, {ch -> !listOf(' ', '$', '{', '}').contains(ch)})
+        val control = LimitedTextField(property.get(), 1, {txt->property.set(txt)}, {ch -> !listOf(' ', '$', '{', '}', '`').contains(ch)})
         control.preferredSize = Dimension(control.preferredSize.height, control.preferredSize.height)
         panel.add(control, BorderLayout.EAST)
         return panel
@@ -65,7 +65,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(searchInProjectsOnly())
         panel.add(separator("Namespace separator", settings::nsSeparator))
         panel.add(separator("Key separator", settings::keySeparator))
-        panel.add(separator("Plural separator", settings::pluralIndexSeparator))
+        panel.add(separator("Plural separator", settings::pluralSeparator))
         return panel
     }
 }

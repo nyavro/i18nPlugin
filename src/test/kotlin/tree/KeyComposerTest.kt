@@ -23,14 +23,21 @@ class KeyComposerTest {
     fun compose() {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "sample"))
-        assertEquals("sample:ROOT.key1.key31", composer.composeKey(tree, ":", "."))
+        assertEquals("sample:ROOT.key1.key31", composer.composeKey(tree))
     }
 
     @Test
     fun compose2() {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("sample"))
-        assertEquals("sample", composer.composeKey(tree, ":", "."))
+        assertEquals("sample", composer.composeKey(tree))
+    }
+
+    @Test
+    fun composePlural() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("key31-1", "key1", "ROOT", "sample"))
+        assertEquals("sample:ROOT.key1.key31", composer.composeKey(tree))
     }
 
     @Test

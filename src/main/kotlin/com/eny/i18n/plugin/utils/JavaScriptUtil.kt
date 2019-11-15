@@ -26,12 +26,12 @@ class JavaScriptUtil {
         else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
             val value: Any? = element.value
             if (value is String) {
-                return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralIndexSeparator)
+                return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
             }
         }
         else if (element.node?.elementType.toString() == "JS:STRING_LITERAL") {
             val value = element.text.unQuote()
-            return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralIndexSeparator)
+            return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
         }
         return null
     }
@@ -60,7 +60,7 @@ class JavaScriptUtil {
                 } else KeyElement.literal(item.text)
         }
         val elements = parser.reduce(transformed)
-        return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator, settings.pluralIndexSeparator)
+        return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
     }
 
     /**

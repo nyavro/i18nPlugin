@@ -192,6 +192,40 @@ class CompositeKeyResolverTest {
     }
 
     @Test
+    fun resolveCustomPluralSeparator() {
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val properties = resolver.tryToResolvePlural(
+            resolver.resolveCompositeKey(
+                listOf(Literal("base1"), Literal("sub1"), Literal("plural1")),
+                root(
+                    TestTree("base1",
+                        listOf(
+                            TestTree(
+                                "sub1",
+                                listOf(
+                                    TestTree("plural1%1"),
+                                    TestTree("plural1%2"),
+                                    TestTree("plural1%5")
+                                )
+                            ),
+                            TestTree("sub2")
+                        )
+                    )
+                )
+            ),
+            "%"
+        )
+        assertEquals(3, properties.size)
+        properties.zip(listOf(1,2,5)).forEach {
+            (property, index) ->
+            assertTrue(property.element?.isLeaf() ?: false)
+            assertEquals("plural1%$index", property.element?.value())
+            assertTrue(property.unresolved.isEmpty())
+            assertEquals(property.path, listOf(Literal("base1"), Literal("sub1"), Literal("plural1")))
+        }
+    }
+
+    @Test
     fun resolvePluralSkippedForLeaf() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val properties = resolver.tryToResolvePlural(

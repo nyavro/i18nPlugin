@@ -18,11 +18,11 @@ import com.intellij.psi.util.PsiTreeUtil
 class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver<PsiElement> {
     private val jsUtil = JavaScriptUtil()
 
-    private fun groupPlurals(set: Set<String>, pluralIndexSeparator: String):List<String> =
+    private fun groupPlurals(set: Set<String>, pluralSeparator: String):List<String> =
         set
-            .groupBy {it.substringBeforeLast(pluralIndexSeparator)}
+            .groupBy {it.substringBeforeLast(pluralSeparator)}
             .entries.flatMap {
-            entry -> if(entry.value.size == 3 && entry.value.containsAll(listOf(1,2,5).map{entry.key+pluralIndexSeparator+it})) {
+            entry -> if(entry.value.size == 3 && entry.value.containsAll(listOf(1,2,5).map{entry.key+pluralSeparator+it})) {
             listOf(entry.key)} else entry.value
         }
 
@@ -51,7 +51,7 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
                                 search
                             )
                     }.map {key -> key.value().text.unQuote()}.toSet(),
-                    settings.pluralIndexSeparator
+                    settings.pluralSeparator
                 )
             result.addAllElements(
                 elements.map {item -> LookupElementBuilder.create(source + item)}
