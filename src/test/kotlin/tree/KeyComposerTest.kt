@@ -2,8 +2,8 @@ package tree
 
 import com.eny.i18n.plugin.tree.FlippedTree
 import com.eny.i18n.plugin.tree.KeyComposer
-import junit.framework.Assert.assertEquals
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class TestFlippedTree(val list: List<String>): FlippedTree<String> {
     override fun isRoot() = list.size == 1
@@ -31,5 +31,26 @@ class KeyComposerTest {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("sample"))
         assertEquals("sample", composer.composeKey(tree, ":", "."))
+    }
+
+    @Test
+    fun alternativeKeySeparator() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "alter"))
+        assertEquals("alter:ROOT#key1#key31", composer.composeKey(tree, ":", "#"))
+    }
+
+    @Test
+    fun alternativeKeySeparator2() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("alter"))
+        assertEquals("alter", composer.composeKey(tree, ":", "$"))
+    }
+
+    @Test
+    fun alternativeKeySeparator3() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "alter"))
+        assertEquals("alter\$ROOT#key1#key31", composer.composeKey(tree, "\$", "#"))
     }
 }
