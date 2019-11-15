@@ -1,7 +1,6 @@
 package utils
 
-import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.utils.*
 
 interface TestBase {
     fun toTestString(fullKey: FullKey?): String =
@@ -12,4 +11,6 @@ interface TestBase {
 
     private fun textWithLength(token: Literal?): String = if (token != null) "${token.text}{${token.length}}" else ""
     private fun extractTextWithLength(list: List<Literal>?): String = (list ?: listOf()).map { token -> textWithLength(token)}.joinToString(".")
+    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".", pluralSeparator: String = "-"): FullKey? =
+        ExpressionKeyParser().parse(elements, isTemplate, nsSeparator, keySeparator, pluralSeparator)
 }

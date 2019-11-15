@@ -13,7 +13,7 @@ class ExpressionKeyParserTest : TestBase {
         val elements = listOf(
             KeyElement.literal("fileName:ROOT.Key2.Key3")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("fileName{8}:ROOT{4}.Key2{4}.Key3{4}", toTestString(parsed))
         assertEquals("fileName:ROOT.Key2.Key3", parsed?.source)
     }
@@ -24,7 +24,7 @@ class ExpressionKeyParserTest : TestBase {
         val elements = listOf(
             KeyElement.literal("fileName:ROOT.Key2.Key3.")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("fileName{8}:ROOT{4}.Key2{4}.Key3{4}.{0}", toTestString(parsed))
         assertEquals("fileName:ROOT.Key2.Key3.", parsed?.source)
     }
@@ -36,7 +36,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
             KeyElement.literal(":ROOT.Key1.Key31")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
         assertEquals("\${fileExpr}:ROOT.Key1.Key31", parsed?.source)
     }
@@ -49,7 +49,7 @@ class ExpressionKeyParserTest : TestBase {
                 KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
                 KeyElement.literal(":ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("prefixsample{17}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
         assertEquals("prefix\${fileExpr}:ROOT.Key4.Key5", parsed?.source)
     }
@@ -61,7 +61,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
             KeyElement.literal("postfix:ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("samplepostfix{18}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
         assertEquals("\${fileExpr}postfix:ROOT.Key4.Key5", parsed?.source)
     }
@@ -74,7 +74,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
             KeyElement.literal("postfix:ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("prefixsamplepostfix{24}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
         assertEquals("prefix\${fileExpr}postfix:ROOT.Key4.Key5", parsed?.source)
     }
@@ -87,7 +87,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.resolvedTemplate("\${fileExpr}", "partFile:partKey"),
             KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("prefixpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
         assertEquals("prefix\${fileExpr}postfix.ROOT.Key4.Key5", parsed?.source)
     }
@@ -99,7 +99,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.literal("filename:"),
             KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
@@ -111,7 +111,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21."),
             KeyElement.literal("item")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:Key0{6}.Key2{0}.Key21{0}.item{4}", toTestString(parsed))
 }
 
@@ -123,7 +123,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21"),
             KeyElement.literal(".item")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:Key0{6}.Key2{0}.Key21{0}.item{4}", toTestString(parsed))
     }
 
@@ -135,7 +135,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21"),
             KeyElement.literal("item")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:Key0{6}.Key2{0}.Key21item{4}", toTestString(parsed))
     }
 
@@ -146,7 +146,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.literal("filename:root."),
             KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:root{4}.Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
@@ -157,7 +157,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.literal("filename:root"),
             KeyElement.resolvedTemplate("\${key}", ".Key0.Key2.Key21")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:root{4}.Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
@@ -168,7 +168,7 @@ class ExpressionKeyParserTest : TestBase {
             KeyElement.literal("filename:root"),
             KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:rootKey0{10}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
@@ -180,7 +180,7 @@ class ExpressionKeyParserTest : TestBase {
                 KeyElement.resolvedTemplate("\${key}", ".Key0"),
                 KeyElement.literal("Postfix")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:root{4}.Key0Postfix{13}", toTestString(parsed))
     }
 
@@ -192,7 +192,7 @@ class ExpressionKeyParserTest : TestBase {
                 KeyElement.resolvedTemplate("\${key}", ".Key0"),
                 KeyElement.literal(".Postfix")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:root{4}.Key0{6}.Postfix{7}", toTestString(parsed))
     }
 
@@ -204,7 +204,7 @@ class ExpressionKeyParserTest : TestBase {
                 KeyElement.resolvedTemplate("\${key}", ".Key0"),
                 KeyElement.literal(".Postfix.")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}:root{4}.Key0{6}.Postfix{7}.{0}", toTestString(parsed))
     }
 }

@@ -13,7 +13,7 @@ class DefaultNsParserTest : TestBase{
         val elements = listOf(
             KeyElement.literal("ROOT.Key2.Key3")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("ROOT{4}.Key2{4}.Key3{4}", toTestString(parsed))
     }
 
@@ -24,7 +24,7 @@ class DefaultNsParserTest : TestBase{
             KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
             KeyElement.literal(".ROOT.Key1.Key31")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("sample{11}.ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
@@ -36,7 +36,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
                 KeyElement.literal(".ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("prefixsample{17}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
@@ -48,7 +48,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement.literal("postfix"),
                 KeyElement.literal(".ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("samplepostfix{18}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
@@ -60,7 +60,7 @@ class DefaultNsParserTest : TestBase{
             KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
             KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("prefixsamplepostfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
@@ -72,7 +72,7 @@ class DefaultNsParserTest : TestBase{
             KeyElement.resolvedTemplate("\${fileExpr}", "partFile.partKey"),
             KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("prefixpartFile{17}.partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
@@ -83,7 +83,7 @@ class DefaultNsParserTest : TestBase{
             KeyElement.literal("root.start"),
             KeyElement.unresolvedTemplate("\${key}")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("root{4}.start*{11}", toTestString(parsed))
     }
 
@@ -94,7 +94,7 @@ class DefaultNsParserTest : TestBase{
             KeyElement.literal("root.start"),
             KeyElement.resolvedTemplate("\${key}", ".Key0.Key2.Key21")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("root{4}.start{5}.Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
@@ -105,7 +105,7 @@ class DefaultNsParserTest : TestBase{
             KeyElement.literal("root.start"),
             KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("root{4}.startKey0{11}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
@@ -116,7 +116,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement.literal("filename."),
                 KeyElement.unresolvedTemplate("\${key}")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}.*{6}", toTestString(parsed))
     }
 
@@ -127,7 +127,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement.literal("filename.root."),
                 KeyElement.unresolvedTemplate("\${key}")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}.root{4}.*{6}", toTestString(parsed))
     }
 
@@ -139,7 +139,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement.unresolvedTemplate("\${key}"),
                 KeyElement.literal("item")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}.*item{10}", toTestString(parsed))
     }
 
@@ -151,7 +151,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement.unresolvedTemplate("\${key}"),
                 KeyElement.literal(".item")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}.*{6}.item{4}", toTestString(parsed))
     }
 
@@ -163,7 +163,7 @@ class DefaultNsParserTest : TestBase{
                 KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21"),
                 KeyElement.literal("item")
         )
-        val parsed = ExpressionKeyParser().parse(elements)
+        val parsed = parse(elements)
         assertEquals("filename{8}.Key0{6}.Key2{0}.Key21item{4}", toTestString(parsed))
     }
 }

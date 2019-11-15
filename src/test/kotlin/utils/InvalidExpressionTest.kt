@@ -13,9 +13,8 @@ class InvalidExpressionTest : TestBase {
     fun parseInvalidFilenameInLiteral() {
         val invalidExpression = listOf(
             KeyElement.literal("invalid:file:literal.ROOT.Key1.Key31")
-        )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        )     
+        assertNull(parse(invalidExpression))
     }
 
 //invalid:literal..key.ROOT.Key1.Key31
@@ -24,8 +23,7 @@ class InvalidExpressionTest : TestBase {
         val invalidExpression = listOf(
             KeyElement.literal("invalid:literal..key.ROOT.Key1.Key31")
         )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        assertNull(parse(invalidExpression))
     }
 
 //invalid.literal..key.ROOT.Key1.Key31
@@ -33,9 +31,8 @@ class InvalidExpressionTest : TestBase {
     fun parseInvalidDefaultNsKeySeparatorInLiteral() {
         val invalidExpression = listOf(
             KeyElement.literal("invalid.literal..key.ROOT.Key1.Key31")
-        )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        )     
+        assertNull(parse(invalidExpression))
     }
 
 //invalid.literal.test:.key.ROOT.Key1.Key31
@@ -44,8 +41,7 @@ class InvalidExpressionTest : TestBase {
         val invalidExpression = listOf(
             KeyElement.literal("invalid.literal.test:.key.ROOT.Key1.Key31")
         )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        assertNull(parse(invalidExpression))
     }
 
 //.invalid.start.test
@@ -53,9 +49,8 @@ class InvalidExpressionTest : TestBase {
     fun parseInvalidStart() {
         val invalidExpression = listOf(
             KeyElement.literal(".invalid.start.test")
-        )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        )     
+        assertNull(parse(invalidExpression))
     }
 
 //:invalid.start.test
@@ -64,8 +59,7 @@ class InvalidExpressionTest : TestBase {
         val invalidExpression = listOf(
             KeyElement.literal(":invalid.start.test")
         )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        assertNull(parse(invalidExpression))
     }
 
 //probably_not_a_reference_to_i18n
@@ -74,8 +68,7 @@ class InvalidExpressionTest : TestBase {
         val literal = listOf(
             KeyElement.literal("probably_not_a_reference_to_i18n")
         )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(literal))
+        assertNull(parse(literal))
     }
 
 //${fileExpr}:ROOT.Key1.Key31               / sample:file
@@ -85,8 +78,7 @@ class InvalidExpressionTest : TestBase {
             KeyElement.resolvedTemplate("\${fileExpr}", "sample:file"),
             KeyElement.literal(":ROOT.Key1.Key31")
         )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        assertNull(parse(invalidExpression))
     }
 
 //filename:root${key}.Postfix               / .Key0.
@@ -97,8 +89,7 @@ class InvalidExpressionTest : TestBase {
             KeyElement.resolvedTemplate("\${key}", ".Key0."),
             KeyElement.literal(".Postfix")
         )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(elements))
+        assertNull(parse(elements))
     }
 
 //invalid:file:literal.ROOT.Key1.Key31
@@ -107,7 +98,6 @@ class InvalidExpressionTest : TestBase {
         val invalidExpression = listOf(
             KeyElement.literal(" invalid:ROOT.Key1.Key31")
         )
-        val parser = ExpressionKeyParser()
-        assertNull(parser.parse(invalidExpression))
+        assertNull(parse(invalidExpression))
     }
 }
