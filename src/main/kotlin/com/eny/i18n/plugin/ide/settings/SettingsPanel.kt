@@ -1,27 +1,71 @@
 package com.eny.i18n.plugin.ide.settings
 
+import com.intellij.openapi.project.Project
 import com.jgoodies.forms.factories.DefaultComponentFactory
-import net.miginfocom.swing.MigLayout
 import java.awt.BorderLayout
-import javax.swing.JCheckBox
-import javax.swing.JPanel
+import java.awt.Dimension
+import java.awt.GridLayout
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
+import javax.swing.*
+import javax.swing.event.DocumentEvent
+import javax.swing.event.DocumentListener
+import kotlin.reflect.KMutableProperty0
 
-class SettingsPanel(val settings: Settings) {
+class LimitedTextField(initialText: String, maxLength: Int, onChange: (newText:String) -> Unit, isValid: (key:Char) -> Boolean = {ch -> true}): JTextField(initialText) {
+    init {
+        addKeyListener(object: KeyAdapter() {
+            override fun keyTyped(e: KeyEvent) {
+                if (text.length - (if (selectedText==null) 0 else selectedText.length) >= maxLength ||
+                    !isValid(e.keyChar)) {
+                    e.consume()
+                }
+            }
+        })
+        getDocument().addDocumentListener(object : DocumentListener {
+            override fun changedUpdate(e: DocumentEvent?) = onChange(text)
+            override fun insertUpdate(e: DocumentEvent?) = onChange(text)
+            override fun removeUpdate(e: DocumentEvent?) = onChange(text)
+        })
+    }
+}
+
+class SettingsPanel(val settings: Settings, val project: Project) {
 
     fun getRootPanel(): JPanel {
         val root = JPanel()
         root.layout = BorderLayout()
-        root.add(DefaultComponentFactory.getInstance().createSeparator("Settings"))
-        root.add(settingsPanel())
+        root.add(DefaultComponentFactory.getInstance().createSeparator("Settings"), BorderLayout.NORTH)
+        root.add(settingsPanel(), BorderLayout.WEST)
         return root
+    }
+
+    private fun searchInProjectsOnly(): JPanel {
+        val panel = JPanel()
+        panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
+        val searchInProjectOnly = JCheckBox("Search in project files only", settings.searchInProjectOnly)
+        searchInProjectOnly.addItemListener {event -> settings.searchInProjectOnly = searchInProjectOnly.isSelected}
+        panel.add(searchInProjectOnly)
+        return panel
+    }
+
+    private fun separator(label:String, property: KMutableProperty0<String>):JPanel {
+        val panel = JPanel()
+        panel.layout = BorderLayout()
+        panel.add(JLabel(label), BorderLayout.WEST)
+        val control = LimitedTextField(property.get(), 1, {txt->property.set(txt)}, {ch -> !listOf(' ', '$', '{', '}').contains(ch)})
+        control.preferredSize = Dimension(control.preferredSize.height, control.preferredSize.height)
+        panel.add(control, BorderLayout.EAST)
+        return panel
     }
 
     private fun settingsPanel(): JPanel {
         val panel = JPanel()
-        panel.layout = MigLayout("", "[][][grow][][][grow]", "[][][]")
-        val searchInProjectOnly = JCheckBox("Search in project files only", settings.searchInProjectOnly)
-        searchInProjectOnly.addItemListener {event -> settings.searchInProjectOnly = searchInProjectOnly.isSelected}
-        panel.add(searchInProjectOnly, "cell 1 1, alignx trailing")
+        panel.layout = GridLayout(20, 1)
+        panel.add(searchInProjectsOnly())
+        panel.add(separator("Namespace separator", settings::nsSeparator))
+        panel.add(separator("Key separator", settings::keySeparator))
+        panel.add(separator("Plural separator", settings::pluralIndexSeparator))
         return panel
     }
 }

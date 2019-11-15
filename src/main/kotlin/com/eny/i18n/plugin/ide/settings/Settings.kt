@@ -12,11 +12,11 @@ class Settings : PersistentStateComponent<Settings> {
 
     var searchInProjectOnly = true
 
-    val nsSeparator = ":"
+    var nsSeparator = ":"
 
-    val keySeparator = "."
+    var keySeparator = "."
 
-    val pluralIndexSeparator = "-"
+    var pluralIndexSeparator = "-"
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 

@@ -11,7 +11,7 @@ class Configurable(val project: Project) : SearchableConfigurable {
     internal var gui: JPanel? = null
 
     override fun createComponent(): JComponent {
-        gui = SettingsPanel(Settings.getInstance(project)).getRootPanel()
+        gui = SettingsPanel(Settings.getInstance(project), project).getRootPanel()
         return gui!!
     }
 
