@@ -1,15 +1,16 @@
 package com.eny.i18n.plugin.tree
 
 interface KeyComposer<T> {
-    fun composeKey(tree: FlippedTree<T>, nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-"): String {
-        val fixPlural = {name:String -> name.substringBefore(pluralSeparator)}
+    fun composeKey(tree: FlippedTree<T>,
+           nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: String = "translation"): String {
         val ancestors = tree.ancestors()
+        val fixPlural = {node: FlippedTree<T> -> if(node.isRoot()) node.name() else node.name().substringBefore(pluralSeparator)}
+        val processNode = {node: FlippedTree<T>, index: Int ->
+            fixPlural(node) + if (index < ancestors.size - 1) if (node.isRoot()) nsSeparator else keySeparator else ""}
+        val fixDefaultNs = {node: FlippedTree<T>, index: Int -> if(node.isRoot() && node.name()==defaultNs) "" else processNode(node, index)}
         return ancestors.foldIndexed("") {
             index, acc, item ->
-                acc + fixPlural(item.name()) +
-                    if (index < ancestors.size - 1)
-                        if (item.isRoot()) nsSeparator else keySeparator
-                    else ""
+                acc + fixDefaultNs(item, index)
         }
     }
 }

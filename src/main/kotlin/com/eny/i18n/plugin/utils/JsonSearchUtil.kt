@@ -16,10 +16,8 @@ class JsonSearchUtil(private val project: Project) {
     /**
      * Finds json roots by json file name
      */
-    fun findFilesByName(fileName: String): List<PsiFile> {
-        val value = findVirtualFilesByName(fileName)
-        return value.flatMap {vf -> listOfNotNull(findPsiRoot(vf))}
-    }
+    fun findFilesByName(fileName: String?): List<PsiFile> =
+        findVirtualFilesByName(fileName ?: settings.defaultNs).flatMap {vf -> listOfNotNull(findPsiRoot(vf))}
 
     /**
      * Finds json virtual files by file name

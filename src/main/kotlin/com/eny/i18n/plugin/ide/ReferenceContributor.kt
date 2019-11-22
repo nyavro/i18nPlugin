@@ -26,17 +26,14 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
             list
     }
 
-    private fun findProperties(): List<Tree<PsiElement>> {
-        return if (i18nFullKey.ns != null) {
-            filterMostResolved(
-                search
-                    .findFilesByName(i18nFullKey.ns.text)
-                    .map { jsonRoot ->
-                        resolveCompositeKey(i18nFullKey.compositeKey, PsiTreeUtil.getChildOfType(jsonRoot, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot)})
-                    }
-            ).mapNotNull {item -> item.element}
-        } else listOf()
-    }
+    private fun findProperties(): List<Tree<PsiElement>> =
+        filterMostResolved(
+            search
+                .findFilesByName(i18nFullKey.ns?.text)
+                .map { jsonRoot ->
+                    resolveCompositeKey(i18nFullKey.compositeKey, PsiTreeUtil.getChildOfType(jsonRoot, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot)})
+                }
+        ).mapNotNull {item -> item.element}
 
     override fun resolve(): PsiElement? {
         val res = multiResolve(false)

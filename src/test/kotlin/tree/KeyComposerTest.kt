@@ -41,6 +41,13 @@ class KeyComposerTest {
     }
 
     @Test
+    fun pluralFixDoesntAffectNs() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "sample-1"))
+        assertEquals("sample-1:ROOT.key1.key31", composer.composeKey(tree))
+    }
+
+    @Test
     fun alternativeKeySeparator() {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "alter"))
@@ -59,5 +66,12 @@ class KeyComposerTest {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "alter"))
         assertEquals("alter\$ROOT#key1#key31", composer.composeKey(tree, "\$", "#"))
+    }
+
+    @Test
+    fun substituteDefaultNs() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("second31", "first1", "BASE", "Common"))
+        assertEquals("BASE.first1.second31", composer.composeKey(tree, "\$", ".", "-", "Common"))
     }
 }

@@ -27,30 +27,28 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
     private fun annotateI18nLiteral(fullKey: FullKey, element: PsiElement, holder: AnnotationHolder) {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
-        if (fileName != null) {
-            val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange))
-            val files = JsonSearchUtil(element.project).findFilesByName(fileName)
-            if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey)
-            else {
-                val pluralSeparator = Settings.getInstance(element.project).pluralSeparator
-                val mostResolvedReference = files
-                    .flatMap { jsonFile ->
-                        tryToResolvePlural(
-                            resolveCompositeKey(
-                                compositeKey,
-                                PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot)}
-                            ),
-                            pluralSeparator
-                        )
-                    }
-                    .maxBy {v -> v.path.size}!!
-                when {
-                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
-                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
-                    mostResolvedReference.unresolved.isEmpty() && fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
-                    mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
-                    else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)
+        val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange))
+        val files = JsonSearchUtil(element.project).findFilesByName(fileName)
+        if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey)
+        else {
+            val pluralSeparator = Settings.getInstance(element.project).pluralSeparator
+            val mostResolvedReference = files
+                .flatMap { jsonFile ->
+                    tryToResolvePlural(
+                        resolveCompositeKey(
+                            compositeKey,
+                            PsiTreeUtil.getChildOfType(jsonFile, JsonObject::class.java)?.let{fileRoot -> PsiElementTree(fileRoot)}
+                        ),
+                        pluralSeparator
+                    )
                 }
+                .maxBy {v -> v.path.size}!!
+            when {
+                mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
+                mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
+                mostResolvedReference.unresolved.isEmpty() && fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
+                mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
+                else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)
             }
         }
     }

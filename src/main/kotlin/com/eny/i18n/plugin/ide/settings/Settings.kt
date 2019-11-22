@@ -18,6 +18,8 @@ class Settings : PersistentStateComponent<Settings> {
 
     var pluralSeparator = "-"
 
+    var defaultNs = "translation"
+
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
     override fun getState(): Settings? = this
