@@ -31,6 +31,16 @@ class AnnotationHolderFacadeTest : TestBase {
         assertEquals(TextRange(20, 35), range)
     }
 
+    //<h1>{{ $t('root.hello') }}</h1>
+    @Test
+    fun measureTotallyResolvedKeyVue() {
+        val facade = AnnotationHolderFacade(TextRange(7, 39))
+        val range = facade.compositeKeyFullBounds(
+            FullKey("root.hello", null, literalsList("root", "hello"), false, 10)
+        )
+        assertEquals(TextRange(18, 28), range)
+    }
+
     //console.log('sample:missing.whole.composite.key');
     @Test
     fun measureTotallyUnresolvedKey() {
@@ -53,6 +63,17 @@ class AnnotationHolderFacadeTest : TestBase {
             literalsList("ROOT", "Key1")
         )
         assertEquals(TextRange(44, 54), range)
+    }
+
+    //<h1>{{ $t('root.hello1') }}</h1>
+    @Test
+    fun measureUnresolvedKeyVue() {
+        val facade = AnnotationHolderFacade(TextRange(7, 39))
+        val range = facade.unresolvedKey(
+            FullKey("root.hello1", null, literalsList("root", "hello1"), false, 10),
+            literalsList("root")
+        )
+        assertEquals(TextRange(23, 29), range)
     }
 
     //console.log(i18n.t('sample:ROOT.Key1.missing.Key'));

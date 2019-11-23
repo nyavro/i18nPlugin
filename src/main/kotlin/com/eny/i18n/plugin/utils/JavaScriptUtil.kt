@@ -54,7 +54,7 @@ class JavaScriptUtil {
         element.children.filter { el -> el.type() == "XML_TEXT" }
             .mapNotNull { item -> extractVueKey(item.text)?.unQuote() }
             .firstOrNull()?.let { text ->
-                parser.parse(listOf(KeyElement.literal(text)), false, settings.nsSeparator, settings.keySeparator)
+                parser.parse(listOf(KeyElement.literal(text)), false, settings.nsSeparator, settings.keySeparator, element.text.indexOf(text) - 1)
             }
 
     /**
