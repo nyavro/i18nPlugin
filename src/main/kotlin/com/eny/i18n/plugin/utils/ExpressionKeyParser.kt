@@ -55,7 +55,7 @@ class ExpressionKeyParser {
         }
     }
 
-    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".", pluralSeparator: String = "-"): FullKey? {
+    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = "."): FullKey? {
         val source = elements.fold(""){acc, item -> acc + item.text}
         val regex = "\\s".toRegex()
         if (source.contains(regex)) {

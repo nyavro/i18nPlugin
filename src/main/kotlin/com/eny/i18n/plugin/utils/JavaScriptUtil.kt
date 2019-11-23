@@ -28,14 +28,14 @@ class JavaScriptUtil {
         else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
             val value: Any? = element.value
             if (value is String) {
-                return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
+                return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
             } else {
                 return null
             }
         }
         else if (element.type() == "JS:STRING_LITERAL") {
             val value = element.text.unQuote()
-            return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
+            return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
         }
         else if (element.type() == "HTML_TAG") {
             return resolveTokenReference(element, settings)
@@ -54,7 +54,7 @@ class JavaScriptUtil {
         element.children.filter { el -> el.type() == "XML_TEXT" }
             .mapNotNull { item -> extractVueKey(item.text)?.unQuote() }
             .firstOrNull()?.let { text ->
-                parser.parse(listOf(KeyElement.literal(text)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
+                parser.parse(listOf(KeyElement.literal(text)), false, settings.nsSeparator, settings.keySeparator)
             }
 
     /**
@@ -81,7 +81,7 @@ class JavaScriptUtil {
                 } else KeyElement.literal(item.text)
         }
         val elements = parser.reduce(transformed)
-        return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
+        return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator)
     }
 
     /**
