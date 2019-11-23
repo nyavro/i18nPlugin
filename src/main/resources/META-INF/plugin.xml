@@ -13,6 +13,9 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      1.4.1<br>
+      <em>Support for default namespaces.</em><br>
+      <em>Basic support for vue-i18n: navigation and annotations.</em><br>
       1.3.1<br>
       <em>Added navigation from JSON node containing translation to key in code.</em><br>
       <em>Added basic customization panel.</em><br>
