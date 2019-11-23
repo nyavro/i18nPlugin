@@ -7,6 +7,8 @@ import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.PsiReference
 import com.intellij.psi.xml.XmlElementType
 
+fun PsiElement.type(): String = this.node?.elementType.toString()
+
 class JavaScriptUtil {
 
     private val ResolveReferenceMaxDepth = 10
@@ -27,19 +29,38 @@ class JavaScriptUtil {
             val value: Any? = element.value
             if (value is String) {
                 return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
+            } else {
+                return null
             }
         }
-        else if (element.node?.elementType.toString() == "JS:STRING_LITERAL") {
+        else if (element.type() == "JS:STRING_LITERAL") {
             val value = element.text.unQuote()
             return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
         }
-        return null
+        else if (element.type() == "HTML_TAG") {
+            return resolveTokenReference(element, settings)
+        }
+        else {
+            return null
+        }
     }
+
+    private fun extractVueKey (text: String): String? =
+        if (text.contains("\$t(")) {
+            text.substringAfter("\$t(").substringBefore(")")
+        } else null
+
+    private fun resolveTokenReference(element: PsiElement, settings: Settings): FullKey? =
+        element.children.filter { el -> el.type() == "XML_TEXT" }
+            .mapNotNull { item -> extractVueKey(item.text)?.unQuote() }
+            .firstOrNull()?.let { text ->
+                parser.parse(listOf(KeyElement.literal(text)), false, settings.nsSeparator, settings.keySeparator, settings.pluralSeparator)
+            }
 
     /**
      * Checks if element is template expression, i.e. `literal ${reference} etc`
      */
-    private fun isTemplateExpression(element: PsiElement):Boolean = element.node?.elementType.toString() == "JS:STRING_TEMPLATE_EXPRESSION"
+    private fun isTemplateExpression(element: PsiElement):Boolean = element.type() == "JS:STRING_TEMPLATE_EXPRESSION"
 
     /**
      * Resolves template expression

@@ -68,6 +68,15 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         return panel
     }
 
+    private fun vue(): JPanel {
+        val panel = JPanel()
+        panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
+        val vueMode = JCheckBox("Vue-i18n", settings.vue)
+        vueMode.addItemListener { event -> settings.vue = vueMode.isSelected}
+        panel.add(vueMode)
+        return panel
+    }
+
     private fun settingsPanel(): JPanel {
         val panel = JPanel()
         panel.layout = GridLayout(20, 1)
@@ -76,6 +85,8 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(separator("Key separator", settings::keySeparator))
         panel.add(separator("Plural separator", settings::pluralSeparator))
         panel.add(textInput("Default namespace", settings::defaultNs))
+        panel.add(vue())
+        panel.add(textInput("Vue locales directory", settings::vueDirectory))
         return panel
     }
 }

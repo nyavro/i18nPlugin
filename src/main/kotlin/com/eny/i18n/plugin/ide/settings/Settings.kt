@@ -20,6 +20,10 @@ class Settings : PersistentStateComponent<Settings> {
 
     var defaultNs = "translation"
 
+    var vue = false
+
+    var vueDirectory = "locales"
+
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
     override fun getState(): Settings? = this

@@ -60,7 +60,14 @@ class JsonReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElemen
                     if (element is JsonStringLiteral && element.isPropertyName) {
                         val project = element.project
                         val settings = Settings.getInstance(project)
-                        val key = composeKey(PsiProperty(element), settings.nsSeparator, settings.keySeparator, settings.pluralSeparator, settings.defaultNs)
+                        val key = composeKey(
+                            PsiProperty(element),
+                            settings.nsSeparator,
+                            settings.keySeparator,
+                            settings.pluralSeparator,
+                            settings.defaultNs,
+                            settings.vue && element.containingFile.parent?.name == settings.vueDirectory
+                        )
                         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES==
                                 PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, settings.searchScope(project), null, null)) {
                             return arrayOf(JsonI18nReference(element, TextRange(1, element.textLength - 1), key))
