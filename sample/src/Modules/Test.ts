@@ -22,5 +22,6 @@ class Test {
         console.log(i18n.t(`sample:ROOT.Key1.${unknownInCompileTime}`));           //Goto to json object
         const fileExpr = "sample";
         console.log(`${fileExpr}:ROOT.Key1.`)
+        console.log('Main.Key1.key31');                                          //Default ns simple case resolved
     }
 }
