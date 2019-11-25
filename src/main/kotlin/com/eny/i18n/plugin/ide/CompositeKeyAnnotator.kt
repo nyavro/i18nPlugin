@@ -29,7 +29,10 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val compositeKey = fullKey.compositeKey
         val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange))
         val files = JsonSearchUtil(element.project).findFilesByName(fileName)
-        if (files.isEmpty()) annotationHelper.annotateFileUnresolved(fullKey)
+        if (files.isEmpty()) {
+            if (fullKey.ns==null) annotationHelper.annotateUnresolved(fullKey, listOf())
+            else annotationHelper.annotateFileUnresolved(fullKey)
+        }
         else {
             val pluralSeparator = Settings.getInstance(element.project).pluralSeparator
             val mostResolvedReference = files
