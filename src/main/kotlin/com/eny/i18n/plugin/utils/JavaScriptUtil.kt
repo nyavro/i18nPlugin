@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.vue.VueKeyExtractor
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
@@ -15,8 +14,6 @@ class JavaScriptUtil {
     private val ResolveReferenceMaxDepth = 10
 
     private val parser: ExpressionKeyParser = ExpressionKeyParser()
-
-    private val vueKeyExtractor = VueKeyExtractor()
 
     /**
      * Converts element to it's literal value, if possible
@@ -40,25 +37,10 @@ class JavaScriptUtil {
             val value = element.text.unQuote()
             return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
         }
-        else if (element.type() == "HTML_TAG") {
-            return resolveTokenReference(element, settings)
-        }
         else {
             return null
         }
     }
-
-    private fun extractVueKey (text: String): String? =
-        if (text.contains("\$t(")) {
-            text.substringAfter("\$t(").substringBefore(")")
-        } else null
-
-    private fun resolveTokenReference(element: PsiElement, settings: Settings): FullKey? =
-        element.children.filter { el -> el.type() == "XML_TEXT" }
-            .mapNotNull { item -> vueKeyExtractor.extract(item.text) }
-            .firstOrNull()?.let { text ->
-                parser.parse(listOf(KeyElement.literal(text)), false, settings.nsSeparator, settings.keySeparator, element.text.indexOf(text) - 1)
-            }
 
     /**
      * Checks if element is template expression, i.e. `literal ${reference} etc`

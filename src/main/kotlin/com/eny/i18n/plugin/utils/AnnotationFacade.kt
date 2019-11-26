@@ -13,8 +13,8 @@ class AnnotationHolderFacade(private val textRange: TextRange) : AnnotationFacad
 
     override fun unresolvedNs(fullKey: FullKey): TextRange =
         safeRange(
-            textRange.startOffset + 1 + fullKey.offset,
-            textRange.startOffset + 1 + fullKey.offset + (fullKey.ns?.length ?: 0)
+            textRange.startOffset + 1,
+            textRange.startOffset + 1 + (fullKey.ns?.length ?: 0)
         )
 
     override fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange =
@@ -30,10 +30,10 @@ class AnnotationHolderFacade(private val textRange: TextRange) : AnnotationFacad
         )
 
     private fun FullKey.compositeKeyStartOffset(): Int =
-        textRange.startOffset + this.offset + (this.ns?.let { text -> text.length + 1 } ?: 0) + 1
+        textRange.startOffset + (this.ns?.let { text -> text.length + 1 } ?: 0) + 1
 
     private fun FullKey.compositeKeyEndOffset(): Int =
-        textRange.startOffset + 1 + this.offset + this.source.length
+        textRange.startOffset + 1 + this.source.length
 
     private fun safeRange(start: Int, end: Int): TextRange = TextRange(start, max(end, start))
 }

@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.utils
 
 interface State {
     fun next(token: Token): State
-    fun fullKey(isTemplate: Boolean, source: String, offset: Int): FullKey? = null
+    fun fullKey(isTemplate: Boolean, source: String): FullKey? = null
 }
 
 class Error(private val msg: String): State {
@@ -26,7 +26,7 @@ class WaitingLiteral(private val file: Literal?, val key: List<Literal>) : State
             is Literal -> WaitingLiteralOrSeparator(file, key + token)
             else -> Error("Invalid token $token")
         }
-    override fun fullKey(isTemplate: Boolean, source: String, offset: Int): FullKey? = FullKey(source, file, key + Literal(""), isTemplate, offset)
+    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key + Literal(""), isTemplate)
 }
 
 class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : State {
@@ -40,7 +40,7 @@ class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : St
             }
             else -> Error("Invalid token $token")
         }
-    override fun fullKey(isTemplate: Boolean, source: String, offset: Int): FullKey? = FullKey(source, file, key, isTemplate, offset)
+    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key, isTemplate)
 }
 
 class ExpressionKeyParser {
@@ -55,7 +55,7 @@ class ExpressionKeyParser {
         }
     }
 
-    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".", offset: Int = 0): FullKey? {
+    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = "."): FullKey? {
         val source = elements.fold(""){acc, item -> acc + item.text}
         val regex = "\\s".toRegex()
         if (source.contains(regex)) {
@@ -66,6 +66,6 @@ class ExpressionKeyParser {
             .fold(Start(null) as State) { state, token ->
                 state.next(token)
             }
-            .fullKey(isTemplate, source, offset)
+            .fullKey(isTemplate, source)
     }
 }

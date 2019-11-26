@@ -4,7 +4,7 @@ enum class KeyElementType {
     LITERAL, TEMPLATE
 }
 
-data class FullKey(val source: String, val ns:Literal?, val compositeKey:List<Literal>, val isTemplate: Boolean = false, val offset: Int = 0)
+data class FullKey(val source: String, val ns:Literal?, val compositeKey:List<Literal>, val isTemplate: Boolean = false)
 
 data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyElementType) {
     companion object {
