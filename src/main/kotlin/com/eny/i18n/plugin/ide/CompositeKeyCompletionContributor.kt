@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.ide
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.JavaScriptUtil
+import com.eny.i18n.plugin.parser.FullKeyExtractor
 import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor
@@ -16,7 +16,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 
 class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver<PsiElement> {
-    private val jsUtil = JavaScriptUtil()
+    private val jsUtil = FullKeyExtractor()
 
     private fun groupPlurals(set: Set<String>, pluralSeparator: String):List<String> =
         set

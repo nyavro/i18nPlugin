@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.JavaScriptUtil
+import com.eny.i18n.plugin.parser.FullKeyExtractor
 import com.eny.i18n.plugin.utils.JsonSearchUtil
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.json.psi.JsonObject
@@ -72,7 +72,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
  * Provides navigation from i18n key to it's value in json
  */
 class ReferenceContributor: PsiReferenceContributor() {
-    private val jsUtil = JavaScriptUtil()
+    private val jsUtil = FullKeyExtractor()
 
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(

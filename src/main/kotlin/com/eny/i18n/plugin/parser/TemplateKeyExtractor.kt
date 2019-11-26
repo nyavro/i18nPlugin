@@ -1,51 +1,27 @@
-package com.eny.i18n.plugin.utils
+package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.utils.ExpressionKeyParser
+import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.KeyElementType
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.PsiReference
-import com.intellij.psi.xml.XmlElementType
 
-fun PsiElement.type(): String = this.node?.elementType.toString()
-
-class JavaScriptUtil {
+class TemplateKeyExtractor : KeyExtractor {
 
     private val ResolveReferenceMaxDepth = 10
-
-    private val parser: ExpressionKeyParser = ExpressionKeyParser()
-
-    /**
-     * Converts element to it's literal value, if possible
-     */
-    fun extractI18nKeyLiteral(element: PsiElement): FullKey? {
-        val settings = Settings.getInstance(element.project)
-        // Template expression
-        if (isTemplateExpression(element)) {
-            return resolveTemplateExpression(element, settings)
-        }
-        // String literal
-        else if (element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE) {
-            val value: Any? = element.value
-            if (value is String) {
-                return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
-            } else {
-                return null
-            }
-        }
-        else if (element.type() == "JS:STRING_LITERAL") {
-            val value = element.text.unQuote()
-            return parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
-        }
-        else {
-            return null
-        }
-    }
-
     /**
      * Checks if element is template expression, i.e. `literal ${reference} etc`
      */
     private fun isTemplateExpression(element: PsiElement):Boolean = element.type() == "JS:STRING_TEMPLATE_EXPRESSION"
+
+    override fun canExtract(element: PsiElement): Boolean = isTemplateExpression(element)
+
+    override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
+        resolveTemplateExpression(element, parser, settings)
 
     /**
      * Resolves template expression
@@ -54,16 +30,16 @@ class JavaScriptUtil {
      * const key = 'element';
      * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
      */
-    private fun resolveTemplateExpression(element: PsiElement, settings: Settings): FullKey? {
+    private fun resolveTemplateExpression(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
             item ->
-                if (item.elementType.toString().contains("REFERENCE")) {
-                    KeyElement(
+            if (item.elementType.toString().contains("REFERENCE")) {
+                KeyElement(
                         item.text,
                         resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth),
                         KeyElementType.TEMPLATE
-                    )
-                } else KeyElement.literal(item.text)
+                )
+            } else KeyElement.literal(item.text)
         }
         val elements = parser.reduce(transformed)
         return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator)

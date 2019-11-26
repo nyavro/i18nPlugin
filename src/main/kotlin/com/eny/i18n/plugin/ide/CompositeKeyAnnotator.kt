@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.parser.FullKeyExtractor
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
@@ -15,7 +16,7 @@ import com.intellij.psi.util.PsiTreeUtil
  */
 class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
 
-    private val jsUtil = JavaScriptUtil()
+    private val jsUtil = FullKeyExtractor()
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val i18nKeyLiteral = jsUtil.extractI18nKeyLiteral(element)
