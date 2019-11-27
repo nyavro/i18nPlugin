@@ -1,6 +1,9 @@
 package com.eny.i18n.plugin.utils
 
+import com.eny.i18n.plugin.ide.quickfix.AllFilesSelector
 import com.eny.i18n.plugin.ide.quickfix.CreateJsonFileQuickFix
+import com.eny.i18n.plugin.ide.quickfix.CreatePropertyQuickFix
+import com.eny.i18n.plugin.ide.quickfix.UserChoice
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 
@@ -19,7 +22,11 @@ class AnnotationHelper(val holder: AnnotationHolder, val facade: AnnotationFacad
         holder.createInfoAnnotation(facade.compositeKeyFullBounds(fullKey),"Reference to plural value").textAttributes = RESOLVED_COLOR
     }
     fun annotateUnresolved(fullKey: FullKey, resolvedPath: List<Literal>) {
-        holder.createErrorAnnotation(facade.unresolvedKey(fullKey, resolvedPath), "Unresolved property")//.registerFix(CreatePropertyQuickFix(fullKey))
+        val unresolvedPropertyAnnotation = holder.createErrorAnnotation(facade.unresolvedKey(fullKey, resolvedPath), "Unresolved property")
+        unresolvedPropertyAnnotation.registerFix(
+            CreatePropertyQuickFix(fullKey, UserChoice(), "Create property"))
+        unresolvedPropertyAnnotation.registerFix(
+            CreatePropertyQuickFix(fullKey, AllFilesSelector(), "Create property in all localization files"))
     }
     fun annotatePartiallyResolved(fullKey: FullKey, resolvedPath: List<Literal>) {
         holder.createInfoAnnotation(facade.unresolvedKey(fullKey, resolvedPath), "Partially resolved").textAttributes = RESOLVED_COLOR

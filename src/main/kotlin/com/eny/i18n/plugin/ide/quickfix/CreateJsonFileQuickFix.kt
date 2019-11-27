@@ -14,41 +14,37 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiManager
 
-class CreateJsonFileQuickFix(val fullKey: FullKey) : BaseIntentionAction() {
+class CreateJsonFileQuickFix(private val fullKey: FullKey) : BaseIntentionAction() {
 
     override fun getFamilyName(): String = "i18n plugin"
 
     override fun getText(): String = "Create translation files"
 
-    override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean {
-        return true
-    }
+    override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
 
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) =
-        ApplicationManager.getApplication().invokeLater({
+        ApplicationManager.getApplication().invokeLater {
             val descriptor = FileChooserDescriptorFactory
-                .createMultipleFoldersDescriptor()
-                .withDescription("Select destination folder/folders")
-            descriptor.roots = project.guessProjectDir().let {res -> listOf(res)}
+                    .createMultipleFoldersDescriptor()
+                    .withDescription("Select destination folder/folders")
+            descriptor.roots = listOf(project.guessProjectDir())
             FileChooser.chooseFiles(
-                descriptor,
-                project,
-                null,
-                {folders ->
-                    val settings = Settings.getInstance(project)
-                    val name: String = (fullKey.ns?.text ?: settings.defaultNs) + ".json"
-                    val content: String = generateContent(fullKey)
-                    ApplicationManager.getApplication().runWriteAction ({
-                        folders.forEach {
-                            folder ->
-                                PsiManager.getInstance(project).findDirectory(folder)?.add(
-                                    PsiFileFactory.getInstance(project).createFileFromText(name, JsonLanguage.INSTANCE, content)
-                                )
-                        }
-                    })
+                    descriptor,
+                    project,
+                    null
+            ) { folders ->
+                val settings = Settings.getInstance(project)
+                val name: String = (fullKey.ns?.text ?: settings.defaultNs) + ".json"
+                val content: String = generateContent(fullKey)
+                ApplicationManager.getApplication().runWriteAction {
+                    folders.forEach { folder ->
+                        PsiManager.getInstance(project).findDirectory(folder)?.add(
+                                PsiFileFactory.getInstance(project).createFileFromText(name, JsonLanguage.INSTANCE, content)
+                        )
+                    }
                 }
-            )
-        })
+            }
+        }
 
     private fun generateContent(fullKey: FullKey): String =
         fullKey.compositeKey.foldRightIndexed("\"TODO-${fullKey.source}\"", {
