@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.utils
 
+import com.eny.i18n.plugin.ide.quickfix.CreateJsonFileQuickFix
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 
@@ -24,6 +25,6 @@ class AnnotationHelper(val holder: AnnotationHolder, val facade: AnnotationFacad
         holder.createInfoAnnotation(facade.unresolvedKey(fullKey, resolvedPath), "Partially resolved").textAttributes = RESOLVED_COLOR
     }
     fun annotateFileUnresolved(fullKey: FullKey) {
-        holder.createErrorAnnotation(facade.unresolvedNs(fullKey), "Unresolved file")//.registerFix(CreateJsonFileQuickFix(fileName))
+        holder.createErrorAnnotation(facade.unresolvedNs(fullKey), "Unresolved file").registerFix(CreateJsonFileQuickFix(fullKey))
     }
 }
