@@ -18,8 +18,9 @@ class JsonSearchUtil(private val project: Project) {
      * Finds json roots by json file name
      */
     fun findFilesByName(fileName: String?): List<PsiFile> =
-        if (settings.vue) findVirtualFilesUnder(settings.vueDirectory)
-        else findVirtualFilesByName(fileName ?: settings.defaultNs).flatMap {vf -> listOfNotNull(findPsiRoot(vf))}
+        findVirtualFilesByName(fileName ?: settings.defaultNs).flatMap {vf -> listOfNotNull(findPsiRoot(vf))} +
+            if (settings.vue) findVirtualFilesUnder(settings.vueDirectory)
+            else listOf()
 
     private fun findVirtualFilesUnder(directory: String): List<PsiFile> =
         FilenameIndex.getFilesByName(project, directory, settings.searchScope(project), true).toList().flatMap {
