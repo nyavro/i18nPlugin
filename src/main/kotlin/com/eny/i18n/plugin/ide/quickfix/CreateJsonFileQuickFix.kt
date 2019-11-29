@@ -25,8 +25,9 @@ class CreateJsonFileQuickFix(private val fullKey: FullKey) : BaseIntentionAction
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) =
         ApplicationManager.getApplication().invokeLater {
             val descriptor = FileChooserDescriptorFactory
-                    .createMultipleFoldersDescriptor()
-                    .withDescription("Select destination folder/folders")
+                .createMultipleFoldersDescriptor()
+                .withDescription("Select destination folder/folders")
+                .withShowHiddenFiles(false)
             descriptor.roots = listOf(project.guessProjectDir())
             FileChooser.chooseFiles(
                     descriptor,
