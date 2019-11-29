@@ -1,4 +1,7 @@
 # i18nPlugin
+
+![Build Status](https://travis-ci.com/nyavro/i18nPlugin.svg?branch=master)
+
 Intellij idea i18next support plugin
 
 ## Features
