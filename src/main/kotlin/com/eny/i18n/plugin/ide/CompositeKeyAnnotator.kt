@@ -30,12 +30,17 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val compositeKey = fullKey.compositeKey
         val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange))
         val files = JsonSearchUtil(element.project).findFilesByName(fileName)
+        val settings = Settings.getInstance(element.project)
         if (files.isEmpty()) {
-            if (fullKey.ns==null) annotationHelper.annotateUnresolved(fullKey, listOf())
-            else annotationHelper.annotateFileUnresolved(fullKey)
+            val isVueContext = settings.vue && element.containingFile.name.substringAfter(".").equals("vue", true)
+            if (isVueContext) {
+                annotationHelper.annotateUnresolvedVueKey(fullKey)
+            } else {
+                annotationHelper.annotateFileUnresolved(fullKey)
+            }
         }
         else {
-            val pluralSeparator = Settings.getInstance(element.project).pluralSeparator
+            val pluralSeparator = settings.pluralSeparator
             val mostResolvedReference = files
                 .flatMap { jsonFile ->
                     tryToResolvePlural(

@@ -32,6 +32,13 @@ class AnnotationHelper(val holder: AnnotationHolder, val facade: AnnotationFacad
         holder.createInfoAnnotation(facade.unresolvedKey(fullKey, resolvedPath), "Partially resolved").textAttributes = RESOLVED_COLOR
     }
     fun annotateFileUnresolved(fullKey: FullKey) {
-        holder.createErrorAnnotation(facade.unresolvedNs(fullKey), "Unresolved file").registerFix(CreateJsonFileQuickFix(fullKey))
+        if (fullKey.ns == null) {
+            holder.createErrorAnnotation(facade.unresolvedKey(fullKey, listOf()), "Missing default namespace Json").registerFix(CreateJsonFileQuickFix(fullKey))
+        } else {
+            holder.createErrorAnnotation(facade.unresolvedNs(fullKey), "Unresolved file").registerFix(CreateJsonFileQuickFix(fullKey))
+        }
+    }
+    fun annotateUnresolvedVueKey(fullKey: FullKey) {
+        holder.createErrorAnnotation(facade.unresolvedKey(fullKey, listOf()), "Missing localization").registerFix(CreateJsonFileQuickFix(fullKey, true))
     }
 }

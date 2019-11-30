@@ -64,7 +64,7 @@ class CreatePropertyQuickFix(
     private fun createPropertiesChain(project: Project, element: PsiElement, unresolved: List<Literal>) {
         if (unresolved.isNotEmpty() && element is JsonObject) {
             val first = unresolved.first()
-            val text = unresolved.drop(1).foldRight("\"base\"") {
+            val text = unresolved.drop(1).foldRight("\"TODO-${fullKey.source}\"") {
                 item, acc -> "{\"${item.text}\": $acc}"
             }
             ApplicationManager.getApplication().runWriteAction {
