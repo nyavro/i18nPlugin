@@ -1,0 +1,18 @@
+{
+    parserClass="com.eny.i18n.plugin.parser.I18nParser"
+  parserUtilClass="com.eny.i18n.plugin.parser.I18nParserUtil"
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+    psiClassPrefix="I18n"
+    psiImplClassSuffix="Impl"
+    psiPackage="com.eny.i18n.plugin.psi"
+    psiImplPackage="com.eny.i18n.plugin.psi"
+    elementTypeHolderClass="com.eny.i18n.plugin.psi.I18nTypes"
+    elementTypeClass="com.eny.i18n.plugin.psi.I18nElementType"
+    tokenTypeClass="com.eny.i18n.plugin.psi.I18nTokenType"
+}
+
+i18nFile ::= item
+
+private item ::= ns? key (separator key)*
+
+private ns ::= key separator
