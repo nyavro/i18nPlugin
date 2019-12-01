@@ -1,6 +1,6 @@
 # i18nPlugin
 
-![Build Status](https://travis-ci.com/nyavro/i18nPlugin.svg?branch=master)
+[![Build Status](https://travis-ci.com/nyavro/i18nPlugin.svg?branch=master)](https://travis-ci.com/nyavro/i18nPlugin)
 
 Intellij idea i18next support plugin
 
