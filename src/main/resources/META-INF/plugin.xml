@@ -47,5 +47,7 @@
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <projectService serviceInterface="com.eny.i18n.plugin.ide.settings.Settings" serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="i18n Plugin" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
+        <lang.parserDefinition language="I18n" implementationClass="com.eny.i18n.plugin.parser.KeyParserDefinition"/>
+        <languageInjector implementation="com.eny.i18n.plugin.parser.I18nLanguageInjector"/>
     </extensions>
 </idea-plugin>
