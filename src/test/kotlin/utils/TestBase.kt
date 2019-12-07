@@ -11,6 +11,7 @@ interface TestBase {
 
     private fun textWithLength(token: Literal?): String = if (token != null) "${token.text}{${token.length}}" else ""
     private fun extractTextWithLength(list: List<Literal>?): String = (list ?: listOf()).map { token -> textWithLength(token)}.joinToString(".")
-    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = "."): FullKey? =
-        ExpressionKeyParser().parse(elements, isTemplate, nsSeparator, keySeparator)
+    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".",
+              stopCharacters: String = ""): FullKey? =
+        ExpressionKeyParser().parse(elements, isTemplate, nsSeparator, keySeparator, stopCharacters)
 }

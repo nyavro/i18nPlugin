@@ -42,7 +42,7 @@ class TemplateKeyExtractor : KeyExtractor {
             } else KeyElement.literal(item.text)
         }
         val elements = parser.reduce(transformed)
-        return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator)
+        return parser.parse(elements, true, settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
     }
 
     /**

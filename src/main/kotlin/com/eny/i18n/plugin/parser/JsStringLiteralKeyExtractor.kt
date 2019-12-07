@@ -12,5 +12,11 @@ class JsStringLiteralKeyExtractor(): KeyExtractor {
     override fun canExtract(element: PsiElement): Boolean = element.type() == "JS:STRING_LITERAL"
 
     override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
-        parser.parse(listOf(KeyElement.literal(element.text.unQuote())), false, settings.nsSeparator, settings.keySeparator)
+        parser.parse(
+            listOf(KeyElement.literal(element.text.unQuote())), 
+            false, 
+            settings.nsSeparator, 
+            settings.keySeparator,
+            settings.stopCharacters
+        )
 }

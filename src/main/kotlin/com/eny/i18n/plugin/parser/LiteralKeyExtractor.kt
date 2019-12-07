@@ -16,7 +16,7 @@ class LiteralKeyExtractor(): KeyExtractor {
     override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? {
         val value: Any? = (element as PsiLiteralValue).value
         return if (value is String)
-            parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator)
+            parser.parse(listOf(KeyElement.literal(value)), false, settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
         else
             null
     }

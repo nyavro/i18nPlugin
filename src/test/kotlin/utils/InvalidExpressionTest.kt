@@ -92,12 +92,21 @@ class InvalidExpressionTest : TestBase {
         assertNull(parse(elements))
     }
 
-//invalid:file:literal.ROOT.Key1.Key31
+// invalid:ROOT.Key1.Key31
     @Test
     fun notAKey() {
         val invalidExpression = listOf(
             KeyElement.literal(" invalid:ROOT.Key1.Key31")
         )
         assertNull(parse(invalidExpression))
+    }
+
+//invalid:file/literal.ROOT.Key1.Key31
+    @Test
+    fun stopCharacter() {
+        val invalidExpression = listOf(
+            KeyElement.literal("invalid:file/literal.ROOT.Key1.Key31")
+        )
+        assertNull(parse(invalidExpression, false, ":", ".", "/"))
     }
 }

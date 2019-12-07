@@ -23,6 +23,8 @@ class Settings : PersistentStateComponent<Settings> {
     var vue = false
 
     var vueDirectory = "locales"
+    
+    var stopCharacters = "/"
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 

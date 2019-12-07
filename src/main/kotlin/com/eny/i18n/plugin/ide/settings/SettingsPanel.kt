@@ -85,6 +85,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(separator("Key separator", settings::keySeparator))
         panel.add(separator("Plural separator", settings::pluralSeparator))
         panel.add(textInput("Default namespace", settings::defaultNs))
+        panel.add(textInput("Stop characters", settings::stopCharacters))
         panel.add(vue())
         panel.add(textInput("Vue locales directory", settings::vueDirectory))
         return panel

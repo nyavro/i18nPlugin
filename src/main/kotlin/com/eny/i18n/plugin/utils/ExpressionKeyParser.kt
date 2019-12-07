@@ -55,10 +55,16 @@ class ExpressionKeyParser {
         }
     }
 
-    fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = "."): FullKey? {
+    fun parse(
+        elements: List<KeyElement>,
+        isTemplate: Boolean = false,
+        nsSeparator: String = ":",
+        keySeparator: String = ".",
+        stopCharacters: String = ""
+    ): FullKey? {
         val source = elements.fold(""){acc, item -> acc + item.text}
         val regex = "\\s".toRegex()
-        if (source.contains(regex)) {
+        if (source.contains(regex) || stopCharacters.any {char -> source.contains(char)}) {
             return null
         }
         return Tokenizer(nsSeparator, keySeparator)
