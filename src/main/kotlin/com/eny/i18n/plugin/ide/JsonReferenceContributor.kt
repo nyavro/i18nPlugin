@@ -12,28 +12,56 @@ import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.UsageSearchContext
 import com.intellij.util.ProcessingContext
 
-class JsonI18nReference(element: PsiElement, textRange: TextRange, val composedKey: String) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
+class ReferencesAccumulator {
 
-    fun processSearchEntry(list: MutableCollection<PsiElement>) = {
+    private val res = mutableListOf<PsiElement>()
+    private var toDrop: PsiElement? = null
+
+    fun process() = {
         entry: PsiElement, offset:Int ->
             val typeName = entry.node.elementType.toString()
             if (typeName == "JS:STRING_LITERAL") {
-                list.add(entry)
+                process(entry)
             } else if (typeName == "JS:STRING_TEMPLATE_PART") {
-                list.add(entry.parent)
+                process(entry.parent)
             } else if (typeName == "JS:STRING_TEMPLATE_EXPRESSION"){
-                list.add(entry)
+                process(entry)
             }
             true
     }
 
+    fun entries(): Collection<PsiElement> = res
+
+    private fun getParentsOfType(element: PsiElement, types: Set<String>) {
+        var cur = element.parent
+        while(!(cur is PsiFile)) {
+            val typeName = cur.node.elementType.toString()
+            if (types.contains(typeName)) {
+                toDrop = cur
+            }
+            cur = cur.parent
+        }
+    }
+
+    private fun process(entry: PsiElement) {
+        if (entry != toDrop) {
+            getParentsOfType(entry, setOf("JS:STRING_LITERAL", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION"))
+            res.add(entry)
+        } else {
+            toDrop = null
+        }
+    }
+}
+
+class JsonI18nReference(element: PsiElement, textRange: TextRange, val composedKey: String) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
+
     fun findRefs(): Collection<PsiElement> {
         val project = element.project
-        val set = mutableSetOf<PsiElement>()
+        val referencesAccumulator = ReferencesAccumulator()
         PsiSearchHelper.getInstance(project).processElementsWithWord(
-            processSearchEntry(set), Settings.getInstance(project).searchScope(project), composedKey, UsageSearchContext.ANY, true
+            referencesAccumulator.process(), Settings.getInstance(project).searchScope(project), composedKey, UsageSearchContext.ANY, true
         )
-        return set
+        return referencesAccumulator.entries()
     }
 
     override fun resolve(): PsiElement? {
