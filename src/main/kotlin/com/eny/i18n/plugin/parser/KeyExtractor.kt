@@ -7,5 +7,5 @@ import com.intellij.psi.PsiElement
 
 interface KeyExtractor {
     fun canExtract(element: PsiElement): Boolean
-    fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey?
+    fun extract(element: PsiElement, parser: ExpressionKeyParser, normalizer: KeyNormalizer, settings: Settings): FullKey?
 }

@@ -9,6 +9,7 @@ fun PsiElement.type(): String = this.node?.elementType.toString()
 
 class FullKeyExtractor {
 
+    private val normalizer: KeyNormalizer = KeyNormalizerImpl()
     private val parser: ExpressionKeyParser = ExpressionKeyParser()
     /**
      * Converts element to it's literal value, if possible
@@ -18,8 +19,9 @@ class FullKeyExtractor {
         val extractors = listOf(
             TemplateKeyExtractor(),
             LiteralKeyExtractor(),
-            JsStringLiteralKeyExtractor()
+            JsStringLiteralKeyExtractor(),
+            TemplatePartKeyExtractor()
         )
-        return extractors.find { extractor -> extractor.canExtract(element) }?.extract(element, parser, settings)
+        return extractors.find { extractor -> extractor.canExtract(element) }?.extract(element, parser, normalizer, settings)
     }
 }

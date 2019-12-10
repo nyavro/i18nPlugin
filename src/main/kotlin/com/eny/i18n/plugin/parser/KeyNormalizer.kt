@@ -1,0 +1,42 @@
+package com.eny.i18n.plugin.parser
+
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.KeyElementType
+import com.intellij.codeInsight.completion.CompletionInitializationContext
+
+interface KeyNormalizer {
+    fun normalize(elements: List<KeyElement>): List<KeyElement> = elements.mapNotNull {item -> normalize(item)}
+    fun normalize(element: KeyElement?): KeyElement? = element
+}
+
+class KeyNormalizerImpl: KeyNormalizer {
+    private val normalizers = listOf(ExpressionNormalizer(), DummyTextNormalizer())
+    override fun normalize(element: KeyElement?) = normalizers.fold(element, {
+        item, normalizer -> item?.let {value -> normalizer.normalize(value)}
+    })
+}
+
+class ExpressionNormalizer: KeyNormalizer {
+    private val dropItems = listOf("`", "{", "}", "$")
+    override fun normalize(element: KeyElement?): KeyElement? = when {
+        dropItems.contains(element?.text) -> null
+        element?.type == KeyElementType.TEMPLATE -> element.copy(text="\${${element.text}}")
+        else -> element
+    }
+}
+
+class DummyTextNormalizer: KeyNormalizer {
+    override fun normalize(element: KeyElement?): KeyElement? =
+        element?.let {
+            value -> value.copy(
+                text = value.text.replace(
+                    CompletionInitializationContext.DUMMY_IDENTIFIER,
+                    CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED
+                )
+            )
+        }
+}
+
+
+
+

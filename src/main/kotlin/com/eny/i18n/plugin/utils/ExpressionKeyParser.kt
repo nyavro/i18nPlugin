@@ -44,31 +44,20 @@ class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : St
 }
 
 class ExpressionKeyParser {
-    private val dropItems = listOf("`", "{", "}", "$")
-    fun reduce(elements: List<KeyElement>): List<KeyElement> {
-        return elements.mapNotNull {
-            item -> when {
-                dropItems.contains(item.text) -> null
-                item.type == KeyElementType.TEMPLATE -> item.copy(text="\${${item.text}}")
-                else -> item
-            }
-        }
-    }
-
     fun parse(
-        elements: List<KeyElement>,
+        normalized: List<KeyElement>,
         isTemplate: Boolean = false,
         nsSeparator: String = ":",
         keySeparator: String = ".",
         stopCharacters: String = ""
     ): FullKey? {
-        val source = elements.fold(""){acc, item -> acc + item.text}
+        val source = normalized.fold(""){acc, item -> acc + item.text}
         val regex = "\\s".toRegex()
         if (source.contains(regex) || stopCharacters.any {char -> source.contains(char)}) {
             return null
         }
         return Tokenizer(nsSeparator, keySeparator)
-            .tokenizeAll(elements)
+            .tokenizeAll(normalized)
             .fold(Start(null) as State) { state, token ->
                 state.next(token)
             }
