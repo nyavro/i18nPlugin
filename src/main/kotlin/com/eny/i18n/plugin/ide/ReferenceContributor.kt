@@ -1,22 +1,20 @@
 package com.eny.i18n.plugin.ide
 
+import com.eny.i18n.plugin.parser.FullKeyExtractor
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.parser.FullKeyExtractor
-import com.eny.i18n.plugin.utils.JsonSearchUtil
+import com.eny.i18n.plugin.utils.JsonSearch
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.json.psi.JsonObject
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 
 class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: FullKey) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference, CompositeKeyResolver<PsiElement> {
-    private val search = JsonSearchUtil(element.project)
+    private val search = JsonSearch(element.project)
 
     private fun filterMostResolved(list: List<PropertyReference<PsiElement>>): List<PropertyReference<PsiElement>> {
         val mostResolved = list.maxBy {ref -> ref.path.size}?.path?.size
@@ -30,9 +28,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
         filterMostResolved(
             search
                 .findFilesByName(i18nFullKey.ns?.text)
-                .map { jsonRoot ->
-                    resolveCompositeKey(i18nFullKey.compositeKey, PsiTreeUtil.getChildOfType(jsonRoot, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot)})
-                }
+                .map { jsonRoot -> resolveCompositeKey(i18nFullKey.compositeKey, PsiElementTree.create(jsonRoot)) }
         ).mapNotNull {item -> item.element}
 
     override fun resolve(): PsiElement? {

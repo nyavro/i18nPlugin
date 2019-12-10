@@ -7,6 +7,7 @@ import com.intellij.json.psi.JsonProperty
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
+import com.intellij.psi.util.PsiTreeUtil
 
 class PsiElementTree(val element: PsiElement): Tree<PsiElement> {
     override fun value(): PsiElement = element
@@ -22,6 +23,10 @@ class PsiElementTree(val element: PsiElement): Tree<PsiElement> {
             .map {item -> item.firstChildNode.psi}
             .filter {item -> item != null && item.text.unQuote().matches(regex)}
             .map {item -> PsiElementTree(item)}
+    companion object {
+        fun create(file: PsiElement): PsiElementTree? =
+            PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot)}
+    }
 }
 class PsiRoot(val element: PsiFile): FlippedTree<PsiElement> {
     override fun name() = element.containingFile.name.substringBeforeLast(".")

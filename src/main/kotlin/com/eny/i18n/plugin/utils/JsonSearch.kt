@@ -10,7 +10,7 @@ import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 
-class JsonSearchUtil(private val project: Project) {
+class JsonSearch(private val project: Project) {
 
     val settings = Settings.getInstance(project)
 

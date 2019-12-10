@@ -8,7 +8,7 @@ class Test {
     static render(unknownInCompileTime: string) {
         const i18n = new I18n();
 
-        console.log('sample:ROOT.Key1.key31');                                          //Simple case resolved
+        console.log('sample:ROOT.Key1.key2');                                          //Simple case resolved
         console.log('sample:missing.whole.composite.key');                              //Unresolved whole key
         console.log('sample:ROOT.missing.composite.key');                               //Unresolved part of the key
         console.log('MissingFile:Ex.Sub.Val');                                          //Unresolved File

@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.JsonSearchUtil
+import com.eny.i18n.plugin.utils.JsonSearch
 import com.eny.i18n.plugin.utils.Literal
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.json.psi.JsonElementGenerator
@@ -17,7 +17,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.util.PsiTreeUtil
 
 class CreatePropertyQuickFix(
         private val fullKey: FullKey,
@@ -33,7 +32,7 @@ class CreatePropertyQuickFix(
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         ApplicationManager.getApplication().invokeLater {
             if (editor != null) {
-                val jsonFiles = JsonSearchUtil(project).findFilesByName(fullKey.ns?.text ?: Settings.getInstance(project).defaultNs)
+                val jsonFiles = JsonSearch(project).findFilesByName(fullKey.ns?.text ?: Settings.getInstance(project).defaultNs)
                 if (jsonFiles.size == 1) {
                     createPropertyInFile(project, jsonFiles.first())
                 } else if (jsonFiles.size > 1) {
@@ -49,7 +48,7 @@ class CreatePropertyQuickFix(
     private fun createPropertyInFile(project: Project, target: PsiFile) {
         val ref = resolveCompositeKey(
             fullKey.compositeKey,
-            PsiTreeUtil.getChildOfType(target, JsonObject::class.java)?.let{ fileRoot -> PsiElementTree(fileRoot) }
+            PsiElementTree.create(target)
         )
         if (ref.element != null) {
             CommandProcessor.getInstance().executeCommand(
