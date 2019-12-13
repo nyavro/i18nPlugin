@@ -26,6 +26,8 @@ class Settings : PersistentStateComponent<Settings> {
     
     var stopCharacters = "/"
 
+    var suppressWarningsForUnresolvedDefaultNs = true
+
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
     override fun getState(): Settings? = this

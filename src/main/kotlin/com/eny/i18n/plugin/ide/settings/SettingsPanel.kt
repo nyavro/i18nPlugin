@@ -39,13 +39,31 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         root.add(settingsPanel(), BorderLayout.WEST)
         return root
     }
+//
+//    private fun searchInProjectsOnly(): JPanel {
+//        val panel = JPanel()
+//        panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
+//        val checkbox = JCheckBox("Search in project files only", settings.searchInProjectOnly)
+//        checkbox.addItemListener { event -> settings.searchInProjectOnly = checkbox.isSelected}
+//        panel.add(checkbox)
+//        return panel
+//    }
+//
+//    private fun suppressWarningsForUnresolvedDefaultNs(): JPanel {
+//        val panel = JPanel()
+//        panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
+//        val checkbox = JCheckBox("Suppress warnings for unresolved default ns", settings.suppressWarningsForUnresolvedDefaultNs)
+//        checkbox.addItemListener { event -> settings.suppressWarningsForUnresolvedDefaultNs = checkbox.isSelected}
+//        panel.add(checkbox)
+//        return panel
+//    }
 
-    private fun searchInProjectsOnly(): JPanel {
+    private fun checkbox(label:String, property: KMutableProperty0<Boolean>): JPanel {
         val panel = JPanel()
         panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
-        val searchInProjectOnly = JCheckBox("Search in project files only", settings.searchInProjectOnly)
-        searchInProjectOnly.addItemListener {event -> settings.searchInProjectOnly = searchInProjectOnly.isSelected}
-        panel.add(searchInProjectOnly)
+        val checkbox = JCheckBox(label, property.get())
+        checkbox.addItemListener { event -> property.set(checkbox.isSelected) }
+        panel.add(checkbox)
         return panel
     }
 
@@ -80,7 +98,8 @@ class SettingsPanel(val settings: Settings, val project: Project) {
     private fun settingsPanel(): JPanel {
         val panel = JPanel()
         panel.layout = GridLayout(20, 1)
-        panel.add(searchInProjectsOnly())
+        panel.add(checkbox("Search in project files only", settings::searchInProjectOnly))
+        panel.add(checkbox("Suppress warnings for unresolved default ns", settings::suppressWarningsForUnresolvedDefaultNs))
         panel.add(separator("Namespace separator", settings::nsSeparator))
         panel.add(separator("Key separator", settings::keySeparator))
         panel.add(separator("Plural separator", settings::pluralSeparator))
