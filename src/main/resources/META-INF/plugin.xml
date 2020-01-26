@@ -40,6 +40,7 @@
     </change-notes>
 
     <depends>JavaScript</depends>
+    <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
         <annotator language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
@@ -49,5 +50,15 @@
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <projectService serviceInterface="com.eny.i18n.plugin.ide.settings.Settings" serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="i18n Plugin" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
+        <localInspection language="TypeScript"
+                         bundle="messages.I18nBundle"
+                         key="settings.javascript.linters.tslint.configurable.name"
+                         groupName="TypeScript"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.eny.i18n.plugin.ide.ReactInspection"
+                         unfair="true"/>
+<!--        <localInspection language="TypeScript JSX"-->
+<!--                         implementationClass="com.eny.i18n.plugin.ide.ReactInspection"/>-->
     </extensions>
 </idea-plugin>
