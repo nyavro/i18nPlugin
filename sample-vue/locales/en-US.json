@@ -3,6 +3,11 @@
     "value": "en",
     "hi": "hi"
   },
+  "service": {
+    "typescript": {
+      "navigation": "Navigates"
+    }
+  },
   "components": {
     "language1": {
       "current": "Current language code: {language}"
