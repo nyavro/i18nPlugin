@@ -34,23 +34,19 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
                     last ->
                         val search = last.text.let {value -> Regex(value.replace(DUMMY_KEY, ".*"))}
                         val source = fullKey.source.replace(last.text, "")
-                        if (fullKey.ns != null) {
-                            val elements =
-                                groupPlurals(
-                                    JsonSearch(parameters.position.project).findFilesByName(fullKey.ns.text).flatMap {
-                                        file ->
-                                            listCompositeKeyVariants(
-                                                fixedKey,
-                                                PsiElementTree.create(file),
-                                                search
-                                            )
-                                        }.map {key -> key.value().text.unQuote()}.toSet(),
-                                    settings.pluralSeparator
-                                )
-                            result.addAllElements(
-                                elements.map {item -> LookupElementBuilder.create(source + item)}
-                            )
-                        }
+                        result.addAllElements(
+                            groupPlurals(
+                                JsonSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
+                                    file ->
+                                    listCompositeKeyVariants(
+                                        fixedKey,
+                                        PsiElementTree.create(file),
+                                        search
+                                    )
+                                }.map {key -> key.value().text.unQuote()}.toSet(),
+                                settings.pluralSeparator
+                            ).map {item -> LookupElementBuilder.create(source + item)}
+                        )
                 }
         }
     }

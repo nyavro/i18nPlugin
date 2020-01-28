@@ -1,6 +1,5 @@
 package com.eny.i18n.plugin.ide.quickfix
 
-import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
@@ -32,7 +31,7 @@ class CreatePropertyQuickFix(
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         ApplicationManager.getApplication().invokeLater {
             if (editor != null) {
-                val jsonFiles = JsonSearch(project).findFilesByName(fullKey.ns?.text ?: Settings.getInstance(project).defaultNs)
+                val jsonFiles = JsonSearch(project).findFilesByName(fullKey.ns?.text)
                 if (jsonFiles.size == 1) {
                     createPropertyInFile(project, jsonFiles.first())
                 } else if (jsonFiles.size > 1) {

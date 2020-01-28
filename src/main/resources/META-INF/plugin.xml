@@ -47,6 +47,7 @@
         <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.JsonReferenceContributor"/>
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
+        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <projectService serviceInterface="com.eny.i18n.plugin.ide.settings.Settings" serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="i18n Plugin" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
     </extensions>
