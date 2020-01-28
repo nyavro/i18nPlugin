@@ -14,6 +14,12 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>1.5.5</h3>
+            <ul>
+                <li>Fixed code completion for Vue and default namespaces</li>
+            </ul>
+        </div>
+        <div>
             <h3>1.5.1</h3>
             <ul>
                 <li>Create translation files for missing namespace quick fix</li>
@@ -27,13 +33,6 @@
             <ul>
                 <li>Fixed vue-i18n multi reference navigation</li>
                 <li>Fixed unresolved default namespace key annotation.</li>
-            </ul>
-        </div>
-        <div>
-            <h3>1.4.1</h3>
-            <ul>
-                <li>Support for default namespaces.</li>
-                <li>Basic support for vue-i18n: navigation and annotations.</li>
             </ul>
         </div>
     ]]>
