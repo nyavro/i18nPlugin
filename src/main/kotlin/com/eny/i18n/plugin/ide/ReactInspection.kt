@@ -5,6 +5,7 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.lang.javascript.psi.*
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttributeValue
 
 class ReactInspection : LocalInspectionTool() {
@@ -53,12 +54,11 @@ class ReactInspection : LocalInspectionTool() {
 
             override fun visitJSEmbeddedContent(embeddedContent: JSEmbeddedContent?) {
                 if (embeddedContent != null && isEmbeddedInXMLAttribute(embeddedContent) && isReference(embeddedContent)) {
-                    val resolved = (embeddedContent.children[0] as JSReferenceExpression).resolve()
-                    val item = resolved?.children?.get(0)
-                    if (item != null && item is JSFunction && isInContextByName(item, "render")) {
+                    val resolved = PsiTreeUtil.findChildOfType(embeddedContent, JSReferenceExpression::class.java)?.resolve()
+                    val item = PsiTreeUtil.findCommonParent(resolved, embeddedContent)
+                    if (item != null && item is JSBlockStatement) {
                         holder.registerProblem(embeddedContent, "Embedded content")
                     }
-//                visitJSElement(embeddedContent)
                 }
             }
 
