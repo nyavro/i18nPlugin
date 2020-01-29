@@ -14,9 +14,10 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'kotlin'
 
 intellij {
-    version 'IC-LATEST-EAP-SNAPSHOT'
+    version 'IU-2019.2'
     type "IC"
     pluginName 'i18n'
+    plugins = ['JavaScriptLanguage']
 }
 
 patchPluginXml {

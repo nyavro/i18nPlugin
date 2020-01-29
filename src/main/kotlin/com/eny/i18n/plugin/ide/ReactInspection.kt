@@ -5,7 +5,6 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.lang.javascript.psi.*
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttributeValue
 
 class ReactInspection : LocalInspectionTool() {
@@ -26,8 +25,6 @@ class ReactInspection : LocalInspectionTool() {
                 if (node is JSFunction && node.name != null) {
                     if (node.name == name) {
                         return true
-                    } else {
-                        return isCalledFromContextByName(node, name)
                     }
                 } else {
                     if (node.parent == null) {
@@ -55,25 +52,11 @@ class ReactInspection : LocalInspectionTool() {
             }
 
             override fun visitJSEmbeddedContent(embeddedContent: JSEmbeddedContent?) {
-                if (embeddedContent != null) {
-                    if (isEmbeddedInXMLAttribute(embeddedContent) && isReference(embeddedContent)) {
-                        val resolved = (embeddedContent.children[0] as JSReferenceExpression).resolve()
-                        val item = resolved?.children?.get(0)
-                        if (item != null && item is JSFunction && isInContextByName(item, "render")) {
-                            holder.registerProblem(embeddedContent, "Handler defined in render")
-                        }
-                    } else {
-                        val jsCallExpression =
-                            PsiTreeUtil.findChildOfType(embeddedContent, JSCallExpression::class.java)
-                                ?.methodExpression
-                                ?.reference
-                                ?.resolve()
-                        if (jsCallExpression != null) {
-                            val jsFunction = PsiTreeUtil.findChildOfType(jsCallExpression, JSFunction::class.java)
-                            if (jsFunction != null) {
-                                if (isInContextByName(jsFunction, "re"))
-                            }
-                        }
+                if (embeddedContent != null && isEmbeddedInXMLAttribute(embeddedContent) && isReference(embeddedContent)) {
+                    val resolved = (embeddedContent.children[0] as JSReferenceExpression).resolve()
+                    val item = resolved?.children?.get(0)
+                    if (item != null && item is JSFunction && isInContextByName(item, "render")) {
+                        holder.registerProblem(embeddedContent, "Embedded content")
                     }
 //                visitJSElement(embeddedContent)
                 }
