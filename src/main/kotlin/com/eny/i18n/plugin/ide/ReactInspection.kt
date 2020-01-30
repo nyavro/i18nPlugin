@@ -53,11 +53,26 @@ class ReactInspection : LocalInspectionTool() {
             }
 
             override fun visitJSEmbeddedContent(embeddedContent: JSEmbeddedContent?) {
-                if (embeddedContent != null && isEmbeddedInXMLAttribute(embeddedContent) && isReference(embeddedContent)) {
-                    val resolved = PsiTreeUtil.findChildOfType(embeddedContent, JSReferenceExpression::class.java)?.resolve()
-                    val item = PsiTreeUtil.findCommonParent(resolved, embeddedContent)
-                    if (item != null && item is JSBlockStatement) {
-                        holder.registerProblem(embeddedContent, "Embedded content")
+                if (embeddedContent != null && isEmbeddedInXMLAttribute(embeddedContent)) {
+                    if (isReference(embeddedContent)) {
+                        val resolved = PsiTreeUtil.findChildOfType(embeddedContent, JSReferenceExpression::class.java)?.resolve()
+                        val item = PsiTreeUtil.findCommonParent(resolved, embeddedContent)
+                        if (item != null && item is JSBlockStatement) {
+                            holder.registerProblem(embeddedContent, "Handler in render")
+                        }
+                    } else {
+                        if (PsiTreeUtil.findChildOfType(embeddedContent, JSFunction::class.java) != null) {
+                            holder.registerProblem(embeddedContent, "Handler in render 2")
+                        }
+                    }
+                }
+            }
+
+            override fun visitJSDestructuringElement(destructuringElement: JSDestructuringElement?) {
+                if(destructuringElement != null) {
+                    val item = PsiTreeUtil.findChildOfType(destructuringElement, JSReferenceExpression::class.java)?.resolve()
+                    if (item != null && item is TypeScriptPropertySignature && item.isOptional) {
+                        holder.registerProblem(destructuringElement, "Destruct")
                     }
                 }
             }
