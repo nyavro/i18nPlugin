@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.json.JsonFileType
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
@@ -9,8 +10,9 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
+import org.jetbrains.yaml.YAMLFileType
 
-class JsonSearch(private val project: Project) {
+class LocalizationFileSearch(private val project: Project) {
 
     val settings = Settings.getInstance(project)
 
@@ -28,17 +30,24 @@ class JsonSearch(private val project: Project) {
         }
 
     /**
-     * Finds json virtual files by file name
+     * Finds virtual files by file name
      */
     private fun findVirtualFilesByName(fileName: String) =
-        FileTypeIndex
+        findVirtualFilesByName(fileName, JsonFileType.INSTANCE) + findVirtualFilesByName(fileName, YAMLFileType.YML)
+
+    /**
+     * Finds virtual files by file name and type
+     */
+    private fun findVirtualFilesByName(fileName: String, fileType: FileType): List<VirtualFile> {
+        val ext = fileType.defaultExtension
+        return FileTypeIndex
             .getFiles(
-                JsonFileType.INSTANCE,
+                fileType,
                 if (settings.searchInProjectOnly) GlobalSearchScope.projectScope(project)
                 else GlobalSearchScope.allScope(project)
             )
-            .filter {file -> file.name == "$fileName.json"}
-
+            .filter { file -> file.name == "$fileName.$ext" }
+    }
     /**
      * Finds root of virtual file
      */

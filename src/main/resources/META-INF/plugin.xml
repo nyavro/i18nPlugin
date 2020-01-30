@@ -39,6 +39,7 @@
     </change-notes>
 
     <depends>JavaScript</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
         <annotator language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>

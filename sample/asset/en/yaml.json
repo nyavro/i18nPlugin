@@ -1,0 +1,10 @@
+{
+  "flat0": "Flaten 0",
+  "flat": "Flaten key",
+  "flat2": "Flaten key 2",
+  "nested": {
+    "sub0": "nested en value 0",
+    "sub1": "nested en value 1"
+  },
+  "flat3": "Flat key 3"
+}

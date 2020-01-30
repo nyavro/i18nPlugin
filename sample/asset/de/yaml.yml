@@ -1,0 +1,14 @@
+flat0: Flat 0
+flat: Flat key
+flat2: Flat key
+nested:
+  sub0: nested value 0
+  sub1: nested value 1
+  "sub2": nested value 2
+  "plurals": {
+    "value-1": "сундук",
+    "value-2": "сундука",
+    "value-5": "сундуков",
+    "other": "другой"
+  }
+flat3: Flat key 3

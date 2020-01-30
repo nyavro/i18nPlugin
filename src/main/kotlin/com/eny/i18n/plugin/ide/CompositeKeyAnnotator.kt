@@ -7,7 +7,7 @@ import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.AnnotationHelper
 import com.eny.i18n.plugin.utils.AnnotationHolderFacade
 import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.JsonSearch
+import com.eny.i18n.plugin.utils.LocalizationFileSearch
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
@@ -30,7 +30,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
         val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange))
-        val files = JsonSearch(element.project).findFilesByName(fileName)
+        val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
         val settings = Settings.getInstance(element.project)
         if (files.isEmpty()) {
             val isVueContext = settings.vue && element.containingFile.name.substringAfter(".").equals("vue", true)

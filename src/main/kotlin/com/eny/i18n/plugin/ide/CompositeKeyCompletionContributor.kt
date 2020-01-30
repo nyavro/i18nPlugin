@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.parser.FullKeyExtractor
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.JsonSearch
+import com.eny.i18n.plugin.utils.LocalizationFileSearch
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionInitializationContext
@@ -36,13 +36,13 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
                         val source = fullKey.source.replace(last.text, "")
                         result.addAllElements(
                             groupPlurals(
-                                JsonSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
+                                LocalizationFileSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
                                     file ->
-                                    listCompositeKeyVariants(
-                                        fixedKey,
-                                        PsiElementTree.create(file),
-                                        search
-                                    )
+                                        listCompositeKeyVariants(
+                                            fixedKey,
+                                            PsiElementTree.create(file),
+                                            search
+                                        )
                                 }.map {key -> key.value().text.unQuote()}.toSet(),
                                 settings.pluralSeparator
                             ).map {item -> LookupElementBuilder.create(source + item)}

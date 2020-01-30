@@ -3,8 +3,8 @@ package com.eny.i18n.plugin.ide.quickfix
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.JsonSearch
 import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.utils.LocalizationFileSearch
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
 import com.intellij.json.psi.JsonElementGenerator
 import com.intellij.json.psi.JsonObject
@@ -31,7 +31,7 @@ class CreatePropertyQuickFix(
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         ApplicationManager.getApplication().invokeLater {
             if (editor != null) {
-                val jsonFiles = JsonSearch(project).findFilesByName(fullKey.ns?.text)
+                val jsonFiles = LocalizationFileSearch(project).findFilesByName(fullKey.ns?.text)
                 if (jsonFiles.size == 1) {
                     createPropertyInFile(project, jsonFiles.first())
                 } else if (jsonFiles.size > 1) {
