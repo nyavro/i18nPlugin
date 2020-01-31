@@ -9,6 +9,6 @@ nested:
     "value-1": "сундук",
     "value-2": "сундука",
     "value-5": "сундуков",
-    "other": "другой"
-  }
+    "other": "другой" 
+  } 
 flat3: Flat key 3

@@ -89,7 +89,7 @@ class JsonReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElemen
                         val project = element.project
                         val settings = Settings.getInstance(project)
                         val key = composeKey(
-                            PsiProperty(element),
+                            PsiProperty.create(element),
                             settings.nsSeparator,
                             settings.keySeparator,
                             settings.pluralSeparator,

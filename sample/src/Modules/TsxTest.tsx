@@ -15,7 +15,7 @@ class TsxTest {
             <div about={v > 5 ? 'greater' : 'lower'}>
                 <div title={`${i18n.t("sample:ROOT.Key1.")}`}/>
                 <div title={`${i18n.t("sample:ROOT.Key1.key2")}`}/>
-                <div title={`${i18n.t("Main")}`}/>
+                <div title={`${i18n.t("yaml:flat0")}`}/>
                 Body1
             </div>
         );
