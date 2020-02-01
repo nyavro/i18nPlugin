@@ -14,10 +14,10 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'kotlin'
 
 intellij {
-    version 'IU-2019.3'
+    version 'IC-LATEST-EAP-SNAPSHOT'
     type "IC"
     pluginName 'i18n'
-    plugins = ['YAML']
+    plugins = ['yaml']
 }
 
 patchPluginXml {
