@@ -14,7 +14,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'kotlin'
 
 intellij {
-    version 'IC-LATEST-EAP-SNAPSHOT'
+    version 'IU-2019.3'
     type "IC"
     pluginName 'i18n'
     plugins = ['YAML']
