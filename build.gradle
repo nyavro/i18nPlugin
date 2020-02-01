@@ -7,14 +7,14 @@ buildscript {
     }
 }
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.10'
+    id 'org.jetbrains.intellij' version '0.4.15'
 }
 
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'kotlin'
 
 intellij {
-    version 'IU-2019.2'
+    version 'IC-LATEST-EAP-SNAPSHOT'
     type "IC"
     pluginName 'i18n'
     plugins = ['YAML']
