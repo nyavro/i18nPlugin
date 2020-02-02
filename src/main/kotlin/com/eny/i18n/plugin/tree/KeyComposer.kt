@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.tree
 interface KeyComposer<T> {
     fun composeKey(tree: FlippedTree<T>,
            nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: String = "translation", dropRoot: Boolean = false): String {
-        val ancestors = tree.ancestors()
+        val ancestors = tree.parents()
         val criteria = {node: FlippedTree<T> -> node.isRoot() && (node.name()==defaultNs || dropRoot)}
         val fixPlural = {node: FlippedTree<T> -> if(node.isRoot()) node.name() else node.name().substringBefore(pluralSeparator)}
         val processNode = {node: FlippedTree<T>, index: Int ->

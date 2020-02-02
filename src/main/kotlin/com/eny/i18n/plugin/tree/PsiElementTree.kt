@@ -90,7 +90,7 @@ abstract class PsiProperty: FlippedTree<PsiElement> {
 class JsonRoot(val element: PsiFile): PsiProperty() {
     override fun name() = element.containingFile.name.substringBeforeLast(".")
     override fun isRoot() = true
-    override fun ancestors(): List<FlippedTree<PsiElement>> = listOf()
+    override fun parents(): List<FlippedTree<PsiElement>> = listOf()
 }
 
 /**
@@ -99,7 +99,7 @@ class JsonRoot(val element: PsiFile): PsiProperty() {
 class JsonProperty(val element: PsiElement): PsiProperty() {
     override fun name() = element.firstChild.text.unQuote()
     override fun isRoot() = false
-    override fun ancestors(): List<FlippedTree<PsiElement>> = allAncestors(element)
+    override fun parents(): List<FlippedTree<PsiElement>> = allAncestors(element)
     protected fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> {
         if (item is PsiFile) return listOf(JsonRoot(item))
         else if(item is JsonProperty) return allAncestors(item.parent) + JsonProperty(item)
@@ -113,7 +113,7 @@ class JsonProperty(val element: PsiElement): PsiProperty() {
 class YamlRoot(val element: PsiFile): PsiProperty() {
     override fun name() = element.containingFile.name.substringBeforeLast(".")
     override fun isRoot() = true
-    override fun ancestors(): List<FlippedTree<PsiElement>> = listOf()
+    override fun parents(): List<FlippedTree<PsiElement>> = listOf()
 }
 
 /**
@@ -122,7 +122,7 @@ class YamlRoot(val element: PsiFile): PsiProperty() {
 class YamlProperty(val element: PsiElement): PsiProperty() {
     override fun name() = (element as YAMLKeyValue).key?.text?.unQuote() ?: ""
     override fun isRoot() = false
-    override fun ancestors(): List<FlippedTree<PsiElement>> = allAncestors(element)
+    override fun parents(): List<FlippedTree<PsiElement>> = allAncestors(element)
     protected fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> {
         return (PsiTreeUtil
             .collectParents(item, YAMLKeyValue::class.java, true, {c -> c is YAMLDocument})

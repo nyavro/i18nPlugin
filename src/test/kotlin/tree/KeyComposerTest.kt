@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 
 class TestFlippedTree(val list: List<String>): FlippedTree<String> {
     override fun isRoot() = list.size == 1
-    override fun ancestors(): List<FlippedTree<String>> {
+    override fun parents(): List<FlippedTree<String>> {
         fun parents(lst: List<String>): List<FlippedTree<String>> {
             if (lst.isEmpty()) return listOf()
             else return parents(lst.drop(1)) + TestFlippedTree(lst)

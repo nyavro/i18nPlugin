@@ -6,7 +6,10 @@ import com.eny.i18n.plugin.utils.Literal
 import org.junit.Assert.*
 import org.junit.Test
 
-class TestTree(val value: String, val children: List<TestTree> = listOf()) : Tree<String> {
+/**
+ * Test tree wrapper
+ */
+class TestTree(private val value: String, private val children: List<TestTree> = listOf()) : Tree<String> {
     override fun findChild(name: String) = children.find {item -> item.value==name}
     override fun isTree() = children.isNotEmpty()
     override fun value() = value
@@ -15,6 +18,9 @@ class TestTree(val value: String, val children: List<TestTree> = listOf()) : Tre
 
 fun root(tree: TestTree) = TestTree("", listOf(tree))
 
+/**
+ * CompositeKeyResolver tests
+ */
 class CompositeKeyResolverTest {
 
     @Test
