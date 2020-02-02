@@ -1,5 +1,6 @@
 # i18nPlugin
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ec904e969c348eeb9b1a010ab76d1b9)](https://app.codacy.com/manual/nyavro/i18nPlugin?utm_source=github.com&utm_medium=referral&utm_content=nyavro/i18nPlugin&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/nyavro/i18nPlugin.svg?branch=master)](https://travis-ci.com/nyavro/i18nPlugin)
 [![Hits-of-Code](https://hitsofcode.com/github/nyavro/i18nPlugin)](https://hitsofcode.com/view/github/nyavro/i18nPlugin)
 
