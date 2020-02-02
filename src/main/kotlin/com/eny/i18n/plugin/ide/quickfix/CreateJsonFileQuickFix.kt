@@ -4,7 +4,6 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.searchScope
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction
-import com.intellij.json.JsonLanguage
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileChooser.FileChooser
@@ -16,7 +15,13 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FilenameIndex
 
-class CreateJsonFileQuickFix(private val fullKey: FullKey, private val isVueContext: Boolean = false) : BaseIntentionAction() {
+/**
+ * Quick fix for json file creation
+ */
+class CreateJsonFileQuickFix(
+        private val fullKey: FullKey,
+        private val isVueContext: Boolean = false,
+        private val contentGenerator: ContentGenerator) : BaseIntentionAction() {
 
     override fun getFamilyName(): String = "i18n plugin"
 
@@ -29,12 +34,12 @@ class CreateJsonFileQuickFix(private val fullKey: FullKey, private val isVueCont
             val settings = Settings.getInstance(project)
             if (isVueContext) {
                 val folders = FilenameIndex.getFilesByName(project, settings.vueDirectory, settings.searchScope(project), true)
-                val name = "en.json"
-                val content: String = generateContent(fullKey)
+                val name = "en." + contentGenerator.getFileType().defaultExtension
+                val content: String = contentGenerator.generateContent(fullKey)
                 ApplicationManager.getApplication().runWriteAction {
                     folders.forEach { folder ->
                         folder.add(
-                            PsiFileFactory.getInstance(project).createFileFromText(name, JsonLanguage.INSTANCE, content)
+                            PsiFileFactory.getInstance(project).createFileFromText(name, contentGenerator.getLanguage(), content)
                         )
                     }
                 }
@@ -49,23 +54,16 @@ class CreateJsonFileQuickFix(private val fullKey: FullKey, private val isVueCont
                         project,
                         null
                 ) { folders ->
-                    val name: String = (fullKey.ns?.text ?: settings.defaultNs) + ".json"
-                    val content: String = generateContent(fullKey)
+                    val name: String = (fullKey.ns?.text ?: settings.defaultNs) + contentGenerator.getFileType().defaultExtension
+                    val content: String = contentGenerator.generateContent(fullKey)
                     ApplicationManager.getApplication().runWriteAction {
                         folders.forEach { folder ->
                             PsiManager.getInstance(project).findDirectory(folder)?.add(
-                                PsiFileFactory.getInstance(project).createFileFromText(name, JsonLanguage.INSTANCE, content)
+                                PsiFileFactory.getInstance(project).createFileFromText(name, contentGenerator.getLanguage(), content)
                             )
                         }
                     }
                 }
             }
         }
-
-    private fun generateContent(fullKey: FullKey): String =
-        fullKey.compositeKey.foldRightIndexed("\"TODO-${fullKey.source}\"", {
-            i, key, acc ->
-                val tab = "\t".repeat(i)
-                "{\n\t$tab\"${key.text}\": $acc\n$tab}"
-        })
 }

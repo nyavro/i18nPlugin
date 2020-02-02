@@ -19,6 +19,9 @@ import com.intellij.psi.PsiFile
 import org.jetbrains.yaml.YAMLElementGenerator
 import org.jetbrains.yaml.psi.YAMLMapping
 
+/**
+ * Quick fix for missing property creation
+ */
 class CreatePropertyQuickFix(
         private val fullKey: FullKey,
         private val selector: FilesSelector,

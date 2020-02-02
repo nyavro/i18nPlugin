@@ -59,8 +59,8 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
         val annotation =
             if (fullKey.ns == null) holder.createAnnotation(errorSeverity, facade.unresolvedKey(fullKey, listOf()), "Missing default namespace")
             else holder.createAnnotation(errorSeverity, facade.unresolvedNs(fullKey), "Unresolved file")
-        annotation.registerFix(CreateJsonFileQuickFix(fullKey))
-        annotation.registerFix(CreateYamlFileQuickFix(fullKey))
+        annotation.registerFix(CreateJsonFileQuickFix(fullKey, false, JsonContentGenerator()))
+        annotation.registerFix(CreateJsonFileQuickFix(fullKey, false, YamlContentGenerator()))
     }
 
     /**
@@ -68,7 +68,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
      */
     fun annotateUnresolvedVueKey(fullKey: FullKey) {
         val annotation = holder.createAnnotation(errorSeverity, facade.unresolvedKey(fullKey, listOf()), "Missing localization")
-        annotation.registerFix(CreateJsonFileQuickFix(fullKey, true))
-        annotation.registerFix(CreateYamlFileQuickFix(fullKey, true))
+        annotation.registerFix(CreateJsonFileQuickFix(fullKey, true, JsonContentGenerator()))
+        annotation.registerFix(CreateJsonFileQuickFix(fullKey, true, YamlContentGenerator()))
     }
 }
