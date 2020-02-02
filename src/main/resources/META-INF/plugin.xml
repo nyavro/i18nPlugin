@@ -14,6 +14,12 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>1.6.1</h3>
+            <ul>
+                <li>Yaml files support</li>
+            </ul>
+        </div>
+        <div>
             <h3>1.5.5</h3>
             <ul>
                 <li>Fixed code completion for Vue and default namespaces</li>

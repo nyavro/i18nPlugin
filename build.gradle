@@ -25,7 +25,7 @@ patchPluginXml {
 }
 
 group 'com.eny'
-version '1.5.5'
+version '1.6.1'
 
 repositories {
     mavenCentral()
