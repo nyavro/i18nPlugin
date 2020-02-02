@@ -16,6 +16,8 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import org.jetbrains.yaml.YAMLElementGenerator
+import org.jetbrains.yaml.psi.YAMLMapping
 
 class CreatePropertyQuickFix(
         private val fullKey: FullKey,
@@ -60,18 +62,31 @@ class CreatePropertyQuickFix(
     }
 
     private fun createPropertiesChain(project: Project, element: PsiElement, unresolved: List<Literal>) {
-        if (unresolved.isNotEmpty() && element is JsonObject) {
-            val first = unresolved.first()
-            val text = unresolved.drop(1).foldRight("\"TODO-${fullKey.source}\"") {
-                item, acc -> "{\"${item.text}\": $acc}"
+        if (unresolved.isNotEmpty()) {
+            if (element is JsonObject) {
+                val first = unresolved.first()
+                val text = unresolved.drop(1).foldRight("\"TODO-${fullKey.source}\"") { item, acc ->
+                    "{\"${item.text}\": $acc}"
+                }
+                ApplicationManager.getApplication().runWriteAction {
+                    JsonPsiUtil
+                            .addProperty(
+                                    element,
+                                    JsonElementGenerator(project).createProperty(first.text, text),
+                                    false
+                            )
+                }
             }
-            ApplicationManager.getApplication().runWriteAction {
-                JsonPsiUtil
-                    .addProperty(
-                        element,
-                        JsonElementGenerator(project).createProperty(first.text, text),
-                        false
-                    )
+            else if (element is YAMLMapping) {
+                val first = unresolved.first()
+                val text = unresolved.drop(1).foldRight("TODO-${fullKey.source}") { item, acc ->
+                    "{${item.text}: $acc}"
+                }
+                ApplicationManager.getApplication().runWriteAction {
+                    val generator = YAMLElementGenerator.getInstance(element.project)
+                    element.add(generator.createEol())
+                    element.add(generator.createYamlKeyValue(first.text, text))
+                }
             }
         }
     }
