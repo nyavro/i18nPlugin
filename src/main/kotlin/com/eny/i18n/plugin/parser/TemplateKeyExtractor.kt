@@ -10,6 +10,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.PsiReference
 
+/**
+ * Extracts i18n key from JS string template expression
+ */
 class TemplateKeyExtractor : KeyExtractor {
 
     private val ResolveReferenceMaxDepth = 10

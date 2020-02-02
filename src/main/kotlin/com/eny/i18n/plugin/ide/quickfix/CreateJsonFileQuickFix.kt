@@ -25,7 +25,7 @@ class CreateJsonFileQuickFix(
 
     override fun getFamilyName(): String = "i18n plugin"
 
-    override fun getText(): String = "Create translation files"
+    override fun getText(): String = contentGenerator.getDescription()
 
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
 
@@ -54,7 +54,7 @@ class CreateJsonFileQuickFix(
                         project,
                         null
                 ) { folders ->
-                    val name: String = (fullKey.ns?.text ?: settings.defaultNs) + contentGenerator.getFileType().defaultExtension
+                    val name: String = (fullKey.ns?.text ?: settings.defaultNs) + "." + contentGenerator.getFileType().defaultExtension
                     val content: String = contentGenerator.generateContent(fullKey)
                     ApplicationManager.getApplication().runWriteAction {
                         folders.forEach { folder ->
