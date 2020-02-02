@@ -13,6 +13,9 @@ import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
 
+/**
+ * Represents wrapper-tree around psi tree
+ */
 abstract class PsiElementTree: Tree<PsiElement> {
     companion object {
         fun create(file: PsiElement): PsiElementTree? =
@@ -20,6 +23,10 @@ abstract class PsiElementTree: Tree<PsiElement> {
             else YamlElementTree.create(file)
     }
 }
+
+/**
+ * Tree wrapper around json psi tree
+ */
 class JsonElementTree(val element: PsiElement): PsiElementTree() {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is JsonObject
@@ -39,6 +46,10 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
             PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{ fileRoot -> JsonElementTree(fileRoot)}
     }
 }
+
+/**
+ * Tree wrapper around yaml psi tree
+ */
 class YamlElementTree(val element: PsiElement): PsiElementTree() {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is YAMLMapping
@@ -62,6 +73,9 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
     }
 }
 
+/**
+ * Leaf to root wrapper around psi tree
+ */
 abstract class PsiProperty: FlippedTree<PsiElement> {
     companion object {
         fun create(element: PsiElement): PsiProperty =
@@ -69,11 +83,19 @@ abstract class PsiProperty: FlippedTree<PsiElement> {
             else YamlProperty(element)
     }
 }
+
+/**
+ * Wrapper around Json root psi node
+ */
 class JsonRoot(val element: PsiFile): PsiProperty() {
     override fun name() = element.containingFile.name.substringBeforeLast(".")
     override fun isRoot() = true
     override fun ancestors(): List<FlippedTree<PsiElement>> = listOf()
 }
+
+/**
+ * Wrapper around Json tree item
+ */
 class JsonProperty(val element: PsiElement): PsiProperty() {
     override fun name() = element.firstChild.text.unQuote()
     override fun isRoot() = false
@@ -85,11 +107,18 @@ class JsonProperty(val element: PsiElement): PsiProperty() {
     }
 }
 
+/**
+ * Wrapper around Yaml tree root
+ */
 class YamlRoot(val element: PsiFile): PsiProperty() {
     override fun name() = element.containingFile.name.substringBeforeLast(".")
     override fun isRoot() = true
     override fun ancestors(): List<FlippedTree<PsiElement>> = listOf()
 }
+
+/**
+ * Wrapper around Yaml element
+ */
 class YamlProperty(val element: PsiElement): PsiProperty() {
     override fun name() = (element as YAMLKeyValue).key?.text?.unQuote() ?: ""
     override fun isRoot() = false
