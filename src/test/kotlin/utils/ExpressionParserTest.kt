@@ -1,6 +1,6 @@
 package utils
 
-import com.eny.i18n.plugin.utils.ExpressionParser
+import com.eny.i18n.plugin.utils.KeysNormalizer
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
 import org.junit.Test
@@ -18,11 +18,11 @@ class ExpressionParserTest {
             KeyElement(":ROOT.Key1.Key31", ":ROOT.Key1.Key31", KeyElementType.LITERAL),
             KeyElement("`", "`", KeyElementType.LITERAL)
         )
-        val parser = ExpressionParser()
+        val parser = KeysNormalizer()
         val expected = listOf(
             KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
             KeyElement(":ROOT.Key1.Key31", ":ROOT.Key1.Key31", KeyElementType.LITERAL)
         )
-        assertEquals(parser.parse(elements), expected)
+        assertEquals(parser.normalize(elements), expected)
     }
 }

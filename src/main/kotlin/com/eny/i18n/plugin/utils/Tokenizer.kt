@@ -11,10 +11,19 @@ data class Literal(val text: String, val length: Int = text.length, val dot: Int
     fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length)
 }
 
+/**
+ * Tokenizer of translation keys
+ */
 class Tokenizer(private val nsSeparator: String, private val keySeparator: String) {
 
+    /**
+     * Tokenize list of key elements into list of tokens
+     */
     fun tokenizeAll(elements: List<KeyElement>): List<Token> = elements.flatMap {item -> tokenize(item)}
 
+    /**
+     * Tokenizes single key element into list of tokens
+     */
     fun tokenize(element: KeyElement): List<Token> =
         when {
             element.type == KeyElementType.LITERAL -> tokenizeLiteral(element.text)

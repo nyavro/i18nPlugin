@@ -1,8 +1,15 @@
 package com.eny.i18n.plugin.utils
 
-class ExpressionParser {
+/**
+ * Normalizes expressions with special characters
+ */
+class KeysNormalizer {
     private val dropItems = listOf("`", "{", "}", "$")
-    fun parse(elements: List<KeyElement>): List<KeyElement> {
+
+    /**
+     * Runs normalization
+     */
+    fun normalize(elements: List<KeyElement>): List<KeyElement> {
         return elements.mapNotNull {
             item -> when {
                 dropItems.contains(item.text) -> null

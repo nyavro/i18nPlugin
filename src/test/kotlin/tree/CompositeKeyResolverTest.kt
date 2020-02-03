@@ -125,7 +125,6 @@ class CompositeKeyResolverTest {
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
-//        assertEquals("root4", property.element?.value())
         assertEquals(listOf(Literal("root6"), Literal("key12"), Literal("subkey8")), property.unresolved)
         assertTrue(property.path.isEmpty())
     }
