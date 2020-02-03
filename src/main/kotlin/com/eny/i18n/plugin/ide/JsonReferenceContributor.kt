@@ -12,11 +12,17 @@ import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.UsageSearchContext
 import com.intellij.util.ProcessingContext
 
+/**
+ * Accumulates references
+ */
 class ReferencesAccumulator {
 
     private val res = mutableListOf<PsiElement>()
     private var toDrop: PsiElement? = null
 
+    /**
+     * Processing function for PsiSearchHelper
+     */
     fun process() = {
         entry: PsiElement, offset:Int ->
             val typeName = entry.node.elementType.toString()
@@ -30,6 +36,9 @@ class ReferencesAccumulator {
             true
     }
 
+    /**
+     * Returns collected entries
+     */
     fun entries(): Collection<PsiElement> = res
 
     private fun getParentsOfType(element: PsiElement, types: Set<String>) {
@@ -53,8 +62,14 @@ class ReferencesAccumulator {
     }
 }
 
+/**
+ * Reference to key usage for json translation file
+ */
 class JsonI18nReference(element: PsiElement, textRange: TextRange, val composedKey: String) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
 
+    /**
+     * Finds usages of json translation
+     */
     fun findRefs(): Collection<PsiElement> {
         val project = element.project
         val referencesAccumulator = ReferencesAccumulator()
