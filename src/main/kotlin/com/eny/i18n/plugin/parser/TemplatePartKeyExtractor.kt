@@ -5,6 +5,9 @@ import com.eny.i18n.plugin.utils.ExpressionKeyParser
 import com.eny.i18n.plugin.utils.FullKey
 import com.intellij.psi.PsiElement
 
+/**
+ * Extracts key from js string template
+ */
 class TemplatePartKeyExtractor(): KeyExtractor {
     private val keyExtractor = FullKeyExtractor()
 

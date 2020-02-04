@@ -4,11 +4,24 @@ import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
 import com.intellij.codeInsight.completion.CompletionInitializationContext
 
+/**
+ * Key normalization utils interface
+ */
 interface KeyNormalizer {
+    /**
+     * Normalizes list of Key elements
+     */
     fun normalize(elements: List<KeyElement>): List<KeyElement> = elements.mapNotNull {item -> normalize(item)}
+
+    /**
+     * Normalizes single key element
+     */
     fun normalize(element: KeyElement?): KeyElement? = element
 }
 
+/**
+ * Combined normalizer - aggregates other normalizers
+ */
 class KeyNormalizerImpl: KeyNormalizer {
     private val normalizers = listOf(ExpressionNormalizer(), DummyTextNormalizer())
     override fun normalize(element: KeyElement?) = normalizers.fold(element, {
@@ -16,7 +29,7 @@ class KeyNormalizerImpl: KeyNormalizer {
     })
 }
 
-class ExpressionNormalizer: KeyNormalizer {
+private class ExpressionNormalizer: KeyNormalizer {
     private val dropItems = listOf("`", "{", "}", "$")
     override fun normalize(element: KeyElement?): KeyElement? = when {
         dropItems.contains(element?.text) -> null
@@ -25,7 +38,7 @@ class ExpressionNormalizer: KeyNormalizer {
     }
 }
 
-class DummyTextNormalizer: KeyNormalizer {
+private class DummyTextNormalizer: KeyNormalizer {
     override fun normalize(element: KeyElement?): KeyElement? =
         element?.let {
             value -> value.copy(

@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.xml.XmlElementType
 
+/**
+ * Extracts translation key from psi literal
+ */
 class LiteralKeyExtractor(): KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean =

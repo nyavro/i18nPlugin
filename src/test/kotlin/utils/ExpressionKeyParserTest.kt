@@ -1,6 +1,5 @@
 package utils
 
-import com.eny.i18n.plugin.utils.ExpressionKeyParser
 import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals

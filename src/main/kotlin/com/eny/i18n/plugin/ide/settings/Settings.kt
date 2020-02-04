@@ -7,6 +7,9 @@ import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
 
+/**
+ * Plugin settings
+ */
 @State(name = "i18nSettings", storages = [Storage("i18nSettings.xml")])
 class Settings : PersistentStateComponent<Settings> {
 

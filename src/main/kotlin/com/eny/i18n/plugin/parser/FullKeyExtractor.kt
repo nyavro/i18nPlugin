@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement
 
 fun PsiElement.type(): String = this.node?.elementType.toString()
 
+/**
+ * Extracts translation key from psi element
+ */
 class FullKeyExtractor {
 
     private val normalizer: KeyNormalizer = KeyNormalizerImpl()
