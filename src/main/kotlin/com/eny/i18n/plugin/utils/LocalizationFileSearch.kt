@@ -12,6 +12,9 @@ import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.yaml.YAMLFileType
 
+/**
+ * Provides search of localization files (json, yaml)
+ */
 class LocalizationFileSearch(private val project: Project) {
 
     val settings = Settings.getInstance(project)

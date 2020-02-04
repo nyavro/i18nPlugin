@@ -35,6 +35,9 @@ class Settings : PersistentStateComponent<Settings> {
 
     override fun getState(): Settings? = this
 
+    /**
+     * Service class for persisting settings
+     */
     companion object Persistence {
         fun getInstance(project: Project): Settings = ServiceManager.getService(project, Settings::class.java)
     }

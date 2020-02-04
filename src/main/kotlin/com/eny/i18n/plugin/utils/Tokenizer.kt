@@ -7,6 +7,9 @@ interface Separator : Token
 object NsSeparator: Separator
 object KeySeparator: Separator
 
+/**
+ * Represents key literal
+ */
 data class Literal(val text: String, val length: Int = text.length, val dot: Int = 0): Token {
     fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length)
 }

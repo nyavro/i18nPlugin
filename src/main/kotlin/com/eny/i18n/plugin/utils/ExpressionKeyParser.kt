@@ -1,15 +1,31 @@
 package com.eny.i18n.plugin.utils
 
+/**
+ * Parsing state machine's state
+ */
 interface State {
+    /**
+     * Process next token
+     */
     fun next(token: Token): State
+
+    /**
+     * Get current parsed key
+     */
     fun fullKey(isTemplate: Boolean, source: String): FullKey? = null
 }
 
+/**
+ * Final error state
+ */
 class Error(private val msg: String): State {
     override fun next(token: Token): State = this
     override fun toString(): String = "Error <$msg>"
 }
 
+/**
+ * Initial state
+ */
 class Start(private val init: Literal?) : State {
     override fun next(token: Token): State =
         when {
@@ -20,6 +36,9 @@ class Start(private val init: Literal?) : State {
         }
 }
 
+/**
+ * Waiting literal state
+ */
 class WaitingLiteral(private val file: Literal?, val key: List<Literal>) : State {
     override fun next(token: Token): State =
         when (token) {
@@ -29,6 +48,9 @@ class WaitingLiteral(private val file: Literal?, val key: List<Literal>) : State
     override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key + Literal(""), isTemplate)
 }
 
+/**
+ * Waiting literal or separator
+ */
 class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : State {
     override fun next(token: Token): State =
         when (token) {
@@ -43,6 +65,9 @@ class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : St
     override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key, isTemplate)
 }
 
+/**
+ * Parses list of normalized key elements into FullKey
+ */
 class ExpressionKeyParser {
     fun parse(
         normalized: List<KeyElement>,
