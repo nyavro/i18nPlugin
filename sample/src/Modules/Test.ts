@@ -24,6 +24,6 @@ class Test {
         console.log(`${fileExpr}:ROOT.Key1.`);
         console.log('Main.Key1.key312');                                           //Default ns simple case resolved
         console.log('yaml:nested.plurals.value');
-        console.log('common.test');
+        console.log('Main.ExtraKey.Val2');
     }
 }
