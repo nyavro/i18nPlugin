@@ -39,6 +39,9 @@ class Settings : PersistentStateComponent<Settings> {
      * Service class for persisting settings
      */
     companion object Persistence {
+        /**
+         * Loads project's Settings instance
+         */
         fun getInstance(project: Project): Settings = ServiceManager.getService(project, Settings::class.java)
     }
 }

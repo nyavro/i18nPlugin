@@ -9,19 +9,19 @@ import org.junit.Test
 /**
  * Test tree wrapper
  */
-class TestTree(private val value: String, private val children: List<TestTree> = listOf()) : Tree<String> {
+internal class TestTree(private val value: String, private val children: List<TestTree> = listOf()) : Tree<String> {
     override fun findChild(name: String) = children.find {item -> item.value==name}
     override fun isTree() = children.isNotEmpty()
     override fun value() = value
     override fun findChildren(regex: Regex): List<Tree<String>> = children.filter {item -> item.value.matches(regex)}
 }
 
-fun root(tree: TestTree) = TestTree("", listOf(tree))
+internal fun root(tree: TestTree) = TestTree("", listOf(tree))
 
 /**
  * CompositeKeyResolver tests
  */
-class CompositeKeyResolverTest {
+internal class CompositeKeyResolverTest {
 
     @Test
     fun resolveElementByKey() {

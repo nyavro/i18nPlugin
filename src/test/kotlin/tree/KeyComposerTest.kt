@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.tree.KeyComposer
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class TestFlippedTree(val list: List<String>): FlippedTree<String> {
+internal class TestFlippedTree(val list: List<String>): FlippedTree<String> {
     override fun isRoot() = list.size == 1
     override fun parents(): List<FlippedTree<String>> {
         fun parents(lst: List<String>): List<FlippedTree<String>> {
@@ -17,7 +17,7 @@ class TestFlippedTree(val list: List<String>): FlippedTree<String> {
     override fun name() = list.first()
 }
 
-class KeyComposerTest {
+internal class KeyComposerTest {
 
     @Test
     fun compose() {
