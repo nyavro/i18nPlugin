@@ -1,11 +1,11 @@
 package utils
 
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals
 
 //@Ignore
-class AsteriskKeyParserTest : TestBase {
+internal class AsteriskKeyParserTest : TestBase {
 
 //${fileExpr}:ROOT.Key1.Key31               / *         *{11}:ROOT{4}.Key1{4}.Key31{5}
     @Test

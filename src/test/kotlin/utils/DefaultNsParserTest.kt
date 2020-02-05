@@ -1,11 +1,11 @@
 package utils
 
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals
 
 //@Ignore
-class DefaultNsParserTest : TestBase{
+internal class DefaultNsParserTest : TestBase {
 
 //ROOT.Key2.Key3                            /                   / ROOT{4}.Key2{4}.Key3{4}
     @Test

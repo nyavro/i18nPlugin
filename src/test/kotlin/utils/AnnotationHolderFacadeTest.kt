@@ -9,7 +9,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 //@Ignore
-class AnnotationHolderFacadeTest : TestBase {
+internal class AnnotationHolderFacadeTest : TestBase {
 
     //console.log('sample:ROOT.Key1.key31');
     @Test
