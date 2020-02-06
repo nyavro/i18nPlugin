@@ -12,6 +12,9 @@ import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import kotlin.reflect.KMutableProperty0
 
+/**
+ * JTextField with custom validation
+ */
 class LimitedTextField(initialText: String, maxLength: Int, onChange: (newText:String) -> Unit, isValid: (key:Char) -> Boolean = {ch -> true}): JTextField(initialText) {
     init {
         addKeyListener(object: KeyAdapter() {
@@ -30,6 +33,9 @@ class LimitedTextField(initialText: String, maxLength: Int, onChange: (newText:S
     }
 }
 
+/**
+ * Settings configuration panel
+ */
 class SettingsPanel(val settings: Settings, val project: Project) {
 
     fun getRootPanel(): JPanel {

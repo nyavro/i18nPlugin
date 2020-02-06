@@ -13,6 +13,9 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 
+/**
+ * I18nReference to json/yaml translation
+ */
 class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: FullKey) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference, CompositeKeyResolver<PsiElement> {
     private val search = LocalizationFileSearch(element.project)
 

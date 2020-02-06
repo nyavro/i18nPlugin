@@ -6,9 +6,12 @@ import org.jetbrains.annotations.Nls
 import javax.swing.JComponent
 import javax.swing.JPanel
 
+/**
+ * Project configurable
+ */
 class Configurable(val project: Project) : SearchableConfigurable {
 
-    internal var gui: JPanel? = null
+    private var gui: JPanel? = null
 
     override fun createComponent(): JComponent {
         gui = SettingsPanel(Settings.getInstance(project), project).getRootPanel()
@@ -16,32 +19,19 @@ class Configurable(val project: Project) : SearchableConfigurable {
     }
 
     @Nls
-    override fun getDisplayName(): String {
-        return "i18n Plugin"
-    }
+    override fun getDisplayName(): String = "i18n Plugin"
 
-    override fun getHelpTopic(): String? {
-        return "preference.i18nPlugin"
-    }
+    override fun getHelpTopic(): String? = "preference.i18nPlugin"
 
-    override fun getId(): String {
-        return "preference.i18nPlugin"
-    }
+    override fun getId(): String = "preference.i18nPlugin"
 
-    override fun enableSearch(s: String?): Runnable? {
-        return null
-    }
+    override fun enableSearch(s: String?): Runnable? = null
 
-    override fun isModified(): Boolean {
-        return false
-    }
+    override fun isModified(): Boolean = false
 
-    override fun apply() {
-    }
+    override fun apply() {}
 
-    override fun reset() {
-
-    }
+    override fun reset() {}
 
     override fun disposeUIResources() {
         gui = null
