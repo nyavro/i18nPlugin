@@ -53,6 +53,13 @@ class ReactInspection : LocalInspectionTool() {
                 super.visitJSFunctionDeclaration(node)
             }
 
+            private fun returnsFunction(call: JSCallExpression): Boolean {
+                val res = PsiTreeUtil.findChildOfType(call, JSReferenceExpression::class.java)?.resolve() ?: return false
+                val jsFunction = PsiTreeUtil.findChildOfType(res, JSFunctionExpression::class.java)
+                if (jsFunction?.block != null) return false
+                return PsiTreeUtil.findChildOfType(jsFunction, JSFunctionExpression::class.java) != null
+            }
+
             override fun visitJSEmbeddedContent(embeddedContent: JSEmbeddedContent?) {
                 if (embeddedContent != null && isEmbeddedInXMLAttribute(embeddedContent)) {
                     if (isReference(embeddedContent)) {
@@ -64,6 +71,11 @@ class ReactInspection : LocalInspectionTool() {
                     } else {
                         if (PsiTreeUtil.findChildOfType(embeddedContent, JSFunction::class.java) != null) {
                             holder.registerProblem(embeddedContent, "Handler in render 2")
+                        } else {
+                            val call = PsiTreeUtil.findChildOfType(embeddedContent, JSCallExpression::class.java)
+                            if (call!=null && returnsFunction(call)) {
+                                holder.registerProblem(embeddedContent, "Handler in render 3")
+                            }
                         }
                     }
                 }
