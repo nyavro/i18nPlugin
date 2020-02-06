@@ -25,13 +25,10 @@ class Configurable(val project: Project) : SearchableConfigurable {
 
     override fun getId(): String = "preference.i18nPlugin"
 
-    override fun enableSearch(s: String?): Runnable? = null
-
     override fun isModified(): Boolean = false
 
-    override fun apply() {}
-
-    override fun reset() {}
+    override fun apply() {
+    }
 
     override fun disposeUIResources() {
         gui = null
