@@ -18,6 +18,9 @@ import org.jetbrains.yaml.psi.YAMLMapping
  */
 abstract class PsiElementTree: Tree<PsiElement> {
     companion object {
+        /**
+         * Creates instance of PsiElementTree
+         */
         fun create(file: PsiElement): PsiElementTree? =
             if (file is JsonFile) JsonElementTree.create(file)
             else YamlElementTree.create(file)
@@ -42,6 +45,9 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
             .filter {item -> item != null && item.text.unQuote().matches(regex)}
             .map {item -> JsonElementTree(item)}
     companion object {
+        /**
+         * Creates instance of JsonElementTree
+         */
         fun create(file: PsiElement): JsonElementTree? =
             PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{ fileRoot -> JsonElementTree(fileRoot)}
     }
@@ -66,6 +72,9 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
             .mapNotNull {item -> item.key?.let { key -> YamlElementTree(key)}}
     }
     companion object {
+        /**
+         * Creates YamlElementTree instance
+         */
         fun create(file: PsiElement): YamlElementTree? {
             val fileRoot = PsiTreeUtil.getChildOfType(file, YAMLDocument::class.java)
             return PsiTreeUtil.getChildOfType(fileRoot, YAMLMapping::class.java)?.let{ root -> YamlElementTree(root)}
@@ -78,6 +87,9 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
  */
 abstract class PsiProperty: FlippedTree<PsiElement> {
     companion object {
+        /**
+         * Creates FlippedTree instance
+         */
         fun create(element: PsiElement): PsiProperty =
             if (element.containingFile is JsonFile) JsonProperty(element)
             else YamlProperty(element)
@@ -100,11 +112,12 @@ class JsonProperty(val element: PsiElement): PsiProperty() {
     override fun name() = element.firstChild.text.unQuote()
     override fun isRoot() = false
     override fun parents(): List<FlippedTree<PsiElement>> = allAncestors(element)
-    protected fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> {
-        if (item is PsiFile) return listOf(JsonRoot(item))
-        else if(item is JsonProperty) return allAncestors(item.parent) + JsonProperty(item)
-        else return allAncestors(item.parent)
-    }
+    private fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> =
+        when (item) {
+            is PsiFile -> listOf(JsonRoot(item))
+            is JsonProperty -> allAncestors(item.parent) + JsonProperty(item)
+            else -> allAncestors(item.parent)
+        }
 }
 
 /**
@@ -123,10 +136,9 @@ class YamlProperty(val element: PsiElement): PsiProperty() {
     override fun name() = (element as YAMLKeyValue).key?.text?.unQuote() ?: ""
     override fun isRoot() = false
     override fun parents(): List<FlippedTree<PsiElement>> = allAncestors(element)
-    protected fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> {
-        return (PsiTreeUtil
-            .collectParents(item, YAMLKeyValue::class.java, true, {c -> c is YAMLDocument})
-            .map {kv -> YamlProperty(kv)} +
+    private fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> =
+        (PsiTreeUtil
+            .collectParents(item, YAMLKeyValue::class.java, true) { c -> c is YAMLDocument}
+                .map {kv -> YamlProperty(kv)} +
             YamlRoot(item.containingFile)).reversed()
-    }
 }
