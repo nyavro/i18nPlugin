@@ -1,8 +1,14 @@
 package com.eny.i18n.plugin.utils
 
+/**
+ * Checks if string is quoted
+ */
 fun String.isQuoted(): Boolean =
     (this.length > 1) && listOf("\"", "'", "`").any {quote -> this.startsWith(quote) && this.endsWith(quote)}
 
+/**
+ * Unquotes the string
+ */
 fun String.unQuote(): String {
     return listOf('\'', '\"', '`').fold(this) {
         acc, quote ->
