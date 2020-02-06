@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.plugin.utils.isQuoted
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -33,7 +34,7 @@ class ExtractI18nAction: AnAction() {
         val end = primaryCaret.selectionEnd
         val key = Messages.showInputDialog(project, "Specify the key", "Input i18n key", Messages.getQuestionIcon(), null, isValidKey())
         val template = "i18n.t"
-        val isWide = isQuoted(document.getText(TextRange(start-1, end+1)))
+        val isWide = document.getText(TextRange(start-1, end+1)).isQuoted()
         val wideCorrection = if (isWide) 1 else 0
         WriteCommandAction.runWriteCommandAction(project) {
             document.replaceString(start - wideCorrection, end + wideCorrection, "$template('$key')")
@@ -49,14 +50,12 @@ class ExtractI18nAction: AnAction() {
         val end = primaryCaret.selectionEnd
         val widenText = document.getText(TextRange(start-1, end+1))
         e.presentation.isEnabled =
-            isQuoted(widenText) ||
+            widenText.isQuoted() ||
             primaryCaret.selectedText?.let {
-                text -> isQuoted(text) && (e.getData(LangDataKeys.PSI_FILE)?.let { psiFile -> isJsSource(psiFile) } ?: false )
+                text -> text.isQuoted() && (e.getData(LangDataKeys.PSI_FILE)?.let { psiFile -> isJsSource(psiFile) } ?: false )
             } ?: false
     }
 
     private fun isJsSource(psiFile: PsiFile) = listOf("TypeScript", "JavaScript").contains(psiFile.fileType.name)
 
-    private fun isQuoted(text: String): Boolean =
-        (text.length > 1) && listOf("\"", "'", "`").any {quote -> text.startsWith(quote) && text.endsWith(quote)}
 }

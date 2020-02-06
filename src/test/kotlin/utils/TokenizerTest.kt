@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.utils.*
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class TokenizerTest {
+internal class TokenizerTest {
 
     @Test
     fun tokenizeLiteral() {

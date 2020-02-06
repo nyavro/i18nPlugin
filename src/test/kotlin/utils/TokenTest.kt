@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.utils.Literal
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class TokenTest {
+internal class TokenTest {
     @Test
     fun mergeTwoLiterals() {
         val a = Literal("first", 5, 0)

@@ -23,8 +23,8 @@ class TemplateKeyExtractor : KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean = isTemplateExpression(element)
 
-    override fun extract(element: PsiElement, parser: ExpressionKeyParser, normalizer: KeyNormalizer, settings: Settings): FullKey? =
-        resolveTemplateExpression(element, parser, normalizer, settings)
+    override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
+        resolveTemplateExpression(element, parser, settings)
 
     /**
      * Resolves template expression
@@ -33,7 +33,7 @@ class TemplateKeyExtractor : KeyExtractor {
      * const key = 'element';
      * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
      */
-    private fun resolveTemplateExpression(element: PsiElement, parser: ExpressionKeyParser, normalizer: KeyNormalizer, settings: Settings): FullKey? {
+    private fun resolveTemplateExpression(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
             item ->
             if (item.elementType.toString().contains("REFERENCE")) {
@@ -44,7 +44,7 @@ class TemplateKeyExtractor : KeyExtractor {
                 )
             } else KeyElement.literal(item.text)
         }
-        return parser.parse(normalizer.normalize(transformed), true, settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
+        return parser.parse(transformed, true, settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
     }
 
     /**

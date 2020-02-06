@@ -1,12 +1,12 @@
 package utils
 
-import com.eny.i18n.plugin.utils.KeysNormalizer
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
+import com.eny.i18n.plugin.utils.KeysNormalizer
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ExpressionParserTest {
+internal class ExpressionParserTest {
     @Test
     fun parse() {
         val elements = listOf(

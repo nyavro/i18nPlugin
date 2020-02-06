@@ -16,15 +16,15 @@ class LiteralKeyExtractor(): KeyExtractor {
     override fun canExtract(element: PsiElement): Boolean =
         element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE
 
-    override fun extract(element: PsiElement, parser: ExpressionKeyParser, normalizer: KeyNormalizer, settings: Settings): FullKey? {
+    override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? {
         val value: Any? = (element as PsiLiteralValue).value
         return if (value is String)
             parser.parse(
-                normalizer.normalize(listOf(KeyElement.literal(value))),
-                    false,
-                    settings.nsSeparator,
-                    settings.keySeparator,
-                    settings.stopCharacters
+                listOf(KeyElement.literal(value)),
+                false,
+                settings.nsSeparator,
+                settings.keySeparator,
+                settings.stopCharacters
             )
         else
             null

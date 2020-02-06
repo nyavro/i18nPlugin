@@ -13,6 +13,6 @@ class TemplatePartKeyExtractor(): KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean = element.type() == "JS:STRING_TEMPLATE_PART"
 
-    override fun extract(element: PsiElement, parser: ExpressionKeyParser, normalizer: KeyNormalizer, settings: Settings): FullKey? =
+    override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
         keyExtractor.extractI18nKeyLiteral(element.parent)
 }

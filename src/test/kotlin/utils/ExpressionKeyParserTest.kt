@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ExpressionKeyParserTest : TestBase {
+internal class ExpressionKeyParserTest : TestBase {
 
 //fileName:ROOT.Key2.Key3                   /                       / fileName{8}:ROOT{4}.Key2{4}.Key3{4}
     @Test

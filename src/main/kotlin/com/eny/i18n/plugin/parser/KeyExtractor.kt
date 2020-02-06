@@ -17,5 +17,5 @@ interface KeyExtractor {
     /**
      * Extracts key from psi element
      */
-    fun extract(element: PsiElement, parser: ExpressionKeyParser, normalizer: KeyNormalizer, settings: Settings): FullKey?
+    fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey?
 }

@@ -3,12 +3,18 @@ package com.eny.i18n.plugin.utils
 import com.intellij.openapi.util.TextRange
 import kotlin.math.max
 
+/**
+ * Annotation utils
+ */
 interface AnnotationFacade {
     fun compositeKeyFullBounds(fullKey: FullKey): TextRange
     fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange
     fun unresolvedNs(fullKey: FullKey): TextRange
 }
 
+/**
+ * Annotation utils implementation
+ */
 class AnnotationHolderFacade(private val textRange: TextRange) : AnnotationFacade {
 
     override fun unresolvedNs(fullKey: FullKey): TextRange =

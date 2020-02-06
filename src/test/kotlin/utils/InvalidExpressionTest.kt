@@ -5,7 +5,7 @@ import org.junit.Test
 import kotlin.test.assertNull
 
 //@Ignore
-class InvalidExpressionTest : TestBase {
+internal class InvalidExpressionTest : TestBase {
 
 //invalid:file:literal.ROOT.Key1.Key31
     @Test

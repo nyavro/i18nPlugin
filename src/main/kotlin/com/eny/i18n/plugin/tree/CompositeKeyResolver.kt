@@ -7,6 +7,9 @@ import com.eny.i18n.plugin.utils.Literal
  */
 data class PropertyReference<T>(val path: List<Literal>, val element: Tree<T>?, val unresolved: List<Literal>, val isPlural: Boolean = false)
 
+/**
+ * Key resolving utils
+ */
 interface CompositeKeyResolver<T> {
 
     /**

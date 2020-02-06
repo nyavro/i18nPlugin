@@ -5,7 +5,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 //@Ignore
-class StringUtilsTest : TestBase {
+internal class StringUtilsTest : TestBase {
 
     @Test
     fun matchPattern() {

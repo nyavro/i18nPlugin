@@ -1,5 +1,8 @@
 package com.eny.i18n.plugin.utils
 
+import com.eny.i18n.plugin.parser.KeyNormalizer
+import com.eny.i18n.plugin.parser.KeyNormalizerImpl
+
 /**
  * Parsing state machine's state
  */
@@ -68,14 +71,16 @@ class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : St
 /**
  * Parses list of normalized key elements into FullKey
  */
-class ExpressionKeyParser {
+class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
+
     fun parse(
-        normalized: List<KeyElement>,
+        elements: List<KeyElement>,
         isTemplate: Boolean = false,
         nsSeparator: String = ":",
         keySeparator: String = ".",
         stopCharacters: String = ""
     ): FullKey? {
+        val normalized = normalizer.normalize(elements)
         val source = normalized.fold(""){acc, item -> acc + item.text}
         val regex = "\\s".toRegex()
         if (source.contains(regex) || stopCharacters.any {char -> source.contains(char)}) {

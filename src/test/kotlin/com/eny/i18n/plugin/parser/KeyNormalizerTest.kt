@@ -5,7 +5,7 @@ import com.intellij.codeInsight.completion.CompletionInitializationContext
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class KeyNormalizerTest {
+internal class KeyNormalizerTest {
 
 //valid:ROOT.Key1.---idea-placeholder-here---
     @Test
