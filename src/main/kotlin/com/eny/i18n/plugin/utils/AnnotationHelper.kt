@@ -1,17 +1,20 @@
 package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.plugin.ide.quickfix.*
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
+import com.intellij.openapi.project.Project
 
 /**
  * Annotation helper methods
  */
-class AnnotationHelper(private val holder: AnnotationHolder, private val facade: AnnotationFacade) {
+class AnnotationHelper(private val holder: AnnotationHolder, private val facade: AnnotationFacade, private val project: Project) {
     private val RESOLVED_COLOR = DefaultLanguageHighlighterColors.LINE_COMMENT
     private val errorSeverity = HighlightSeverity.WARNING
     private val infoSeverity = HighlightSeverity.INFORMATION
+    private val settings = Settings.getInstance(project)
 
     /**
      * Annotates resolved translation key
@@ -39,10 +42,14 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
      */
     fun annotateUnresolved(fullKey: FullKey, resolvedPath: List<Literal>) {
         val unresolvedPropertyAnnotation = holder.createAnnotation(errorSeverity, facade.unresolvedKey(fullKey, resolvedPath), "Unresolved property")
+        val generators = listOf(
+            ContentGeneratorAdapter(YamlContentGenerator(), YamlPsiContentGenerator()),
+            ContentGeneratorAdapter(JsonContentGenerator(), JsonPsiContentGenerator())
+        )
         unresolvedPropertyAnnotation.registerFix(
-            CreatePropertyQuickFix(fullKey, UserChoice(), "Create property"))
+            CreatePropertyQuickFix(fullKey, UserChoice(), "Create property", generators))
         unresolvedPropertyAnnotation.registerFix(
-            CreatePropertyQuickFix(fullKey, AllFilesSelector(), "Create property in all localization files"))
+            CreatePropertyQuickFix(fullKey, AllFilesSelector(), "Create property in all localization files", generators))
     }
 
     /**
@@ -59,8 +66,10 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
         val annotation =
             if (fullKey.ns == null) holder.createAnnotation(errorSeverity, facade.unresolvedKey(fullKey, listOf()), "Missing default namespace")
             else holder.createAnnotation(errorSeverity, facade.unresolvedNs(fullKey), "Unresolved file")
-        annotation.registerFix(CreateJsonFileQuickFix(fullKey, false, JsonContentGenerator()))
-        annotation.registerFix(CreateJsonFileQuickFix(fullKey, false, YamlContentGenerator()))
+        val fileName = fullKey.ns?.text ?: settings.defaultNs
+        val folderSelector = I18NextTranslationFolderSelector(project)
+        annotation.registerFix(CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName))
+        annotation.registerFix(CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName))
     }
 
     /**
@@ -68,7 +77,13 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
      */
     fun annotateUnresolvedVueKey(fullKey: FullKey) {
         val annotation = holder.createAnnotation(errorSeverity, facade.unresolvedKey(fullKey, listOf()), "Missing localization")
-        annotation.registerFix(CreateJsonFileQuickFix(fullKey, true, JsonContentGenerator()))
-        annotation.registerFix(CreateJsonFileQuickFix(fullKey, true, YamlContentGenerator()))
+        val fileName = "en"
+        val folderSelector = Vue18nTranslationFolderSelector(project)
+        annotation.registerFix(
+            CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName)
+        )
+        annotation.registerFix(
+            CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName)
+        )
     }
 }

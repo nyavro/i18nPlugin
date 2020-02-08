@@ -5,10 +5,6 @@ import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.Literal
 import com.eny.i18n.plugin.utils.LocalizationFileSearch
-import com.intellij.codeInsight.intention.impl.BaseIntentionAction
-import com.intellij.json.psi.JsonElementGenerator
-import com.intellij.json.psi.JsonObject
-import com.intellij.json.psi.JsonPsiUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.command.UndoConfirmationPolicy
@@ -16,8 +12,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import org.jetbrains.yaml.YAMLElementGenerator
-import org.jetbrains.yaml.psi.YAMLMapping
 
 /**
  * Quick fix for missing property creation
@@ -25,26 +19,21 @@ import org.jetbrains.yaml.psi.YAMLMapping
 class CreatePropertyQuickFix(
         private val fullKey: FullKey,
         private val selector: FilesSelector,
-        private val commandCaption: String): BaseIntentionAction(), CompositeKeyResolver<PsiElement> {
-
-    override fun getFamilyName(): String = "i18n quick fix"
+        private val commandCaption: String,
+        private val generators: List<ContentGeneratorAdapter>,
+        private val translationValue: String? = null): QuickFix(), CompositeKeyResolver<PsiElement> {
 
     override fun getText(): String = commandCaption
 
-    override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
-
-    override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
+    override fun invoke(project: Project, editor: Editor) =
         ApplicationManager.getApplication().invokeLater {
-            if (editor != null) {
-                val jsonFiles = LocalizationFileSearch(project).findFilesByName(fullKey.ns?.text)
-                if (jsonFiles.size == 1) {
-                    createPropertyInFile(project, jsonFiles.first())
-                } else if (jsonFiles.size > 1) {
-                    createPropertyInFiles(project, editor, jsonFiles)
-                }
+            val jsonFiles = LocalizationFileSearch(project).findFilesByName(fullKey.ns?.text)
+            if (jsonFiles.size == 1) {
+                createPropertyInFile(project, jsonFiles.first())
+            } else if (jsonFiles.size > 1) {
+                createPropertyInFiles(project, editor, jsonFiles)
             }
         }
-    }
 
     private fun createPropertyInFiles(project: Project, editor: Editor, jsonFiles: List<PsiFile>) =
         selector.select(jsonFiles, {file: PsiFile -> createPropertyInFile(project, file)}, editor)
@@ -57,40 +46,25 @@ class CreatePropertyQuickFix(
         if (ref.element != null) {
             CommandProcessor.getInstance().executeCommand(
                 project,
-                { createPropertiesChain(project, ref.element.value(), ref.unresolved) },
+                {
+                    ApplicationManager.getApplication().runWriteAction {
+                        createPropertiesChain(ref.element.value(), ref.unresolved)
+                    }
+                },
                 commandCaption,
                 UndoConfirmationPolicy.DO_NOT_REQUEST_CONFIRMATION
             )
         }
     }
 
-    private fun createPropertiesChain(project: Project, element: PsiElement, unresolved: List<Literal>) {
+    private fun createPropertiesChain(element: PsiElement, unresolved: List<Literal>) {
         if (unresolved.isNotEmpty()) {
-            if (element is JsonObject) {
-                val first = unresolved.first()
-                val text = unresolved.drop(1).foldRight("\"TODO-${fullKey.source}\"") { item, acc ->
-                    "{\"${item.text}\": $acc}"
+            val filter = generators
+                    .filter { generator -> generator.isSuitable(element) }
+            filter
+                .forEach { generator ->
+                    generator.generate(element, fullKey, unresolved, translationValue)
                 }
-                ApplicationManager.getApplication().runWriteAction {
-                    JsonPsiUtil
-                            .addProperty(
-                                    element,
-                                    JsonElementGenerator(project).createProperty(first.text, text),
-                                    false
-                            )
-                }
-            }
-            else if (element is YAMLMapping) {
-                val first = unresolved.first()
-                val text = unresolved.drop(1).foldRight("TODO-${fullKey.source}") { item, acc ->
-                    "{${item.text}: $acc}"
-                }
-                ApplicationManager.getApplication().runWriteAction {
-                    val generator = YAMLElementGenerator.getInstance(element.project)
-                    element.add(generator.createEol())
-                    element.add(generator.createYamlKeyValue(first.text, text))
-                }
-            }
         }
     }
 }

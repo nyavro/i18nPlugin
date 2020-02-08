@@ -29,9 +29,9 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
     private fun annotateI18nLiteral(fullKey: FullKey, element: PsiElement, holder: AnnotationHolder) {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
-        val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange))
-        val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
         val settings = Settings.getInstance(element.project)
+        val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange), element.project)
+        val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
         if (files.isEmpty()) {
             val isVueContext = settings.vue && element.containingFile.name.substringAfter(".").equals("vue", true)
             if (isVueContext) {

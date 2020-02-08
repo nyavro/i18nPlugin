@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.utils.Literal
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
 import com.intellij.lang.Language
@@ -16,8 +17,15 @@ interface ContentGenerator {
     /**
      * Generates content by given i18n key
      */
+    fun generateContent(fullKey: FullKey, value: String?): String = generateContent(fullKey.compositeKey, value ?: "TODO-${fullKey.source}")
 
-    fun generateContent(fullKey: FullKey): String
+
+    /**
+     * Generates content by given composite key
+     */
+
+    fun generateContent(compositeKey: List<Literal>, value: String): String
+
     /**
      * Returns file type
      */
@@ -38,9 +46,8 @@ interface ContentGenerator {
  * Generates JSON translation content
  */
 class JsonContentGenerator: ContentGenerator {
-    override fun generateContent(fullKey: FullKey): String =
-        fullKey.compositeKey.foldRightIndexed("\"TODO-${fullKey.source}\"", {
-            i, key, acc ->
+    override fun generateContent(compositeKey: List<Literal>, value: String): String =
+        compositeKey.foldRightIndexed("\"$value\"", { i, key, acc ->
             val tab = "\t".repeat(i)
             "{\n\t$tab\"${key.text}\": $acc\n$tab}"
         })
@@ -54,10 +61,9 @@ class JsonContentGenerator: ContentGenerator {
  * Generates YAML translation content
  */
 class YamlContentGenerator: ContentGenerator {
-    override fun generateContent(fullKey: FullKey): String =
-        fullKey.compositeKey.foldRightIndexed("TODO-${fullKey.source}", {
-            i, key, acc ->
-            val caret = if (i==0) "" else "\n"
+    override fun generateContent(compositeKey: List<Literal>, value: String): String =
+        compositeKey.foldRightIndexed(value ?: "", { i, key, acc ->
+            val caret = if (i == 0) "" else "\n"
             val tab = "\t".repeat(i)
             "$caret$tab${key.text}: $acc"
         })
