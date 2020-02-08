@@ -17,7 +17,7 @@ intellij {
     version 'IC-LATEST-EAP-SNAPSHOT'
     type "IC"
     pluginName 'i18n'
-    plugins = ['yaml']
+    plugins = ['yaml', 'JavaScriptLanguage']
 }
 
 patchPluginXml {
