@@ -14,18 +14,21 @@ internal class CompositeKeyResolvePluralsTest {
     @Test
     fun resolvePluralElementByKey() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val base = "base1"
+        val sub = "sub1"
+        val plural = "plural1"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
-                listOf(Literal("base1"), Literal("sub1"), Literal("plural1")),
+                listOf(Literal(base), Literal(sub), Literal(plural)),
                 root(
-                    TestTree("base1",
+                    TestTree(base,
                         listOf(
                             TestTree(
-                                "sub1",
+                                    sub,
                                 listOf(
-                                    TestTree("plural1-1"),
-                                    TestTree("plural1-2"),
-                                    TestTree("plural1-5")
+                                    TestTree("$plural-1"),
+                                    TestTree("$plural-2"),
+                                    TestTree("$plural-5")
                                 )
                             ),
                             TestTree("sub2")
@@ -38,27 +41,30 @@ internal class CompositeKeyResolvePluralsTest {
         properties.zip(listOf(1,2,5)).forEach {
             (property, index) ->
                 assertTrue(property.element?.isLeaf() ?: false)
-                assertEquals("plural1-$index", property.element?.value())
+                assertEquals("$plural-$index", property.element?.value())
                 assertTrue(property.unresolved.isEmpty())
-                assertEquals(property.path, listOf(Literal("base1"), Literal("sub1"), Literal("plural1")))
+                assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(plural)))
         }
     }
 
     @Test
     fun resolveCustomPluralSeparator() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val base = "base2"
+        val sub = "sub2"
+        val plural = "plural2"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
-                listOf(Literal("base1"), Literal("sub1"), Literal("plural1")),
+                listOf(Literal(base), Literal(sub), Literal(plural)),
                 root(
-                    TestTree("base1",
+                    TestTree(base,
                         listOf(
                             TestTree(
-                                "sub1",
+                                    sub,
                                 listOf(
-                                    TestTree("plural1%1"),
-                                    TestTree("plural1%2"),
-                                    TestTree("plural1%5")
+                                    TestTree("$plural%1"),
+                                    TestTree("$plural%2"),
+                                    TestTree("$plural%5")
                                 )
                             ),
                             TestTree("sub2")
@@ -72,27 +78,30 @@ internal class CompositeKeyResolvePluralsTest {
         properties.zip(listOf(1,2,5)).forEach {
             (property, index) ->
             assertTrue(property.element?.isLeaf() ?: false)
-            assertEquals("plural1%$index", property.element?.value())
+            assertEquals("$plural%$index", property.element?.value())
             assertTrue(property.unresolved.isEmpty())
-            assertEquals(property.path, listOf(Literal("base1"), Literal("sub1"), Literal("plural1")))
+            assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(plural)))
         }
     }
 
     @Test
     fun resolvePluralSkippedForLeaf() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val base = "base3"
+        val sub = "sub3"
+        val plural = "plural3"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
-                listOf(Literal("base2"), Literal("sub3"), Literal("plural2-2")),
+                listOf(Literal(base), Literal(sub), Literal("$plural-2")),
                 root(
-                    TestTree("base2",
+                    TestTree(base,
                         listOf(
                             TestTree(
-                                "sub3",
+                                    sub,
                                 listOf(
-                                    TestTree("plural2-1"),
-                                    TestTree("plural2-2"),
-                                    TestTree("plural2-5")
+                                    TestTree("$plural-1"),
+                                    TestTree("$plural-2"),
+                                    TestTree("$plural-5")
                                 )
                             ),
                             TestTree("sub4")
@@ -104,26 +113,29 @@ internal class CompositeKeyResolvePluralsTest {
         assertEquals(1, properties.size)
         val property = properties.first()
         assertTrue(property.element?.isLeaf() ?: false)
-        assertEquals("plural2-2", property.element?.value())
+        assertEquals("$plural-2", property.element?.value())
         assertTrue(property.unresolved.isEmpty())
-        assertEquals(property.path, listOf(Literal("base2"), Literal("sub3"), Literal("plural2-2")))
+        assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal("$plural-2")))
     }
 
     @Test
     fun resolvePluralSkippedForLongUnresolvedPaths() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val base = "base4"
+        val sub = "sub4"
+        val plural = "plural4"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
-                listOf(Literal("base3"), Literal("sub5")),
+                listOf(Literal(base), Literal(sub)),
                 root(
-                    TestTree("base3",
+                    TestTree(base,
                         listOf(
                             TestTree(
-                                "sub5",
+                                    sub,
                                 listOf(
-                                    TestTree("plural3-1"),
-                                    TestTree("plural3-2"),
-                                    TestTree("plural3-5")
+                                    TestTree("$plural-1"),
+                                    TestTree("$plural-2"),
+                                    TestTree("$plural-5")
                                 )
                             ),
                             TestTree("sub6")
@@ -135,8 +147,8 @@ internal class CompositeKeyResolvePluralsTest {
         assertEquals(1, properties.size)
         val property = properties.first()
         assertTrue(property.element?.isTree() ?: false)
-        assertEquals("sub5", property.element?.value())
+        assertEquals(sub, property.element?.value())
         assertTrue(property.unresolved.isEmpty())
-        assertEquals(listOf(Literal("base3"), Literal("sub5")), property.path)
+        assertEquals(listOf(Literal(base), Literal(sub)), property.path)
     }
 }
