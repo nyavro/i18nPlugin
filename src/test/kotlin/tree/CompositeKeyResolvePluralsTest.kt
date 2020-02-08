@@ -16,19 +16,19 @@ internal class CompositeKeyResolvePluralsTest {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base1"
         val sub = "sub1"
-        val plural = "plural1"
+        val pl1 = "plural1"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
-                listOf(Literal(base), Literal(sub), Literal(plural)),
+                listOf(Literal(base), Literal(sub), Literal(pl1)),
                 root(
                     TestTree(base,
                         listOf(
                             TestTree(
                                     sub,
                                 listOf(
-                                    TestTree("$plural-1"),
-                                    TestTree("$plural-2"),
-                                    TestTree("$plural-5")
+                                    TestTree("$pl1-1"),
+                                    TestTree("$pl1-2"),
+                                    TestTree("$pl1-5")
                                 )
                             ),
                             TestTree("sub2")
@@ -41,9 +41,9 @@ internal class CompositeKeyResolvePluralsTest {
         properties.zip(listOf(1,2,5)).forEach {
             (property, index) ->
                 assertTrue(property.element?.isLeaf() ?: false)
-                assertEquals("$plural-$index", property.element?.value())
+                assertEquals("$pl1-$index", property.element?.value())
                 assertTrue(property.unresolved.isEmpty())
-                assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(plural)))
+                assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(pl1)))
         }
     }
 
@@ -52,19 +52,19 @@ internal class CompositeKeyResolvePluralsTest {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base2"
         val sub = "sub2"
-        val plural = "plural2"
+        val pl2 = "plural2"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
-                listOf(Literal(base), Literal(sub), Literal(plural)),
+                listOf(Literal(base), Literal(sub), Literal(pl2)),
                 root(
                     TestTree(base,
                         listOf(
                             TestTree(
                                     sub,
                                 listOf(
-                                    TestTree("$plural%1"),
-                                    TestTree("$plural%2"),
-                                    TestTree("$plural%5")
+                                    TestTree("$pl2%1"),
+                                    TestTree("$pl2%2"),
+                                    TestTree("$pl2%5")
                                 )
                             ),
                             TestTree("sub2")
@@ -78,9 +78,9 @@ internal class CompositeKeyResolvePluralsTest {
         properties.zip(listOf(1,2,5)).forEach {
             (property, index) ->
             assertTrue(property.element?.isLeaf() ?: false)
-            assertEquals("$plural%$index", property.element?.value())
+            assertEquals("$pl2%$index", property.element?.value())
             assertTrue(property.unresolved.isEmpty())
-            assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(plural)))
+            assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(pl2)))
         }
     }
 
@@ -89,19 +89,19 @@ internal class CompositeKeyResolvePluralsTest {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base3"
         val sub = "sub3"
-        val plural = "plural3"
+        val pl3 = "plural3"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
-                listOf(Literal(base), Literal(sub), Literal("$plural-2")),
+                listOf(Literal(base), Literal(sub), Literal("$pl3-2")),
                 root(
                     TestTree(base,
                         listOf(
                             TestTree(
                                     sub,
                                 listOf(
-                                    TestTree("$plural-1"),
-                                    TestTree("$plural-2"),
-                                    TestTree("$plural-5")
+                                    TestTree("$pl3-1"),
+                                    TestTree("$pl3-2"),
+                                    TestTree("$pl3-5")
                                 )
                             ),
                             TestTree("sub4")
@@ -113,9 +113,9 @@ internal class CompositeKeyResolvePluralsTest {
         assertEquals(1, properties.size)
         val property = properties.first()
         assertTrue(property.element?.isLeaf() ?: false)
-        assertEquals("$plural-2", property.element?.value())
+        assertEquals("$pl3-2", property.element?.value())
         assertTrue(property.unresolved.isEmpty())
-        assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal("$plural-2")))
+        assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal("$pl3-2")))
     }
 
     @Test
@@ -123,7 +123,7 @@ internal class CompositeKeyResolvePluralsTest {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base4"
         val sub = "sub4"
-        val plural = "plural4"
+        val pl4 = "plural4"
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
                 listOf(Literal(base), Literal(sub)),
@@ -133,9 +133,9 @@ internal class CompositeKeyResolvePluralsTest {
                             TestTree(
                                     sub,
                                 listOf(
-                                    TestTree("$plural-1"),
-                                    TestTree("$plural-2"),
-                                    TestTree("$plural-5")
+                                    TestTree("$pl4-1"),
+                                    TestTree("$pl4-2"),
+                                    TestTree("$pl4-5")
                                 )
                             ),
                             TestTree("sub6")

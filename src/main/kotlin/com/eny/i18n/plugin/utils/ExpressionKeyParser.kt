@@ -73,6 +73,9 @@ class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : St
  */
 class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
 
+    /**
+     * Parses list of key elements into i18n key
+     */
     fun parse(
         elements: List<KeyElement>,
         isTemplate: Boolean = false,

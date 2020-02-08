@@ -2,9 +2,24 @@ package com.eny.i18n.plugin.utils
 
 import java.util.*
 
+/**
+ * Represents i18n token
+ */
 interface Token
+
+/**
+ * Token - separator
+ */
 interface Separator : Token
+
+/**
+ * Namespace separator
+ */
 object NsSeparator: Separator
+
+/**
+ * Key separator
+ */
 object KeySeparator: Separator
 
 /**
