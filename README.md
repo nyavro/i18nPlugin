@@ -28,7 +28,7 @@ Intellij idea i18next support plugin
   
 -   References to plural values:
 
-    ![Reference to plural value](docs/img/p5.png) 
+    ![Reference to plural value](docs/img/p5.png)
      
  ### Navigation
  
@@ -39,6 +39,3 @@ Intellij idea i18next support plugin
 -   and to partially resolved keys:
 
     ![Reference to plural value](docs/img/p7.png)
-
-     
-    
