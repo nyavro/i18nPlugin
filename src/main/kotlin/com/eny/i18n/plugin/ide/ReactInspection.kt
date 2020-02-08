@@ -96,8 +96,28 @@ class ReactInspection : LocalInspectionTool() {
             private fun isEmbeddedInXMLAttribute(node: JSEmbeddedContent): Boolean =
                 node.parent?.parent is XmlAttributeValue
 
+            private fun isProps(name: String?) =
+                (name != null) && name.split(".").contains("props")
+
             override fun visitJSReferenceExpression(node: JSReferenceExpression?) {
                 visitJSExpression(node)
+            }
+
+            override fun visitJSAssignmentExpression(node: JSAssignmentExpression?) {
+                if (node != null) {
+                    if (isProps(node.lOperand?.text)) {
+                        holder.registerProblem(node, "Assignment 1")
+                    } else {
+                        val source = PsiTreeUtil.findChildOfType(
+                                PsiTreeUtil.findChildOfType(node?.lOperand, JSReferenceExpression::class.java),
+                                JSReferenceExpression::class.java
+                        )?.resolve()
+                        val parent = PsiTreeUtil.getParentOfType(source, JSDestructuringElement::class.java)
+                        if (isProps(parent?.initializer?.text)) {
+                            holder.registerProblem(node, "Assignment 2")
+                        }
+                    }
+                }
             }
         }
     }

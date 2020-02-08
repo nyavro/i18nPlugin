@@ -2,7 +2,19 @@ class I18n {
     t(key) {console.log(key);}
 }
 
+class IConfig {
+    showHeader: boolean;
+    showDescription: boolean;
+}
+
+class IProps {
+    config: IConfig;
+    title: string;
+}
+
 class TsxTest {
+
+    props: IProps;
 
     handleClick1 = () => {
         console.log('handlecl11ick');
@@ -10,6 +22,11 @@ class TsxTest {
  
     renderHeader = () => {
         const handle1 = () => {console.log("here1")};
+        this.props.config.showDescription = false;
+        const {config} = this.props;  
+        config.showHeader = true;
+        const cfg = this.props.config;
+        cfg.showHeader = false;
         return (<div onClick={() => console.log('test123')}>
             <div onClick={handle1}>Test12</div>
         </div>);
