@@ -31,6 +31,10 @@ class Settings : PersistentStateComponent<Settings> {
 
     var suppressWarningsForUnresolvedDefaultNs = true
 
+    var preferYamlFilesGeneration = false
+
+    var translationFunction = "i18n.t"
+
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
     override fun getState(): Settings? = this

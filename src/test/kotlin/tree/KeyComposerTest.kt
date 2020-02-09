@@ -22,8 +22,8 @@ internal class KeyComposerTest {
     @Test
     fun compose() {
         val composer = object : KeyComposer<String>{}
-        val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "sample"))
-        assertEquals("sample:ROOT.key1.key31", composer.composeKey(tree))
+        val tree = TestFlippedTree(listOf("key311", "key1", "ROOT", "sample"))
+        assertEquals("sample:ROOT.key1.key311", composer.composeKey(tree))
     }
 
     @Test
@@ -43,15 +43,15 @@ internal class KeyComposerTest {
     @Test
     fun pluralFixDoesntAffectNs() {
         val composer = object : KeyComposer<String>{}
-        val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "sample-1"))
-        assertEquals("sample-1:ROOT.key1.key31", composer.composeKey(tree))
+        val tree = TestFlippedTree(listOf("key312", "key1", "ROOT", "sample-1"))
+        assertEquals("sample-1:ROOT.key1.key312", composer.composeKey(tree))
     }
 
     @Test
     fun alternativeKeySeparator() {
         val composer = object : KeyComposer<String>{}
-        val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "alter"))
-        assertEquals("alter:ROOT#key1#key31", composer.composeKey(tree, ":", "#"))
+        val tree = TestFlippedTree(listOf("key313", "key1", "ROOT", "alter"))
+        assertEquals("alter:ROOT#key1#key313", composer.composeKey(tree, ":", "#"))
     }
 
     @Test
@@ -64,8 +64,8 @@ internal class KeyComposerTest {
     @Test
     fun alternativeKeySeparator3() {
         val composer = object : KeyComposer<String>{}
-        val tree = TestFlippedTree(listOf("key31", "key1", "ROOT", "alter"))
-        assertEquals("alter\$ROOT#key1#key31", composer.composeKey(tree, "\$", "#"))
+        val tree = TestFlippedTree(listOf("key314", "key1", "ROOT", "alter"))
+        assertEquals("alter\$ROOT#key1#key314", composer.composeKey(tree, "\$", "#"))
     }
 
     @Test

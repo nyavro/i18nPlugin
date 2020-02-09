@@ -44,7 +44,8 @@ class ExtractI18nAction: AnAction() {
             Messages.showErrorDialog("Invalid i18n key", "Key extraction aborted")
             return
         }
-        val template = "i18n.t"
+        val settings = Settings.getInstance(project)
+        val template = settings.translationFunction
         val isWide = document.getText(TextRange(start-1, end+1)).isQuoted()
         val wideCorrection = if (isWide) 1 else 0
         WriteCommandAction.runWriteCommandAction(project) {
@@ -58,12 +59,10 @@ class ExtractI18nAction: AnAction() {
         val search = LocalizationFileSearch(project)
         val settings = Settings.getInstance(project)
         val files = search.findFilesByName(i18nKey.ns?.text)
-        val preferYaml = false
-        val isVue = false
         val quickFix = if (files.isEmpty()) {
-            val contentGenerator = if (preferYaml) YamlContentGenerator() else JsonContentGenerator()
-            val folderSelector = if (isVue) Vue18nTranslationFolderSelector(project) else I18NextTranslationFolderSelector(project)
-            val fileName = if (isVue) "en" else (i18nKey.ns?.text ?: settings.defaultNs)
+            val contentGenerator = if (settings.preferYamlFilesGeneration) YamlContentGenerator() else JsonContentGenerator()
+            val folderSelector = if (settings.vue) Vue18nTranslationFolderSelector(project) else I18NextTranslationFolderSelector(project)
+            val fileName = if (settings.vue) "en" else (i18nKey.ns?.text ?: settings.defaultNs)
             CreateTranslationFileQuickFix(i18nKey, contentGenerator, folderSelector, fileName, source)
         } else {
             val generators = listOf(
@@ -89,6 +88,8 @@ class ExtractI18nAction: AnAction() {
             } ?: false
     }
 
-    private fun isJsSource(psiFile: PsiFile) = listOf("TypeScript", "JavaScript").contains(psiFile.fileType.name)
+    private fun isJsSource(psiFile: PsiFile):Boolean {
+        return listOf("TypeScript", "JavaScript", "Vue.js").contains(psiFile.fileType.name)
+    }
 
 }

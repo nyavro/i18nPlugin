@@ -113,6 +113,8 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(textInput("Stop characters", settings::stopCharacters))
         panel.add(vue())
         panel.add(textInput("Vue locales directory", settings::vueDirectory))
+        panel.add(checkbox("Prefer YAML translation files", settings::preferYamlFilesGeneration))
+        panel.add(textInput("Custom translation function", settings::translationFunction))
         return panel
     }
 }

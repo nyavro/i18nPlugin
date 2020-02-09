@@ -13,6 +13,8 @@
     <p>{{ $t('components.language1.current', { language: $i18n.locale }) }}</p>
     <p>{{ $t(`components.language1.current`) }}</p>
   </section>
+    <div>'вSo3me Text'</div>
     <h1>{{ $t('components.root.language.current') }}</h1>
     <h1>{{ $t('root.hi') }}</h1>
+    <div>Some more text</div>
 </template>

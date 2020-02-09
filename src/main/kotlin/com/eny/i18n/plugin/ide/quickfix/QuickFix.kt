@@ -20,5 +20,8 @@ abstract class QuickFix: BaseIntentionAction() {
         }
     }
 
+    /**
+     * Run quick fix
+     */
     abstract fun invoke(project: Project, editor: Editor)
 }
