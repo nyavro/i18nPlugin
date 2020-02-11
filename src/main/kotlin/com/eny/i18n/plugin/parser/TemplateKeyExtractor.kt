@@ -16,9 +16,7 @@ import com.intellij.psi.PsiReference
 class TemplateKeyExtractor : KeyExtractor {
 
     private val ResolveReferenceMaxDepth = 10
-    /**
-     * Checks if element is template expression, i.e. `literal ${reference} etc`
-     */
+
     private fun isTemplateExpression(element: PsiElement):Boolean = element.type() == "JS:STRING_TEMPLATE_EXPRESSION"
 
     override fun canExtract(element: PsiElement): Boolean = isTemplateExpression(element)
@@ -47,9 +45,6 @@ class TemplateKeyExtractor : KeyExtractor {
         return parser.parse(transformed, true, settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
     }
 
-    /**
-     * Resolves reference to it's String value, if possible, or null
-     */
     private fun resolveStringLiteralReference(item: ASTNode, chain: Set<ASTNode>, maxDepth: Int): String? {
         if (item in chain || chain.size >= maxDepth) {
             return null

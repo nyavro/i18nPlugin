@@ -20,8 +20,19 @@ data class FullKey(val source: String, val ns:Literal?, val compositeKey:List<Li
  */
 data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyElementType) {
     companion object {
+        /**
+         * Creates Literal key element
+         */
         fun literal(value: String): KeyElement = KeyElement(value, value, KeyElementType.LITERAL)
+
+        /**
+         * Creates unresolved template key element
+         */
         fun unresolvedTemplate(expression: String): KeyElement = KeyElement(expression, null, KeyElementType.TEMPLATE)
+
+        /**
+         * Creates resolved template key element
+         */
         fun resolvedTemplate(expression: String, resolvedTo: String): KeyElement = KeyElement(expression, resolvedTo, KeyElementType.TEMPLATE)
     }
 }
