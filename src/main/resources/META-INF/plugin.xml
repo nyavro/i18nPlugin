@@ -9,10 +9,22 @@
     <ul>
         <li>annotation of invalid i18n keys</li>
         <li>navigation to i18n property value definition</li>
+        <li>yaml translation files support</li>
+        <li>navigation from i18n json/yaml reference to code usage</li>
+        <li>code completion</li>
+        <li>missing namespace/key quick fixes</li>
     </ul>
     ]]></description>
 
     <change-notes><![CDATA[
+        <div>
+            <h3>1.6.2</h3>
+            <ul>
+                <li>Fixed JavaScript and JSX support issue</li>
+                <li>Fixed several code completion issues</li>
+                <li>Fixed default namespace unresolved reference issue</li>
+            </ul>
+        </div>
         <div>
             <h3>1.6.1</h3>
             <ul>
