@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement
 /**
  * Extracts key from js string template
  */
-class TemplatePartKeyExtractor(): KeyExtractor {
+class TemplatePartKeyExtractor: KeyExtractor {
     private val keyExtractor = FullKeyExtractor()
 
     override fun canExtract(element: PsiElement): Boolean = element.type() == "JS:STRING_TEMPLATE_PART"

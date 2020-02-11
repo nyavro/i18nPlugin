@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement
 /**
  * Extracts i18n key from js string literal
  */
-class JsStringLiteralKeyExtractor(): KeyExtractor {
+class JsStringLiteralKeyExtractor: KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean = element.type() == "JS:STRING_LITERAL"
 

@@ -11,7 +11,7 @@ import com.intellij.psi.xml.XmlElementType
 /**
  * Extracts translation key from psi literal
  */
-class LiteralKeyExtractor(): KeyExtractor {
+class LiteralKeyExtractor: KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean =
         element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE

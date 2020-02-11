@@ -38,6 +38,9 @@ class LimitedTextField(initialText: String, maxLength: Int, onChange: (newText:S
  */
 class SettingsPanel(val settings: Settings, val project: Project) {
 
+    /**
+     * Returns Settings main panel
+     */
     fun getRootPanel(): JPanel {
         val root = JPanel()
         root.layout = BorderLayout()
@@ -51,15 +54,6 @@ class SettingsPanel(val settings: Settings, val project: Project) {
 //        panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
 //        val checkbox = JCheckBox("Search in project files only", settings.searchInProjectOnly)
 //        checkbox.addItemListener { event -> settings.searchInProjectOnly = checkbox.isSelected}
-//        panel.add(checkbox)
-//        return panel
-//    }
-//
-//    private fun suppressWarningsForUnresolvedDefaultNs(): JPanel {
-//        val panel = JPanel()
-//        panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
-//        val checkbox = JCheckBox("Suppress warnings for unresolved default ns", settings.suppressWarningsForUnresolvedDefaultNs)
-//        checkbox.addItemListener { event -> settings.suppressWarningsForUnresolvedDefaultNs = checkbox.isSelected}
 //        panel.add(checkbox)
 //        return panel
 //    }
@@ -105,7 +99,6 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         val panel = JPanel()
         panel.layout = GridLayout(20, 1)
         panel.add(checkbox("Search in project files only", settings::searchInProjectOnly))
-        panel.add(checkbox("Suppress warnings for unresolved default ns", settings::suppressWarningsForUnresolvedDefaultNs))
         panel.add(separator("Namespace separator", settings::nsSeparator))
         panel.add(separator("Key separator", settings::keySeparator))
         panel.add(separator("Plural separator", settings::pluralSeparator))

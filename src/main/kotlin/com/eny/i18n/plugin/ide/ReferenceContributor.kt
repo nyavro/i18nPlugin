@@ -32,6 +32,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
             search
                 .findFilesByName(i18nFullKey.ns?.text)
                 .map { jsonRoot -> resolveCompositeKey(i18nFullKey.compositeKey, PsiElementTree.create(jsonRoot)) }
+                .filter { res -> res.path.isNotEmpty()}
         ).mapNotNull {item -> item.element}
 
     override fun resolve(): PsiElement? {

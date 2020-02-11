@@ -58,7 +58,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
                 mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
                 mostResolvedReference.unresolved.isEmpty() && fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                 mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
-                fullKey.ns == null && settings.suppressWarningsForUnresolvedDefaultNs && (fullKey.compositeKey.size == mostResolvedReference.unresolved.size) -> {}
+                fullKey.ns == null && (fullKey.compositeKey.size == mostResolvedReference.unresolved.size) -> {}
                 else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)
             }
         }

@@ -29,8 +29,6 @@ class Settings : PersistentStateComponent<Settings> {
     
     var stopCharacters = "/"
 
-    var suppressWarningsForUnresolvedDefaultNs = true
-
     var preferYamlFilesGeneration = false
 
     var translationFunction = "i18n.t"

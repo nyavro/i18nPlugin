@@ -10,6 +10,10 @@ import com.intellij.psi.PsiFile
  * Files selector interface
  */
 interface FilesSelector {
+
+    /**
+     * Selects files from given range
+     */
     fun select(files: List<PsiFile>, onSelect: (file: PsiFile) -> Unit, editor: Editor)
 }
 

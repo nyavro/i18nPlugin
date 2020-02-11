@@ -61,11 +61,11 @@
         <projectService serviceInterface="com.eny.i18n.plugin.ide.settings.Settings" serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="i18n Plugin" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
     </extensions>
-    <actions>
-        <action id="com.eny.i18n.plugin.ide.actions.ExtractI18nAction" class="com.eny.i18n.plugin.ide.actions.ExtractI18nAction"
-                text="Extract i18n" description="Extract selected text into translation">
-            <add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="I18nize"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>
-        </action>
-    </actions>
+<!--    <actions>-->
+<!--        <action id="com.eny.i18n.plugin.ide.actions.ExtractI18nAction" class="com.eny.i18n.plugin.ide.actions.ExtractI18nAction"-->
+<!--                text="Extract i18n" description="Extract selected text into translation">-->
+<!--            <add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="I18nize"/>-->
+<!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>-->
+<!--        </action>-->
+<!--    </actions>-->
 </idea-plugin>
