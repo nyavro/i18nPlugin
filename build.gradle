@@ -18,7 +18,7 @@ intellij {
     version 'IC-LATEST-EAP-SNAPSHOT'
     type "IC"
     pluginName 'i18n'
-    plugins = ['yaml']
+    plugins = ['yaml', 'java', 'JavaScriptLanguage', 'CSS']
 }
 
 patchPluginXml {
@@ -50,3 +50,7 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
+
+test {
+    systemProperty "idea.home.path", "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2019.2.3"
+}
