@@ -28,15 +28,15 @@ internal class ExpressionKeyParserTest : TestBase {
         assertEquals("fileName:ROOT.Key2.Key3.", parsed?.source)
     }
 
-//${fileExpr}:ROOT.Key1.Key31               / sample                / sample{11}:ROOT{4}.Key1{4}.Key31{5}
+//${fileExpr}:ROOT.Key1.Key31               / sampla                / sampla{11}:ROOT{4}.Key1{4}.Key31{5}
     @Test
     fun parseExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
+            KeyElement.resolvedTemplate("\${fileExpr}", "sampla"),
             KeyElement.literal(":ROOT.Key1.Key31")
         )
         val parsed = parse(elements)
-        assertEquals("sample{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
+        assertEquals("sampla{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
         assertEquals("\${fileExpr}:ROOT.Key1.Key31", parsed?.source)
     }
 

@@ -11,22 +11,22 @@ import org.junit.Test
 //@Ignore
 internal class AnnotationHolderFacadeTest : TestBase {
 
-    //console.log('sample:ROOT.Key1.key31');
+    //console.log('sampla:ROOA.Kea1.kea31');
     @Test
     fun measureTotallyResolvedKey() {
         val facade = AnnotationHolderFacade(TextRange(19, 43))
         val range = facade.compositeKeyFullBounds(
-            FullKey("sample:ROOT.Key1.key31", Literal("sample"), literalsList("ROOT", "Key1", "key31"))
+            FullKey("sampla:ROOA.Kea1.kea31", Literal("sampla"), literalsList("ROOA", "Kea1", "kea31"))
         )
         assertEquals(TextRange(27, 42), range)
     }
 
-    //console.log('ROOT.Key1.key31');
+    //console.log('ROOB.Keb1.keb31');
     @Test
     fun measureTotallyResolvedKeyWithDefaultNS() {
         val facade = AnnotationHolderFacade(TextRange(19, 36))
         val range = facade.compositeKeyFullBounds(
-            FullKey("ROOT.Key1.key31",null, literalsList("ROOT", "Key1", "key31"))
+            FullKey("ROOB.Keb1.keb31",null, literalsList("ROOB", "Keb1", "keb31"))
         )
         assertEquals(TextRange(20, 35), range)
     }
