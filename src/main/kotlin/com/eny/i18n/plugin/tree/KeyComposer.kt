@@ -4,6 +4,9 @@ package com.eny.i18n.plugin.tree
  * Composes key from element's location in tree
  */
 interface KeyComposer<T> {
+    /**
+     * Composes string representation of key by given path
+     */
     fun composeKey(tree: FlippedTree<T>,
            nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: String = "translation", dropRoot: Boolean = false): String {
         val parents = tree.parents()

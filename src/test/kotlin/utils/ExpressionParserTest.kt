@@ -9,19 +9,20 @@ import kotlin.test.assertEquals
 internal class ExpressionParserTest {
     @Test
     fun parse() {
+        val text = ":ROOT.Key1.Key31"
         val elements = listOf(
             KeyElement("`", "`", KeyElementType.LITERAL),
             KeyElement("$", "$", KeyElementType.LITERAL),
             KeyElement("{", "{", KeyElementType.LITERAL),
             KeyElement("fileExpr", "sample", KeyElementType.TEMPLATE),
             KeyElement("}", "}", KeyElementType.LITERAL),
-            KeyElement(":ROOT.Key1.Key31", ":ROOT.Key1.Key31", KeyElementType.LITERAL),
+            KeyElement(text, text, KeyElementType.LITERAL),
             KeyElement("`", "`", KeyElementType.LITERAL)
         )
         val parser = KeysNormalizer()
         val expected = listOf(
             KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
-            KeyElement(":ROOT.Key1.Key31", ":ROOT.Key1.Key31", KeyElementType.LITERAL)
+            KeyElement(text, text, KeyElementType.LITERAL)
         )
         assertEquals(parser.normalize(elements), expected)
     }
