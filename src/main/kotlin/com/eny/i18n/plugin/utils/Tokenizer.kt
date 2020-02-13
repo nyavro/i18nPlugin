@@ -26,6 +26,9 @@ object KeySeparator: Separator
  * Represents key literal
  */
 data class Literal(val text: String, val length: Int = text.length, val dot: Int = 0): Token {
+    /**
+     * Merges two tokens
+     */
     fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length)
 }
 
