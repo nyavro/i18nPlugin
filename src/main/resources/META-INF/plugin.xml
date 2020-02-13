@@ -3,7 +3,6 @@
     <name>i18n support</name>
     <vendor email="e.nyavro@gmail.com" url="https://github.com/nyavro/i18nPlugin">i18nPlugin</vendor>
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>
     <description><![CDATA[
     <h4>i18next TypeScript/JavaScript plugin</h4>
     i18n plugin provides:

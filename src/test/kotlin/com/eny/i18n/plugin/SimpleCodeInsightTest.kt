@@ -10,9 +10,9 @@ internal class SimpleCodeInsightTest : BasePlatformTestCase() {
     }
 
     fun testCompletion() {
-        val cfg = myFixture.configureByFiles("Test.ts", "test.json")
+        myFixture.configureByFiles("test.ts", "test.json")
         myFixture.complete(CompletionType.BASIC, 1)
-        val strings = myFixture.lookupElementStrings
+        myFixture.checkResultByFile("result.ts")
     }
 //
 //    fun testAnnotator() {
