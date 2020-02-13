@@ -240,12 +240,15 @@ internal class CompositeKeyResolverUnresolvedTest {
     @Test
     fun stopResolvingAfterFirstFailure() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val root = "root8"
+        val key = "key15"
+        val subkey = "subkey9"
         val property = resolver.resolveCompositeKey(
-            listOf(Literal("root8"), Literal("key15"), Literal("subkey9")),
+            listOf(Literal(root), Literal(key), Literal(subkey)),
             root(
                 TestTree("root7",
                     listOf(
-                        TestTree("key15", listOf(TestTree("subkey9"))),
+                        TestTree(key, listOf(TestTree(subkey))),
                         TestTree("key16"),
                         TestTree("key17", listOf(TestTree("subkey6")))
                     )
@@ -255,7 +258,7 @@ internal class CompositeKeyResolverUnresolvedTest {
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
         assertEquals("", property.element?.value())
-        assertEquals(listOf(Literal("root8"), Literal("key15"), Literal("subkey9")), property.unresolved)
+        assertEquals(listOf(Literal(root), Literal(key), Literal(subkey)), property.unresolved)
         assertTrue(property.path.isEmpty())
     }
 

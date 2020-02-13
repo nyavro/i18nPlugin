@@ -3,17 +3,38 @@ package com.eny.i18n.plugin
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-internal class SimpleCodeInsightTest : BasePlatformTestCase() {
+internal class CodeCompletionTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
-        return "src/test/resources"
+        return "src/test/resources/codeCompletion"
     }
 
-    fun testCompletion() {
-        myFixture.configureByFiles("test.ts", "test.json")
+    fun testTsNoCompletion() {
+        myFixture.configureByFiles("ts/none.ts", "assets/test.json")
         myFixture.complete(CompletionType.BASIC, 1)
-        myFixture.checkResultByFile("result.ts")
+        myFixture.checkResultByFile("ts/noneResult.ts")
     }
+
+    fun testTsSingleCompletion() {
+        myFixture.configureByFiles("ts/single.ts", "assets/test.json")
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("ts/singleResult.ts")
+    }
+
+    fun testJsSingleCompletion() {
+        myFixture.configureByFiles("js/single.js", "assets/test.json")
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("js/singleResult.js")
+    }
+
+//    fun testVueSingleCompletion() {
+//        val settings = Settings.Persistence.getInstance(myFixture.project)
+//        settings.vue = true
+//        settings.vueDirectory = "src"
+//        myFixture.configureByFiles("vue/single.vue", "assets/en-US.json")
+//        myFixture.complete(CompletionType.BASIC, 1)
+//        myFixture.checkResultByFile("vue/singleResult.vue")
+//    }
 //
 //    fun testAnnotator() {
 //        myFixture.configureByFiles("AnnotatorTestData.java", "DefaultTestData.simple")

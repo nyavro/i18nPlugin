@@ -24,13 +24,12 @@ class TemplateKeyExtractor : KeyExtractor {
     override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
         resolveTemplateExpression(element, parser, settings)
 
-    /**
-     * Resolves template expression
-     *
-     * Example
-     * const key = 'element';
-     * const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
-     */
+
+//     Resolves template expression
+//
+//     Example
+//     const key = 'element';
+//     const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
     private fun resolveTemplateExpression(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
             item ->
