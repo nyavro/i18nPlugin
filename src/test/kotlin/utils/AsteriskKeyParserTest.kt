@@ -7,34 +7,34 @@ import kotlin.test.assertEquals
 //@Ignore
 internal class AsteriskKeyParserTest : TestBase {
 
-//${fileExpr}:ROOT.Key1.Key31               / *         *{11}:ROOT{4}.Key1{4}.Key31{5}
+//${fileExpa}:ROOT.Key1.Key31               / *         *{11}:ROOT{4}.Key1{4}.Key31{5}
     @Test
     fun parseExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.unresolvedTemplate("\${fileExpa}"),
             KeyElement.literal(":ROOT.Key1.Key31")
         )
         val parsed = parse(elements)
         assertEquals("*{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
-//prefix${fileExpr}:ROOT.Key4.Key5          / *         prefix*{17}:ROOT{4}.Key4{4}.Key5{4}
+//prefix${fileExpb}:ROOT.Key4.Key5          / *         prefix*{17}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefix"),
-            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.unresolvedTemplate("\${fileExpb}"),
             KeyElement.literal(":ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
         assertEquals("prefix*{17}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//${fileExpr}postfix:ROOT.Key4.Key5         / *         *postfix{18}:ROOT{4}.Key4{4}.Key5{4}
+//${fileExpc}postfix:ROOT.Key4.Key5         / *         *postfix{18}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.unresolvedTemplate("\${fileExpc}"),
             KeyElement.literal("postfix"),
             KeyElement.literal(":ROOT.Key4.Key5")
         )
@@ -42,12 +42,12 @@ internal class AsteriskKeyParserTest : TestBase {
         assertEquals("*postfix{18}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//prefix${fileExpr}postfix:ROOT.Key4.Key5   / *         prefix*postfix{24}:ROOT{4}.Key4{4}.Key5{4}
+//prefix${fileExpd}postfix:ROOT.Key4.Key5   / *         prefix*postfix{24}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefix"),
-            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.unresolvedTemplate("\${fileExpd}"),
             KeyElement.literal("postfix"),
             KeyElement.literal(":ROOT.Key4.Key5")
         )
