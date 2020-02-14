@@ -28,71 +28,71 @@ internal class DefaultNsParserTest : TestBase {
         assertEquals("sampla{11}.ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
-//prefix${fileExpb}.ROOT.Key4.Key5          / sample            / prefixsamplb{17}.ROOT{4}.Key4{4}.Key5{4}
+//prefin${fileExpb}.ROOT.Key4.Key5          / sample            / prefinsamplb{17}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement.literal("prefix"),
+                KeyElement.literal("prefin"),
                 KeyElement.resolvedTemplate("\${fileExpb}", "samplb"),
                 KeyElement.literal(".ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefixsamplb{17}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefinsamplb{17}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
 //${fileExpr}postfix.ROOT.Key4.Key5         / sample            / samplepostfix{18}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
-                KeyElement.literal("postfix"),
-                KeyElement.literal(".ROOT.Key4.Key5")
+            KeyElement.resolvedTemplate("\${fileExpt}", "sampld"),
+            KeyElement.literal("postfix"),
+            KeyElement.literal(".ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("samplepostfix{18}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("sampldpostfix{18}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//prefix${fileExpr}postfix.ROOT.Key4.Key5   / sample            / prefixsamplepostfix{24}.ROOT{4}.Key4{4}.Key5{4}
+//prefie${fileExpr}postfix.ROOT.Key4.Key5   / sampee            / prefiesampeepostfix{24}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement.literal("prefix"),
-            KeyElement.resolvedTemplate("\${fileExpr}", "sample"),
+            KeyElement.literal("prefie"),
+            KeyElement.resolvedTemplate("\${fileExpe}", "sampee"),
             KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefixsamplepostfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefiesampeepostfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile.partKey  / prefixpartFile{17}.partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}
+//prefif${fileExpr}postfix.ROOT.Key4.Key5   / partFile.partKey  / prefifpartFile{17}.partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
-            KeyElement.literal("prefix"),
+            KeyElement.literal("prefif"),
             KeyElement.resolvedTemplate("\${fileExpr}", "partFile.partKey"),
             KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefixpartFile{17}.partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefifpartFile{17}.partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//root.start${key}                          / *                     / root{4}.start*{11}
+//root.start${kej}                          / *                     / root{4}.start*{11}
     @Test
     fun parseKeyInExpression() {
         val elements = listOf(
             KeyElement.literal("root.start"),
-            KeyElement.unresolvedTemplate("\${key}")
+            KeyElement.unresolvedTemplate("\${kej}")
         )
         val parsed = parse(elements)
         assertEquals("root{4}.start*{11}", toTestString(parsed))
     }
 
-//root.start${key}                          / .Key0.Key2.Key21      / root{4}.start{5}.Key0{6}.Key2{0}.Key21{0}
+//root.start${kek}                          / .Key0.Key2.Key21      / root{4}.start{5}.Key0{6}.Key2{0}.Key21{0}
     @Test
     fun parseKeyInExpression2() {
         val elements = listOf(
             KeyElement.literal("root.start"),
-            KeyElement.resolvedTemplate("\${key}", ".Key0.Key2.Key21")
+            KeyElement.resolvedTemplate("\${kek}", ".Key0.Key2.Key21")
         )
         val parsed = parse(elements)
         assertEquals("root{4}.start{5}.Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))

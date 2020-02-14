@@ -19,7 +19,9 @@ class LocalizationFileSearch(private val project: Project) {
 
     val settings = Settings.getInstance(project)
 
-//    Finds json roots by json file name
+    /**
+     * Finds json roots by json file name
+     */
     fun findFilesByName(fileName: String?): List<PsiFile> =
         findVirtualFilesByName(fileName ?: settings.defaultNs).flatMap {vf -> listOfNotNull(findPsiRoot(vf))} +
             if (settings.vue) findVirtualFilesUnder(settings.vueDirectory)

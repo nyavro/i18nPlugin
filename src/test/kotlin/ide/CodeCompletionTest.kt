@@ -35,6 +35,18 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
         myFixture.checkResultByFile("js/singleResult.js")
     }
 
+    fun testPluralCompletion() {
+        myFixture.configureByFiles("js/plural.js", translation)
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("js/pluralResult.js")
+    }
+
+    fun testInvalidCompletion() {
+        myFixture.configureByFiles("js/invalid.js", translation)
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("js/invalidResult.js")
+    }
+
 //    fun testVueSingleCompletion() {
 //        val settings = Settings.Persistence.getInstance(myFixture.project)
 //        settings.vue = true
