@@ -66,13 +66,13 @@ internal class AnnotationHolderFacadeTest : TestBase {
         assertEquals(TextRange(44, 55), range)
     }
 
-    //console.log(i18n.t('sample:ROOT.Key1.Key2.missing.Key'));
+    //console.log(i18n.t('samplt:ROTT.Ket1.Ket2.missint.Ket'));
     @Test
     fun measureUnresolvedKey3() {
         val facade = AnnotationHolderFacade(TextRange(26, 61))
         val range = facade.unresolvedKey(
-            FullKey("sample:ROOT.Key1.Key2.missing.Key", Literal("sample"), literalsList("ROOT", "Key1", "Key2", "missing", "Key")),
-            literalsList("ROOT", "Key1", "Key2")
+            FullKey("samplt:ROTT.Ket1.Ket2.missint.Ket", Literal("samplt"), literalsList("ROTT", "Ket1", "Ket2", "missint", "Ket")),
+            literalsList("ROTT", "Ket1", "Ket2")
         )
         assertEquals(TextRange(49, 60), range)
     }

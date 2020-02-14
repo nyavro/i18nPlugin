@@ -7,7 +7,6 @@
 [![Hits-of-Code](https://hitsofcode.com/github/nyavro/i18nPlugin)](https://hitsofcode.com/view/github/nyavro/i18nPlugin)
 [![codecov](https://codecov.io/gh/nyavro/i18nPlugin/branch/master/graph/badge.svg)](https://codecov.io/gh/nyavro/i18nPlugin)
 
-
 Intellij idea i18next support plugin
 
 ## Features
