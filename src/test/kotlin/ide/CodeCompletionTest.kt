@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin
+package ide
 
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -9,20 +9,28 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
         return "src/test/resources/codeCompletion"
     }
 
+    private val translation = "assets/test.json"
+
     fun testTsNoCompletion() {
-        myFixture.configureByFiles("ts/none.ts", "assets/test.json")
+        myFixture.configureByFiles("ts/none.ts", translation)
         myFixture.complete(CompletionType.BASIC, 1)
         myFixture.checkResultByFile("ts/noneResult.ts")
     }
 
     fun testTsSingleCompletion() {
-        myFixture.configureByFiles("ts/single.ts", "assets/test.json")
+        myFixture.configureByFiles("ts/single.ts", translation)
         myFixture.complete(CompletionType.BASIC, 1)
         myFixture.checkResultByFile("ts/singleResult.ts")
     }
 
+    fun testTsSingleNoDotCompletion() {
+        myFixture.configureByFiles("ts/singleNoDot.ts", translation)
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("ts/singleNoDotResult.ts")
+    }
+
     fun testJsSingleCompletion() {
-        myFixture.configureByFiles("js/single.js", "assets/test.json")
+        myFixture.configureByFiles("js/single.js", translation)
         myFixture.complete(CompletionType.BASIC, 1)
         myFixture.checkResultByFile("js/singleResult.js")
     }

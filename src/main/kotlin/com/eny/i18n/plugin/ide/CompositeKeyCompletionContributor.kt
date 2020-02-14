@@ -28,8 +28,9 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
         keyExtractor.extractI18nKeyLiteral(parameters.position)?.let {
             fullKey ->
-            processKey(fullKey, result, parameters, settings)
-            if (!fullKey.source.endsWith(".$DUMMY_KEY")) {
+            if (fullKey.source.endsWith(".$DUMMY_KEY")) {
+                processKey(fullKey, result, parameters, settings)
+            } else {
                 processKey(endWithDot(fullKey), result, parameters, settings)
             }
             result.stopHere()

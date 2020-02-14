@@ -7,8 +7,19 @@ import kotlin.math.max
  * Annotation utils
  */
 interface AnnotationFacade {
+    /**
+     * Calculates bounds of composite key
+     */
     fun compositeKeyFullBounds(fullKey: FullKey): TextRange
+
+    /**
+     * Calculates bounds of unresolved part of key
+     */
     fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange
+
+    /**
+     * Calculates bounds of unresolved namespace
+     */
     fun unresolvedNs(fullKey: FullKey): TextRange
 }
 

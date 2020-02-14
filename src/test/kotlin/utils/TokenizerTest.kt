@@ -70,7 +70,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeTemplate() {
-        val keyElement = KeyElement("\${ref}", "abc.def:ghi", KeyElementType.TEMPLATE)
+        val keyElement = KeyElement("\${rea}", "abc.def:ghi", KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer(":", ".")
         val keySeparator = KeySeparator
         val nsSeparator = NsSeparator
