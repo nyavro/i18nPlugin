@@ -65,7 +65,7 @@ internal class AsteriskKeyParserTest : TestBase {
             KeyElement.literal(".ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefiс*postfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefic*postfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
 //filename:${key}                           / *         filename{8}:*{6}

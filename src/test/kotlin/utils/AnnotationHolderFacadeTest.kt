@@ -55,13 +55,13 @@ internal class AnnotationHolderFacadeTest : TestBase {
         assertEquals(TextRange(44, 54), range)
     }
 
-    //console.log(i18n.t('sample:ROOT.Key1.missing.Key'));
+    //console.log(i18n.t('samplf:ROOT.Key1.missing.Key'));
     @Test
     fun measureUnresolvedKey2() {
         val facade = AnnotationHolderFacade(TextRange(26, 56))
         val range = facade.unresolvedKey(
-            FullKey("sample:ROOT.Key1.missing.Key", Literal("sample"), literalsList("ROOT", "Key1", "missing", "Key")),
-            literalsList("ROOT", "Key1")
+            FullKey("samplf:ROOF.Kef1.missinf.Kef", Literal("samplf"), literalsList("ROOF", "Kef1", "missinf", "Kef")),
+            literalsList("ROOF", "Kef1")
         )
         assertEquals(TextRange(44, 55), range)
     }
@@ -117,25 +117,25 @@ internal class AnnotationHolderFacadeTest : TestBase {
         assertEquals(TextRange(20, 20), range)
     }
 
-    //console.log(i18n.t(`sample:ROOT.${sub}.key31`));                           //'Key1.key31'
+    //console.log(i18n.t(`samplg:ROOG.${sub}.keg31`));                           //'Keg1.keg31'
     @Test
     fun measureResolvedTemplateKey() {
         val facade = AnnotationHolderFacade(TextRange(26, 52))
         val range = facade.unresolvedKey(
             FullKey(
-                "sample:ROOT.\${sub}.key31",
-                Literal("sample"),
+                "samplg:ROOG.\${sub}.keg31",
+                Literal("samplg"),
                 listOf(
-                    Literal("ROOT"),
-                    Literal("Key1", 6),
-                    Literal("key31", 0),
-                    Literal("key31")
+                    Literal("ROOG"),
+                    Literal("Keg1", 6),
+                    Literal("keg31", 0),
+                    Literal("keg41")
                 )
             ),
             listOf(
-                Literal("ROOT"),
-                Literal("Key1", 6),
-                Literal("key31", 0)
+                Literal("ROOG"),
+                Literal("Keg1", 6),
+                Literal("keg31", 0)
             )
         )
         assertEquals(TextRange(46, 51), range)

@@ -19,9 +19,7 @@ class LocalizationFileSearch(private val project: Project) {
 
     val settings = Settings.getInstance(project)
 
-    /**
-     * Finds json roots by json file name
-     */
+//    Finds json roots by json file name
     fun findFilesByName(fileName: String?): List<PsiFile> =
         findVirtualFilesByName(fileName ?: settings.defaultNs).flatMap {vf -> listOfNotNull(findPsiRoot(vf))} +
             if (settings.vue) findVirtualFilesUnder(settings.vueDirectory)
@@ -32,15 +30,12 @@ class LocalizationFileSearch(private val project: Project) {
             item -> item.children.toList().map {root -> root.containingFile}
         }
 
-    /**
-     * Finds virtual files by file name
-     */
+
+//    Finds virtual files by file name
     private fun findVirtualFilesByName(fileName: String) =
         findVirtualFilesByName(fileName, JsonFileType.INSTANCE) + findVirtualFilesByName(fileName, YAMLFileType.YML)
 
-    /**
-     * Finds virtual files by file name and type
-     */
+//    Finds virtual files by file name and type
     private fun findVirtualFilesByName(fileName: String, fileType: FileType): List<VirtualFile> {
         val ext = fileType.defaultExtension
         return FileTypeIndex
@@ -51,8 +46,7 @@ class LocalizationFileSearch(private val project: Project) {
             )
             .filter { file -> file.name == "$fileName.$ext" }
     }
-    /**
-     * Finds root of virtual file
-     */
+
+//    Finds root of virtual file
     private fun findPsiRoot(virtualFile: VirtualFile):PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
 }
