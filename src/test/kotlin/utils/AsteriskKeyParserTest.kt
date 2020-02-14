@@ -18,16 +18,16 @@ internal class AsteriskKeyParserTest : TestBase {
         assertEquals("*{11}:ROOT{4}.Key1{4}.Key31{5}", toTestString(parsed))
     }
 
-//prefia${fileExpb}:ROOT.Key4.Key5          / *         prefia*{17}:ROOT{4}.Key4{4}.Key5{4}
+//prefia${fileExpb}:ROOT.Kea4.Key5          / *         prefia*{17}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefia"),
             KeyElement.unresolvedTemplate("\${fileExpb}"),
-            KeyElement.literal(":ROOT.Key4.Key5")
+            KeyElement.literal(":ROOT.Kea4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefia*{17}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefia*{17}:ROOT{4}.Kea4{4}.Key5{4}", toTestString(parsed))
     }
 
 //${fileExpc}postfix:ROOT.Key4.Key5         / *         *postfix{18}:ROOT{4}.Key4{4}.Key5{4}

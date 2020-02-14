@@ -56,11 +56,6 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
 //        myFixture.checkResultByFile("vue/singleResult.vue")
 //    }
 //
-//    fun testAnnotator() {
-//        myFixture.configureByFiles("AnnotatorTestData.java", "DefaultTestData.simple")
-//        myFixture.checkHighlighting(false, false, true, true)
-//    }
-//
 //    fun testFormatter() {
 //        myFixture.configureByFiles("FormatterTestData.simple")
 //        CodeStyle.getLanguageSettings(myFixture.file).SPACE_AROUND_ASSIGNMENT_OPERATORS = true
@@ -84,7 +79,7 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
 //    }
 //
 //    fun testFindUsages() {
-//        val usageInfos = myFixture.testFindUsages("FindUsagesTestData.simple", "FindUsagesTestData.java")
+//         val usageInfos = myFixture.testFindUsages("FindUsagesTestData.simple", "FindUsagesTestData.java")
 //        Assert.assertEquals(1, usageInfos.size)
 //    }
 //
@@ -95,11 +90,5 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
 //        myFixture.checkResult("#website = http://en.wikipedia.org/")
 //        commentAction.actionPerformedImpl(project, myFixture.editor)
 //        myFixture.checkResult("website = http://en.wikipedia.org/")
-//    }
-//
-//    fun testReference() {
-//        myFixture.configureByFiles("ReferenceTestData.java", "DefaultTestData.simple")
-//        val element = myFixture.file.findElementAt(myFixture.caretOffset)!!.parent
-//        assertEquals("http://en.wikipedia.org/", (element.references[0].resolve() as SimpleProperty?).getValue())
 //    }
 }
