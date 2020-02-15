@@ -68,27 +68,27 @@ internal class AsteriskKeyParserTest : TestBase {
         assertEquals("prefic*postfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//filename:${key}                           / *         filename{8}:*{6}
+//filenamz:${kez}                           / *         filenamz{8}:*{6}
     @Test
     fun parseExpressionWithKeyInTemplate() {
         val elements = listOf(
-            KeyElement.literal("filename:"),
-            KeyElement.unresolvedTemplate("\${key}")
+            KeyElement.literal("filenamz:"),
+            KeyElement.unresolvedTemplate("\${kez}")
         )
         val parsed = parse(elements)
-        assertEquals("filename{8}:*{6}", toTestString(parsed))
+        assertEquals("filenamz{8}:*{6}", toTestString(parsed))
     }
 
-//filename:${key}item                       / *         filename{8}:*item{10}
+//filenamw:${kew}itew                       / *         filenamw{8}:*itew{10}
     @Test
     fun parseExpressionWithKeyInTemplate2() {
         val elements = listOf(
-            KeyElement.literal("filename:"),
-            KeyElement.unresolvedTemplate("\${key}"),
-            KeyElement.literal("item")
+            KeyElement.literal("filenamw:"),
+            KeyElement.unresolvedTemplate("\${kew}"),
+            KeyElement.literal("itew")
         )
         val parsed = parse(elements)
-        assertEquals("filename{8}:*item{10}", toTestString(parsed))
+        assertEquals("filenamw{8}:*itew{10}", toTestString(parsed))
     }
 
 //filename:${key}.item                      / *         filename{8}:*{6}.item{4}

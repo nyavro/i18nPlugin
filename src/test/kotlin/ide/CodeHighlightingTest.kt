@@ -8,8 +8,6 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
         return "src/test/resources/codeHighlighting"
     }
 
-    private val translation = "assets/test.json"
-
     fun testTsNoCompletion() {
         myFixture.configureByFiles("tsx/unresolvedNs.tsx")
         myFixture.checkHighlighting(false, false, true, false)
