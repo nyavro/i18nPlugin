@@ -33,12 +33,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange), element.project)
         val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
         if (files.isEmpty()) {
-            val isVueContext = settings.vue && element.containingFile.name.substringAfter(".").equals("vue", true)
-            if (isVueContext) {
-                annotationHelper.annotateUnresolvedVueKey(fullKey)
-            } else {
-                annotationHelper.annotateFileUnresolved(fullKey)
-            }
+            annotateUnresolvedNs(settings, element, annotationHelper, fullKey)
         }
         else {
             val pluralSeparator = settings.pluralSeparator
@@ -61,6 +56,15 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
                 fullKey.ns == null && (fullKey.compositeKey.size == mostResolvedReference.unresolved.size) -> {}
                 else -> annotationHelper.annotateUnresolved(fullKey, mostResolvedReference.path)
             }
+        }
+    }
+
+    private fun annotateUnresolvedNs(settings: Settings, element: PsiElement, annotationHelper: AnnotationHelper, fullKey: FullKey) {
+        val isVueContext = settings.vue && element.containingFile.name.substringAfter(".").equals("vue", true)
+        if (isVueContext) {
+            annotationHelper.annotateUnresolvedVueKey(fullKey)
+        } else {
+            annotationHelper.annotateFileUnresolved(fullKey)
         }
     }
 }
