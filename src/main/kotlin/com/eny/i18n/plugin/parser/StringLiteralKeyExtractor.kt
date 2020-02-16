@@ -10,15 +10,18 @@ import com.intellij.psi.PsiElement
 /**
  * Extracts i18n key from js string literal
  */
-class JsStringLiteralKeyExtractor: KeyExtractor {
+class StringLiteralKeyExtractor: KeyExtractor {
 
-    override fun canExtract(element: PsiElement): Boolean = element.type() == "JS:STRING_LITERAL"
+    override fun canExtract(element: PsiElement): Boolean = listOf("JS:STRING_LITERAL", "quoted string", "String").any{
+        item ->
+            element.type().contains(item)
+    }
 
     override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
         parser.parse(
             listOf(KeyElement.literal(element.text.unQuote())),
-            false, 
-            settings.nsSeparator, 
+            false,
+            settings.nsSeparator,
             settings.keySeparator,
             settings.stopCharacters
         )

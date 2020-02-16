@@ -18,7 +18,8 @@ intellij {
     version 'IC-LATEST-EAP-SNAPSHOT'
     type "IC"
     pluginName 'i18n'
-    plugins = ['yaml']
+    plugins = ['yaml', 'php']
+    //alternativeIdePath = "C:\\opt\\PhpStorm"
 }
 
 test {

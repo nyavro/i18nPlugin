@@ -4,10 +4,7 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.parser.FullKeyExtractor
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.AnnotationHelper
-import com.eny.i18n.plugin.utils.AnnotationHolderFacade
-import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.LocalizationFileSearch
+import com.eny.i18n.plugin.utils.*
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
@@ -30,7 +27,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
         val settings = Settings.getInstance(element.project)
-        val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange), element.project)
+        val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange, element.text.isQuoted()), element.project)
         val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
         if (files.isEmpty()) {
             annotateUnresolvedNs(settings, element, annotationHelper, fullKey)

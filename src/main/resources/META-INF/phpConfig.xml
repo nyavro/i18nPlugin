@@ -1,0 +1,7 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <annotator language="PHP" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
+        <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
+        <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
+    </extensions>
+</idea-plugin>

@@ -26,7 +26,7 @@ class ReferencesAccumulator {
     fun process() = {
         entry: PsiElement, offset:Int ->
             val typeName = entry.node.elementType.toString()
-            if (typeName == "JS:STRING_LITERAL") {
+            if (listOf("JS:STRING_LITERAL", "quoted string").any {item -> typeName.contains(item)}) {
                 process(entry)
             } else if (typeName == "JS:STRING_TEMPLATE_PART") {
                 process(entry.parent)
@@ -54,7 +54,7 @@ class ReferencesAccumulator {
 
     private fun process(entry: PsiElement) {
         if (entry != toDrop) {
-            getParentsOfType(entry, setOf("JS:STRING_LITERAL", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION"))
+            getParentsOfType(entry, setOf("single quoted string", "double quoted string", "JS:STRING_LITERAL", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION"))
             res.add(entry)
         } else {
             toDrop = null

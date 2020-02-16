@@ -26,17 +26,21 @@ interface AnnotationFacade {
 /**
  * Annotation utils implementation
  */
-class AnnotationHolderFacade(private val textRange: TextRange) : AnnotationFacade {
+class AnnotationHolderFacade(private val textRange: TextRange, private val isQuoted: Boolean = true) : AnnotationFacade {
+
+    private val quoteOffset = if (isQuoted) 1 else 0
+    private val nsSeparatorOffset = 1
+    private val keySeparatorOffset = 1
 
     override fun unresolvedNs(fullKey: FullKey): TextRange =
         safeRange(
-            textRange.startOffset + 1,
-            textRange.startOffset + 1 + (fullKey.ns?.length ?: 0)
+            textRange.startOffset + quoteOffset,
+            textRange.startOffset + quoteOffset + (fullKey.ns?.length ?: 0)
         )
 
     override fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange =
         safeRange(
-            fullKey.compositeKeyStartOffset() + tokensLength(resolvedPath) + (if (resolvedPath.isNotEmpty()) 1 else 0),
+            fullKey.compositeKeyStartOffset() + tokensLength(resolvedPath) + (if (resolvedPath.isNotEmpty()) keySeparatorOffset else 0),
             fullKey.compositeKeyEndOffset()
         )
 
@@ -47,10 +51,10 @@ class AnnotationHolderFacade(private val textRange: TextRange) : AnnotationFacad
         )
 
     private fun FullKey.compositeKeyStartOffset(): Int =
-        textRange.startOffset + (this.ns?.let { text -> text.length + 1 } ?: 0) + 1
+        textRange.startOffset + (this.ns?.let { text -> text.length + nsSeparatorOffset } ?: 0) + quoteOffset
 
     private fun FullKey.compositeKeyEndOffset(): Int =
-        textRange.startOffset + 1 + this.source.length
+        textRange.startOffset + quoteOffset + this.source.length
 
     private fun safeRange(start: Int, end: Int): TextRange = TextRange(start, max(end, start))
 }

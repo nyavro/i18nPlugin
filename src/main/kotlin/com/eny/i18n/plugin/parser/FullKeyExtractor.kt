@@ -24,7 +24,7 @@ class FullKeyExtractor {
         val extractors = listOf(
             TemplateKeyExtractor(),
             LiteralKeyExtractor(),
-            JsStringLiteralKeyExtractor(),
+            StringLiteralKeyExtractor(),
             TemplatePartKeyExtractor()
         )
         return extractors.find { extractor -> extractor.canExtract(element) }?.extract(element, parser, settings)
