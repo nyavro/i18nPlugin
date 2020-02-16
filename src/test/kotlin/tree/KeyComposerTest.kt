@@ -57,8 +57,8 @@ internal class KeyComposerTest {
     @Test
     fun alternativeKeySeparator2() {
         val composer = object : KeyComposer<String>{}
-        val tree = TestFlippedTree(listOf("altez"))
-        assertEquals("altez", composer.composeKey(tree, ":", "$"))
+        val tree = TestFlippedTree(listOf("altex"))
+        assertEquals("altex", composer.composeKey(tree, ":", "$"))
     }
 
     @Test

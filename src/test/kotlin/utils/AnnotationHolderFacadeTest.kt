@@ -85,8 +85,8 @@ internal class AnnotationHolderFacadeTest : TestBase {
             Check(
                 TextRange(26, 68),
                 FullKey(
-                    "sample:ROOT.Key1.\${unknownInCompileTime}",
-                    Literal("sample"),
+                    "samplq:ROOT.Key1.\${unknownInCompileTime}",
+                    Literal("samplq"),
                     listOf(Literal("ROOT"), Literal("Key1"), Literal("*", 23))
                 ),
                 TextRange(44, 67),
@@ -134,7 +134,7 @@ internal class AnnotationHolderFacadeTest : TestBase {
             ),
             Check(
                 TextRange(19, 43),
-                FullKey("\${fileExpr}:ROOT.Key1.Key31", Literal("sample", 11), literalsList("ROOT", "Key1", "Key31")),
+                FullKey("\${fileExpr}:ROOT.Key1.Key31", Literal("sampli", 11), literalsList("ROOT", "Key1", "Key31")),
                 TextRange(20, 31)
             ),
             Check(

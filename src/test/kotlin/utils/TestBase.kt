@@ -31,5 +31,8 @@ interface TestBase {
               stopCharacters: String = ""): FullKey? =
         ExpressionKeyParser(object: KeyNormalizer {}).parse(elements, isTemplate, nsSeparator, keySeparator, stopCharacters)
 
+    /**
+     * Utility for AnnotationHolder
+     */
     fun facade(textRange: TextRange, isQuoted:Boolean = true) = AnnotationHolderFacade(textRange, isQuoted)
 }
