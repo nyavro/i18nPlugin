@@ -140,7 +140,7 @@ internal class DefaultNsParserTest : TestBase {
                 KeyElement.literal("item")
         )
         val parsed = parse(elements)
-        assertEquals("filename{8}.*item{10}", toTestString(parsed))
+        assertEquals("filenama{8}.*item{10}", toTestString(parsed))
     }
 
 //filename.${keb}.item                      / *         filename{8}.*{6}.item{4}
@@ -152,7 +152,7 @@ internal class DefaultNsParserTest : TestBase {
                 KeyElement.literal(".item")
         )
         val parsed = parse(elements)
-        assertEquals("filename{8}.*{6}.item{4}", toTestString(parsed))
+        assertEquals("filenamb{8}.*{6}.item{4}", toTestString(parsed))
     }
 
 //filename.${key}item                       / Key0.Key2.Key21       / filename{8}.Key0{6}.Key2{0}.Key21item{4}
@@ -164,7 +164,7 @@ internal class DefaultNsParserTest : TestBase {
                 KeyElement.literal("item")
         )
         val parsed = parse(elements)
-        assertEquals("filename{8}.Key0{6}.Key2{0}.Key21item{4}", toTestString(parsed))
+        assertEquals("filenamc{8}.Key0{6}.Key2{0}.Key21item{4}", toTestString(parsed))
     }
 }
 
