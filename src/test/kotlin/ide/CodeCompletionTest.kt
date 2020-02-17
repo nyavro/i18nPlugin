@@ -11,7 +11,6 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
         return "src/test/resources/codeCompletion"
     }
 
-
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
