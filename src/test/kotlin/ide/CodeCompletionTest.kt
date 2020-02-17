@@ -1,15 +1,22 @@
 package ide
 
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-
 internal class CodeCompletionTest : BasePlatformTestCase() {
+
+    private val translation = "assets/test.json"
 
     override fun getTestDataPath(): String {
         return "src/test/resources/codeCompletion"
     }
 
-    private val translation = "assets/test.json"
+
+    override fun setUp() {
+        super.setUp()
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
+    }
 
     fun testTsNoCompletion() {
         myFixture.configureByFiles("ts/none.ts", translation)
@@ -47,14 +54,26 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
         myFixture.checkResultByFile("js/invalidResult.js")
     }
 
-//    fun testVueSingleCompletion() {
-//        val settings = Settings.Persistence.getInstance(myFixture.project)
-//        settings.vue = true
-//        settings.vueDirectory = "src"
-//        myFixture.configureByFiles("vue/single.vue", "assets/en-US.json")
-//        myFixture.complete(CompletionType.BASIC, 1)
-//        myFixture.checkResultByFile("vue/singleResult.vue")
-//    }
+    fun testVueSingleCompletion() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = true
+        settings.vueDirectory = "assets"
+        myFixture.configureByFiles("vue/single.vue", "assets/en-US.json")
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("vue/singleResult.vue")
+    }
+
+    fun testPhpSingleCompletion() {
+        myFixture.configureByFiles("php/single.php", translation)
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("php/singleResult.php")
+    }
+
+    fun testPhpDQuoteCompletion() {
+        myFixture.configureByFiles("php/dQuote.php", translation)
+        myFixture.complete(CompletionType.BASIC, 1)
+        myFixture.checkResultByFile("php/dQuoteResult.php")
+    }
 //
 //    fun testFormatter() {
 //        myFixture.configureByFiles("FormatterTestData.simple")

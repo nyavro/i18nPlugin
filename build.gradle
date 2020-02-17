@@ -24,10 +24,10 @@ intellij {
 
 test {
     intellij {
-        version 'IU-2019.2'
+        version 'IU-2019.3'
         type "IC"
         pluginName 'i18n'
-        plugins = ['yaml', 'JavaScriptLanguage', 'CSS']
+        plugins = ['yaml', 'JavaScriptLanguage', 'CSS', "org.jetbrains.plugins.vue:193.5233.118", "com.jetbrains.php:193.5233.102"]
     }
 }
 

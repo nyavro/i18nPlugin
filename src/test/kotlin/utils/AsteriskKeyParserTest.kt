@@ -30,42 +30,42 @@ internal class AsteriskKeyParserTest : TestBase {
         assertEquals("prefia*{17}:ROOT{4}.Kea4{4}.Key5{4}", toTestString(parsed))
     }
 
-//${fileExpc}postfix:ROOT.Key4.Key5         / *         *postfix{18}:ROOT{4}.Key4{4}.Key5{4}
+//${fileExpc}postfin:ROOT.Key4.Key5         / *         *postfin{18}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.unresolvedTemplate("\${fileExpc}"),
-            KeyElement.literal("postfix"),
+            KeyElement.literal("postfin"),
             KeyElement.literal(":ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("*postfix{18}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("*postfin{18}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//prefib${fileExpd}postfix:ROOT.Key4.Key5   / *         prefib*postfix{24}:ROOT{4}.Key4{4}.Key5{4}
+//prefib${fileExpd}postfim:ROOT.Key4.Key5   / *         prefib*postfim{24}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefib"),
             KeyElement.unresolvedTemplate("\${fileExpd}"),
-            KeyElement.literal("postfix"),
+            KeyElement.literal("postfim"),
             KeyElement.literal(":ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefib*postfix{24}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefib*postfim{24}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
-//prefic${fileExpr}postfix.ROOT.Key4.Key5   / *         prefic*postfix{24}.ROOT{4}.Key4{4}.Key5{4} || prefix*:*postfix{24}.ROOT{4}.Key4{4}.Key5{4}
+//prefic${fileExpr}postfih.ROOT.Key4.Key5   / *         prefic*postfih{24}.ROOT{4}.Key4{4}.Key5{4} || prefix*:*postfih{24}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
             KeyElement.literal("prefic"),
             KeyElement.unresolvedTemplate("\${fileExpr}"),
-            KeyElement.literal("postfix"),
+            KeyElement.literal("postfih"),
             KeyElement.literal(".ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefic*postfix{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefic*postfih{24}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
     }
 
 //filenamz:${kez}                           / *         filenamz{8}:*{6}

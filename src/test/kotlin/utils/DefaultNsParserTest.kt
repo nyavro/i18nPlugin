@@ -98,57 +98,57 @@ internal class DefaultNsParserTest : TestBase {
         assertEquals("rooq{4}.starq{5}.Key0{6}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
-//root.start${key}                          / Key0.Key2.Key21       / root{4}.startKey0{11}.Key2{0}.Key21{0}
+//root.start${kes}                          / Key0.Key2.Key21       / root{4}.startKey0{11}.Key2{0}.Key21{0}
     @Test
     fun parseKeyInExpression3() {
         val elements = listOf(
             KeyElement.literal("root.start"),
-            KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21")
+            KeyElement.resolvedTemplate("\${kes}", "Key0.Key2.Key21")
         )
         val parsed = parse(elements)
         assertEquals("root{4}.startKey0{11}.Key2{0}.Key21{0}", toTestString(parsed))
     }
 
-//filename:${key}                           / *         filename{8}.*{6}
+//filename:${ker}                           / *         filename{8}.*{6}
     @Test
     fun parseExpressionWithKeyInTemplate() {
         val elements = listOf(
                 KeyElement.literal("filename."),
-                KeyElement.unresolvedTemplate("\${key}")
+                KeyElement.unresolvedTemplate("\${ker}")
         )
         val parsed = parse(elements)
         assertEquals("filename{8}.*{6}", toTestString(parsed))
     }
 
-//filename.root.${key}                      / *         filename{8}.root{4}.*{6}
+//filename.root.${ket}                      / *         filename{8}.root{4}.*{6}
     @Test
     fun partOfKeyIsExpression() {
         val elements = listOf(
                 KeyElement.literal("filename.root."),
-                KeyElement.unresolvedTemplate("\${key}")
+                KeyElement.unresolvedTemplate("\${ket}")
         )
         val parsed = parse(elements)
         assertEquals("filename{8}.root{4}.*{6}", toTestString(parsed))
     }
 
-//filename.${key}item                       / *         filename{8}.*item{10}
+//filename.${kep}item                       / *         filename{8}.*item{10}
     @Test
     fun parseExpressionWithKeyInTemplate2() {
         val elements = listOf(
-                KeyElement.literal("filename."),
-                KeyElement.unresolvedTemplate("\${key}"),
+                KeyElement.literal("filenama."),
+                KeyElement.unresolvedTemplate("\${kep}"),
                 KeyElement.literal("item")
         )
         val parsed = parse(elements)
         assertEquals("filename{8}.*item{10}", toTestString(parsed))
     }
 
-//filename.${key}.item                      / *         filename{8}.*{6}.item{4}
+//filename.${keb}.item                      / *         filename{8}.*{6}.item{4}
     @Test
     fun parseExpressionWithKeyInTemplate3() {
         val elements = listOf(
-                KeyElement.literal("filename."),
-                KeyElement.unresolvedTemplate("\${key}"),
+                KeyElement.literal("filenamb."),
+                KeyElement.unresolvedTemplate("\${keb}"),
                 KeyElement.literal(".item")
         )
         val parsed = parse(elements)
@@ -159,7 +159,7 @@ internal class DefaultNsParserTest : TestBase {
     @Test
     fun parseExpressionWithKeyInTemplate4() {
         val elements = listOf(
-                KeyElement.literal("filename."),
+                KeyElement.literal("filenamc."),
                 KeyElement.resolvedTemplate("\${key}", "Key0.Key2.Key21"),
                 KeyElement.literal("item")
         )
