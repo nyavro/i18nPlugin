@@ -57,7 +57,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
     }
 
     private fun annotateUnresolvedNs(settings: Settings, element: PsiElement, annotationHelper: AnnotationHelper, fullKey: FullKey) {
-        val isVueContext = settings.vue && element.containingFile.name.substringAfter(".").equals("vue", true)
+        val isVueContext = settings.vue && element.containingFile.language.displayName == "VueJS"
         if (isVueContext) {
             annotationHelper.annotateUnresolvedVueKey(fullKey)
         } else {

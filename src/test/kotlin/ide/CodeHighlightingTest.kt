@@ -32,6 +32,14 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
         myFixture.checkHighlighting(true, false, true, true)
     }
 
+    fun testVueUnresolvedFile() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = true
+        settings.vueDirectory = "assets"
+        myFixture.configureByFiles("vue/unresolvedNs.vue")
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
     fun testVueUnresolvedKey() {
         val settings = Settings.getInstance(myFixture.project)
         settings.vue = true
