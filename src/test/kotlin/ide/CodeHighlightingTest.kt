@@ -52,4 +52,9 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
         myFixture.configureByFiles("php/unresolvedKey.php", translation)
         myFixture.checkHighlighting(true, false, true, true)
     }
+
+    fun testResolved() {
+        myFixture.configureByFiles("tsx/resolved.tsx", translation)
+        myFixture.checkHighlighting(false, true, false, true)
+    }
 }

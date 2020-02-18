@@ -47,7 +47,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
                 .maxBy {v -> v.path.size}!!
             when {
                 mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
-                mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural-> annotationHelper.annotateReferenceToPlural(fullKey)
+                mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural -> annotationHelper.annotateReferenceToPlural(fullKey)
                 mostResolvedReference.unresolved.isEmpty() && fullKey.isTemplate -> annotationHelper.annotatePartiallyResolved(fullKey, mostResolvedReference.path)
                 mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToJson(fullKey)
                 fullKey.ns == null && (fullKey.compositeKey.size == mostResolvedReference.unresolved.size) -> {}

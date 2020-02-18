@@ -29,7 +29,7 @@ class LocalizationFileSearch(private val project: Project) {
 
     private fun findVirtualFilesUnder(directory: String): List<PsiFile> =
         FilenameIndex.getFilesByName(project, directory, settings.searchScope(project), true).toList().flatMap {
-            item -> item.children.toList().map {root -> root.containingFile}
+            item -> item.children.toList().mapNotNull {root -> root.containingFile}
         }
 
 
