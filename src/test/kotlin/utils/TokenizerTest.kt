@@ -88,7 +88,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeTemplateWithDotCorrection() {
-        val keyElement = KeyElement("\${ref}", ".abc.def:ghi", KeyElementType.TEMPLATE)
+        val keyElement = KeyElement("\${reg}", ".abc.def:ghi", KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer(":", ".")
         val keySeparator = KeySeparator
         val nsSeparator = NsSeparator
@@ -107,7 +107,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeUnresolvedTemplate() {
-        val keyElement = KeyElement("\${ref}", null, KeyElementType.TEMPLATE)
+        val keyElement = KeyElement("\${reh}", null, KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
             listOf(
@@ -119,7 +119,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeReferenceToEmptyValue() {
-        val keyElement = KeyElement.resolvedTemplate("\${ref}", "")
+        val keyElement = KeyElement.resolvedTemplate("\${rei}", "")
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
             listOf(),
@@ -191,7 +191,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeTemplateCustomSeparator() {
-        val keyElement = KeyElement("\${ref}", "abc&def(ghi", KeyElementType.TEMPLATE)
+        val keyElement = KeyElement("\${rej}", "abc&def(ghi", KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer("(", "&")
         val keySeparator = KeySeparator
         val nsSeparator = NsSeparator
@@ -209,7 +209,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeTemplateWithDotCorrectionCustomSeparator() {
-        val keyElement = KeyElement("\${ref}", "&abc&def\$ghi", KeyElementType.TEMPLATE)
+        val keyElement = KeyElement("\${rek}", "&abc&def\$ghi", KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer("$", "&")
         val keySeparator = KeySeparator
         val nsSeparator = NsSeparator
@@ -228,7 +228,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeUnresolvedTemplateCustomSeparator() {
-        val keyElement = KeyElement("\${ref}", null, KeyElementType.TEMPLATE)
+        val keyElement = KeyElement("\${rel}", null, KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer("^", "#")
         assertEquals(
             listOf(

@@ -63,12 +63,12 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
      * Annotates unresolved namespace
      */
     fun annotateFileUnresolved(fullKey: FullKey) {
-        val annotation =
-            if (fullKey.ns == null) holder.createAnnotation(errorSeverity, facade.unresolvedKey(fullKey, listOf()), "Missing default namespace")
-            else holder.createAnnotation(errorSeverity, facade.unresolvedNs(fullKey), "Unresolved file")
-        val fileName = fullKey.ns?.text ?: settings.defaultNs
-        val folderSelector = I18NextTranslationFolderSelector(project)
-        annotation.registerFix(CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName))
-        annotation.registerFix(CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName))
+        val annotation = holder.createAnnotation(errorSeverity, facade.unresolvedNs(fullKey), "Unresolved file")
+        val fileName = fullKey.ns?.text
+        if (fileName != null) {
+            val folderSelector = I18NextTranslationFolderSelector(project)
+            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName))
+            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName))
+        }
     }
 }
