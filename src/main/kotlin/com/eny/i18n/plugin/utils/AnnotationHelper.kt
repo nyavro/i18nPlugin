@@ -71,19 +71,4 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
         annotation.registerFix(CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName))
         annotation.registerFix(CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName))
     }
-
-    /**
-     * Annotates unresolved Vue key
-     */
-    fun annotateUnresolvedVueKey(fullKey: FullKey) {
-        val annotation = holder.createAnnotation(errorSeverity, facade.unresolvedKey(fullKey, listOf()), "Missing localization")
-        val fileName = "en"
-        val folderSelector = Vue18nTranslationFolderSelector(project)
-        annotation.registerFix(
-            CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName)
-        )
-        annotation.registerFix(
-            CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName)
-        )
-    }
 }
