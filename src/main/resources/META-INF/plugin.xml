@@ -61,6 +61,7 @@
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>
     <depends optional="true" config-file="vueConfig.xml">Vue.js</depends>
+    <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
@@ -75,12 +76,8 @@
         <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
+        <intentionAction>
+            <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
+        </intentionAction>
     </extensions>
-<!--    <actions>-->
-<!--        <action id="com.eny.i18n.plugin.ide.actions.ExtractI18nAction" class="com.eny.i18n.plugin.ide.actions.ExtractI18nAction"-->
-<!--                text="Extract i18n" description="Extract selected text into translation">-->
-<!--            <add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="I18nize"/>-->
-<!--            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt N"/>-->
-<!--        </action>-->
-<!--    </actions>-->
 </idea-plugin>

@@ -63,7 +63,11 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val facade:
      * Annotates unresolved namespace
      */
     fun annotateFileUnresolved(fullKey: FullKey) {
-        val annotation = holder.createAnnotation(errorSeverity, facade.unresolvedNs(fullKey), "Unresolved file")
+        val annotation = holder.createAnnotation(
+            errorSeverity,
+            facade.unresolvedNs(fullKey),
+            PluginBundle.getMessage("unresolved.ns")
+        )
         val fileName = fullKey.ns?.text
         if (fileName != null) {
             val folderSelector = I18NextTranslationFolderSelector(project)
