@@ -10,11 +10,13 @@ internal class ExtractI18nIntentionActionTest: BasePlatformTestCase() {
 
     private val translation = "assets/test.json"
 
+    private val hint = "Extract i18n key"
+
     override fun getTestDataPath(): String = "src/test/resources/keyExtraction"
 
     fun doRun(src: String, trgt: String) {
         myFixture.configureByFiles(src, translation)
-        val action = myFixture.findSingleIntention("Extract i18n key")
+        val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
         Messages.setTestInputDialog(object : TestInputDialog {
             override fun show(message: String): String? = null
@@ -27,11 +29,45 @@ internal class ExtractI18nIntentionActionTest: BasePlatformTestCase() {
         myFixture.checkResultByFile(translation, "assets/testKeyExtracted.json", false)
     }
 
+    fun doCancel(src: String) {
+        myFixture.configureByFiles(src, translation)
+        val action = myFixture.findSingleIntention(hint)
+        assertNotNull(action)
+        Messages.setTestInputDialog(object : TestInputDialog {
+            override fun show(message: String): String? = null
+            override fun show(message: String, validator: InputValidator?) = null
+        })
+        myFixture.launchAction(action)
+        myFixture.checkResultByFile(src)
+        myFixture.checkResultByFile(translation, translation, false)
+    }
+
+    fun cancelInvalid(src: String) {
+        myFixture.configureByFiles(src, translation)
+        val action = myFixture.findSingleIntention(hint)
+        assertNotNull(action)
+        Messages.setTestInputDialog(object : TestInputDialog {
+            override fun show(message: String): String? = null
+            override fun show(message: String, validator: InputValidator?) = "not:a/key{here}"
+        })
+        myFixture.launchAction(action)
+        myFixture.checkResultByFile(src)
+        myFixture.checkResultByFile(translation, translation, false)
+    }
+
     fun testTsKeyExtraction() {
         doRun("ts/simple.ts", "ts/simpleKeyExtracted.ts")
     }
 
-//    fun testJsKeyExtraction() {
-//        doRun("js/simple.js", "js/simpleKeyExtracted.js")
-//    }
+    fun testTsCancel() {
+        doCancel("ts/simple.ts")
+    }
+
+    fun testJsKeyExtraction() {
+        doRun("js/simple.js", "js/simpleKeyExtracted.js")
+    }
+
+    fun testTsCancelInvalid() {
+        doCancel("ts/simple.ts")
+    }
 }

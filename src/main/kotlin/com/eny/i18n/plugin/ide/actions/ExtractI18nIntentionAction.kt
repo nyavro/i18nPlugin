@@ -54,6 +54,6 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
 //        TypeScript JSX
 //        XML_DATA_CHARACTERS
-        return (element.containingFile.fileType.name == "TypeScript" && element.type()=="JS:STRING_LITERAL")
+        return (element.type()=="JS:STRING_LITERAL")
     }
 }

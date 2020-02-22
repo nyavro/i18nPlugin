@@ -40,17 +40,17 @@ internal class ExpressionKeyParserTest : TestBase {
         assertEquals("\${fileExpa}:ROOT.Key1.Key31", parsed?.source)
     }
 
-//prefix${fileExpb}:ROOT.Key4.Key5          / samplb                / prefixsamplb{17}:ROOT{4}.Key4{4}.Key5{4}
+//prefia${fileExpb}:ROOT.Key4.Key5          / samplb                / prefiasamplb{17}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-                KeyElement.literal("prefix"),
+                KeyElement.literal("prefia"),
                 KeyElement.resolvedTemplate("\${fileExpb}", "samplb"),
                 KeyElement.literal(":ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefixsamplb{17}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
-        assertEquals("prefix\${fileExpb}:ROOT.Key4.Key5", parsed?.source)
+        assertEquals("prefiasamplb{17}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefia\${fileExpb}:ROOT.Key4.Key5", parsed?.source)
     }
 
 //${fileExpc}postfix:ROOT.Key4.Key5         / samplc                / samplcpostfix{18}:ROOT{4}.Key4{4}.Key5{4}
@@ -65,30 +65,30 @@ internal class ExpressionKeyParserTest : TestBase {
         assertEquals("\${fileExpc}postfix:ROOT.Key4.Key5", parsed?.source)
     }
 
-//prefix${fileExpd}postfix:ROOT.Key4.Key5   / sampld                / prefixsampldpostfix{24}:ROOT{4}.Key4{4}.Key5{4}
+//prefib${fileExpd}postfix:ROOT.Key4.Key5   / sampld                / prefibsampldpostfix{24}:ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement.literal("prefix"),
+            KeyElement.literal("prefib"),
             KeyElement.resolvedTemplate("\${fileExpd}", "sampld"),
             KeyElement.literal("postfix:ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefixsampldpostfix{24}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
-        assertEquals("prefix\${fileExpd}postfix:ROOT.Key4.Key5", parsed?.source)
+        assertEquals("prefibsampldpostfix{24}:ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefib\${fileExpd}postfix:ROOT.Key4.Key5", parsed?.source)
     }
 
-//prefix${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey      / prefixpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}
+//prefic${fileExpr}postfix.ROOT.Key4.Key5   / partFile:partKey      / preficpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}
     @Test
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
-            KeyElement.literal("prefix"),
+            KeyElement.literal("prefic"),
             KeyElement.resolvedTemplate("\${fileExpr}", "partFile:partKey"),
             KeyElement.literal("postfix.ROOT.Key4.Key5")
         )
         val parsed = parse(elements)
-        assertEquals("prefixpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
-        assertEquals("prefix\${fileExpr}postfix.ROOT.Key4.Key5", parsed?.source)
+        assertEquals("preficpartFile{17}:partKeypostfix{7}.ROOT{4}.Key4{4}.Key5{4}", toTestString(parsed))
+        assertEquals("prefic\${fileExpr}postfix.ROOT.Key4.Key5", parsed?.source)
     }
 
 //filename:${key}                           / Key0.Key2.Key21       / filename{8}:Key0{6}.Key2{0}.Key21{0}
