@@ -28,7 +28,10 @@ class KeyRequest {
         return if(keyStr == null) {
             KeyRequestResult(null, true)
         } else {
-            KeyRequestResult(parser.parse(listOf(KeyElement.literal(keyStr))), false)
+            KeyRequestResult(
+                parser.parse(listOf(KeyElement.literal(keyStr))),
+                false
+            )
         }
     }
 

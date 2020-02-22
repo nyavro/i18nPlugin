@@ -29,7 +29,6 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
         editor ?: return
         val document = editor.document
         val primaryCaret = editor.caretModel.primaryCaret
-//        val selectedText = primaryCaret.selectedText ?: return
         val requestResult = request.key(project)
         if (requestResult.isCancelled) return
         if (requestResult.key == null) {
@@ -54,6 +53,6 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
 //        TypeScript JSX
 //        XML_DATA_CHARACTERS
-        return (element.type()=="JS:STRING_LITERAL")
+        return listOf("XML_DATA_CHARACTERS", "JS:STRING_LITERAL").contains(element.type())
     }
 }
