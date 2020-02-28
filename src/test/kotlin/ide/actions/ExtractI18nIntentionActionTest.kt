@@ -71,9 +71,9 @@ internal class ExtractI18nIntentionActionTest: BasePlatformTestCase() {
         doRun("ts/simple.ts", "ts/simpleKeyExtracted.ts")
     }
 
-//    fun testJsxKeyExtraction() {
-//        doRun("jsx/simple.jsx", "jsx/simpleKeyExtracted.jsx")
-//    }
+    fun testJsxKeyExtraction() {
+        doRun("jsx/simple.jsx", "jsx/simpleKeyExtracted.jsx")
+    }
 
     fun testTsCancel() {
         doCancel("ts/simple.ts")
