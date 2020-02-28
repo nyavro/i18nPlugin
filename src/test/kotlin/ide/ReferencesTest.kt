@@ -16,4 +16,11 @@ internal class ReferencesTest : BasePlatformTestCase() {
         assertNotNull(element)
         assertEquals("\"Reference in json\"", element!!.references[0].resolve()?.text)
     }
+
+    fun testExpressionReference() {
+        myFixture.configureByFiles("tsx/testReference.tsx", translation)
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertEquals("\"section\"", element!!.references[0].resolve()?.text)
+    }
 }

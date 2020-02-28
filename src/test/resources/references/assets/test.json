@@ -1,7 +1,8 @@
 {
   "ref": {
     "section": {
-      "key": "Reference in json"
+      "key": "Reference in json",
+      "key2": "Alternative"
     },
     "plurals": {
       "value-1": "tt",

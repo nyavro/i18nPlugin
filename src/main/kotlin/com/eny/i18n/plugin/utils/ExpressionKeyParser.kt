@@ -73,6 +73,8 @@ class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : St
  */
 class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
 
+    private val regex = "\\s".toRegex()
+
     /**
      * Parses list of key elements into i18n key
      */
@@ -84,10 +86,13 @@ class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerI
         stopCharacters: String = ""
     ): FullKey? {
         val normalized = normalizer.normalize(elements)
-        val source = normalized.fold(""){acc, item -> acc + item.text}
-        val regex = "\\s".toRegex()
-        if (source.contains(regex) || stopCharacters.any {char -> source.contains(char)}) {
-            return null
+        val source = normalized.fold(""){
+            acc, item ->
+                val text = item.resolvedTo
+                if (text != null && (text.contains(regex) || stopCharacters.any {char -> text.contains(char)})) {
+                    return null
+                }
+                acc + item.text
         }
         return Tokenizer(nsSeparator, keySeparator)
             .tokenizeAll(normalized)

@@ -5,7 +5,8 @@ import com.eny.i18n.plugin.utils.ExpressionKeyParser
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
-import com.intellij.lang.ASTNode
+import com.intellij.lang.javascript.psi.JSExpression
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.PsiReference
@@ -33,29 +34,38 @@ class TemplateKeyExtractor : KeyExtractor {
     private fun resolveTemplateExpression(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
             item ->
-            if (item.elementType.toString().contains("REFERENCE")) {
+            val text = item.text
+            if (item is JSReferenceExpression) {
                 KeyElement(
-                    item.text,
+                    text,
                     resolveStringLiteralReference(item, setOf(), ResolveReferenceMaxDepth),
                     KeyElementType.TEMPLATE
                 )
-            } else KeyElement.literal(item.text)
+            }
+            else if (item is JSExpression) {
+                KeyElement(
+                    text,
+                    null,
+                    KeyElementType.TEMPLATE
+                )
+            }
+            else KeyElement.literal(text)
         }
         return parser.parse(transformed, true, settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
     }
 
-    private fun resolveStringLiteralReference(item: ASTNode, chain: Set<ASTNode>, maxDepth: Int): String? {
+    private fun resolveStringLiteralReference(item: PsiElement, chain: Set<PsiElement>, maxDepth: Int): String? {
         if (item in chain || chain.size >= maxDepth) {
             return null
         }
-        val resolved = item.psi?.reference?.resolve()?.lastChild
+        val resolved = item.reference?.resolve()?.lastChild
         if (resolved is PsiLiteralValue) {
             val v = resolved.value
             if (v is String)
                 return v
         }
         else if (resolved is PsiReference) {
-            return resolveStringLiteralReference(resolved.node, chain + item, maxDepth)
+            return resolveStringLiteralReference(resolved, chain + item, maxDepth)
         }
         return null
     }
