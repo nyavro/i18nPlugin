@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.command.WriteCommandAction
@@ -44,7 +45,7 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
         val settings = Settings.getInstance(project)
         val template = settings.translationFunction
         val range = getTextRange(element)
-        val text = getText(element)
+        val text = getText(element).unQuote()
         WriteCommandAction.runWriteCommandAction(project) {
             keyExtractor.tryToResolveTranslationFile(project, i18nKey, text, editor)
             document.replaceString(range.startOffset, range.endOffset, "$template('${i18nKey.source}')")
