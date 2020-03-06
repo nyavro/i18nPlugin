@@ -13,10 +13,16 @@ class TsxTest {
         const i18n = new I18n();
         return (
             <div about={v > 5 ? 'greater' : 'lower'}>
-                <div title={`${i18n.t("sample:ROOT.Key1.")}`}/>
-                <div title={`${i18n.t("sample:ROOT.Key1.key2")}`}/>
+                <div title={`${i18n.t("sample:ROOT.Key11.")}`}/>
+                <div title={`${i18n.t("sample:ROOT.Key1.key21")}`}/>
                 <div title={`${i18n.t("yaml:flat0")}`}/>
                 Body1
+                <div>
+                    This is ok { t({'ns:string'}) }
+                    <br />
+                    but this is not: {'12:34'}
+                    or this one <span style={{margin: '12.5px'}}>a</span>
+                </div>
             </div>
         );
     }

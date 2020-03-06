@@ -54,4 +54,13 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
         myFixture.configureByFiles("tsx/defNsUresolved.tsx", translation)
         myFixture.checkHighlighting(true, true, true, false)
     }
+
+    private fun checkNotAKey(sourcePath: String) {
+        myFixture.configureByFiles(sourcePath, translation)
+        myFixture.checkHighlighting(true, false, true, false)
+    }
+
+    fun testNotAKey() {
+        checkNotAKey("tsx/notAKey.tsx")
+    }
 }

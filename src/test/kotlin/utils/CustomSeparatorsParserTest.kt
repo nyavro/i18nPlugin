@@ -9,7 +9,7 @@ internal class CustomSeparatorsParserTest: TestBase {
     @Test
     fun parseSimpleLiteral() {
         val elements = listOf(
-                KeyElement.literal("fileName:ROOT.Key2.Key3")
+            KeyElement.literal("fileName:ROOT.Key2.Key3")
         )
         val parsed = parse(elements, false, ":", "$")
         assertEquals("fileName{8}:ROOT.Key2.Key3{14}", toTestString(parsed))

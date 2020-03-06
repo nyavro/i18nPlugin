@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idea-plugin>
+    <extensions defaultExtensionNs="com.eny.i18n">
+        <extension
+                    <languageSupport implementation="com.eny.i18n.plugin.language.injection.I18nLanguageInjection"/>
+
+    </extensions>
+</idea-plugin>

@@ -1,3 +1,3 @@
 const someFunction = () => {
-    return `<strong>${this.$tc('components.navigation.menu.blog')}</strong> ${this.$tc('components.navigation.menu')}`;
+    return `<strongta>${this.$tc('components.navigation.menu.blog')}</strongta> ${this.$tc('components.navigation.menu')}`;
 };

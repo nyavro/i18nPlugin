@@ -14,6 +14,7 @@ import com.intellij.psi.PsiElement
  */
 class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
 
+    private val MinCompositeKeyLength = 2
     private val keyExtractor = FullKeyExtractor()
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
@@ -30,7 +31,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange, element.text.isQuoted()), element.project)
         val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
         if (files.isEmpty()) {
-            if (fullKey.ns != null) {
+            if (fullKey.ns != null && fullKey.compositeKey.size >= MinCompositeKeyLength) {
                 annotationHelper.annotateFileUnresolved(fullKey)
             }
         }

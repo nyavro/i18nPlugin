@@ -1,0 +1,21 @@
+{
+  parserClass="com.eny.i18n.plugin.language.parser.I18nParser"
+  parserUtilClass="com.intellij.lang.parser.GeneratedParserUtilBase"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="I18n"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.eny.i18n.plugin.language.psi"
+  psiImplPackage="com.eny.i18n.plugin.language.psi.impl"
+
+  elementTypeHolderClass="com.eny.i18n.plugin.language.psi.I18nTypes"
+  elementTypeClass="com.eny.i18n.plugin.language.psi.I18nElementType"
+  tokenTypeClass="com.eny.i18n.plugin.language.psi.I18nTokenType"
+}
+
+i18n ::= fullKey | shortKey
+fullKey ::= namespace NS_SEPARATOR compositeKey
+shortKey ::= compositeKey
+namespace ::= KEY
+compositeKey ::= KEY (KEY_SEPARATOR KEY)*

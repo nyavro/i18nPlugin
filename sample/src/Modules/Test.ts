@@ -15,7 +15,7 @@ class Test {
         console.log(i18n.t('sample:ROOT.Key1.missingKey'));                        //Unresolved property
         console.log(i18n.t('sample:ROOT.Key1'));                                   //Reference to Json object
         console.log(i18n.t('sample:ROOT.Key1.plurals.value', {count: 2})); //Reference to plural key
-        const sub0 = 'Key1';
+        const sub0 = 'sample:ROOT.Key1';
         const sub = sub0;
         console.log(i18n.t(`sample:ROOT.${sub}.plurals`));                           //Resolved simple expression
         console.log(i18n.t(`sample:ROOT.${sub}.key314`));                          //Unresolved simple expression
