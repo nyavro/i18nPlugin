@@ -1,5 +1,6 @@
 package ide
 
+import com.eny.i18n.plugin.ide.inspections.I18nInspection
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -13,6 +14,7 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
 
     override fun setUp() {
         super.setUp()
+        myFixture.enableInspections(I18nInspection())
         val settings = Settings.getInstance(myFixture.project)
         settings.vue = false
     }
@@ -57,7 +59,7 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
 
     private fun checkNotAKey(sourcePath: String) {
         myFixture.configureByFiles(sourcePath, translation)
-        myFixture.checkHighlighting(true, false, true, false)
+        myFixture.checkHighlighting(true, true, true, false)
     }
 
     fun testNotAKey() {

@@ -79,8 +79,8 @@
 <!--        <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>-->
 <!--        <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>-->
 <!--        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>-->
-<!--        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>-->
-<!--        <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>-->
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
+        <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
 <!--        <intentionAction>-->
 <!--            <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>-->
 <!--        </intentionAction>-->
@@ -88,7 +88,7 @@
         <fileType name="I18n file" implementationClass="com.eny.i18n.plugin.language.I18nFileType"
               fieldName="Instance" language="I18n" extensions="i18n"/>
         <lang.parserDefinition language="I18n" implementationClass="com.eny.i18n.plugin.language.I18nParserDefinition"/>
-        <localInspection language="TypeScript"
+        <localInspection language="I18n"
                          bundle="messages.I18nBundle"
                          key="inspection"
                          groupName="I18n"
