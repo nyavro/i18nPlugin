@@ -54,7 +54,8 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
 
     fun testDefaultNsUnresolved() {
         myFixture.configureByFiles("tsx/defNsUresolved.tsx", translation)
-        myFixture.checkHighlighting(true, true, true, false)
+//        myFixture.checkHighlighting(true, true, true, false)
+        myFixture.checkHighlighting(true, false, true, true)
     }
 
     private fun checkNotAKey(sourcePath: String) {
