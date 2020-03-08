@@ -24,26 +24,36 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
         myFixture.checkHighlighting(true, false, true, true)
     }
 
-    fun testUnresolvedKey() {
-        myFixture.configureByFiles("tsx/unresolvedKey.tsx", translation)
+    private fun checkDefaultNsUnresolvedKey(sourcePath: String, vue: Boolean = false) {
+        val asset = if (vue) "assets/en-US.json" else translation
+        if (vue) {
+            val settings = Settings.getInstance(myFixture.project)
+            settings.vue = true
+            settings.vueDirectory = "assets"
+        }
+        myFixture.configureByFiles(sourcePath, asset)
         myFixture.checkHighlighting(true, false, true, true)
+    }
+
+    private fun checkUnresolvedKey(sourcePath: String, vue: Boolean = false) {
+        myFixture.configureByFiles(sourcePath, translation)
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
+    fun testUnresolvedKey() {
+        checkUnresolvedKey("tsx/unresolvedKey.tsx")
+        checkUnresolvedKey("ts/unresolvedKey.ts")
+        checkUnresolvedKey("jsx/unresolvedKey.jsx")
+        checkUnresolvedKey("js/unresolvedKey.js")
+        checkUnresolvedKey("php/unresolvedKey.php")
+    }
+
+    fun testUresolvedKeyDefaultNs() {
+        checkDefaultNsUnresolvedKey("vue/unresolvedKey.vue", true)
     }
 
     fun testReferenceToObject() {
         myFixture.configureByFiles("tsx/refToObject.tsx", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testVueUnresolvedKey() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
-        settings.vueDirectory = "assets"
-        myFixture.configureByFiles("vue/unresolvedKey.vue", "assets/en-US.json")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testUnresolvedKeyPhp() {
-        myFixture.configureByFiles("php/unresolvedKey.php", translation)
         myFixture.checkHighlighting(true, false, true, true)
     }
 
@@ -54,13 +64,12 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
 
     fun testDefaultNsUnresolved() {
         myFixture.configureByFiles("tsx/defNsUresolved.tsx", translation)
-//        myFixture.checkHighlighting(true, true, true, false)
         myFixture.checkHighlighting(true, false, true, true)
     }
 
     private fun checkNotAKey(sourcePath: String) {
         myFixture.configureByFiles(sourcePath, translation)
-        myFixture.checkHighlighting(true, true, true, false)
+        myFixture.checkHighlighting(true, false, true, true)
     }
 
     fun testNotAKey() {

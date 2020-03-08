@@ -8,6 +8,12 @@ import com.eny.i18n.plugin.utils.Literal
 data class PropertyReference<T>(val path: List<Literal>, val element: Tree<T>?, val unresolved: List<Literal>, val isPlural: Boolean = false)
 
 /**
+ * Property reference represents PsiElement and it's path from Json file root
+ */
+data class PropertyReference2<T>(val path: List<String>, val element: Tree<T>?, val unresolved: List<String>, val isPlural: Boolean = false)
+
+
+/**
  * Key resolving utils
  */
 interface CompositeKeyResolver<T> {
@@ -25,6 +31,22 @@ interface CompositeKeyResolver<T> {
                     if (value == null) propertyReference.copy(unresolved = propertyReference.unresolved + key)
                     else propertyReference.copy(path = propertyReference.path + key, element = value)
                 } else propertyReference.copy(unresolved = propertyReference.unresolved + key)
+        }
+    }
+
+    /**
+     * @param {List<String>} compositeKey Composite key(path) to resolve
+     * @param {PsiElement?} root Root element to find property from
+     * Returns PropertyReference by composite key
+     */
+    fun resolveCompositeKey2(compositeKey: List<String>, root: Tree<T>?): PropertyReference2<T> {
+        return compositeKey.fold(PropertyReference2(listOf(), root, listOf())) {
+            propertyReference, key ->
+            if (propertyReference.element != null && propertyReference.element.isTree() && propertyReference.unresolved.isEmpty()) {
+                val value = propertyReference.element.findChild(key)
+                if (value == null) propertyReference.copy(unresolved = propertyReference.unresolved + key)
+                else propertyReference.copy(path = propertyReference.path + key, element = value)
+            } else propertyReference.copy(unresolved = propertyReference.unresolved + key)
         }
     }
 
