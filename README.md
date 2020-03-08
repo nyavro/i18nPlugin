@@ -4,6 +4,7 @@
 [![codebeat badge](https://codebeat.co/badges/efe74563-add4-4309-a673-dfce2e839677)](https://codebeat.co/projects/github-com-nyavro-i18nplugin-master)
 [![Build Status](https://travis-ci.com/nyavro/i18nPlugin.svg?branch=master)](https://travis-ci.com/nyavro/i18nPlugin)
 [![Hits-of-Code](https://hitsofcode.com/github/nyavro/i18nPlugin)](https://hitsofcode.com/view/github/nyavro/i18nPlugin)
+![](https://tokei.rs/b1/github/nyavro/i18nPlugin)
 [![codecov](https://codecov.io/gh/nyavro/i18nPlugin/branch/master/graph/badge.svg)](https://codecov.io/gh/nyavro/i18nPlugin)
 
 Intellij idea i18next support plugin
