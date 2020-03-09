@@ -17,6 +17,7 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
         myFixture.enableInspections(I18nInspection())
         val settings = Settings.getInstance(myFixture.project)
         settings.vue = false
+        settings.defaultNs = "translation"
     }
 
     fun testUnresolvedNs() {
@@ -25,11 +26,13 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     private fun checkDefaultNsUnresolvedKey(sourcePath: String, vue: Boolean = false) {
-        val asset = if (vue) "assets/en-US.json" else translation
+        val asset = if (vue) "assets/en-US.json" else "assets/common.json"
+        val settings = Settings.getInstance(myFixture.project)
         if (vue) {
-            val settings = Settings.getInstance(myFixture.project)
             settings.vue = true
             settings.vueDirectory = "assets"
+        } else {
+            settings.defaultNs = "common"
         }
         myFixture.configureByFiles(sourcePath, asset)
         myFixture.checkHighlighting(true, false, true, true)
@@ -49,6 +52,12 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testUresolvedKeyDefaultNs() {
+        checkDefaultNsUnresolvedKey("tsx/unresolvedKeyDefaultNs.tsx")
+        checkDefaultNsUnresolvedKey("ts/unresolvedKeyDefaultNs.ts")
+        checkDefaultNsUnresolvedKey("jsx/unresolvedKeyDefaultNs.jsx")
+        checkDefaultNsUnresolvedKey("jsx/unresolvedKeyDefaultNsAttribute.jsx")
+        checkDefaultNsUnresolvedKey("js/unresolvedKeyDefaultNs.js")
+        checkDefaultNsUnresolvedKey("php/unresolvedKeyDefaultNs.php")
         checkDefaultNsUnresolvedKey("vue/unresolvedKey.vue", true)
     }
 

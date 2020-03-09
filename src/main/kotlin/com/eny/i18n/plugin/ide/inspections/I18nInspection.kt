@@ -1,9 +1,6 @@
 package com.eny.i18n.plugin.ide.inspections
 
-import com.eny.i18n.plugin.language.psi.I18nFullKey
-import com.eny.i18n.plugin.language.psi.I18nNamespace
-import com.eny.i18n.plugin.language.psi.I18nShortKey
-import com.eny.i18n.plugin.language.psi.I18nVisitor
+import com.eny.i18n.plugin.language.psi.*
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.LocalizationFileSearch
@@ -19,42 +16,51 @@ class I18nInspection : LocalInspectionTool(), CompositeKeyResolver<PsiElement> {
         return object : I18nVisitor() {
             override fun visitFullKey(o: I18nFullKey) {
                 val ns = o.namespace.text
-                val compositeKey = o.compositeKey.text.split(".").toList()
-                val mostResolvedReference = LocalizationFileSearch(o.project).findFilesByName(ns).map {
-                    file -> resolveCompositeKey2(
-                        compositeKey,
-                        PsiElementTree.create(file)
-                    )
-                }.maxBy {v -> v.path.size}
-                if (mostResolvedReference == null) return
-                when {
-                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> {}
-                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural -> {}
-                    mostResolvedReference.unresolved.isEmpty() -> {}
-                    mostResolvedReference.unresolved.isEmpty() -> {}
-                    else -> {
-                        val resolved = mostResolvedReference.path.joinToString(".").length + 1
-                        holder.registerProblem(
-                            o.compositeKey,
-                            TextRange(
-                                resolved,
-                                o.compositeKey.textRange.length
-                            ),
-                            PluginBundle.getMessage("unresolved.key")
-                        )
-                    }
-                }
+                process(o.compositeKey, ns)
             }
 
             override fun visitNamespace(ns: I18nNamespace) {
                 val files = LocalizationFileSearch(ns.project).findFilesByName(ns.text)
                 if (files.isEmpty()) {
-                    holder.registerProblem(ns, PluginBundle.getMessage("unresolved.ns"))
+                    holder.registerProblem(ns, PluginBundle.getMessage("inspection.unresolved.ns"))
                 }
             }
 
             override fun visitShortKey(o: I18nShortKey) {
-                visitPsiElement(o)
+                process(o.compositeKey, null)
+            }
+
+            private fun process(o: I18nCompositeKey, ns: String?) {
+                val compositeKey = o.text.split(".").toList()
+                val mostResolvedReference = LocalizationFileSearch(o.project).findFilesByName(ns).map { file ->
+                    resolveCompositeKey2(
+                        compositeKey,
+                        PsiElementTree.create(file)
+                    )
+                }.maxBy { v -> v.path.size }
+                if (mostResolvedReference == null) return
+                when {
+                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> {
+                    }
+                    mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.isPlural -> {
+                    }
+                    mostResolvedReference.unresolved.isEmpty() -> {
+                        holder.registerProblem(o, PluginBundle.getMessage("inspection.reference.to.object"))
+                    }
+                    mostResolvedReference.unresolved.isEmpty() -> {
+                    }
+                    else -> {
+                        val resolved = mostResolvedReference.path.joinToString(".").length + 1
+                        holder.registerProblem(
+                            o,
+                            TextRange(
+                                resolved,
+                                o.textRange.length
+                            ),
+                            PluginBundle.getMessage("inspection.unresolved.key")
+                        )
+                    }
+                }
             }
         }
     }

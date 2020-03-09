@@ -58,9 +58,9 @@
 
     <depends>com.intellij.css</depends>
     <depends>JavaScript</depends>
-<!--    <depends>org.jetbrains.plugins.yaml</depends>-->
-<!--    <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>-->
-<!--    <depends optional="true" config-file="vueConfig.xml">Vue.js</depends>-->
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>
+    <depends optional="true" config-file="vueConfig.xml">Vue.js</depends>
 <!--    <depends optional="true" config-file="i18nSupport.xml">i18n</depends>-->
     <resource-bundle>messages.I18nBundle</resource-bundle>
 <!--    <extensionPoints>-->
@@ -70,21 +70,22 @@
     <extensions defaultExtensionNs="com.intellij">
 <!--        <annotator language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>-->
 <!--        <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>-->
-<!--        <annotator language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>-->
-<!--        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>-->
-<!--        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>-->
-<!--        <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>-->
-<!--        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.JsonReferenceContributor"/>-->
-<!--        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.YamlReferenceContributor"/>-->
-<!--        <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>-->
-<!--        <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>-->
-<!--        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>-->
+        <annotator language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
+        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
+        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
+        <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
+        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.JsonReferenceContributor"/>
+        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.YamlReferenceContributor"/>
+        <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
+        <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
+        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
-<!--        <intentionAction>-->
-<!--            <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>-->
-<!--        </intentionAction>-->
+        <intentionAction>
+            <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
+        </intentionAction>
         <languageInjector implementation="com.eny.i18n.plugin.ide.I18nLanguageInjector"/>
+<!--        <multiHostInjector implementation="com.eny.i18n.plugin.ide.I18nMultiHostInjector"/>-->
         <fileType name="I18n file" implementationClass="com.eny.i18n.plugin.language.I18nFileType"
               fieldName="Instance" language="I18n" extensions="i18n"/>
         <lang.parserDefinition language="I18n" implementationClass="com.eny.i18n.plugin.language.I18nParserDefinition"/>

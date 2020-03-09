@@ -1,1 +1,1 @@
-const <info descr="global variable">key</info> = "test:<info descr="null"><info descr="null"><info descr="null">tst1.base.single</info></info></info>";
+const <info descr="global variable">key</info> = "test:tst1.base.single";
