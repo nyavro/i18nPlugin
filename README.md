@@ -7,6 +7,8 @@
 ![](https://tokei.rs/b1/github/nyavro/i18nPlugin)
 [![codecov](https://codecov.io/gh/nyavro/i18nPlugin/branch/master/graph/badge.svg)](https://codecov.io/gh/nyavro/i18nPlugin)
 
+[![Downloads Badge](https://img.shields.io/jetbrains/plugin/d/12981-i18n-support.svg)](https://plugins.jetbrains.com/plugin/12981-i18n-support)
+
 Intellij idea i18next support plugin
 
 ## Features
