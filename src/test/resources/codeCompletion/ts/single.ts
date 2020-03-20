@@ -1,3 +1,3 @@
-export const test1 = () => {
-    const key = "test:tst1.base.<caret>";
+export const test1 = (t: (string) => string) => {
+    return t("test:tst1.base.<caret>");
 };

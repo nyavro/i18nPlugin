@@ -12,7 +12,7 @@ class Test {
         console.log('sample:missing.whole.composite.key');                              //Unresolved whole key
         console.log('sample:ROOT.missing.composite.key');                               //Unresolved part of the key
         console.log('MissingFile:Ex.Sub.Val');                                          //Unresolved File
-        console.log(i18n.t('sample:ROOT.Key1.missingKey'));                        //Unresolved property
+        console.log(i18n.t('sample:ROOT.Key1'));                        //Unresolved property
         console.log(i18n.t('sample:ROOT.Key1'));                                   //Reference to Json object
         console.log(i18n.t('sample:ROOT.Key1.plurals.value', {count: 2})); //Reference to plural key
         const sub0 = 'sample:ROOT.Key1';

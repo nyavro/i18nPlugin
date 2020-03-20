@@ -1,3 +1,3 @@
 export const test1 = (t: (string) => string) => {
-    return t("test:tst1.base.single");
+    return <div>{t("test:tst1.base.single")}</div>;
 };

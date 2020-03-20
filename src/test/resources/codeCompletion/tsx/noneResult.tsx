@@ -1,3 +1,3 @@
 export const test = (t: (string) => string) => {
-    const key = t("test:none.base.<caret>");
+    return <div>{t("test:none.base.")}</div>;
 };

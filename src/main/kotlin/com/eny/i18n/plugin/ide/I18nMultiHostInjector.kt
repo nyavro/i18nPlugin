@@ -51,6 +51,12 @@ class I18nMultiHostInjector : MultiHostInjector {
     override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
         val text = context.text
         if (context !is PsiLanguageInjectionHost) return
+//        const host =
+//        if (host.isValidHost && host.textRange.length > 1 && patterns.any {pattern -> pattern.accepts(host)}) {
+//            val range = TextRange(1, host.textRange.length - 1)
+//            injectionPlacesRegistrar.addPlace(Language.findLanguageByID("I18n")!!, range, null, null);
+//        }
+//        context.language
         if (text.contains("{{") && text.contains("}}") && context.isValidHost) {
             registrar.startInjecting(Language.findLanguageByID("I18n")!!)
                 .addPlace(null, null, context, TextRange(1, context.textRange.length - 1))

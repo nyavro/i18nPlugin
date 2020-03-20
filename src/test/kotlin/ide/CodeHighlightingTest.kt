@@ -53,12 +53,12 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
 
     fun testUresolvedKeyDefaultNs() {
         checkDefaultNsUnresolvedKey("tsx/unresolvedKeyDefaultNs.tsx")
-        checkDefaultNsUnresolvedKey("ts/unresolvedKeyDefaultNs.ts")
-        checkDefaultNsUnresolvedKey("jsx/unresolvedKeyDefaultNs.jsx")
-        checkDefaultNsUnresolvedKey("jsx/unresolvedKeyDefaultNsAttribute.jsx")
-        checkDefaultNsUnresolvedKey("js/unresolvedKeyDefaultNs.js")
-        checkDefaultNsUnresolvedKey("php/unresolvedKeyDefaultNs.php")
-        checkDefaultNsUnresolvedKey("vue/unresolvedKey.vue", true)
+//        checkDefaultNsUnresolvedKey("ts/unresolvedKeyDefaultNs.ts")
+//        checkDefaultNsUnresolvedKey("jsx/unresolvedKeyDefaultNs.jsx")
+//        checkDefaultNsUnresolvedKey("jsx/unresolvedKeyDefaultNsAttribute.jsx")
+//        checkDefaultNsUnresolvedKey("js/unresolvedKeyDefaultNs.js")
+//        checkDefaultNsUnresolvedKey("php/unresolvedKeyDefaultNs.php")
+//        checkDefaultNsUnresolvedKey("vue/unresolvedKey.vue", true)
     }
 
     fun testReferenceToObject() {
