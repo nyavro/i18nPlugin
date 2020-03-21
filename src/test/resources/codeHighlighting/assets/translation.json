@@ -1,0 +1,14 @@
+{
+  "tst1": {
+    "base": {
+      "single": "only one value"
+    }
+  },
+  "tst2": {
+    "plurals": {
+      "value-1": "tt",
+      "value-2": "qq",
+      "value-5": "vv"
+    }
+  }
+}

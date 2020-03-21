@@ -32,6 +32,11 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
         myFixture.checkHighlighting(true, false, true, true)
     }
 
+    fun testReferenceToObjectDefaultNs() {
+        myFixture.configureByFiles("tsx/refToObjectDef.tsx", "assets/translation.json")
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
     fun testResolved() {
         myFixture.configureByFiles("tsx/resolved.tsx", translation)
         myFixture.checkHighlighting(false, true, false, true)
@@ -69,6 +74,11 @@ internal class CodeHighlightingTsTest : BasePlatformTestCase() {
 
     fun testReferenceToObject() {
         myFixture.configureByFiles("ts/refToObject.ts", translation)
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
+    fun testReferenceToObjectDefaultNs() {
+        myFixture.configureByFiles("ts/refToObjectDef.ts", "assets/translation.json")
         myFixture.checkHighlighting(true, false, true, true)
     }
 
@@ -112,6 +122,11 @@ internal class CodeHighlightingJsTest : BasePlatformTestCase() {
         myFixture.checkHighlighting(true, false, true, true)
     }
 
+    fun testReferenceToObjectDefaultNs() {
+        myFixture.configureByFiles("js/refToObjectDef.js", "assets/translation.json")
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
     fun testResolved() {
         myFixture.configureByFiles("js/resolved.js", translation)
         myFixture.checkHighlighting(false, true, false, true)
@@ -149,6 +164,11 @@ internal class CodeHighlightingJsxTest : BasePlatformTestCase() {
 
     fun testReferenceToObject() {
         myFixture.configureByFiles("jsx/refToObject.jsx", translation)
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
+    fun testReferenceToObjectDefaultNs() {
+        myFixture.configureByFiles("jsx/refToObjectDef.jsx", "assets/translation.json")
         myFixture.checkHighlighting(true, false, true, true)
     }
 
@@ -192,6 +212,11 @@ internal class CodeHighlightingPhpTest : BasePlatformTestCase() {
         myFixture.checkHighlighting(true, false, true, true)
     }
 
+    fun testReferenceToObjectDefaultNs() {
+        myFixture.configureByFiles("php/refToObjectDef.php", "assets/translation.json")
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
     fun testResolved() {
         myFixture.configureByFiles("php/resolved.php", translation)
         myFixture.checkHighlighting(false, true, false, true)
@@ -225,6 +250,11 @@ internal class CodeHighlightingVueTest : BasePlatformTestCase() {
 
     fun testDefaultNsUnresolved() {
         myFixture.configureByFiles("vue/unresolvedKey.vue", "assets/en-US.json")
+        myFixture.checkHighlighting(true, false, true, true)
+    }
+
+    fun testReferenceToObject() {
+        myFixture.configureByFiles("vue/refToObject.vue", "assets/en-US.json")
         myFixture.checkHighlighting(true, false, true, true)
     }
 }
