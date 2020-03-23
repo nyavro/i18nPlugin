@@ -63,7 +63,6 @@
     <depends optional="true" config-file="vueConfig.xml">Vue.js</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
-<!--        <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>-->
         <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
@@ -83,7 +82,7 @@
                          groupName="I18n"
                          enabledByDefault="true"
                          level="WARNING"
-                         implementationClass="com.eny.i18n.plugin.ide.I18nInspection"
+                         implementationClass="com.eny.i18n.plugin.ide.inspections.I18nInspection"
                          unfair="true"/>
     </extensions>
 </idea-plugin>

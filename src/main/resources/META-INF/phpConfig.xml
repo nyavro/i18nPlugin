@@ -1,6 +1,13 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="PHP" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyAnnotator"/>
+        <localInspection language="PHP"
+                         bundle="messages.I18nBundle"
+                         key="inspection.php"
+                         groupName="I18n"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="com.eny.i18n.plugin.ide.inspections.I18nPhpInspection"
+                         unfair="true"/>
         <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
     </extensions>

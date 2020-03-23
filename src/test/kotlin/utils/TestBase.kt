@@ -1,8 +1,10 @@
 package utils
 
 import com.eny.i18n.plugin.parser.KeyNormalizer
-import com.eny.i18n.plugin.utils.*
-import com.intellij.openapi.util.TextRange
+import com.eny.i18n.plugin.utils.ExpressionKeyParser
+import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.Literal
 
 /**
  * Base class and utils for unit tests
@@ -30,9 +32,4 @@ interface TestBase {
     fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".",
               stopCharacters: String = ""): FullKey? =
         ExpressionKeyParser(object: KeyNormalizer {}).parse(elements, isTemplate, nsSeparator, keySeparator, stopCharacters)
-
-    /**
-     * Utility for AnnotationHolder
-     */
-    fun facade(textRange: TextRange, isQuoted:Boolean = true) = KeyRangesCalculator(textRange, isQuoted)
 }

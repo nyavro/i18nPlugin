@@ -1,6 +1,7 @@
 package ide
 
-import com.eny.i18n.plugin.ide.I18nInspection
+import com.eny.i18n.plugin.ide.inspections.I18nInspection
+import com.eny.i18n.plugin.ide.inspections.I18nPhpInspection
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -199,7 +200,7 @@ internal class CodeHighlightingPhpTest : BasePlatformTestCase() {
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
-        myFixture.enableInspections(I18nInspection())
+        myFixture.enableInspections(I18nPhpInspection())
         settings.vue = false
     }
 
@@ -225,7 +226,7 @@ internal class CodeHighlightingPhpTest : BasePlatformTestCase() {
 
     fun testResolved() {
         myFixture.configureByFiles("php/resolved.php", translation)
-        myFixture.checkHighlighting(false, true, false, true)
+        myFixture.checkHighlighting(true, false, true, true)
     }
 
     fun testDefaultNsUnresolved() {
