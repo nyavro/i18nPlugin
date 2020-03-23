@@ -27,7 +27,7 @@ class CompositeKeyAnnotator : Annotator, CompositeKeyResolver<PsiElement> {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
         val settings = Settings.getInstance(element.project)
-        val annotationHelper = AnnotationHelper(holder, AnnotationHolderFacade(element.textRange, element.text.isQuoted()), element.project)
+        val annotationHelper = AnnotationHelper(holder, KeyRangesCalculator(element.textRange, element.text.isQuoted()), element.project)
         val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
         if (files.isEmpty()) {
             if (fullKey.ns != null) {

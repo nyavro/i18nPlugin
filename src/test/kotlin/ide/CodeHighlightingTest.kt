@@ -1,5 +1,6 @@
 package ide
 
+import com.eny.i18n.plugin.ide.I18nInspection
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -13,6 +14,7 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
 
     override fun setUp() {
         super.setUp()
+        myFixture.enableInspections(I18nInspection())
         val settings = Settings.getInstance(myFixture.project)
         settings.vue = false
     }
@@ -39,7 +41,7 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
 
     fun testResolved() {
         myFixture.configureByFiles("tsx/resolved.tsx", translation)
-        myFixture.checkHighlighting(false, true, false, true)
+        myFixture.checkHighlighting(true, false, true, true)
     }
 
     fun testDefaultNsUnresolved() {
@@ -59,6 +61,7 @@ internal class CodeHighlightingTsTest : BasePlatformTestCase() {
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
+        myFixture.enableInspections(I18nInspection())
         settings.vue = false
     }
 
@@ -84,7 +87,7 @@ internal class CodeHighlightingTsTest : BasePlatformTestCase() {
 
     fun testResolved() {
         myFixture.configureByFiles("ts/resolved.ts", translation)
-        myFixture.checkHighlighting(false, true, false, true)
+        myFixture.checkHighlighting(true, false, true, true)
     }
 
     fun testDefaultNsUnresolved() {
@@ -104,6 +107,7 @@ internal class CodeHighlightingJsTest : BasePlatformTestCase() {
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
+        myFixture.enableInspections(I18nInspection())
         settings.vue = false
     }
 
@@ -129,7 +133,7 @@ internal class CodeHighlightingJsTest : BasePlatformTestCase() {
 
     fun testResolved() {
         myFixture.configureByFiles("js/resolved.js", translation)
-        myFixture.checkHighlighting(false, true, false, true)
+        myFixture.checkHighlighting(true, false, true, true)
     }
 
     fun testDefaultNsUnresolved() {
@@ -149,6 +153,7 @@ internal class CodeHighlightingJsxTest : BasePlatformTestCase() {
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
+        myFixture.enableInspections(I18nInspection())
         settings.vue = false
     }
 
@@ -174,7 +179,7 @@ internal class CodeHighlightingJsxTest : BasePlatformTestCase() {
 
     fun testResolved() {
         myFixture.configureByFiles("jsx/resolved.jsx", translation)
-        myFixture.checkHighlighting(false, true, false, true)
+        myFixture.checkHighlighting(true, false, true, true)
     }
 
     fun testDefaultNsUnresolved() {
@@ -194,6 +199,7 @@ internal class CodeHighlightingPhpTest : BasePlatformTestCase() {
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
+        myFixture.enableInspections(I18nInspection())
         settings.vue = false
     }
 
@@ -239,6 +245,7 @@ internal class CodeHighlightingVueTest : BasePlatformTestCase() {
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
+        myFixture.enableInspections(I18nInspection())
         settings.vueDirectory = "assets"
         settings.vue = true
     }

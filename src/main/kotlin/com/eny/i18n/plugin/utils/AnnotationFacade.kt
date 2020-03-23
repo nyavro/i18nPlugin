@@ -26,7 +26,7 @@ interface AnnotationFacade {
 /**
  * Annotation utils implementation
  */
-class AnnotationHolderFacade(private val textRange: TextRange, private val isQuoted: Boolean = true) : AnnotationFacade {
+class KeyRangesCalculator(private val textRange: TextRange, private val isQuoted: Boolean = true) : AnnotationFacade {
 
     private val quoteOffset = if (isQuoted) 1 else 0
     private val nsSeparatorOffset = 1

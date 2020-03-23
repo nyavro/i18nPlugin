@@ -12,6 +12,15 @@ data class PropertyReference<T>(val path: List<Literal>, val element: Tree<T>?, 
  */
 interface CompositeKeyResolver<T> {
 
+    fun resolve(compositeKey: List<Literal>, root: Tree<T>?, pluralSeparator: String): List<PropertyReference<T>> =
+        tryToResolvePlural(
+            resolveCompositeKey(
+                compositeKey,
+                root
+            ),
+            pluralSeparator
+        )
+
     /**
      * @param {List<String>} compositeKey Composite key(path) to resolve
      * @param {PsiElement?} root Root element to find property from

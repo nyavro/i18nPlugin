@@ -34,5 +34,5 @@ interface TestBase {
     /**
      * Utility for AnnotationHolder
      */
-    fun facade(textRange: TextRange, isQuoted:Boolean = true) = AnnotationHolderFacade(textRange, isQuoted)
+    fun facade(textRange: TextRange, isQuoted:Boolean = true) = KeyRangesCalculator(textRange, isQuoted)
 }
