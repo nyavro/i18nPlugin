@@ -1,7 +1,7 @@
 package ide
 
-import com.eny.i18n.plugin.ide.inspections.I18nInspection
-import com.eny.i18n.plugin.ide.inspections.I18nPhpInspection
+import com.eny.i18n.plugin.ide.inspections.JsInspection
+import com.eny.i18n.plugin.ide.inspections.PhpInspection
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -15,254 +15,82 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
 
     override fun setUp() {
         super.setUp()
-        myFixture.enableInspections(I18nInspection())
+        myFixture.enableInspections(JsInspection(), PhpInspection())
         val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
-    }
-
-    fun testUnresolvedNs() {
-        myFixture.configureByFiles("tsx/unresolvedNs.tsx")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testUnresolvedKey() {
-        myFixture.configureByFiles("tsx/unresolvedKey.tsx", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObject() {
-        myFixture.configureByFiles("tsx/refToObject.tsx", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObjectDefaultNs() {
-        myFixture.configureByFiles("tsx/refToObjectDef.tsx", "assets/translation.json")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testResolved() {
-        myFixture.configureByFiles("tsx/resolved.tsx", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testDefaultNsUnresolved() {
-        myFixture.configureByFiles("tsx/defNsUresolved.tsx", translation)
-        myFixture.checkHighlighting(true, true, true, false)
-    }
-}
-
-internal class CodeHighlightingTsTest : BasePlatformTestCase() {
-
-    private val translation = "assets/test.json"
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/codeHighlighting"
-    }
-
-    override fun setUp() {
-        super.setUp()
-        val settings = Settings.getInstance(myFixture.project)
-        myFixture.enableInspections(I18nInspection())
-        settings.vue = false
-    }
-
-    fun testUnresolvedNs() {
-        myFixture.configureByFiles("ts/unresolvedNs.ts")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testUnresolvedKey() {
-        myFixture.configureByFiles("ts/unresolvedKey.ts", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObject() {
-        myFixture.configureByFiles("ts/refToObject.ts", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObjectDefaultNs() {
-        myFixture.configureByFiles("ts/refToObjectDef.ts", "assets/translation.json")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testResolved() {
-        myFixture.configureByFiles("ts/resolved.ts", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testDefaultNsUnresolved() {
-        myFixture.configureByFiles("ts/defNsUnresolved.ts", translation)
-        myFixture.checkHighlighting(true, true, true, false)
-    }
-}
-
-internal class CodeHighlightingJsTest : BasePlatformTestCase() {
-
-    private val translation = "assets/test.json"
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/codeHighlighting"
-    }
-
-    override fun setUp() {
-        super.setUp()
-        val settings = Settings.getInstance(myFixture.project)
-        myFixture.enableInspections(I18nInspection())
-        settings.vue = false
-    }
-
-    fun testUnresolvedNs() {
-        myFixture.configureByFiles("js/unresolvedNs.js")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testUnresolvedKey() {
-        myFixture.configureByFiles("js/unresolvedKey.js", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObject() {
-        myFixture.configureByFiles("js/refToObject.js", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObjectDefaultNs() {
-        myFixture.configureByFiles("js/refToObjectDef.js", "assets/translation.json")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testResolved() {
-        myFixture.configureByFiles("js/resolved.js", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testDefaultNsUnresolved() {
-        myFixture.configureByFiles("js/defNsUnresolved.js", translation)
-        myFixture.checkHighlighting(true, true, true, false)
-    }
-}
-
-internal class CodeHighlightingJsxTest : BasePlatformTestCase() {
-
-    private val translation = "assets/test.json"
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/codeHighlighting"
-    }
-
-    override fun setUp() {
-        super.setUp()
-        val settings = Settings.getInstance(myFixture.project)
-        myFixture.enableInspections(I18nInspection())
-        settings.vue = false
-    }
-
-    fun testUnresolvedNs() {
-        myFixture.configureByFiles("jsx/unresolvedNs.jsx")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testUnresolvedKey() {
-        myFixture.configureByFiles("jsx/unresolvedKey.jsx", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObject() {
-        myFixture.configureByFiles("jsx/refToObject.jsx", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObjectDefaultNs() {
-        myFixture.configureByFiles("jsx/refToObjectDef.jsx", "assets/translation.json")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testResolved() {
-        myFixture.configureByFiles("jsx/resolved.jsx", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testDefaultNsUnresolved() {
-        myFixture.configureByFiles("jsx/defNsUresolved.jsx", translation)
-        myFixture.checkHighlighting(true, true, true, false)
-    }
-}
-
-internal class CodeHighlightingPhpTest : BasePlatformTestCase() {
-
-    private val translation = "assets/test.json"
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/codeHighlighting"
-    }
-
-    override fun setUp() {
-        super.setUp()
-        val settings = Settings.getInstance(myFixture.project)
-        myFixture.enableInspections(I18nPhpInspection())
-        settings.vue = false
-    }
-
-    fun testUnresolvedNs() {
-        myFixture.configureByFiles("php/unresolvedNs.php")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testUnresolvedKey() {
-        myFixture.configureByFiles("php/unresolvedKey.php", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObject() {
-        myFixture.configureByFiles("php/refToObject.php", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testReferenceToObjectDefaultNs() {
-        myFixture.configureByFiles("php/refToObjectDef.php", "assets/translation.json")
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testResolved() {
-        myFixture.configureByFiles("php/resolved.php", translation)
-        myFixture.checkHighlighting(true, false, true, true)
-    }
-
-    fun testDefaultNsUnresolved() {
-        myFixture.configureByFiles("php/defNsUnresolved.php", translation)
-        myFixture.checkHighlighting(true, true, true, false)
-    }
-}
-
-internal class CodeHighlightingVueTest : BasePlatformTestCase() {
-
-    private val translation = "assets/test.json"
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/codeHighlighting"
-    }
-
-    override fun setUp() {
-        super.setUp()
-        val settings = Settings.getInstance(myFixture.project)
-        myFixture.enableInspections(I18nInspection())
         settings.vueDirectory = "assets"
-        settings.vue = true
+        settings.vue = false
     }
 
-    fun testResolved() {
-        myFixture.configureByFiles("vue/resolved.vue", translation)
-        myFixture.checkHighlighting(false, true, false, true)
-    }
-
-    fun testDefaultNsUnresolved() {
-        myFixture.configureByFiles("vue/unresolvedKey.vue", "assets/en-US.json")
+    private fun check(filePath: String) {
+        myFixture.configureByFiles(filePath)
         myFixture.checkHighlighting(true, false, true, true)
+    }
+
+    private fun check(filePath: String, assetPath: String, vue: Boolean = false) {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = vue
+        myFixture.configureByFiles(filePath, assetPath)
+        myFixture.checkHighlighting(true, false, true, true)
+        settings.vue = false
+    }
+
+    fun testUnresolvedNs() {
+        check("tsx/unresolvedNs.tsx")
+        check("ts/unresolvedNs.ts")
+        check("jsx/unresolvedNs.jsx")
+        check("js/unresolvedNs.js")
+        check("php/unresolvedNs.php")
+    }
+
+    fun testUnresolvedKey() {
+        check("tsx/unresolvedKey.tsx", translation)
+        check("ts/unresolvedKey.ts", translation)
+        check("jsx/unresolvedKey.jsx", translation)
+        check("js/unresolvedKey.js", translation)
+        check("php/unresolvedKey.php", translation)
     }
 
     fun testReferenceToObject() {
-        myFixture.configureByFiles("vue/refToObject.vue", "assets/en-US.json")
-        myFixture.checkHighlighting(true, false, true, true)
+        check("tsx/refToObject.tsx", translation)
+        check("ts/refToObject.ts", translation)
+        check("jsx/refToObject.jsx", translation)
+        check("js/refToObject.js", translation)
+        check("php/refToObject.php", translation)
+        check("vue/refToObject.vue", "assets/en-US.json", true)
+    }
+
+    fun testReferenceToObjectDefaultNs() {
+        check("tsx/refToObjectDef.tsx", "assets/translation.json")
+        check("ts/refToObjectDef.ts", "assets/translation.json")
+        check("jsx/refToObjectDef.jsx", "assets/translation.json")
+        check("js/refToObjectDef.js", "assets/translation.json")
+        check("php/refToObjectDef.php", "assets/translation.json")
+    }
+
+    fun testResolved() {
+        check("tsx/resolved.tsx", translation)
+        check("ts/resolved.ts", translation)
+        check("jsx/resolved.jsx", translation)
+        check("js/resolved.js", translation)
+        check("php/resolved.php", translation)
+        check("vue/resolved.vue", "assets/test.json", true)
+    }
+
+    fun testDefaultNsUnresolved() {
+        check("tsx/defNsUnresolved.tsx", translation)
+        check("ts/defNsUnresolved.ts", translation)
+        check("jsx/defNsUnresolved.jsx", translation)
+        check("js/defNsUnresolved.js", translation)
+        check("php/defNsUnresolved.php", translation)
+        check("vue/unresolvedKey.vue", "assets/en-US.json", true)
+    }
+
+    fun testNotTranslationArgument() {
+        check("tsx/notArg.tsx", translation)
+        check("ts/notArg.ts", translation)
+        check("jsx/notArg.jsx", translation)
+        check("js/notArg.js", translation)
+        check("php/notArg.php", translation)
+        check("vue/notArg.vue", "assets/en-US.json", true)
     }
 }

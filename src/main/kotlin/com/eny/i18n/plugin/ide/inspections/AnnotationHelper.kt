@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.utils.Literal
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.tokensLength
 import com.intellij.codeInspection.ProblemsHolder
@@ -21,7 +22,7 @@ class AnnotationHelper(val holder: ProblemsHolder, val element: PsiElement) {
         holder.registerProblem(element, TextRange(i + 1, fullKey.source.length + 1), PluginBundle.getMessage("inspection.unresolved.key"))
     }
 
-    fun unresolvedNs(fullKey: FullKey) {
-        holder.registerProblem(element, TextRange(1, (fullKey.ns?.length ?: 0) +1), PluginBundle.getMessage("unresolved.ns"))
+    fun unresolvedNs(ns: Literal) {
+        holder.registerProblem(element, TextRange(1, ns.length + 1), PluginBundle.getMessage("unresolved.ns"))
     }
 }

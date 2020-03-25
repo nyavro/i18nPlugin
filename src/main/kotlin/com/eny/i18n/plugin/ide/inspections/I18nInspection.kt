@@ -1,32 +1,22 @@
 package com.eny.i18n.plugin.ide.inspections
 
+import com.eny.i18n.plugin.parser.CaptureContext
 import com.eny.i18n.plugin.parser.FullKeyExtractor
-import com.intellij.codeInspection.LocalInspectionTool
+import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.intellij.codeInspection.ProblemsHolder
-import com.intellij.lang.javascript.psi.JSElementVisitor
-import com.intellij.lang.javascript.psi.JSLiteralExpression
-import com.intellij.lang.javascript.psi.ecma6.JSStringTemplateExpression
-import com.intellij.psi.PsiElementVisitor
+import com.intellij.patterns.PsiElementPattern
+import com.intellij.psi.PsiElement
 
 /**
- * I18n inspection
+ * Inspects i18n key
  */
-class I18nInspection : LocalInspectionTool() {
-    override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
-        return object : JSElementVisitor() {
-
-            private val annotator = FullKeyAnnotator(holder)
-            private val keyExtractor = FullKeyExtractor()
-
-            override fun visitJSStringTemplateExpression(stringTemplateExpression: JSStringTemplateExpression) {
-                visitJSExpression(stringTemplateExpression)
-            }
-            override fun visitJSLiteralExpression(node: JSLiteralExpression) {
-                val i18nKeyLiteral = keyExtractor.extractI18nKeyLiteral(node)
-                if (i18nKeyLiteral != null) {
-                    annotator.annotateI18nLiteral(i18nKeyLiteral, node)
-                }
-            }
+class I18nInspection<P: PsiElement, T: PsiElementPattern<P, T>>(captures: List<T>, holder: ProblemsHolder) {
+    private val annotator = FullKeyAnnotator(holder)
+    private val keyExtractor = FullKeyExtractor(CaptureContext(captures), KeyExtractorImpl())
+    fun inspect(node: P) {
+        val key = keyExtractor.extractI18nKeyLiteral(node)
+        if (key != null) {
+            annotator.annotateI18nLiteral(key, node)
         }
     }
 }

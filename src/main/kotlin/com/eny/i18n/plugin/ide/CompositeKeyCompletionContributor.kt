@@ -1,7 +1,9 @@
 package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.parser.DummyContext
 import com.eny.i18n.plugin.parser.FullKeyExtractor
+import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
@@ -19,8 +21,8 @@ import com.intellij.psi.PsiElement
  * Completion of i18n key
  */
 class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyResolver<PsiElement> {
-    private val keyExtractor = FullKeyExtractor()
     private val DUMMY_KEY = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED
+    private val keyExtractor = FullKeyExtractor(DummyContext(), KeyExtractorImpl())
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
         super.fillCompletionVariants(parameters, result)

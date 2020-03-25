@@ -1,1 +1,1 @@
-const <info descr="global variable">key</info> = "test:<info descr="null"><info descr="null"><info descr="null">tst1.base.single</info></info></info>";
+const key = (t: Function) => t("test:tst1.base.single");

@@ -1,6 +1,8 @@
 package com.eny.i18n.plugin.ide
 
+import com.eny.i18n.plugin.parser.DummyContext
 import com.eny.i18n.plugin.parser.FullKeyExtractor
+import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
@@ -72,14 +74,13 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
  * Provides navigation from i18n key to it's value in json
  */
 class ReferenceContributor: PsiReferenceContributor() {
-    private val jsUtil = FullKeyExtractor()
-
+    private val keyExtractor = FullKeyExtractor(DummyContext(), KeyExtractorImpl())
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(
             PlatformPatterns.psiElement(PsiElement::class.java),
             object : PsiReferenceProvider() {
                 override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-                    val i18nKeyLiteral = jsUtil.extractI18nKeyLiteral(element)
+                    val i18nKeyLiteral = keyExtractor.extractI18nKeyLiteral(element)
                     if (i18nKeyLiteral != null) {
                         return arrayOf(I18nReference(element, TextRange(1, element.textLength - 1), i18nKeyLiteral))
                     }

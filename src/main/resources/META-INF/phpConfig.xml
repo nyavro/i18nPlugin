@@ -6,7 +6,7 @@
                          groupName="I18n"
                          enabledByDefault="true"
                          level="WARNING"
-                         implementationClass="com.eny.i18n.plugin.ide.inspections.I18nPhpInspection"
+                         implementationClass="com.eny.i18n.plugin.ide.inspections.PhpInspection"
                          unfair="true"/>
         <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>

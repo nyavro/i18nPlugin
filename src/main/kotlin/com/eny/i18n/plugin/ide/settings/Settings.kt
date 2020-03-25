@@ -33,6 +33,8 @@ class Settings : PersistentStateComponent<Settings> {
 
     var translationFunction = "i18n.t"
 
+    var bindToArgument = true
+
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
     override fun getState(): Settings? = this

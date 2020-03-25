@@ -65,12 +65,10 @@
     <extensions defaultExtensionNs="com.intellij">
         <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
-        <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.JsonReferenceContributor"/>
         <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.YamlReferenceContributor"/>
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
-        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
         <intentionAction>
@@ -82,7 +80,7 @@
                          groupName="I18n"
                          enabledByDefault="true"
                          level="WARNING"
-                         implementationClass="com.eny.i18n.plugin.ide.inspections.I18nInspection"
+                         implementationClass="com.eny.i18n.plugin.ide.inspections.JsInspection"
                          unfair="true"/>
     </extensions>
 </idea-plugin>
