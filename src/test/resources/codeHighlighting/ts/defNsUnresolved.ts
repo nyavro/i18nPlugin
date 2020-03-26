@@ -1,3 +1,3 @@
-export const <info descr="exported function">test1</info> = (<info descr="parameter">i18n</info>: (<info descr="parameter">string</info>)=>string) => {
-    return <info descr="parameter">i18n</info>.t("maybe.not.a.key.at.all");
+export const test1 = (i18n: any) => {
+    return i18n.t("<warning descr="Missing default translation file">maybe.not.a.key.at.all</warning>");
 };

@@ -26,6 +26,8 @@ class FullKeyAnnotator(val holder: ProblemsHolder) : CompositeKeyResolver<PsiEle
             val ns = fullKey.ns
             if (ns != null) {
                 annotationHelper.unresolvedNs(ns)
+            } else {
+                annotationHelper.unresolvedDefaultNs(fullKey)
             }
         }
         else {

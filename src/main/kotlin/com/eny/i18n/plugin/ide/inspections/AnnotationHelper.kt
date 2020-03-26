@@ -24,6 +24,10 @@ class AnnotationHelper(val holder: ProblemsHolder, val element: PsiElement) {
     }
 
     fun unresolvedNs(ns: Literal) {
-        holder.registerProblem(element, TextRange(1, ns.length + 1), PluginBundle.getMessage("unresolved.ns"))
+        holder.registerProblem(element, TextRange(1, ns.length + 1), PluginBundle.getMessage("inspection.unresolved.ns"))
+    }
+
+    fun unresolvedDefaultNs(fullKey: FullKey) {
+        holder.registerProblem(element, TextRange(1, fullKey.source.length + 1), PluginBundle.getMessage("inspection.missing.default.ns"))
     }
 }

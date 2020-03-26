@@ -1,3 +1,3 @@
 <?php
 
-    echo <info descr="PHP_PREDEFINED SYMBOL">str_replace</info>("\n", '<br>', <info descr="PHP_FUNCTION_CALL">t</info>('maybe.not.a.key.at.all'));
+    echo str_replace("\n", '<br>', t('<warning descr="Missing default translation file">maybe.not.a.key.at.all</warning>'));
