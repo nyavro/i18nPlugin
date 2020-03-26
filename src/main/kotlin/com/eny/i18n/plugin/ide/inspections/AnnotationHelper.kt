@@ -18,8 +18,9 @@ class AnnotationHelper(val holder: ProblemsHolder, val element: PsiElement) {
     }
 
     fun unresolvedKey(fullKey: FullKey, mostResolvedReference: PropertyReference<PsiElement>) {
-        val i = (fullKey.ns?.length ?: -1) + 1 + tokensLength(mostResolvedReference.path) + 1
-        holder.registerProblem(element, TextRange(i + 1, fullKey.source.length + 1), PluginBundle.getMessage("inspection.unresolved.key"))
+        val keySeparatorOffset = if (mostResolvedReference.path.isEmpty()) 0 else 1
+        val startOffset = (fullKey.ns?.length ?: -1) + 1 + tokensLength(mostResolvedReference.path) + keySeparatorOffset
+        holder.registerProblem(element, TextRange(startOffset + 1, fullKey.source.length + 1), PluginBundle.getMessage("inspection.unresolved.key"))
     }
 
     fun unresolvedNs(ns: Literal) {

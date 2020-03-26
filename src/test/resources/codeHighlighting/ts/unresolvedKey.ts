@@ -1,3 +1,4 @@
-export const test1 = (i18n: (string)=>string) => {
-    return i18n.t("test:tst1.<warning descr="Unresolved property"><warning descr="Unresolved property"><warning descr="Unresolved property">unresolved.part.of.key</warning></warning></warning>");
+export const test1 = (t: (string)=>string) => {
+    t("test:<warning descr="Unresolved property">missing.whole.key</warning>");
+    return t("test:tst1.<warning descr="Unresolved property">unresolved.part.of.key</warning>");
 };
