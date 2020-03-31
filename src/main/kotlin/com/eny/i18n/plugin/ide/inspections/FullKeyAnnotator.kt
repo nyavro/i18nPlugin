@@ -37,7 +37,6 @@ class FullKeyAnnotator(val holder: ProblemsHolder) : CompositeKeyResolver<PsiEle
                 .maxBy { v -> v.path.size }!!
             when {
                 mostResolvedReference.unresolved.isEmpty() -> annotationHelper.referenceToObject(fullKey)
-                fullKey.ns == null && (fullKey.compositeKey.size == mostResolvedReference.unresolved.size) -> {}
                 else -> annotationHelper.unresolvedKey(fullKey, mostResolvedReference)
             }
         }
