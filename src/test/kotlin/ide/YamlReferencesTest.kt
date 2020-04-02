@@ -18,6 +18,27 @@ internal class YamlReferencesTest : BasePlatformTestCase() {
         assertEquals("'test:ref.section.key'", element!!.references[0].resolve()?.text)
     }
 
+    fun testInvalidYaml() {
+        myFixture.configureByFiles("assets/invalid.yml")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertTrue(element!!.references.isEmpty())
+    }
+
+    fun testNoReference() {
+        myFixture.configureByFiles("assets/test.yml")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertTrue(element!!.references.isEmpty())
+    }
+
+    fun testSingleReferenceQuoted() {
+        myFixture.configureByFiles("assets/testQuoted.yml", "jsx/testReferenceQuoted.jsx")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertEquals("'testQuoted:ref.section.key'", element!!.references[0].resolve()?.text)
+    }
+
     fun testMultipleReferences() {
         myFixture.configureByFiles("assets/multiTest.yml", "jsx/testMultiReference1.jsx", "jsx/testMultiReference2.jsx")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent

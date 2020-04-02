@@ -4,7 +4,6 @@ export const test1 = () => {
 export const test2 = () => {
     return (<div>{i18n.t('objectRef:ref.section.key2')}</div>);
 };
-export const test2 = () => {
-    const arg = 'key2'
+export const test3 = (key2) => {
     return (<div>{i18n.t(`objectRef:ref.section.${key2}`)}</div>);
 };
