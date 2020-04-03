@@ -65,8 +65,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
         <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
-        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.JsonReferenceContributor"/>
-        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.YamlReferenceContributor"/>
+        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.JsonReferenceContributor"/>
+        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.YamlReferenceContributor"/>
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>

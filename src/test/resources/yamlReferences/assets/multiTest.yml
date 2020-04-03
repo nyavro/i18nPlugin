@@ -2,7 +2,7 @@ ref:
   section:
     subsection1:
       key11: Reference in yaml
-      key12: Some
+      key1<caret>2: Some
     subsection2:
       key21: Ref
       key22: Etwas

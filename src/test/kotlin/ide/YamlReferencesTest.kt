@@ -1,6 +1,7 @@
 package ide
 
-import com.eny.i18n.plugin.ide.JsonI18nReference
+import com.eny.i18n.plugin.ide.references.TranslationToCodeReference
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 internal class YamlReferencesTest : BasePlatformTestCase() {
@@ -43,8 +44,8 @@ internal class YamlReferencesTest : BasePlatformTestCase() {
         myFixture.configureByFiles("assets/multiTest.yml", "jsx/testMultiReference1.jsx", "jsx/testMultiReference2.jsx")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
-        assertTrue(ref is JsonI18nReference)
-        val refs = (ref as JsonI18nReference).findRefs().map { item -> item.text}.toSet()
+        assertTrue(ref is TranslationToCodeReference)
+        val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
         assertEquals(
             setOf("'multiTest:ref.section.subsection1.key12'"),
             refs
@@ -55,10 +56,24 @@ internal class YamlReferencesTest : BasePlatformTestCase() {
         myFixture.configureByFiles("assets/objectRef.yml", "jsx/testObjectRef.jsx")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
-        assertTrue(ref is JsonI18nReference)
-        val refs = (ref as JsonI18nReference).findRefs().map { item -> item.text}.toSet()
+        assertTrue(ref is TranslationToCodeReference)
+        val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
         assertEquals(
             setOf("'objectRef:ref.section.key1'", "'objectRef:ref.section.key2'", "`objectRef:ref.section.\${key2}`"),
+            refs
+        )
+    }
+
+    fun testDefaultNs() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.defaultNs = "Common"
+        myFixture.configureByFiles("assets/Common.yml", "jsx/testDefaultNs.jsx")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        val ref = element!!.references[0]
+        assertTrue(ref is TranslationToCodeReference)
+        val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
+        assertEquals(
+            setOf("'ref.section.key1'", "'ref.section.key2'", "`ref.section.\${key3}`"),
             refs
         )
     }

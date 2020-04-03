@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide
+package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
@@ -35,7 +35,7 @@ class YamlReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElemen
                         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES==
                                 PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, settings.searchScope(project), null, null)) {
                             val keyElement = element.key
-                            return if(keyElement != null) arrayOf(JsonI18nReference(element, getRange(keyElement), key)) else PsiReference.EMPTY_ARRAY
+                            return if(keyElement != null) arrayOf(TranslationToCodeReference(element, getRange(keyElement), key)) else PsiReference.EMPTY_ARRAY
                         }
                         return PsiReference.EMPTY_ARRAY
                     }
