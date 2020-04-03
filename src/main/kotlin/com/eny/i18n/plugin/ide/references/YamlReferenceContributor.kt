@@ -34,10 +34,8 @@ class YamlReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElemen
                         )
                         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES==
                                 PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, settings.searchScope(project), null, null)) {
-                            val keyElement = element.key
-                            return if(keyElement != null) arrayOf(TranslationToCodeReference(element, getRange(keyElement), key)) else PsiReference.EMPTY_ARRAY
+                            return arrayOf(TranslationToCodeReference(element, getRange(element.key), key))
                         }
-                        return PsiReference.EMPTY_ARRAY
                     }
                     return PsiReference.EMPTY_ARRAY
                 }
@@ -45,8 +43,8 @@ class YamlReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElemen
         )
     }
 
-    private fun getRange(key: PsiElement): TextRange {
-        val text = key.text
-        return TextRange(if (text.startsWith("\"")) 1 else 0, key.textLength - (if (text.endsWith("\"")) 1 else 0))
+    private fun getRange(key: PsiElement?): TextRange {
+        val text = key?.text ?: ""
+        return TextRange(if (text.startsWith("\"")) 1 else 0, text.length - (if (text.endsWith("\"")) 1 else 0))
     }
 }

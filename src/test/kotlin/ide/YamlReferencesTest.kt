@@ -77,4 +77,19 @@ internal class YamlReferencesTest : BasePlatformTestCase() {
             refs
         )
     }
+
+    fun testVue() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vueDirectory = "assets"
+        settings.vue = true
+        myFixture.configureByFiles("assets/en-US.yml", "vue/test.vue")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        val ref = element!!.references[0]
+        assertTrue(ref is TranslationToCodeReference)
+        assertEquals(
+            setOf("'ref.section.key2'", "'ref.section.key5'"),
+            (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
+        )
+        settings.vue = false
+    }
 }
