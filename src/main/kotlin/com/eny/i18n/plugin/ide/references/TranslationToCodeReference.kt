@@ -24,10 +24,7 @@ class TranslationToCodeReference(element: PsiElement, textRange: TextRange, val 
         return referencesAccumulator.entries()
     }
 
-    override fun resolve(): PsiElement? {
-        val res = multiResolve(false)
-        return if (res.size == 1) res.firstOrNull()?.element else null
-    }
+    override fun resolve(): PsiElement? = multiResolve(false).firstOrNull()?.element
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> =
         findRefs()
