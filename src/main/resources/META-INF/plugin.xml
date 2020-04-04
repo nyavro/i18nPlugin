@@ -63,8 +63,8 @@
     <depends optional="true" config-file="vueConfig.xml">Vue.js</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
-        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
-        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
+        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
+        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.JsonReferenceContributor"/>
         <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.YamlReferenceContributor"/>
         <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>

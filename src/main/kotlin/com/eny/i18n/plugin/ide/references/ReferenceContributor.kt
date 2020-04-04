@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide
+package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.parser.DummyContext
 import com.eny.i18n.plugin.parser.FullKeyExtractor
@@ -37,13 +37,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
                 .filter { res -> res.path.isNotEmpty()}
         ).mapNotNull {item -> item.element}
 
-    override fun resolve(): PsiElement? {
-        val res = multiResolve(false)
-        return if (res.size == 1) {
-            res.firstOrNull()?.element
-        }
-        else null
-    }
+    override fun resolve(): PsiElement? = multiResolve(false).firstOrNull()?.element
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> =
         findProperties()

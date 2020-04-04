@@ -1,6 +1,6 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
-        <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
+        <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
     </extensions>
 </idea-plugin>

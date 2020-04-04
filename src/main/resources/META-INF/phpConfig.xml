@@ -8,7 +8,7 @@
                          level="WARNING"
                          implementationClass="com.eny.i18n.plugin.ide.inspections.PhpInspection"
                          unfair="true"/>
-        <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.ReferenceContributor"/>
+        <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
     </extensions>
 </idea-plugin>
