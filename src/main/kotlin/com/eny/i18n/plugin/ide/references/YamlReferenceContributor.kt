@@ -19,9 +19,10 @@ class YamlReferenceContributor: PsiReferenceContributor() {
             object : PsiReferenceProvider() {
 
                 override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> =
-                    when (element) {
-                        is YAMLKeyValue -> provider.getReferences(element, getRange(element.key!!))
-                        else -> PsiReference.EMPTY_ARRAY
+                    if (element is YAMLKeyValue) {
+                        provider.getReferences(element, getRange(element.key!!))
+                    } else {
+                        PsiReference.EMPTY_ARRAY
                     }
 
                 private fun getRange(key: PsiElement): TextRange {

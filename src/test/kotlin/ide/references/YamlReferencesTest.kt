@@ -6,6 +6,12 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 internal abstract class TranslationToCodeTestBase(private val assetExt:String, private val ext:String) : BasePlatformTestCase() {
 
+    override fun setUp() {
+        super.setUp()
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
+    }
+
     fun testSingleReference() {
         myFixture.configureByFiles("assets/test.$assetExt", "$ext/testReference.$ext")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -84,7 +90,16 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
                 setOf("'ref.section.key2'", "'ref.section.key5'"),
                 (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
         )
-        settings.vue = false
+    }
+
+    fun testVueIncorrectConfiguration() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vueDirectory = "translations"
+        settings.vue = true
+        myFixture.configureByFiles("assets/en-US.$assetExt", "vue/test.vue")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertTrue(element!!.references.isEmpty())
     }
 }
 
@@ -99,5 +114,12 @@ internal class JsonReferencesTest : TranslationToCodeTestBase("json", "jsx") {
 
     override fun getTestDataPath(): String {
         return "src/test/resources/jsonReferences"
+    }
+
+    fun testValue() {
+        myFixture.configureByFiles("assets/testValue.json")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertTrue(element!!.references.isEmpty())
     }
 }
