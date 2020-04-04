@@ -10,35 +10,25 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
 import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.util.ProcessingContext
+import org.jetbrains.yaml.psi.YAMLKeyValue
 
 /**
  * Provides navigation from i18n key to it's value in json
  */
 class JsonReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElement> {
 
+    private val provider = TranslationToCodeReferenceProvider()
+
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(
             PlatformPatterns.psiElement(PsiElement::class.java),
             object : PsiReferenceProvider() {
                 override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-                    if (element is JsonStringLiteral && element.isPropertyName) {
-                        val project = element.project
-                        val settings = Settings.getInstance(project)
-                        val key = composeKey(
-                            PsiProperty.create(element),
-                            settings.nsSeparator,
-                            settings.keySeparator,
-                            settings.pluralSeparator,
-                            settings.defaultNs,
-                            settings.vue && element.containingFile.parent?.name == settings.vueDirectory
-                        )
-                        if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES==
-                                PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, settings.searchScope(project), null, null)) {
-                            return arrayOf(TranslationToCodeReference(element, TextRange(1, element.textLength - 1), key))
-                        }
-                        return PsiReference.EMPTY_ARRAY
+                    return if (element is JsonStringLiteral && element.isPropertyName) {
+                        provider.getReferences(element, TextRange(1, element.textLength - 1))
+                    } else {
+                        PsiReference.EMPTY_ARRAY
                     }
-                    return PsiReference.EMPTY_ARRAY
                 }
             }
         )

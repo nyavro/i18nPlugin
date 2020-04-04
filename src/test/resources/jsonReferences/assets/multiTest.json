@@ -1,0 +1,18 @@
+{
+  "ref": {
+    "section": {
+      "subsection1":{
+        "key11": "ref11",
+        "key1<caret>2": "Some"
+      },
+      "subsection2":{
+        "key21": "Ref",
+        "key22": "Etwas"}
+    },
+    "plurals": {
+      "value-1": "tt",
+      "value-2": "qq",
+      "value-5": "vv"
+    }
+  }
+}

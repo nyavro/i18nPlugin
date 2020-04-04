@@ -1,0 +1,13 @@
+{
+  "ref": {
+    "section<caret>": {
+      "key1": "val 1",
+      "key2": "val 2"
+    },
+    "plurals": {
+      "value-1": "tt",
+      "value-2": "qq",
+      "value-5": "vv"
+    }
+  }
+}    
