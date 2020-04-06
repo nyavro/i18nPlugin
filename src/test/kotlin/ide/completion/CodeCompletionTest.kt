@@ -14,6 +14,7 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
+        settings.defaultNs = "translation"
         settings.vue = false
     }
 
