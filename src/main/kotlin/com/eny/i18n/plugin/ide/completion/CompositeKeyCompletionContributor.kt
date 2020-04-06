@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide
+package com.eny.i18n.plugin.ide.completion
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.parser.DummyContext

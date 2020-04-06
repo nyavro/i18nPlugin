@@ -1,4 +1,4 @@
-package ide
+package ide.references
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 

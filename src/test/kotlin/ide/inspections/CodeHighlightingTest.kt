@@ -1,4 +1,4 @@
-package ide
+package ide.inspections
 
 import com.eny.i18n.plugin.ide.inspections.JsInspection
 import com.eny.i18n.plugin.ide.inspections.PhpInspection

@@ -1,4 +1,4 @@
-package ide
+package ide.completion
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.codeInsight.completion.CompletionType

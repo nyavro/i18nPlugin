@@ -9,6 +9,6 @@
                          implementationClass="com.eny.i18n.plugin.ide.inspections.PhpInspection"
                          unfair="true"/>
         <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
-        <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.CompositeKeyCompletionContributor"/>
+        <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.completion.CompositeKeyCompletionContributor"/>
     </extensions>
 </idea-plugin>
