@@ -1,7 +1,5 @@
 package ide.inspections
 
-import com.eny.i18n.plugin.ide.inspections.JsInspection
-import com.eny.i18n.plugin.ide.inspections.PhpInspection
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -15,7 +13,6 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
 
     override fun setUp() {
         super.setUp()
-        myFixture.enableInspections(JsInspection(), PhpInspection())
         val settings = Settings.getInstance(myFixture.project)
         settings.vueDirectory = "assets"
         settings.vue = false
@@ -30,7 +27,7 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
         val settings = Settings.getInstance(myFixture.project)
         settings.vue = vue
         myFixture.configureByFiles(filePath, assetPath)
-        myFixture.checkHighlighting(true, false, true, true)
+        myFixture.checkHighlighting(true, true, true, true)
         settings.vue = false
     }
 

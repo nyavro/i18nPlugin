@@ -63,6 +63,7 @@
     <depends optional="true" config-file="vueConfig.xml">Vue.js</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
+        <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
         <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.JsonReferenceContributor"/>
@@ -74,13 +75,5 @@
         <intentionAction>
             <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
         </intentionAction>
-        <localInspection language="JavaScript"
-                         bundle="messages.I18nBundle"
-                         key="inspection"
-                         groupName="I18n"
-                         enabledByDefault="true"
-                         level="WARNING"
-                         implementationClass="com.eny.i18n.plugin.ide.inspections.JsInspection"
-                         unfair="true"/>
     </extensions>
 </idea-plugin>

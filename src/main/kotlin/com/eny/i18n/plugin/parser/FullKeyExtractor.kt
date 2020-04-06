@@ -24,7 +24,9 @@ class DummyContext: CallContext {
 }
 
 class CaptureContext<P: PsiElement, T: PsiElementPattern<P, T>>(private val captures: List<T>): CallContext {
-    override fun accepts(element: PsiElement): Boolean = captures.any {capture -> capture.accepts(element)}
+    override fun accepts(element: PsiElement): Boolean {
+        return captures.any {capture -> capture.accepts(element)}
+    }
 }
 
 /**
@@ -38,10 +40,7 @@ class FullKeyExtractor(val context: CallContext, val extractor: Extractor): Extr
 
 /**
  * Extracts translation key from psi element
- *
- *
  */
-@Deprecated("To be removed by advanced context analysis")
 class KeyExtractorImpl: Extractor {
 
     private val parser: ExpressionKeyParser = ExpressionKeyParser()
