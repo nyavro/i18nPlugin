@@ -15,6 +15,7 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
         settings.vueDirectory = "assets"
+        settings.defaultNs = "translation"
         settings.vue = false
     }
 
