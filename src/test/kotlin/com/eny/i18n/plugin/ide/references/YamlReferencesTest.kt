@@ -1,4 +1,4 @@
-package ide.references
+package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.ide.references.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.settings.Settings

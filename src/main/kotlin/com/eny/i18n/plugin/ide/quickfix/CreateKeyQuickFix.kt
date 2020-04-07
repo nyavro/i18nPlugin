@@ -14,9 +14,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 
 /**
- * Quick fix for missing property creation
+ * Quick fix for missing key creation
  */
-class CreatePropertyQuickFix(
+class CreateKeyQuickFix(
         private val fullKey: FullKey,
         private val selector: FilesSelector,
         private val commandCaption: String,

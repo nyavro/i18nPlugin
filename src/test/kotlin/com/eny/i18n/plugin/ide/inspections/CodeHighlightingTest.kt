@@ -1,4 +1,4 @@
-package ide.inspections
+package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase

@@ -70,8 +70,8 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             ContentGeneratorAdapter(JsonContentGenerator(), JsonPsiContentGenerator())
         )
         unresolvedPropertyAnnotation.registerFix(
-            CreatePropertyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.property"), generators))
+            CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
         unresolvedPropertyAnnotation.registerFix(
-            CreatePropertyQuickFix(fullKey, AllFilesSelector(), PluginBundle.getMessage("quickfix.create.property.in.files"), generators))
+            CreateKeyQuickFix(fullKey, AllFilesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files"), generators))
     }
 }

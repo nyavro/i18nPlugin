@@ -1,4 +1,4 @@
-package ide.actions
+package com.eny.i18n.plugin.ide.actions
 
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages

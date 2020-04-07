@@ -30,7 +30,7 @@ class KeyExtractor {
                 ContentGeneratorAdapter(YamlContentGenerator(), YamlPsiContentGenerator()),
                 ContentGeneratorAdapter(JsonContentGenerator(), JsonPsiContentGenerator())
             )
-            CreatePropertyQuickFix(i18nKey, UserChoice(),  PluginBundle.getMessage("quickfix.create.property"), generators, source)
+            CreateKeyQuickFix(i18nKey, UserChoice(),  PluginBundle.getMessage("quickfix.create.property"), generators, source)
         }
         quickFix.invoke(project, editor)
     }

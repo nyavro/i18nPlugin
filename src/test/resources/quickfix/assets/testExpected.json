@@ -1,0 +1,8 @@
+{
+  "ref": {
+    "section": {
+      "key": "Translation",
+      "missing": "test:ref.section.missing"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-package ide.references
+package com.eny.i18n.plugin.ide.references
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
