@@ -4,7 +4,7 @@
     <vendor email="e.nyavro@gmail.com" url="https://github.com/nyavro/i18nPlugin">i18nPlugin</vendor>
     <depends>com.intellij.modules.platform</depends>
     <description><![CDATA[
-    <h4>i18next TypeScript/JavaScript plugin</h4>
+    <h4>i18next TypeScript/JavaScript/PHP plugin</h4>
     i18n plugin provides:
     <ul>
         <li>annotation of invalid i18n keys</li>
@@ -17,6 +17,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        <div>
+            <h3>1.7.0</h3>
+            <ul>
+                <li>PHP support introduced</li>
+                <li>Fixed false positive string parsing for strings similar to i18n keys</li>
+            </ul>
+        </div>
         <div>
             <h3>1.6.2</h3>
             <ul>
