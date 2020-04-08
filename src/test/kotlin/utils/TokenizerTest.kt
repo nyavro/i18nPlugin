@@ -111,7 +111,7 @@ internal class TokenizerTest {
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
             listOf(
-                Literal("*", 6, 0)
+                Literal("*", 6, 0, true)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -222,7 +222,7 @@ internal class TokenizerTest {
         val tokenizer = Tokenizer("^", "#")
         assertEquals(
             listOf(
-                Literal("*", 6, 0)
+                Literal("*", 6, 0, true)
             ),
             tokenizer.tokenize(keyElement)
         )
