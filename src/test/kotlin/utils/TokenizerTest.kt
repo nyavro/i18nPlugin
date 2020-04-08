@@ -118,16 +118,6 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeReferenceToEmptyValue() {
-        val keyElement = KeyElement.resolvedTemplate("\${rei}", "")
-        val tokenizer = Tokenizer(":", ".")
-        assertEquals(
-            listOf(),
-            tokenizer.tokenize(keyElement)
-        )
-    }
-
-    @Test
     fun tokenizeLiteralCustomSeparator() {
         val keyElement = KeyElement.literal("item#value:some#test:another")
         val tokenizer = Tokenizer(":", "#")
@@ -234,16 +224,6 @@ internal class TokenizerTest {
             listOf(
                 Literal("*", 6, 0)
             ),
-            tokenizer.tokenize(keyElement)
-        )
-    }
-
-    @Test
-    fun tokenizeReferenceToEmptyValueCustomSeparator() {
-        val keyElement = KeyElement.resolvedTemplate("\${ref}", "")
-        val tokenizer = Tokenizer("@", "#")
-        assertEquals(
-            listOf(),
             tokenizer.tokenize(keyElement)
         )
     }

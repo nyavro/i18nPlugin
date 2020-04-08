@@ -74,6 +74,10 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
         check("vue/resolved.vue", "assets/test.json", true)
     }
 
+    fun testResolvedTemplate() {
+        check("tsx/resolvedTemplate.tsx", translation)
+    }
+
     fun testDefaultNsUnresolved() {
         check("tsx/defNsUnresolved.tsx", translation)
         check("ts/defNsUnresolved.ts", translation)

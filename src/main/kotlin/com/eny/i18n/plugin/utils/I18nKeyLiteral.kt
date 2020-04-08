@@ -29,10 +29,5 @@ data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyEl
          * Creates unresolved template key element
          */
         fun unresolvedTemplate(expression: String): KeyElement = KeyElement(expression, null, KeyElementType.TEMPLATE)
-
-        /**
-         * Creates resolved template key element
-         */
-        fun resolvedTemplate(expression: String, resolvedTo: String): KeyElement = KeyElement(expression, resolvedTo, KeyElementType.TEMPLATE)
     }
 }

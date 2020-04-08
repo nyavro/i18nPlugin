@@ -25,11 +25,11 @@ object KeySeparator: Separator
 /**
  * Represents key literal
  */
-data class Literal(val text: String, val length: Int = text.length, val dot: Int = 0): Token {
+data class Literal(val text: String, val length: Int = text.length, val dot: Int = 0, val isTemplate: Boolean = false): Token {
     /**
      * Merges two tokens
      */
-    fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length)
+    fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length, 0)
 }
 
 /**
@@ -55,7 +55,7 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
         setChildLengths(
             text,
             if (resolvedTo != null) tokenizeLiteral(resolvedTo)
-            else listOf(Literal("*", 1, 0))
+            else listOf(Literal("*", 1, 0, true))
         )
 
     private fun tokenizeLiteral(literal: String): List<Token> =
@@ -79,7 +79,8 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
                         result + Literal(
                             token.text,
                             if (isFirstLiteralSet) 0 else expression.length,
-                            if (startsWithSeparator && (index == 1) || endsWithSeparator && (index == resolved.lastIndex - 1)) 1 else 0
+                            if (startsWithSeparator && (index == 1) || endsWithSeparator && (index == resolved.lastIndex - 1)) 1 else 0,
+                            token.isTemplate
                         )
                     )
                 else Pair (isFirstLiteralSet, result + token)

@@ -70,27 +70,6 @@ internal class InvalidExpressionTest : TestBase {
         assertNull(parse(literal))
     }
 
-//${fileExpr}:ROOT.Key1.Key31               / sample:file
-    @Test
-    fun parseInvalidExpression() {
-        val invalidExpression = listOf(
-            KeyElement.resolvedTemplate("\${fileExpr}", "sample:file"),
-            KeyElement.literal(":ROOT.Key1.Key31")
-        )
-        assertNull(parse(invalidExpression))
-    }
-
-//filename:root${key}.Postfix               / .Key0.
-    @Test
-    fun partOfKeyIsExpression5() {
-        val elements = listOf(
-            KeyElement.literal("filename:root"),
-            KeyElement.resolvedTemplate("\${key}", ".Key0."),
-            KeyElement.literal(".Postfix")
-        )
-        assertNull(parse(elements))
-    }
-
 // invalid:ROOT.Key1.Key31
     @Test
     fun notAKey() {
