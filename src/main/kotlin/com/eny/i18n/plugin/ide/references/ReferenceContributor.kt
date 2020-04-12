@@ -9,7 +9,6 @@ import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.LocalizationFileSearch
-import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
@@ -20,6 +19,18 @@ import com.intellij.util.ProcessingContext
  */
 class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: FullKey) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference, CompositeKeyResolver<PsiElement> {
     private val search = LocalizationFileSearch(element.project)
+    private val resolved: Array<ResolveResult> = findProperties()
+        .map {property ->
+            PsiElementResolveResult(
+                if (property.isTree()) {
+                    val parent = property.value().parent
+                    if (parent is PsiFile) parent
+                    else parent.firstChild
+                }
+                else property.value()
+            )
+        }
+        .toTypedArray()
 
     private fun filterMostResolved(list: List<PropertyReference<PsiElement>>): List<PropertyReference<PsiElement>> {
         val mostResolved = list.maxBy {ref -> ref.path.size}?.path?.size
@@ -39,29 +50,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
 
     override fun resolve(): PsiElement? = multiResolve(false).firstOrNull()?.element
 
-    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> =
-        findProperties()
-            .map {property ->
-                PsiElementResolveResult(
-                    if (property.isTree()) {
-                        val parent = property.value().parent
-                        if (parent is PsiFile) parent
-                        else parent.firstChild
-                    }
-                    else property.value()
-                )
-            }
-            .toTypedArray()
-
-    override fun getVariants(): Array<Any> =
-        findProperties()
-            .map {property ->
-                LookupElementBuilder
-                    .create(property.value().text)
-                    .withTypeText(
-                        (property.value().containingFile.parent?.name ?: "" + "/") + property.value().containingFile.name)
-            }
-            .toTypedArray()
+    override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> = resolved
 }
 
 /**
