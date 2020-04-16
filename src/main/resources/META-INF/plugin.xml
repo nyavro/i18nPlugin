@@ -82,5 +82,7 @@
         <intentionAction>
             <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
         </intentionAction>
+        <lang.foldingBuilder language="TypeScript"
+                             implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
     </extensions>
 </idea-plugin>

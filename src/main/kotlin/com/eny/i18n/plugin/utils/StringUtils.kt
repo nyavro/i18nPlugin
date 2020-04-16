@@ -17,3 +17,13 @@ fun String.unQuote(): String {
             else acc
     }
 }
+
+/**
+ * String ellipsis
+ */
+fun String.ellipsis(maxLen:Int): String =
+    if (this.length > maxLen) {
+        this.substring(0, maxLen) + "..."
+    } else {
+        this
+    }

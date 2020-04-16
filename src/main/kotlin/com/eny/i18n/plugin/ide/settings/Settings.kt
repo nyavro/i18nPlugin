@@ -33,6 +33,10 @@ class Settings : PersistentStateComponent<Settings> {
 
     var translationFunction = "i18n.t"
 
+    var foldingPreferredLanguage = "en"
+
+    var foldingMaxLength = 20
+
     var bindToArgument = true
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
