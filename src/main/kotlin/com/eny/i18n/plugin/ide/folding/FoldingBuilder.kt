@@ -65,7 +65,7 @@ class FoldingBuilder : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiEl
     private fun resolve(element: PsiElement, search: LocalizationFileSearch, settings: Settings, fullKey: FullKey): ElementToReferenceBinding? {
         return search
             .findFilesByName(fullKey.ns?.text)
-            .filter { it.parent!!.name == settings.foldingPreferredLanguage }
+            .filter { it.parent?.name == settings.foldingPreferredLanguage }
             .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it)) }
             .firstOrNull { it.unresolved.isEmpty() }
             ?.let { ElementToReferenceBinding(element, it) }

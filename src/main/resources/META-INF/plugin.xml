@@ -71,18 +71,17 @@
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
-        <psi.referenceContributor language="TypeScript" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.JsonReferenceContributor"/>
         <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.YamlReferenceContributor"/>
-        <completion.contributor language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.completion.CompositeKeyCompletionContributor"/>
         <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.completion.CompositeKeyCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
         <intentionAction>
             <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
         </intentionAction>
-        <lang.foldingBuilder language="TypeScript"
-                             implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
+        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
     </extensions>
 </idea-plugin>
