@@ -33,7 +33,7 @@ class Settings : PersistentStateComponent<Settings> {
 
     var translationFunction = "i18n.t"
 
-    var foldingEnabled = true
+    var foldingEnabled = false
 
     var foldingPreferredLanguage = "en"
 

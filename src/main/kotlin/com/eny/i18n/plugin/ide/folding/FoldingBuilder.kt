@@ -45,8 +45,9 @@ class FoldingBuilder : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiEl
     }
 
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
-        val search = LocalizationFileSearch(root.project)
         val settings = Settings.getInstance(root.project)
+        if (!settings.foldingEnabled) return arrayOf()
+        val search = LocalizationFileSearch(root.project)
         val group = FoldingGroup.newGroup("i18n")
         val descriptors = PsiTreeUtil
             .findChildrenOfType(root, JSLiteralExpression::class.java)
@@ -64,7 +65,7 @@ class FoldingBuilder : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiEl
     private fun resolve(element: PsiElement, search: LocalizationFileSearch, settings: Settings, fullKey: FullKey): ElementToReferenceBinding? {
         return search
             .findFilesByName(fullKey.ns?.text)
-            .filter { it.parent?.name == settings.foldingPreferredLanguage }
+            .filter { it.parent!!.name == settings.foldingPreferredLanguage }
             .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it)) }
             .firstOrNull { it.unresolved.isEmpty() }
             ?.let { ElementToReferenceBinding(element, it) }

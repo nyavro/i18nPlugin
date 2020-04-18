@@ -37,9 +37,9 @@ internal class FoldingTest : BasePlatformTestCase() {
         myFixture.testFolding("$testDataPath/ts/noFolding.ts")
     }
 
-//    fun testFoldingDisabled() {
-//        Settings.getInstance(myFixture.project).foldingEnabled = false
-//        myFixture.configureByFiles("assets/ru/test.json", "assets/en/test.json")
-//        myFixture.testFolding("$testDataPath/ts/noFolding.ts")
-//    }
+    fun testFoldingDisabled() {
+        Settings.getInstance(myFixture.project).foldingEnabled = false
+        myFixture.configureByFiles("assets/ru/test.json", "assets/en/test.json")
+        myFixture.testFolding("$testDataPath/ts/noFolding.ts")
+    }
 }
