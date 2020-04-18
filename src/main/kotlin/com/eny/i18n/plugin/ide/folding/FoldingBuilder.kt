@@ -14,13 +14,11 @@ import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
-import com.intellij.lang.javascript.patterns.JSPatterns
-import com.intellij.lang.javascript.psi.JSCallExpression
-import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
+import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 
@@ -29,9 +27,11 @@ internal data class ElementToReferenceBinding(val psiElement: PsiElement, val re
 /**
  * Provides folding mechanism for i18n keys
  */
-class FoldingBuilder : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
+abstract class FoldingBuilderBase<P: PsiElement, L: PsiElement, C: PsiElement, T: PsiElementPattern<P, T>>(
+        private val pattern: T,
+        private val literalClass: Class<L>,
+        private val callExpressionClass: Class<C>) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
 
-    private val pattern = JSPatterns.jsArgument("t", 0)
     private val extractor = FullKeyExtractor(
         CaptureContext(listOf(pattern)),
         KeyExtractorImpl()
@@ -50,13 +50,14 @@ class FoldingBuilder : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiEl
         val search = LocalizationFileSearch(root.project)
         val group = FoldingGroup.newGroup("i18n")
         val descriptors = PsiTreeUtil
-            .findChildrenOfType(root, JSLiteralExpression::class.java)
+            .findChildrenOfType(root, literalClass)
             .filter {pattern.accepts(it)}
             .mapNotNull {
-                resolve(it, search, settings, extractor.extractI18nKeyLiteral(it)!!)
+                element -> extractor.extractI18nKeyLiteral(element)
+                    ?.let { key -> resolve(element, search, settings, key)}
             }
             .map {
-                val item = PsiTreeUtil.getParentOfType(it.psiElement, JSCallExpression::class.java) ?: it.psiElement
+                val item = PsiTreeUtil.getParentOfType(it.psiElement, callExpressionClass) ?: it.psiElement
                 FoldingDescriptor(it.psiElement.node, TextRange(item.textRange.startOffset, item.textRange.endOffset), group)
             }
         return descriptors.toTypedArray()
@@ -73,3 +74,4 @@ class FoldingBuilder : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiEl
 
     override fun isCollapsedByDefault(node: ASTNode): Boolean = true
 }
+

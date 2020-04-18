@@ -80,8 +80,8 @@
         <intentionAction>
             <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
         </intentionAction>
-        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
-        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
-        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.FoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
     </extensions>
 </idea-plugin>

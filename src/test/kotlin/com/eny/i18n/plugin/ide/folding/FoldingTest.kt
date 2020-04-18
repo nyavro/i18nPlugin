@@ -52,4 +52,6 @@ internal class FoldingTestJsJson : FoldingTestBase("js", "json")
 internal class FoldingTestJsYaml : FoldingTestBase("js", "yml")
 internal class FoldingTestJsxJson : FoldingTestBase("jsx", "json")
 internal class FoldingTestJsxYaml : FoldingTestBase("jsx", "yml")
+internal class FoldingTestPhpJson : FoldingTestBase("php", "json")
+internal class FoldingTestPhpYaml : FoldingTestBase("php", "yml")
 
