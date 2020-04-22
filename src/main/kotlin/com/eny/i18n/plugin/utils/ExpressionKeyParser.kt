@@ -76,6 +76,12 @@ class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerI
     private val regex = "\\s".toRegex()
 
     /**
+     * Parses text to i18n key
+     */
+    fun parse(text: String, nsSeparator: String, keySeparator: String, stopCharacters: String) =
+        parse(listOf(KeyElement.literal(text)), false, nsSeparator, keySeparator, stopCharacters)
+
+    /**
      * Parses list of key elements into i18n key
      */
     fun parse(
