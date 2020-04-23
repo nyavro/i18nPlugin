@@ -59,7 +59,10 @@ abstract class FoldingBuilderBase<C: PsiElement>(
     private fun resolve(element: PsiElement, search: LocalizationFileSearch, settings: Settings, fullKey: FullKey): ElementToReferenceBinding? {
         return search
             .findFilesByName(fullKey.ns?.text)
-            .filter { it.parent?.name == settings.foldingPreferredLanguage }
+            .filter {
+                if(settings.vue) it.name.contains(settings.foldingPreferredLanguage)
+                else it.parent?.name == settings.foldingPreferredLanguage
+            }
             .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it)) }
             .firstOrNull { it.unresolved.isEmpty() }
             ?.let { ElementToReferenceBinding(element, it) }
