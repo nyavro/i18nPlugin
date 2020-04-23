@@ -47,6 +47,15 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
         myFixture.configureByFiles("assets/ru/translation.$translationLang", "assets/en/translation.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/defaultTest.$lang")
     }
+
+    fun testPreferredLanguageDefaultNs() {
+        Settings.getInstance(myFixture.project).let {
+            it.foldingPreferredLanguage = "ru"
+            it.foldingMaxLength = 28
+        }
+        myFixture.configureByFiles("assets/ru/translation.$translationLang", "assets/en/translation.$translationLang")
+        myFixture.testFolding("$testDataPath/$lang/prefferedLangDefTest.$lang")
+    }
 }
 
 internal class FoldingTestTsJson : FoldingTestBase("ts", "json")
