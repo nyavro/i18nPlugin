@@ -9,7 +9,6 @@ import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.LocalizationFileSearch
-import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
@@ -50,16 +49,6 @@ class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: 
                     }
                     else property.value()
                 )
-            }
-            .toTypedArray()
-
-    override fun getVariants(): Array<Any> =
-        findProperties()
-            .map {property ->
-                LookupElementBuilder
-                    .create(property.value().text)
-                    .withTypeText(
-                        (property.value().containingFile.parent?.name ?: "" + "/") + property.value().containingFile.name)
             }
             .toTypedArray()
 }

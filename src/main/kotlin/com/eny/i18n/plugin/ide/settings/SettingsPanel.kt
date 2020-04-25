@@ -86,6 +86,15 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         return panel
     }
 
+    private fun numberInput(label:String, property: KMutableProperty0<Int>):JPanel {
+        val panel = JPanel()
+        panel.layout = BorderLayout()
+        panel.add(JLabel(label), BorderLayout.WEST)
+        val control = LimitedTextField(property.get().toString(), 2, {txt->property.set(txt.toInt())}, {ch -> ('0'..'9').contains(ch)})
+        panel.add(control, BorderLayout.EAST)
+        return panel
+    }
+
     private fun vue(): JPanel {
         val panel = JPanel()
         panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
@@ -103,7 +112,9 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(separator("Key separator", settings::keySeparator))
         panel.add(separator("Plural separator", settings::pluralSeparator))
         panel.add(textInput("Default namespace", settings::defaultNs))
-        panel.add(textInput("Stop characters", settings::stopCharacters))
+        panel.add(checkbox("Enable folding", settings::foldingEnabled))
+        panel.add(textInput("Preferred folding language", settings::foldingPreferredLanguage))
+        panel.add(numberInput("Folding max length", settings::foldingMaxLength))
         panel.add(vue())
         panel.add(textInput("Vue locales directory", settings::vueDirectory))
 //        panel.add(checkbox("Prefer YAML translation files", settings::preferYamlFilesGeneration))

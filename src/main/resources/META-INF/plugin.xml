@@ -67,7 +67,7 @@
     <depends>JavaScript</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>
-    <depends optional="true" config-file="vueConfig.xml">Vue.js</depends>
+    <depends optional="true" config-file="vueConfig.xml">org.jetbrains.plugins.vue</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
@@ -83,6 +83,5 @@
         <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
-        <lang.foldingBuilder language="Vue" implementationClass="com.eny.i18n.plugin.ide.folding.VueJsFoldingBuilder"/>
     </extensions>
 </idea-plugin>
