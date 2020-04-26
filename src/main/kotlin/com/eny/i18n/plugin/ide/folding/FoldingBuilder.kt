@@ -21,7 +21,9 @@ internal data class ElementToReferenceBinding(val psiElement: PsiElement, val re
  */
 abstract class FoldingBuilderBase<C: PsiElement>(
         private val callExpressionClass: Class<C>,
-        private val foldingElementsCollector: FoldingElementsCollector) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
+        private val collectFoldingContainers: (root: PsiElement) -> List<PsiElement>,
+        private val collectLiterals: (container: PsiElement) -> Pair<List<PsiElement>, Int> = fun (container: PsiElement) = Pair(listOf(container), 0)
+) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
 
     private val parser: ExpressionKeyParser = ExpressionKeyParser()
 
@@ -32,10 +34,9 @@ abstract class FoldingBuilderBase<C: PsiElement>(
         if (!settings.foldingEnabled) return arrayOf()
         val search = LocalizationFileSearch(root.project)
         val group = FoldingGroup.newGroup("i18n")
-        return foldingElementsCollector
-            .collectFoldingContainers(root)
+        return collectFoldingContainers(root)
             .flatMap { container ->
-                val literals = foldingElementsCollector.collectLiterals(container)
+                val (literals, offset) = collectLiterals(container)
                 literals.mapNotNull { literal ->
                     parser
                         .parse(literal.text.unQuote(), settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
@@ -46,7 +47,7 @@ abstract class FoldingBuilderBase<C: PsiElement>(
                             FoldingDescriptor(
                                 container.node,
                                 callElement.textRange.shiftRight(
-                                    if (container != literal) container.textOffset else 0
+                                    if (container != literal) (container.textOffset + offset) else 0
                                 ),
                                 group,
                                 placeholder

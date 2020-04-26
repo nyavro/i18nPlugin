@@ -122,6 +122,13 @@ internal abstract class FoldingTestI18nVueBase(private val translationLang:Strin
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/noFoldingVue.vue")
     }
+
+    fun testFoldingParametrizedTranslation() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = true
+        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
+        myFixture.testFolding("$testDataPath/vue/parametersTestVue.vue")
+    }
 }
 
 
