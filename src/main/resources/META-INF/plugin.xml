@@ -18,6 +18,13 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>1.8.1</h3>
+            <ul>
+                <li>Folding i18n keys introduced</li>
+                <li>New settings: Folding enabled, Preferred folding language, Folding max length</li>
+            </ul>
+        </div>
+        <div>
             <h3>1.7.1</h3>
             <ul>
                 <li>PHP support introduced</li>
