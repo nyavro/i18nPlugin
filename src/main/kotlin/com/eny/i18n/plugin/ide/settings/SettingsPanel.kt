@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.settings
 
+import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
 import com.jgoodies.forms.factories.DefaultComponentFactory
 import java.awt.BorderLayout
@@ -112,9 +113,9 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(separator("Key separator", settings::keySeparator))
         panel.add(separator("Plural separator", settings::pluralSeparator))
         panel.add(textInput("Default namespace", settings::defaultNs))
-        panel.add(checkbox("Enable folding", settings::foldingEnabled))
-        panel.add(textInput("Preferred folding language", settings::foldingPreferredLanguage))
-        panel.add(numberInput("Folding max length", settings::foldingMaxLength))
+        panel.add(checkbox(PluginBundle.getMessage("settings.folding.isEnabled"), settings::foldingEnabled))
+        panel.add(textInput(PluginBundle.getMessage("settings.folding.preferredLanguage"), settings::foldingPreferredLanguage))
+        panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
         panel.add(vue())
         panel.add(textInput("Vue locales directory", settings::vueDirectory))
 //        panel.add(checkbox("Prefer YAML translation files", settings::preferYamlFilesGeneration))
