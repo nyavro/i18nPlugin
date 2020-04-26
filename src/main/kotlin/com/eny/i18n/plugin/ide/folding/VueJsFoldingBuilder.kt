@@ -66,7 +66,7 @@ fun trimLeft(element: PsiElement): PsiElement {
 }
 
 /**
- * Utility function for collecting elements in Psi tree by preicate.
+ * Utility function for collecting elements of Psi tree by predicate.
  * For cases when text gets parsed on the fly, it is impossible to use PsiTreeUtil, since it fails to check if elements are physical.
  */
 fun collectChildren(element: PsiElement, predicate: (psiElement: PsiElement) -> Boolean): List<PsiElement> {

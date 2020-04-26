@@ -20,17 +20,14 @@ class PhpPatternsExt {
         fun phpArgument(functionName: String, index: Int): PhpElementPattern.Capture<StringLiteralExpression> =
             PhpElementPattern.Capture<StringLiteralExpression>(
                 object : InitialPatternCondition<StringLiteralExpression>(StringLiteralExpression::class.java) {
-                    override fun accepts(o: Any?, context: ProcessingContext): Boolean {
-                        if (o is StringLiteralExpression) {
-                            val parameterList = o.parent
-                            if (parameterList is ParameterList) {
-                                val parameters = parameterList.parameters
-                                val function = parameterList.parent
-                                return (index < parameters.size) && (parameters[index] == o) && (function is FunctionReference) && (function.name == functionName)
-                            }
-                        }
-                        return false
-                    }
+                    override fun accepts(o: Any?, context: ProcessingContext): Boolean =
+                        (o as? StringLiteralExpression)
+                            ?.let { it.parent as? ParameterList }
+                            ?.let {
+                                val function = it.parent
+                                (index < it.parameters.size) && (it.parameters[index] == o) &&
+                                    (function is FunctionReference) && (function.name == functionName)
+                            } ?: false
                 }
             )
     }
