@@ -14,7 +14,6 @@
       <p id="time">{{ $t('message.time', { current: new Date() }) }}</p>
     </div>
     <i18n path="terms" tag="p">
-      <!-- Using v-t="" -->
       I accept the <a href="https://google.com" v-t="'tos'" />
     </i18n>
 
