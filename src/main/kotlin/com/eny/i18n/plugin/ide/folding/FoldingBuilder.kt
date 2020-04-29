@@ -61,10 +61,10 @@ abstract class FoldingBuilderBase<C: PsiElement>(
         return search
             .findFilesByName(fullKey.ns?.text)
             .filter {
-                if(settings.vue) it.name.contains(settings.foldingPreferredLanguage)
-                else it.parent?.name == settings.foldingPreferredLanguage
+                if (settings.vue) it.name.contains(settings.foldingPreferredLanguage)
+                else it.parent == settings.foldingPreferredLanguage
             }
-            .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it)) }
+            .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)) }
             .firstOrNull { it.unresolved.isEmpty() }
             ?.let { ElementToReferenceBinding(element, it) }
     }

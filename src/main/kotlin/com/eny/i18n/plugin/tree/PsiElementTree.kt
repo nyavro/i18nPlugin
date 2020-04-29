@@ -5,6 +5,9 @@ import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
 import com.intellij.json.psi.JsonProperty
+import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding
+import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
+import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
@@ -23,6 +26,7 @@ abstract class PsiElementTree: Tree<PsiElement> {
          */
         fun create(file: PsiElement): PsiElementTree? =
             if (file is JsonFile) JsonElementTree.create(file)
+            else if (file is JSReferenceExpression) JsElementTree.create(file)
             else YamlElementTree.create(file)
     }
 }
@@ -52,6 +56,37 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
             PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{ fileRoot -> JsonElementTree(fileRoot)}
     }
 }
+
+/**
+ * Tree wrapper around js psi tree
+ */
+class JsElementTree(val element: PsiElement): PsiElementTree() {
+    override fun value(): PsiElement = element
+    override fun isTree(): Boolean = element is JSObjectLiteralExpression
+    override fun findChild(name: String): Tree<PsiElement>? {
+        return (element as? JSObjectLiteralExpression)
+            ?.findProperty(name)
+            ?.value
+            ?.let { child -> JsElementTree(child) }
+    }
+    override fun findChildren(regex: Regex): List<Tree<PsiElement>> {
+        return listOf(element.node)
+            .map { item -> item.firstChildNode.psi }
+            .filter { item -> item != null && item.text.unQuote().matches(regex) }
+            .map { item -> JsElementTree(item) }
+    }
+    companion object {
+        /**
+         * Creates instance of JsElementTree
+         */
+        fun create(file: PsiElement): JsElementTree? {
+            return PsiTreeUtil.findChildOfType(
+                (file.reference?.resolve() as? ES6ImportedBinding)?.findReferencedElements()?.firstOrNull(),
+                JSObjectLiteralExpression::class.java)?.let { JsElementTree(it) }
+        }
+    }
+}
+
 
 /**
  * Tree wrapper around yaml psi tree

@@ -72,6 +72,6 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
         unresolvedPropertyAnnotation.registerFix(
             CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
         unresolvedPropertyAnnotation.registerFix(
-            CreateKeyQuickFix(fullKey, AllFilesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files"), generators))
+            CreateKeyQuickFix(fullKey, AllSourcesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files"), generators))
     }
 }

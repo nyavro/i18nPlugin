@@ -39,7 +39,7 @@ class CompositeKeyAnnotator(private val keyExtractor: FullKeyExtractor):  Compos
         else {
             val pluralSeparator = settings.pluralSeparator
             val mostResolvedReference = files
-                .flatMap { jsonFile -> resolve(compositeKey, PsiElementTree.create(jsonFile), pluralSeparator) }
+                .flatMap { resolve(compositeKey, PsiElementTree.create(it.element), pluralSeparator) }
                 .maxBy { v -> v.path.size }!!
             when {
                 mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)

@@ -61,11 +61,11 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
             val source = fullKey.source.replace(last.text, "")
             result.addAllElements(
                 groupPlurals(
-                    LocalizationFileSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap { file ->
+                    LocalizationFileSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
                         listCompositeKeyVariants(
-                                fixedKey,
-                                PsiElementTree.create(file),
-                                search
+                            fixedKey,
+                            PsiElementTree.create(it.element),
+                            search
                         )
                     }.map { key -> key.value().text.unQuote() }.toSet(),
                     settings.pluralSeparator
