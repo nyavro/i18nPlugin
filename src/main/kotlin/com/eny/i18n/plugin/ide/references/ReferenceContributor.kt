@@ -8,7 +8,7 @@ import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.LocalizationFileSearch
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
@@ -18,7 +18,7 @@ import com.intellij.util.ProcessingContext
  * I18nReference to json/yaml translation
  */
 class I18nReference(element: PsiElement, textRange: TextRange, val i18nFullKey: FullKey) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference, CompositeKeyResolver<PsiElement> {
-    private val search = LocalizationFileSearch(element.project)
+    private val search = LocalizationSourceSearch(element.project)
 
     private fun filterMostResolved(list: List<PropertyReference<PsiElement>>): List<PropertyReference<PsiElement>> {
         val mostResolved = list.maxBy {ref -> ref.path.size}?.path?.size

@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.Literal
-import com.eny.i18n.plugin.utils.LocalizationFileSearch
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.LocalizationSource
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.CommandProcessor
@@ -27,7 +27,7 @@ class CreateKeyQuickFix(
 
     override fun invoke(project: Project, editor: Editor) =
         ApplicationManager.getApplication().invokeLater {
-            val jsonFiles = LocalizationFileSearch(project).findFilesByName(fullKey.ns?.text)
+            val jsonFiles = LocalizationSourceSearch(project).findFilesByName(fullKey.ns?.text)
             if (jsonFiles.size == 1) {
                 createPropertyInFile(project, jsonFiles.first())
             } else if (jsonFiles.size > 1) {

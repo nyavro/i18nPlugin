@@ -26,6 +26,8 @@ class Settings : PersistentStateComponent<Settings> {
     var vue = false
 
     var vueDirectory = "locales"
+
+    var jsConfiguration = ""
     
     var stopCharacters = "/"
 

@@ -8,6 +8,7 @@
     </div>
     <div class="messages">
       <p id="normal">{{ $t('message.hello') }}</p>
+      <p id="inner">{{ $t('message.test.root.inner') }}</p>
       <p id="plural">{{ $t('message.plural', { n: 4 }) }}</p>
       <p id="select">{{ $t('message.select', { gender: 'male' }) }}</p>
       <p id="number">{{ $t('message.number', { current: 0.5 }) }}</p>

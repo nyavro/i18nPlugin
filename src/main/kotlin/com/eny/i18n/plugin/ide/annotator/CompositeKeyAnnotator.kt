@@ -6,7 +6,7 @@ import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.KeyRangesCalculator
-import com.eny.i18n.plugin.utils.LocalizationFileSearch
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.isQuoted
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.psi.PsiElement
@@ -28,7 +28,7 @@ class CompositeKeyAnnotator(private val keyExtractor: FullKeyExtractor):  Compos
         val compositeKey = fullKey.compositeKey
         val settings = Settings.getInstance(element.project)
         val annotationHelper = AnnotationHelper(holder, KeyRangesCalculator(element.textRange, element.text.isQuoted()), element.project)
-        val files = LocalizationFileSearch(element.project).findFilesByName(fileName)
+        val files = LocalizationSourceSearch(element.project).findFilesByName(fileName)
         if (files.isEmpty()) {
             if (fullKey.ns == null) {
                 annotationHelper.unresolvedDefaultNs(fullKey)

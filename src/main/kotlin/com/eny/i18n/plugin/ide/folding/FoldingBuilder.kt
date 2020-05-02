@@ -32,7 +32,7 @@ abstract class FoldingBuilderBase<C: PsiElement>(
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
         val settings = Settings.getInstance(root.project)
         if (!settings.foldingEnabled) return arrayOf()
-        val search = LocalizationFileSearch(root.project)
+        val search = LocalizationSourceSearch(root.project)
         val group = FoldingGroup.newGroup("i18n")
         return collectFoldingContainers(root)
             .flatMap { container ->
@@ -57,7 +57,7 @@ abstract class FoldingBuilderBase<C: PsiElement>(
             }.toTypedArray()
     }
 
-    private fun resolve(element: PsiElement, search: LocalizationFileSearch, settings: Settings, fullKey: FullKey): ElementToReferenceBinding? {
+    private fun resolve(element: PsiElement, search: LocalizationSourceSearch, settings: Settings, fullKey: FullKey): ElementToReferenceBinding? {
         return search
             .findFilesByName(fullKey.ns?.text)
             .filter {

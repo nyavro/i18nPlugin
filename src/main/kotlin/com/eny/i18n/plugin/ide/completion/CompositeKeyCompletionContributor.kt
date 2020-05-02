@@ -8,7 +8,7 @@ import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.Literal
-import com.eny.i18n.plugin.utils.LocalizationFileSearch
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionInitializationContext
@@ -61,7 +61,7 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
             val source = fullKey.source.replace(last.text, "")
             result.addAllElements(
                 groupPlurals(
-                    LocalizationFileSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
+                    LocalizationSourceSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
                         listCompositeKeyVariants(
                             fixedKey,
                             PsiElementTree.create(it.element),
