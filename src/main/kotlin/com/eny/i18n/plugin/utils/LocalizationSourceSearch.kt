@@ -64,7 +64,7 @@ class LocalizationSourceSearch(private val project: Project) {
                 }.firstOrNull(),
                 JSObjectLiteralExpression::class.java
             )
-            return (vueI18nObject?.findProperty("messages")?.value as? JSObjectLiteralExpressionImpl)?.properties?.mapNotNull {
+            return (vueI18nObject?.findProperty("messages")?.value as? JSObjectLiteralExpressionImpl)?.properties?.map {
                 LocalizationSource(it.value!!, it.name!!, file.name)
             } ?: listOf()
         }

@@ -41,6 +41,22 @@ internal class JsConfiguredVueI18nObjTest : BasePlatformTestCase() {
         assertNull(element!!.references[0].resolve()?.text)
     }
 
+    fun testInvalidConfigurationMissingMessages() {
+        myFixture.configureByFiles(
+            "vue/refVue-i18n-js-conf.vue", "jsConfigured/vue-i18n/vue-i18n-object/invalid2/i18n.js")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertNull(element!!.references[0].resolve()?.text)
+    }
+
+    fun testInvalidConfigurationMessages() {
+        myFixture.configureByFiles(
+            "vue/refVue-i18n-js-conf.vue", "jsConfigured/vue-i18n/vue-i18n-object/invalid3/i18n.js")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertNull(element!!.references[0].resolve()?.text)
+    }
+
     fun testReference() {
         myFixture.configureByFiles(
             "vue/refVue-i18n-js-conf.vue", "jsConfigured/vue-i18n/vue-i18n-object/i18n.js")
