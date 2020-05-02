@@ -33,6 +33,7 @@ internal class StringUtilsTest : TestBase {
             assertFalse("sub${it}'".isQuoted())
             assertTrue("${it}subr${it}".isQuoted())
         }
+        assertFalse("u".isQuoted())
     }
 
     @Test

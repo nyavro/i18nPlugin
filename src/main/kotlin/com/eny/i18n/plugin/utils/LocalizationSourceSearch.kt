@@ -59,9 +59,9 @@ class LocalizationSourceSearch(private val project: Project) {
             return listOf()
         } else {
             val vueI18nObject = PsiTreeUtil.findChildOfType(
-                PsiTreeUtil.findChildrenOfType(file, JSNewExpression::class.java).filter {
+                PsiTreeUtil.findChildrenOfType(file, JSNewExpression::class.java).firstOrNull {
                     PsiTreeUtil.findChildOfType(it, JSReferenceExpression::class.java)?.text == "VueI18n"
-                }.firstOrNull(),
+                },
                 JSObjectLiteralExpression::class.java
             )
             return (vueI18nObject?.findProperty("messages")?.value as? JSObjectLiteralExpressionImpl)?.properties?.map {
