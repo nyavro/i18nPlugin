@@ -22,10 +22,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val references: L
 
     private fun filterMostResolved(list: List<PropertyReference<PsiElement>>): List<PropertyReference<PsiElement>> {
         val mostResolved = list.maxBy {ref -> ref.path.size}?.path?.size
-        return if (mostResolved != null)
-            list.filter { ref -> ref.path.size == mostResolved}
-        else
-            list
+        return list.filter { ref -> ref.path.size == mostResolved}
     }
 
     private fun findProperties(): List<Tree<PsiElement>> = filterMostResolved(references).mapNotNull {item -> item.element}
