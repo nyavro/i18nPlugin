@@ -3,5 +3,5 @@
 /.gradle/**
 /build/**
 /out/**
-/examples/sample/.idea/**
+/examples/simple/.idea/**
 /examples/vue-i18n-js-config-simple/.idea/**

@@ -6,6 +6,8 @@ import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
 import com.intellij.json.psi.JsonProperty
 import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
+import com.intellij.lang.javascript.psi.JSReferenceExpression
+import com.intellij.lang.javascript.psi.JSVariable
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
@@ -65,7 +67,27 @@ class JsElementTree(val element: PsiElement): PsiElementTree() {
         return (element as? JSObjectLiteralExpression)
             ?.findProperty(name)
             ?.value
-            ?.let { child -> JsElementTree(child) }
+            ?.let { child ->
+                if (child is JSReferenceExpression) {
+                    resolveReferenceChain(child, 10)?.let {
+                        JsElementTree(it)
+                    }
+                } else {
+                    JsElementTree(child)
+                }
+            }
+    }
+    private fun resolveReferenceChain(element: JSReferenceExpression, depth: Int):JSObjectLiteralExpression? {
+        val res = element.reference?.resolve()
+        if (res is JSVariable) {
+            val rvalue = res.children[0]
+            if (rvalue is JSReferenceExpression && depth > 0) {
+                return resolveReferenceChain(rvalue, depth-1)
+            }
+            return rvalue as? JSObjectLiteralExpression
+        } else {
+            return res as? JSObjectLiteralExpression
+        }
     }
     override fun findChildren(regex: Regex): List<Tree<PsiElement>> {
         return listOf(element.node)
