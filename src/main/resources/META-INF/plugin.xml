@@ -18,6 +18,13 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>1.8.2</h3>
+            <ul>
+                <li>Fixed non i18next string literal annotations</li>
+                <li>Fixed multiple references from key to translations</li>
+            </ul>
+        </div>
+        <div>
             <h3>1.8.1</h3>
             <ul>
                 <li>Folding i18n keys introduced</li>
