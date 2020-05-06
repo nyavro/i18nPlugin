@@ -57,4 +57,10 @@ class KeyRangesCalculator(private val textRange: TextRange, isQuoted: Boolean = 
         textRange.startOffset + quoteOffset + this.source.length
 
     private fun safeRange(start: Int, end: Int): TextRange = TextRange(start, max(end, start))
+
+    private fun tokensLength(tokens: List<Literal>):Int {
+        val lengths = tokens.map { n -> n.length}.filter { v -> v > 0}
+        val dotCorrection = tokens.map { n -> n.dot}.sum()
+        return lengths.sum() + (if (lengths.isEmpty()) 0 else (lengths.size - 1)) - dotCorrection
+    }
 }
