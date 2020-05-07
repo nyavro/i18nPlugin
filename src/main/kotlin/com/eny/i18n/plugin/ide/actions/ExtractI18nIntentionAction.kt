@@ -6,6 +6,7 @@ import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
@@ -28,7 +29,12 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
 
     override fun getFamilyName() = "ExtractI18nIntentionAction"
 
-    override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
+    override fun invoke(project: Project, editor: Editor?, element: PsiElement) =
+        ApplicationManager.getApplication().invokeLater {
+            doInvoke(editor, project, element)
+        }
+
+    private fun doInvoke(editor: Editor?, project: Project, element: PsiElement) {
         editor ?: return
         val document = editor.document
         val primaryCaret = editor.caretModel.primaryCaret
