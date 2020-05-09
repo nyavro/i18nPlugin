@@ -43,7 +43,7 @@ abstract class FoldingBuilderBase<C: PsiElement>(
                 val (literals, offset) = collectLiterals(container)
                 literals.mapNotNull { literal ->
                     parser
-                        .parse(literal.text.unQuote(), settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
+                        .parse(literal.text.unQuote(), settings.nsSeparator, settings.keySeparator, settings.stopCharacters, settings.vue)
                         ?.let { key -> resolve(literal, search, settings, key) }
                         ?.let { resolved ->
                             val callElement = PsiTreeUtil.getParentOfType(resolved.psiElement, callExpressionClass) ?: resolved.psiElement

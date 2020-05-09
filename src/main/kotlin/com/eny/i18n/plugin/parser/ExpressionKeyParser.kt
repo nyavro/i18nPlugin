@@ -76,8 +76,8 @@ class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerI
     /**
      * Parses text to i18n key
      */
-    fun parse(text: String, nsSeparator: String, keySeparator: String, stopCharacters: String) =
-        parse(listOf(KeyElement.literal(text)), false, nsSeparator, keySeparator, stopCharacters)
+    fun parse(text: String, nsSeparator: String, keySeparator: String, stopCharacters: String, emptyNamespace: Boolean) =
+        parse(listOf(KeyElement.literal(text)), false, nsSeparator, keySeparator, stopCharacters, emptyNamespace)
 
     /**
      * Parses list of key elements into i18n key
