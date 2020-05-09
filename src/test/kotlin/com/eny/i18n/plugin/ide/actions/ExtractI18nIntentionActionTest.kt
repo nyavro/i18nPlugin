@@ -9,8 +9,6 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 internal class ExtractI18nIntentionActionTest: BasePlatformTestCase() {
 
-    private val translation = "assets/test.json"
-
     private val hint = "Extract i18n key"
 
     override fun getTestDataPath(): String = "src/test/resources/keyExtraction"
@@ -32,18 +30,18 @@ internal class ExtractI18nIntentionActionTest: BasePlatformTestCase() {
         myFixture.checkResultByFile(origTranslation, patchedTranslation, false)
     }
 
-    private fun doRun(src: String, trgt: String) {
-        doRun(src, trgt, translation, "assets/testKeyExtracted.json",
+    private fun doRun(src: String, trgt: String, translation: String, patchedTranslation: String, newKey: String) {
+        doRun(src, trgt, translation, patchedTranslation,
             object : TestInputDialog {
                 override fun show(message: String): String? = null
                 override fun show(message: String, validator: InputValidator?): String {
-                    return "test:ref.value3"
+                    return newKey
                 }
             }
         )
     }
 
-    private fun doCancel(src: String) {
+    private fun doCancel(src: String, translation: String) {
         doRun(src, src, translation, translation,
             object : TestInputDialog {
                 override fun show(message: String): String? = null
@@ -52,7 +50,7 @@ internal class ExtractI18nIntentionActionTest: BasePlatformTestCase() {
         )
     }
 
-    private fun doCancelInvalid(src: String) {
+    private fun doCancelInvalid(src: String, translation: String) {
         doRun(src, src, translation, translation,
             object : TestInputDialog {
                 override fun show(message: String): String? = null
@@ -68,22 +66,36 @@ internal class ExtractI18nIntentionActionTest: BasePlatformTestCase() {
     }
 
     fun testTsKeyExtraction() {
-        doRun("ts/simple.ts", "ts/simpleKeyExtracted.ts")
+        doRun(
+            "ts/simple.ts",
+            "ts/simpleKeyExtracted.ts",
+            "assets/test.json",
+            "assets/testKeyExtracted.json",
+            "test:ref.value3")
+    }
+
+    fun testTsDefNsKeyExtraction() {
+        doRun(
+            "ts/simpleDefNs.ts",
+            "ts/simpleDefNsKeyExtracted.ts",
+            "assets/translation.json",
+            "assets/translationKeyExtracted.json",
+            "ref.value.sub1")
     }
 
     fun testJsxKeyExtraction() {
-        doRun("jsx/simple.jsx", "jsx/simpleKeyExtracted.jsx")
+        doRun("jsx/simple.jsx", "jsx/simpleKeyExtracted.jsx", "assets/test.json", "assets/testKeyExtracted.json", "test:ref.value3")
     }
 
     fun testTsCancel() {
-        doCancel("ts/simple.ts")
+        doCancel("ts/simple.ts", "assets/test.json")
     }
 
     fun testJsKeyExtraction() {
-        doRun("js/simple.js", "js/simpleKeyExtracted.js")
+        doRun("js/simple.js", "js/simpleKeyExtracted.js", "assets/test.json", "assets/testKeyExtracted.json", "test:ref.value3")
     }
 
     fun testTsCancelInvalid() {
-        doCancelInvalid("ts/simple.ts")
+        doCancelInvalid("ts/simple.ts", "assets/test.json")
     }
 }
