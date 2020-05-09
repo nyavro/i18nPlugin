@@ -1,10 +1,10 @@
-package utils
+package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals
 
-internal class CustomSeparatorsParserTest: TestBase {
+internal class CustomSeparatorsParserTest: ParserTestBase {
 //fileName:ROOT.Key2.Key3                   /                       / fileName{8}:ROOT.Key2.Key3{14}
     @Test
     fun parseSimpleLiteral() {

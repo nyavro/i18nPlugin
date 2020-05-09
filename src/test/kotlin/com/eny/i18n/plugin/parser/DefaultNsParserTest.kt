@@ -1,13 +1,15 @@
-package utils
+package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 internal class CheckDefaultNs(val elements: List<KeyElement>, val expected: String)
 
 //@Ignore
-internal class DefaultNsParserTest : TestBase {
+internal class DefaultNsParserTest : ParserTestBase {
 
     @Test
     fun checkParse() {
@@ -60,7 +62,30 @@ internal class DefaultNsParserTest : TestBase {
                 "filenamb{8}.*{6}.item{4}"
             )
         ).forEach {
-            check -> assertEquals(check.expected, toTestString(parse(check.elements)))
+            assertEquals(it.expected, toTestString(parse(it.elements)))
+        }
+    }
+
+    @Test
+    fun checkParseSingleton() {
+        listOf(
+            CheckDefaultNs(
+                listOf(
+                    KeyElement.literal("we.are.sure."),
+                    KeyElement.literal("that.current.key.has.no.namespace."),
+                    KeyElement.literal("so.this.key.may.be.signleton")
+                ),
+                "we{2}.are{3}.sure{4}.that{4}.current{7}.key{3}.has{3}.no{2}.namespace{9}.so{2}.this{4}.key{3}.may{3}.be{2}.signleton{9}"
+            ),
+            CheckDefaultNs(
+                listOf(KeyElement.literal("singleton")),
+                "singleton{9}"
+            )
+        ).forEach {
+            val fullKey = parse(it.elements, emptyNamespace = true)
+            assertNotNull(fullKey)
+            assertNull(fullKey.ns)
+            assertEquals(it.expected, toTestString(fullKey))
         }
     }
 }

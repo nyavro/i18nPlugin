@@ -1,11 +1,11 @@
-package utils
+package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
 import com.eny.i18n.plugin.utils.KeysNormalizer
 import org.junit.Test
 import kotlin.test.assertEquals
-
+//TODO rename class
 internal class ExpressionParserTest {
     @Test
     fun parse() {

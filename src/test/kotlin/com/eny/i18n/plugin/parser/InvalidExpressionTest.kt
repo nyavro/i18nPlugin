@@ -1,11 +1,11 @@
-package utils
+package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertNull
 
 //@Ignore
-internal class InvalidExpressionTest : TestBase {
+internal class InvalidExpressionTest : ParserTestBase {
 
 //invalid:file:literal.ROOT.Key1.Key31
     @Test

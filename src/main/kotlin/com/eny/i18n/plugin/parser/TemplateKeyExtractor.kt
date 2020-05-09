@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.utils.ExpressionKeyParser
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
@@ -13,8 +12,6 @@ import com.intellij.psi.PsiElement
  * Extracts i18n key from JS string template expression
  */
 class TemplateKeyExtractor : KeyExtractor {
-
-    private val ResolveReferenceMaxDepth = 10
 
     private fun isTemplateExpression(element: PsiElement):Boolean = element.type() == "JS:STRING_TEMPLATE_EXPRESSION"
 
@@ -49,6 +46,11 @@ class TemplateKeyExtractor : KeyExtractor {
             }
             else KeyElement.literal(text)
         }
-        return parser.parse(transformed, true, settings.nsSeparator, settings.keySeparator, settings.stopCharacters)
+        return parser.parse(
+            transformed,
+            true,
+            settings.nsSeparator, settings.keySeparator, settings.stopCharacters,
+            emptyNamespace = settings.vue
+        )
     }
 }

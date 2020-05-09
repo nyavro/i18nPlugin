@@ -1,7 +1,6 @@
-package com.eny.i18n.plugin.utils
+package com.eny.i18n.plugin.parser
 
-import com.eny.i18n.plugin.parser.KeyNormalizer
-import com.eny.i18n.plugin.parser.KeyNormalizerImpl
+import com.eny.i18n.plugin.utils.*
 
 /**
  * Parsing state machine's state
@@ -21,9 +20,8 @@ interface State {
 /**
  * Final error state
  */
-class Error(private val msg: String): State {
+data class Error(val msg: String): State {
     override fun next(token: Token): State = this
-    override fun toString(): String = "Error <$msg>"
 }
 
 /**
@@ -34,7 +32,7 @@ class Start(private val init: Literal?) : State {
         when {
             token is NsSeparator && init != null  -> WaitingLiteral(init, listOf())
             token is KeySeparator && init != null -> WaitingLiteral(null, listOf(init))
-            token is Literal  -> Start(init?.merge(token) ?: token)
+            token is Literal -> Start(init?.merge(token) ?: token)
             else -> Error("Invalid ns separator position (0)") // Never get here
         }
 }
@@ -89,7 +87,8 @@ class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerI
         isTemplate: Boolean = false,
         nsSeparator: String = ":",
         keySeparator: String = ".",
-        stopCharacters: String = ""
+        stopCharacters: String = "",
+        emptyNamespace: Boolean = false
     ): FullKey? {
         val normalized = normalizer.normalize(elements)
         val source = normalized.fold(""){
@@ -100,9 +99,14 @@ class ExpressionKeyParser(private val normalizer: KeyNormalizer = KeyNormalizerI
                 }
                 acc + item.text
         }
+        val startState = if (emptyNamespace) {
+            WaitingLiteral(file = null, key = emptyList())
+        } else {
+            Start(null)
+        }
         return Tokenizer(nsSeparator, keySeparator)
             .tokenizeAll(normalized)
-            .fold(Start(null) as State) { state, token ->
+            .fold(startState) { state, token ->
                 state.next(token)
             }
             .fullKey(isTemplate, source)

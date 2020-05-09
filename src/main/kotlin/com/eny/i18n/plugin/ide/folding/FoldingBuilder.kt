@@ -1,10 +1,14 @@
 package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.parser.ExpressionKeyParser
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.utils.ellipsis
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor

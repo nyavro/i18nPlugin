@@ -41,8 +41,6 @@ class Settings : PersistentStateComponent<Settings> {
 
     var foldingMaxLength = 20
 
-    var bindToArgument = true
-
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
     override fun getState(): Settings? = this
