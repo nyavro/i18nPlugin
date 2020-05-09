@@ -5,3 +5,6 @@
 /out/**
 /examples/simple/.idea/**
 /examples/vue-i18n-js-config-simple/.idea/**
+/examples/vue-i18n-js-config-simple/node_modules/**
+/examples/vue-i18n-files-simple/.idea/**
+/examples/vue-i18n-files-simple/node_modules/**
