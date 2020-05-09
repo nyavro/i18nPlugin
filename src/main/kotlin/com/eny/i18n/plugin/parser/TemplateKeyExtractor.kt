@@ -5,7 +5,6 @@ import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
 import com.intellij.lang.javascript.psi.JSExpression
-import com.intellij.lang.javascript.psi.JSReferenceExpression
 import com.intellij.psi.PsiElement
 
 /**
@@ -28,23 +27,17 @@ class TemplateKeyExtractor : KeyExtractor {
 //     const expression = `fileName:root.${key}.key.subKey`; // Gets resolved to 'fileName:root.element.key.subKey'
     private fun resolveTemplateExpression(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? {
         val transformed = element.node.getChildren(null).mapNotNull {
-            item ->
-            val text = item.text
-            if (item is JSReferenceExpression) {
+            val text = it.text
+            if (it is JSExpression) {
                 KeyElement(
                     text,
                     null,
                     KeyElementType.TEMPLATE
                 )
             }
-            else if (item is JSExpression) {
-                KeyElement(
-                    text,
-                    null,
-                    KeyElementType.TEMPLATE
-                )
+            else {
+                KeyElement.literal(text)
             }
-            else KeyElement.literal(text)
         }
         return parser.parse(
             transformed,
