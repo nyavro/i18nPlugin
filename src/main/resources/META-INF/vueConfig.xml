@@ -2,6 +2,6 @@
     <extensions defaultExtensionNs="com.intellij">
         <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
         <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.completion.CompositeKeyCompletionContributor"/>
-        <lang.foldingBuilder language="Vue" implementationClass="com.eny.i18n.plugin.ide.folding.VueJsFoldingBuilder"/>
+        <lang.foldingBuilder language="HTML" implementationClass="com.eny.i18n.plugin.ide.folding.VueJsFoldingBuilder"/>
     </extensions>
 </idea-plugin>

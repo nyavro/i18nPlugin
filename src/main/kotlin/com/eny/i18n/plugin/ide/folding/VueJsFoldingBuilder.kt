@@ -71,18 +71,15 @@ fun trimLeft(element: PsiElement): PsiElement {
  */
 fun collectChildren(element: PsiElement, predicate: (psiElement: PsiElement) -> Boolean): List<PsiElement> {
     val acc: MutableList<PsiElement> = mutableListOf()
-    val maxDepth = 5
-    fun inner(item: PsiElement, depth: Int) {
-        //Check depth for safety:
-        if (depth == maxDepth) return
+    fun inner(item: PsiElement) {
         if (predicate (item)) {
             acc.add(item)
             //Won't go deeper:
             return
         } else {
-            item.children.forEach { inner(it, depth+1) }
+            item.children.forEach {inner(it)}
         }
     }
-    inner(element, 0)
+    inner(element)
     return acc.toList()
 }
