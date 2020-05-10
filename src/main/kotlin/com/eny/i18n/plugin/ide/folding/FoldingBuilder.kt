@@ -69,7 +69,7 @@ abstract class FoldingBuilderBase<C: PsiElement>(
                 else it.parent == settings.foldingPreferredLanguage
             }
             .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)) }
-            .firstOrNull { it.unresolved.isEmpty() }
+            .firstOrNull { it.unresolved.isEmpty() && it.element?.isLeaf() == true }
             ?.let { ElementToReferenceBinding(element, it) }
     }
 

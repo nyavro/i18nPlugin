@@ -31,6 +31,11 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
         myFixture.testFolding("$testDataPath/$lang/preferredLanguageTest.$lang")
     }
 
+    fun testIncompleteKey() {
+        myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
+        myFixture.testFolding("$testDataPath/$lang/incompleteKeys.$lang")
+    }
+
     fun testPreferredLanguageInvalidConfiguration() {
         Settings.getInstance(myFixture.project).foldingPreferredLanguage = "fr"
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
@@ -115,6 +120,12 @@ internal abstract class FoldingTestI18nVueBase(private val translationLang:Strin
         }
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/noFoldingVue.vue")
+    }
+
+    fun testIncompleteKey() {
+        Settings.getInstance(myFixture.project).let { it.vue = true }
+        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
+        myFixture.testFolding("$testDataPath/vue/incompleteKeysVue.vue")
     }
 
     fun testFoldingDisabled() {

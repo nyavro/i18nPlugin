@@ -46,7 +46,7 @@ class ReferencesAccumulator(private val key: String) {
      * Processing function for PsiSearchHelper
      */
     fun process() = {
-        entry: PsiElement, offset:Int ->
+        entry: PsiElement, _:Int ->
         val typeName = entry.node.elementType.toString()
         if (entry.text.unQuote().startsWith(key)) {
             if (listOf("JS:STRING_LITERAL", "quoted string").any { item -> typeName.contains(item) }) {
@@ -78,7 +78,7 @@ class TranslationToCodeReference(element: PsiElement, textRange: TextRange, val 
         val project = element.project
         val referencesAccumulator = ReferencesAccumulator(composedKey)
         PsiSearchHelper.getInstance(project).processElementsWithWord(
-                referencesAccumulator.process(), Settings.getInstance(project).searchScope(project), composedKey, UsageSearchContext.ANY, true
+            referencesAccumulator.process(), Settings.getInstance(project).searchScope(project), composedKey, UsageSearchContext.ANY, true
         )
         return referencesAccumulator.entries()
     }

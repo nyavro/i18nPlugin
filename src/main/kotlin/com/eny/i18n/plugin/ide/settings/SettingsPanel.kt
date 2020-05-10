@@ -16,7 +16,7 @@ import kotlin.reflect.KMutableProperty0
 /**
  * JTextField with custom validation
  */
-class LimitedTextField(initialText: String, maxLength: Int, onChange: (newText:String) -> Unit, isValid: (key:Char) -> Boolean = {ch -> true}): JTextField(initialText) {
+class LimitedTextField(initialText: String, maxLength: Int, onChange: (newText:String) -> Unit, isValid: (key:Char) -> Boolean = {_ -> true}): JTextField(initialText) {
     init {
         addKeyListener(object: KeyAdapter() {
             override fun keyTyped(e: KeyEvent) {
@@ -63,7 +63,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         val panel = JPanel()
         panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
         val checkbox = JCheckBox(label, property.get())
-        checkbox.addItemListener { event -> property.set(checkbox.isSelected) }
+        checkbox.addItemListener { _ -> property.set(checkbox.isSelected) }
         panel.add(checkbox)
         return panel
     }
@@ -100,7 +100,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         val panel = JPanel()
         panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
         val vueMode = JCheckBox("Vue-i18n", settings.vue)
-        vueMode.addItemListener { event -> settings.vue = vueMode.isSelected}
+        vueMode.addItemListener { _ -> settings.vue = vueMode.isSelected}
         panel.add(vueMode)
         return panel
     }

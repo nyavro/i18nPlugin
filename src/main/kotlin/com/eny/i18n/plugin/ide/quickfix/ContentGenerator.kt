@@ -62,7 +62,7 @@ class JsonContentGenerator: ContentGenerator {
  */
 class YamlContentGenerator: ContentGenerator {
     override fun generateContent(compositeKey: List<Literal>, value: String): String =
-        compositeKey.foldRightIndexed(value ?: "", { i, key, acc ->
+        compositeKey.foldRightIndexed(value, { i, key, acc ->
             val caret = if (i == 0) "" else "\n"
             val tab = "\t".repeat(i)
             "$caret$tab${key.text}: $acc"
