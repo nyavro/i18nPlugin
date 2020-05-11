@@ -23,10 +23,10 @@ class KeyRequest {
     /**
      * Requests key
      */
-    fun key(project: Project): KeyRequestResult {
+    fun key(project: Project, text: String): KeyRequestResult {
         val settings = Settings.getInstance(project)
         val keyStr = Messages
-            .showInputDialog(project, "Specify the key", "Input i18n key", Messages.getQuestionIcon(), null, isValidKey())
+            .showInputDialog(project, String.format("Specify the key for '%s'", text), "Input i18n key", Messages.getQuestionIcon(), null, isValidKey())
         return if(keyStr == null) {
             KeyRequestResult(null, true)
         } else {

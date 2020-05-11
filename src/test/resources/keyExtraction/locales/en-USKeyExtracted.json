@@ -1,0 +1,13 @@
+{
+  "ref": {
+    "section": {
+      "key": "Reference in json"
+    },
+    "plurals": {
+      "value-1": "tt",
+      "value-2": "qq",
+      "value-5": "vv"
+    },
+    "value3": "I want to move it to translation"
+  }
+}

@@ -13,3 +13,17 @@ inline fun <T, C: Collection<T>, R> C.whenNonEmpty(block: (C) -> R): R? {
 inline fun <C> C.whenMatches(predicate: (arg: C) -> Boolean): C? {
     return if (predicate(this)) this else null
 }
+
+/**
+ * Converts nullable to Boolean
+ */
+fun <C> C?.toBoolean(): Boolean {
+    return this != null
+}
+
+/**
+ * Converts nullable to default
+ */
+fun <C> C?.default(value: C): C {
+    return this ?: value
+}

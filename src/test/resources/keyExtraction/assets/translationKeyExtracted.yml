@@ -1,0 +1,9 @@
+ref:
+  section:
+    key: Reference in json
+  plurals:
+    value-1: tt,
+    value-2: qq,
+    value-5: vv
+  value:
+    sub1: I want to move it to translation

@@ -1,0 +1,1 @@
+i18n.t<caret>('test:ref.value3')

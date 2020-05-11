@@ -4,8 +4,8 @@ import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.Literal
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.LocalizationSource
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.command.UndoConfirmationPolicy
@@ -21,7 +21,8 @@ class CreateKeyQuickFix(
     private val selector: SourcesSelector,
     private val commandCaption: String,
     private val generators: List<ContentGeneratorAdapter>,
-    private val translationValue: String? = null): QuickFix(), CompositeKeyResolver<PsiElement> {
+    private val translationValue: String? = null,
+    private val onComplete: () -> Unit = {}): QuickFix(), CompositeKeyResolver<PsiElement> {
 
     override fun getText(): String = commandCaption
 
@@ -36,7 +37,7 @@ class CreateKeyQuickFix(
         }
 
     private fun createPropertyInFiles(project: Project, editor: Editor, jsonFiles: List<LocalizationSource>) =
-        selector.select(jsonFiles, {source: LocalizationSource -> createPropertyInFile(project, source)}, editor)
+        selector.select(jsonFiles, {source: LocalizationSource -> createPropertyInFile(project, source)}, onComplete, editor)
 
     private fun createPropertyInFile(project: Project, target: LocalizationSource) {
         val ref = resolveCompositeKey(
@@ -49,6 +50,7 @@ class CreateKeyQuickFix(
                 {
                     ApplicationManager.getApplication().runWriteAction {
                         createPropertiesChain(ref.element.value(), ref.unresolved)
+                        onComplete()
                     }
                 },
                 commandCaption,

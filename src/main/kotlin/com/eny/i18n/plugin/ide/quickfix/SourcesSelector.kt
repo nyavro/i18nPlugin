@@ -14,26 +14,31 @@ interface SourcesSelector {
     /**
      * Selects source from given range
      */
-    fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, editor: Editor)
+    fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, onComplete: () -> Unit, editor: Editor)
 }
 
 /**
  * Selects and processes all files
  */
 class AllSourcesSelector : SourcesSelector {
-    override fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, editor: Editor) =
+    override fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, onComplete: () -> Unit, editor: Editor) {
         sources.forEach { onSelect(it) }
+        onComplete()
+    }
 }
 
 /**
  * Chooses file from menu and processes it
  */
 class UserChoice: SourcesSelector {
-    override fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, editor: Editor) {
+    override fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, onComplete: () -> Unit, editor: Editor) {
         val menu = JBPopupMenu()
         sources.forEach {
             val menuItem = JBMenuItem(it.parent + '/' + it.name, AllIcons.Json.Object)
-            menuItem.addActionListener { _ -> onSelect(it) }
+            menuItem.addActionListener { _ ->
+                onSelect(it)
+                onComplete()
+            }
             menu.add(menuItem)
         }
         val position = editor.visualPositionToXY(editor.caretModel.visualPosition)

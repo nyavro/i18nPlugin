@@ -16,7 +16,7 @@ class KeyExtractor {
     /**
      * Tries to resolve translation file
      */
-    fun tryToResolveTranslationFile(project:Project, i18nKey:FullKey, source: String, editor:Editor) {
+    fun tryToResolveTranslationFile(project:Project, i18nKey:FullKey, source: String, editor:Editor, onComplete: () -> Unit) {
         val search = LocalizationSourceSearch(project)
         val settings = Settings.getInstance(project)
         val files = search.findFilesByName(i18nKey.ns?.text)
@@ -30,7 +30,7 @@ class KeyExtractor {
                 ContentGeneratorAdapter(YamlContentGenerator(), YamlPsiContentGenerator()),
                 ContentGeneratorAdapter(JsonContentGenerator(), JsonPsiContentGenerator())
             )
-            CreateKeyQuickFix(i18nKey, UserChoice(),  PluginBundle.getMessage("quickfix.create.key"), generators, source)
+            CreateKeyQuickFix(i18nKey, UserChoice(),  PluginBundle.getMessage("quickfix.create.key"), generators, source, onComplete)
         }
         quickFix.invoke(project, editor)
     }

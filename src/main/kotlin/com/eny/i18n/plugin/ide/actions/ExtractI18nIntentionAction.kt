@@ -2,10 +2,11 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.parser.type
-import com.eny.i18n.plugin.utils.PluginBundle
-import com.eny.i18n.plugin.utils.unQuote
+import com.eny.i18n.plugin.utils.*
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
+import com.intellij.lang.ecmascript6.JSXHarmonyFileType
+import com.intellij.lang.javascript.TypeScriptJSXFileType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
@@ -13,8 +14,93 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
+import com.intellij.psi.xml.XmlToken
+import org.jetbrains.vuejs.lang.html.VueFileType
+
+internal interface Extractor {
+    fun canExtract(element: PsiElement): Boolean
+    fun text(element: PsiElement): String
+    fun textRange(element: PsiElement): TextRange
+    fun template(element: PsiElement): (argument: String) -> String
+}
+
+internal class JsDialectExtractor: Extractor {
+    override fun canExtract(element: PsiElement): Boolean = "JS:STRING_LITERAL" == element.type()
+    override fun text(element: PsiElement): String = element.text.unQuote()
+    override fun textRange(element: PsiElement): TextRange = element.parent.textRange
+    override fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
+}
+
+internal class JsxDialectExtractor: Extractor {
+    override fun canExtract(element: PsiElement): Boolean =
+        listOf(JSXHarmonyFileType.INSTANCE, TypeScriptJSXFileType.INSTANCE).any { it == element.containingFile.fileType } &&
+        !PsiTreeUtil.findChildOfType(PsiTreeUtil.getParentOfType(element, XmlTag::class.java), XmlTag::class.java).toBoolean()
+
+    override fun text(element: PsiElement): String {
+        val parentOfType = PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
+        return if (parentOfType != null) {
+            parentOfType.value.textElements.map { item -> item.text}.joinToString(" ")
+        } else {
+            element.parent.text
+        }
+    }
+    override fun textRange(element: PsiElement): TextRange =
+        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
+            ?.value
+            ?.textElements
+            ?.let {
+                TextRange(
+                    it.first().textRange.startOffset,
+                    it.last().textRange.endOffset
+                )
+            } ?:
+            TextRange(
+                element.parent.textRange.startOffset,
+                element.parent.textRange.endOffset
+            )
+    override fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
+}
+
+internal class PhpExtractor: Extractor {
+    override fun canExtract(element: PsiElement): Boolean =
+        listOf("double quoted string", "single quoted string").contains(element.type())
+    override fun text(element: PsiElement): String = element.text.unQuote()
+    override fun textRange(element: PsiElement): TextRange = element.parent.textRange
+    override fun template(element: PsiElement): (argument: String) -> String = {"t($it)"}
+}
+
+internal class VueExtractor: Extractor {
+    override fun canExtract(element: PsiElement): Boolean = element.isVue()
+    override fun text(element: PsiElement): String =
+        element.whenMatches { it.isVueText() }?.parent.default(element).text.unQuote()
+    override fun textRange(element: PsiElement): TextRange =
+        element.whenMatches { it.isVueText() }?.parent.default(element).textRange
+    override fun template(element: PsiElement): (argument: String) -> String =
+        when {
+            element.isVueTemplate() -> ({"this.\$t($it)"})
+            element.isVue() -> ({"{{ \$t($it) }}"})
+            else -> ({"\$t($it)"})
+        }
+
+    private fun PsiElement.isVue():Boolean = this.containingFile.fileType == VueFileType.INSTANCE
+
+    private fun PsiElement.isVueTemplate():Boolean = this.isVue() && PsiTreeUtil.findFirstParent(this, {it is HtmlTag && it.name == "script"}).toBoolean()
+
+    private fun PsiElement.isVueText(): Boolean = (this is PsiWhiteSpace) || (this is XmlToken)
+}
+
+internal class DefaultExtractor: Extractor {
+    override fun canExtract(element: PsiElement): Boolean = false
+    override fun text(element: PsiElement): String {
+        return element.text.unQuote()
+    }
+    override fun textRange(element: PsiElement): TextRange = element.textRange
+    override fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
+}
 
 /**
  * Intention action of i18n key extraction
@@ -34,11 +120,20 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
             doInvoke(editor, project, element)
         }
 
+    private fun getExtractor(element: PsiElement, isVue: Boolean): Extractor {
+        val extractor = (if (isVue) listOf(VueExtractor()) else listOf(
+            JsDialectExtractor(), JsxDialectExtractor(), PhpExtractor())).find { it.canExtract(element) }
+        return extractor ?: DefaultExtractor()
+    }
+
     private fun doInvoke(editor: Editor?, project: Project, element: PsiElement) {
         editor ?: return
         val document = editor.document
         val primaryCaret = editor.caretModel.primaryCaret
-        val requestResult = request.key(project)
+        val settings = Settings.getInstance(project)
+        val extractor = getExtractor(element, settings.vue)
+        val text = extractor.text(element)
+        val requestResult = request.key(project, text)
         if (requestResult.isCancelled) return
         if (requestResult.key == null) {
             Messages.showInfoMessage(
@@ -48,41 +143,18 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
             return
         }
         val i18nKey = requestResult.key
-        val settings = Settings.getInstance(project)
-        val template = settings.translationFunction
-        val range = getTextRange(element)
-        val text = getText(element).unQuote()
+        val template = extractor.template(element)
+        val range = extractor.textRange(element)
         WriteCommandAction.runWriteCommandAction(project) {
-            keyExtractor.tryToResolveTranslationFile(project, i18nKey, text, editor)
-            document.replaceString(range.startOffset, range.endOffset, "$template('${i18nKey.source}')")
+            keyExtractor.tryToResolveTranslationFile(project, i18nKey, text, editor, {
+                document.replaceString(range.startOffset, range.endOffset, template("'${i18nKey.source}'"))
+            })
         }
         primaryCaret.removeSelection()
     }
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
-//        TypeScript JSX
-//        XML_DATA_CHARACTERS
-        return if (element.containingFile.fileType.name == "JSX Harmony") {
-            PsiTreeUtil.findChildOfType(PsiTreeUtil.getParentOfType(element, XmlTag::class.java), XmlTag::class.java) == null
-        }
-        else {
-            listOf("XML_DATA_CHARACTERS", "JS:STRING_LITERAL").contains(element.type())
-        }
+        return getExtractor(element, Settings.getInstance(project).vue).canExtract(element)
     }
-
-    private fun getText(element: PsiElement): String =
-        if (element.containingFile.fileType.name == "JSX Harmony") {
-            PsiTreeUtil.getParentOfType(element, XmlTag::class.java)?.value?.textElements?.map {item -> item.text}?.joinToString(" ") ?: element.text
-        }
-        else element.text
-
-    private fun getTextRange(element: PsiElement): TextRange =
-        if (element.containingFile.fileType.name == "JSX Harmony") {
-            val textElements = PsiTreeUtil.getParentOfType(element, XmlTag::class.java)?.value?.textElements
-            TextRange(
-                (textElements?.firstOrNull() ?: element).textRange.startOffset,
-                (textElements?.lastOrNull() ?: element).textRange.endOffset
-            )
-        }
-        else element.textRange
 }
+
