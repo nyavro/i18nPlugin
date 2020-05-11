@@ -124,6 +124,7 @@ class ExtractI18nIntentionActionJsYamlTest: ExtractI18nIntentionActionBase("js",
 class ExtractI18nIntentionActionTsYamlTest: ExtractI18nIntentionActionBase("ts", "yml")
 class ExtractI18nIntentionActionTsxYamlTest: ExtractI18nIntentionActionBase("tsx", "yml")
 class ExtractI18nIntentionActionJsxYamlTest: ExtractI18nIntentionActionBase("jsx", "yml")
+
 abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: String): ExtractI18nIntentionActionBase("php", translationFormat) {
 
     fun testKeyExtractionSingleQuoted() {
@@ -155,12 +156,6 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
         settings.vue = true
     }
 
-    override fun tearDown() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
-        super.tearDown()
-    }
-
     fun testKeyExtraction() {
         doRun(
             "vue/simpleVue.vue",
@@ -169,6 +164,8 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
             "locales/en-USKeyExtracted.$translationFormat",
             "ref.value3"
         )
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
     }
 
     fun testKeyExtraction2() {
@@ -179,6 +176,8 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
             "locales/en-USKeyExtracted.$translationFormat",
             "ref.value3"
         )
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
     }
 
     fun testScriptKeyExtraction() {
@@ -189,6 +188,8 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
             "locales/en-USKeyExtracted.$translationFormat",
             "ref.value3"
         )
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
     }
 }
 
