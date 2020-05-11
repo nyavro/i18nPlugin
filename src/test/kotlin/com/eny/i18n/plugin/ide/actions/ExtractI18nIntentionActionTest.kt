@@ -7,7 +7,6 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestInputDialog
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.junit.Ignore
 
 abstract class ExtractionTestBase: BasePlatformTestCase() {
     private val hint = "Extract i18n key"
@@ -149,7 +148,6 @@ abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: 
 class ExtractI18nIntentionActionPhpJsonTest: ExtractI18nIntentionActionPhpBase("json")
 class ExtractI18nIntentionActionPhpYamlTest: ExtractI18nIntentionActionPhpBase("yml")
 
-@Ignore
 abstract class ExtractI18nIntentionActionVueI18nBase(private val translationFormat: String): ExtractionTestBase() {
 
     override fun setUp() {
@@ -195,5 +193,5 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
     }
 }
 
-class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
-class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
+//class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
+//class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
