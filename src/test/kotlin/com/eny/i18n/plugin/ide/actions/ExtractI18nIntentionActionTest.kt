@@ -7,6 +7,7 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestInputDialog
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import jdk.jfr.Enabled
 
 abstract class ExtractionTestBase: BasePlatformTestCase() {
     private val hint = "Extract i18n key"
@@ -148,6 +149,7 @@ abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: 
 class ExtractI18nIntentionActionPhpJsonTest: ExtractI18nIntentionActionPhpBase("json")
 class ExtractI18nIntentionActionPhpYamlTest: ExtractI18nIntentionActionPhpBase("yml")
 
+@Enabled(false)
 abstract class ExtractI18nIntentionActionVueI18nBase(private val translationFormat: String): ExtractionTestBase() {
 
     override fun setUp() {
