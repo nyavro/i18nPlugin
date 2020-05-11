@@ -23,16 +23,13 @@ import org.jetbrains.vuejs.lang.html.VueFileType
 
 internal interface Extractor {
     fun canExtract(element: PsiElement): Boolean
-    fun text(element: PsiElement): String
-    fun textRange(element: PsiElement): TextRange
-    fun template(element: PsiElement): (argument: String) -> String
+    fun text(element: PsiElement): String = element.text.unQuote()
+    fun textRange(element: PsiElement): TextRange = element.parent.textRange
+    fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
 }
 
 internal class JsDialectExtractor: Extractor {
     override fun canExtract(element: PsiElement): Boolean = "JS:STRING_LITERAL" == element.type()
-    override fun text(element: PsiElement): String = element.text.unQuote()
-    override fun textRange(element: PsiElement): TextRange = element.parent.textRange
-    override fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
 }
 
 internal class JsxDialectExtractor: Extractor {
@@ -62,14 +59,11 @@ internal class JsxDialectExtractor: Extractor {
                 element.parent.textRange.startOffset,
                 element.parent.textRange.endOffset
             )
-    override fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
 }
 
 internal class PhpExtractor: Extractor {
     override fun canExtract(element: PsiElement): Boolean =
         listOf("double quoted string", "single quoted string").contains(element.type())
-    override fun text(element: PsiElement): String = element.text.unQuote()
-    override fun textRange(element: PsiElement): TextRange = element.parent.textRange
     override fun template(element: PsiElement): (argument: String) -> String = {"t($it)"}
 }
 
@@ -95,11 +89,6 @@ internal class VueExtractor: Extractor {
 
 internal class DefaultExtractor: Extractor {
     override fun canExtract(element: PsiElement): Boolean = false
-    override fun text(element: PsiElement): String {
-        return element.text.unQuote()
-    }
-    override fun textRange(element: PsiElement): TextRange = element.textRange
-    override fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
 }
 
 /**
