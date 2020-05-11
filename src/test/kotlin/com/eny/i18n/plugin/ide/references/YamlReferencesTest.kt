@@ -1,6 +1,5 @@
 package com.eny.i18n.plugin.ide.references
 
-import com.eny.i18n.plugin.ide.references.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -90,6 +89,7 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
                 setOf("'ref.section.key2'", "'ref.section.key5'"),
                 (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
         )
+        settings.vue = true
     }
 
     fun testVueIncorrectConfiguration() {
@@ -100,6 +100,7 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
         assertTrue(element!!.references.isEmpty())
+        settings.vue = false
     }
 }
 

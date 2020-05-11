@@ -37,6 +37,7 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
         myFixture.configureByFiles(filePath, "assets/en-US.json")
         myFixture.complete(CompletionType.BASIC, 1)
         myFixture.checkResultByFile(expectedFilePath)
+        settings.vue = false
     }
 
     fun testNsCompletion() {
