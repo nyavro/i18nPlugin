@@ -149,14 +149,16 @@ class ExtractI18nIntentionActionPhpJsonTest: ExtractI18nIntentionActionPhpBase("
 class ExtractI18nIntentionActionPhpYamlTest: ExtractI18nIntentionActionPhpBase("yml")
 
 abstract class ExtractI18nIntentionActionVueI18nBase(private val translationFormat: String): ExtractionTestBase() {
-
-    override fun setUp() {
-        super.setUp()
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
-    }
+//
+//    override fun setUp() {
+//        super.setUp()
+//        val settings = Settings.getInstance(myFixture.project)
+//        settings.vue = true
+//    }
 
     fun testKeyExtraction() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = true
         doRun(
             "vue/simpleVue.vue",
             "vue/simpleKeyExtractedVue.vue",
@@ -164,34 +166,33 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
             "locales/en-USKeyExtracted.$translationFormat",
             "ref.value3"
         )
-        val settings = Settings.getInstance(myFixture.project)
         settings.vue = false
     }
 
-    fun testKeyExtraction2() {
-        doRun(
-            "vue/App.vue",
-            "vue/AppExtracted.vue",
-            "locales/en-US.$translationFormat",
-            "locales/en-USKeyExtracted.$translationFormat",
-            "ref.value3"
-        )
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
-    }
-
-    fun testScriptKeyExtraction() {
-        doRun(
-            "vue/scriptVue.vue",
-            "vue/scriptKeyExtractedVue.vue",
-            "locales/en-US.$translationFormat",
-            "locales/en-USKeyExtracted.$translationFormat",
-            "ref.value3"
-        )
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
-    }
+//    fun testKeyExtraction2() {
+//        doRun(
+//            "vue/App.vue",
+//            "vue/AppExtracted.vue",
+//            "locales/en-US.$translationFormat",
+//            "locales/en-USKeyExtracted.$translationFormat",
+//            "ref.value3"
+//        )
+//        val settings = Settings.getInstance(myFixture.project)
+//        settings.vue = false
+//    }
+//
+//    fun testScriptKeyExtraction() {
+//        doRun(
+//            "vue/scriptVue.vue",
+//            "vue/scriptKeyExtractedVue.vue",
+//            "locales/en-US.$translationFormat",
+//            "locales/en-USKeyExtracted.$translationFormat",
+//            "ref.value3"
+//        )
+//        val settings = Settings.getInstance(myFixture.project)
+//        settings.vue = false
+//    }
 }
 
-//class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
-//class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
+class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
+class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
