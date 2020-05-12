@@ -74,14 +74,20 @@ abstract class ExtractionTestBase: BasePlatformTestCase() {
 class ExtractionCancellation: ExtractionTestBase() {
 
     fun testTsCancel() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
         doCancel("js/simple.js", "assets/test.json")
     }
 
     fun testTsCancelInvalid() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
         doCancelInvalid("ts/simple.ts", "assets/test.json")
     }
 
     fun testExtractionUnavailable() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
         doUnavailable("tsx/unavailable.tsx")
     }
 
