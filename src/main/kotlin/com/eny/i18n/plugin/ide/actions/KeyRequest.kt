@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.parser.ExpressionKeyParser
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
@@ -25,8 +26,13 @@ class KeyRequest {
      */
     fun key(project: Project, text: String): KeyRequestResult {
         val settings = Settings.getInstance(project)
-        val keyStr = Messages
-            .showInputDialog(project, String.format("Specify the key for '%s'", text), "Input i18n key", Messages.getQuestionIcon(), null, isValidKey())
+        val keyStr = Messages.showInputDialog(
+            project,
+            String.format(PluginBundle.getMessage("action.intention.extract.key.hint"), text),
+            PluginBundle.getMessage("action.intention.extract.key.input.key"),
+            Messages.getQuestionIcon(),
+            null,
+            isValidKey())
         return if(keyStr == null) {
             KeyRequestResult(null, true)
         } else {

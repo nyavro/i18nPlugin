@@ -13,12 +13,12 @@ abstract class ExtractionTestBase: BasePlatformTestCase() {
     override fun getTestDataPath(): String = "src/test/resources/keyExtraction"
 
     protected fun doRun(
-        src: String,
-        patched: String,
-        origTranslation: String,
-        patchedTranslation: String,
-        inputDialog: TestInputDialog,
-        message: TestDialog? = null) {
+            src: String,
+            patched: String,
+            origTranslation: String,
+            patchedTranslation: String,
+            inputDialog: TestInputDialog,
+            message: TestDialog? = null) {
         myFixture.configureByFiles(src, origTranslation)
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
@@ -35,14 +35,7 @@ abstract class ExtractionTestBase: BasePlatformTestCase() {
     }
 
     protected fun doRun(src: String, patched: String, translation: String, patchedTranslation: String, newKey: String) {
-        doRun(src, patched, translation, patchedTranslation,
-            object : TestInputDialog {
-                override fun show(message: String): String? = null
-                override fun show(message: String, validator: InputValidator?): String {
-                    return newKey
-                }
-            }
-        )
+        doRun(src, patched, translation, patchedTranslation, predefinedTextInputDialog(newKey))
     }
 
     protected fun doCancel(src: String, translation: String) {
@@ -67,5 +60,29 @@ abstract class ExtractionTestBase: BasePlatformTestCase() {
                 }
             }
         )
+    }
+
+    protected fun doRunUnknownNs(
+            src: String,
+            patched: String,
+            translationCreated: String,
+            translationExpected: String,
+            newKey: String) {
+        myFixture.configureByFiles(src)
+        val action = myFixture.findSingleIntention(hint)
+        assertNotNull(action)
+        Messages.setTestInputDialog(predefinedTextInputDialog(newKey))
+        myFixture.launchAction(action)
+        myFixture.checkResultByFile(patched)
+        myFixture.checkResultByFile(translationCreated, translationExpected, false)
+    }
+
+    private fun predefinedTextInputDialog(newKey: String): TestInputDialog {
+        return object : TestInputDialog {
+            override fun show(message: String): String? = null
+            override fun show(message: String, validator: InputValidator?): String {
+                return newKey
+            }
+        }
     }
 }

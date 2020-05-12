@@ -24,7 +24,7 @@ class KeyExtractor {
             val contentGenerator = if (settings.preferYamlFilesGeneration) YamlContentGenerator() else JsonContentGenerator()
             val folderSelector = if (settings.vue) Vue18nTranslationFolderSelector(project) else I18NextTranslationFolderSelector(project)
             val fileName = if (settings.vue) "en" else (i18nKey.ns?.text ?: settings.defaultNs)
-            CreateTranslationFileQuickFix(i18nKey, contentGenerator, folderSelector, fileName, source)
+            CreateTranslationFileQuickFix(i18nKey, contentGenerator, folderSelector, fileName, source, onComplete)
         } else {
             val generators = listOf(
                 ContentGeneratorAdapter(YamlContentGenerator(), YamlPsiContentGenerator()),

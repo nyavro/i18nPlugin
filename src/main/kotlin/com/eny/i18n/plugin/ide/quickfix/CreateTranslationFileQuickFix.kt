@@ -15,7 +15,8 @@ class CreateTranslationFileQuickFix(
         private val contentGenerator: ContentGenerator,
         private val folderSelector: TranslationFolderSelector,
         private val fileName: String,
-        private val translationValue: String? = null): QuickFix() {
+        private val translationValue: String? = null,
+        private val onComplete: () -> Unit = {}): QuickFix() {
 
     override fun getText(): String = contentGenerator.getDescription()
 
@@ -32,6 +33,8 @@ class CreateTranslationFileQuickFix(
                 folders.forEach {
                     it.add(PsiFileFactory.getInstance(project).createFileFromText(name, contentGenerator.getLanguage(), content))
                 }
+                //TODO: onComplete here is in double "transaction". This should be fixed
+                onComplete()
             }
         }
     }

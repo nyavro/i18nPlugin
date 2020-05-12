@@ -14,10 +14,8 @@ abstract class QuickFix: BaseIntentionAction() {
 
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean = true
 
-    override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
-        if (editor != null) {
-            invoke(project, editor)
-        }
+    override fun invoke(project: Project, editor: Editor, file: PsiFile?) {
+        invoke(project, editor)
     }
 
     /**

@@ -50,6 +50,7 @@ class CreateKeyQuickFix(
                 {
                     ApplicationManager.getApplication().runWriteAction {
                         createPropertiesChain(ref.element.value(), ref.unresolved)
+                        //TODO: onComplete here is in double "transaction". This should be fixed
                         onComplete()
                     }
                 },

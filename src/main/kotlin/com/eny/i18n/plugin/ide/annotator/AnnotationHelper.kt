@@ -56,7 +56,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
     }
 
     /**
-     * Annotates unresolved namespace
+     * Annotates unresolved default namespace
      */
     fun unresolvedDefaultNs(fullKey: FullKey) {
         holder.createAnnotation(
@@ -66,6 +66,9 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
         )
     }
 
+    /**
+     * Annotates unresolved composite key
+     */
     fun unresolvedKey(fullKey: FullKey, mostResolvedReference: PropertyReference<PsiElement>) {
         val unresolvedPropertyAnnotation = holder.createAnnotation(
             errorSeverity,
