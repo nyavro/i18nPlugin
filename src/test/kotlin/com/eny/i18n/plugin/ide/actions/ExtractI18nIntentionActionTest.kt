@@ -177,30 +177,31 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
 //        settings.vue = false
 //    }
 
-    fun testKeyExtraction2() {
+//    fun testKeyExtraction2() {
+//        val settings = Settings.getInstance(myFixture.project)
+//        settings.vue = true
+//        doRun(
+//            "vue/App.vue",
+//            "vue/AppExtracted.vue",
+//            "locales/en-US.$translationFormat",
+//            "locales/en-USKeyExtracted.$translationFormat",
+//            "ref.value3"
+//        )
+//        settings.vue = false
+//    }
+
+    fun testScriptKeyExtraction() {
         val settings = Settings.getInstance(myFixture.project)
         settings.vue = true
         doRun(
-            "vue/App.vue",
-            "vue/AppExtracted.vue",
+            "vue/scriptVue.vue",
+            "vue/scriptKeyExtractedVue.vue",
             "locales/en-US.$translationFormat",
             "locales/en-USKeyExtracted.$translationFormat",
             "ref.value3"
         )
         settings.vue = false
     }
-//
-//    fun testScriptKeyExtraction() {
-//        doRun(
-//            "vue/scriptVue.vue",
-//            "vue/scriptKeyExtractedVue.vue",
-//            "locales/en-US.$translationFormat",
-//            "locales/en-USKeyExtracted.$translationFormat",
-//            "ref.value3"
-//        )
-//        val settings = Settings.getInstance(myFixture.project)
-//        settings.vue = false
-//    }
 }
 
 class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
