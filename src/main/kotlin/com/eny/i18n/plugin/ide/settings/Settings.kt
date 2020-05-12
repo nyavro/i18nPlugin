@@ -33,13 +33,15 @@ class Settings : PersistentStateComponent<Settings> {
 
     var preferYamlFilesGeneration = false
 
-    var translationFunction = "i18n.t"
-
     var foldingEnabled = false
 
     var foldingPreferredLanguage = "en"
 
     var foldingMaxLength = 20
+
+    var jsonContentGenerationEnabled = true
+
+    var yamlContentGenerationEnabled = true
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 

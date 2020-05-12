@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.annotator
 
 import com.eny.i18n.plugin.ide.quickfix.*
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.utils.FullKey
 import com.eny.i18n.plugin.utils.Literal
@@ -45,8 +46,13 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
         )
         val fileName = ns.text
         val folderSelector = I18NextTranslationFolderSelector(project)
-        annotation.registerFix(CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName))
-        annotation.registerFix(CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName))
+        val settings = Settings.getInstance(project)
+        if (settings.jsonContentGenerationEnabled) {
+            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName))
+        }
+        if (settings.yamlContentGenerationEnabled) {
+            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName))
+        }
     }
 
     /**

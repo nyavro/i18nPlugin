@@ -27,3 +27,10 @@ fun <C> C?.toBoolean(): Boolean {
 fun <C> C?.default(value: C): C {
     return this ?: value
 }
+
+/**
+ * Converts nullable to List
+ */
+fun <C> C?.nullableToList(): List<C> {
+    return if (this == null) emptyList() else listOf(this)
+}
