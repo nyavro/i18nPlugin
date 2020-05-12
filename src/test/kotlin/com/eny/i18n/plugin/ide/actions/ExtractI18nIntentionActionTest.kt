@@ -86,6 +86,8 @@ class ExtractionCancellation: ExtractionTestBase() {
     }
 
     fun testInvalidSource() {
+        val settings = Settings.getInstance(myFixture.project)
+        settings.vue = false
         doRun("jsx/strange.jsx",
             "jsx/strangeKeyExtracted.jsx",
             "assets/test.json",
