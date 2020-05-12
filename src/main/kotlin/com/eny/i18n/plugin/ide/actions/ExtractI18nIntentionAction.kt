@@ -40,11 +40,17 @@ internal class JsDialectExtractor: Extractor {
 internal class JsxDialectExtractor: Extractor {
     override fun canExtract(element: PsiElement): Boolean =
         listOf(JSXHarmonyFileType.INSTANCE, TypeScriptJSXFileType.INSTANCE).any { it == element.containingFile.fileType } &&
-            !PsiTreeUtil.findChildOfType(PsiTreeUtil.getParentOfType(element, XmlTag::class.java), XmlTag::class.java).toBoolean() &&
-            !element.text.startsWith("i18n.t") //Could not get any better criteria
-    override fun text(element: PsiElement): String =
-        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)?.value?.textElements?.map {it.text}?.joinToString(" ") ?: element.parent.text
+        !PsiTreeUtil.findChildOfType(PsiTreeUtil.getParentOfType(element, XmlTag::class.java), XmlTag::class.java).toBoolean() &&
+        !(element.isJs() && JSPatterns.jsArgument("t", 0).accepts(element.parent))
 
+    override fun text(element: PsiElement): String {
+        val parentTag = PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
+        return if (parentTag != null) {
+            parentTag.value.textElements.map {it.text}.joinToString(" ")
+        } else {
+            element.parent.text
+        }
+    }
     override fun textRange(element: PsiElement): TextRange =
         PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
             ?.value
@@ -59,6 +65,7 @@ internal class JsxDialectExtractor: Extractor {
                 element.parent.textRange.startOffset,
                 element.parent.textRange.endOffset
             )
+    private fun PsiElement.isJs(): Boolean = this.language == JavascriptLanguage.INSTANCE
 }
 
 internal class PhpExtractor: Extractor {
@@ -110,7 +117,7 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
 
     override fun getFamilyName() = "ExtractI18nIntentionAction"
 
-    override fun invoke(project: Project, editor: Editor?, element: PsiElement) =
+    override fun invoke(project: Project, editor: Editor, element: PsiElement) =
         ApplicationManager.getApplication().invokeLater {
             doInvoke(editor, project, element)
         }
@@ -121,8 +128,7 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
         return extractor ?: DefaultExtractor()
     }
 
-    private fun doInvoke(editor: Editor?, project: Project, element: PsiElement) {
-        editor ?: return
+    private fun doInvoke(editor: Editor, project: Project, element: PsiElement) {
         val document = editor.document
         val primaryCaret = editor.caretModel.primaryCaret
         val settings = Settings.getInstance(project)

@@ -7,6 +7,10 @@ abstract class KeyContextBase(private val language: String): ExtractionTestBase(
     fun testKeyContext() {
         doUnavailable("$language/keyContext.$language")
     }
+
+    fun testKeyContextDefaultNs() {
+        doUnavailable("$language/keyContextDefNs.$language")
+    }
 }
 
 class KeyContextJsTest: KeyContextBase("js")
