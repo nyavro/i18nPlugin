@@ -1,12 +1,15 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.language.php.PhpPatternsExt
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.*
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.lang.ecmascript6.JSXHarmonyFileType
+import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.TypeScriptJSXFileType
+import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
@@ -19,6 +22,7 @@ import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.psi.xml.XmlToken
+import org.jetbrains.vuejs.lang.expr.VueJSLanguage
 import org.jetbrains.vuejs.lang.html.VueFileType
 
 internal interface Extractor {
@@ -29,22 +33,18 @@ internal interface Extractor {
 }
 
 internal class JsDialectExtractor: Extractor {
-    override fun canExtract(element: PsiElement): Boolean = "JS:STRING_LITERAL" == element.type()
+    override fun canExtract(element: PsiElement): Boolean =
+        "JS:STRING_LITERAL" == element.type() && !JSPatterns.jsArgument("t", 0).accepts(element.parent)
 }
 
 internal class JsxDialectExtractor: Extractor {
     override fun canExtract(element: PsiElement): Boolean =
         listOf(JSXHarmonyFileType.INSTANCE, TypeScriptJSXFileType.INSTANCE).any { it == element.containingFile.fileType } &&
-        !PsiTreeUtil.findChildOfType(PsiTreeUtil.getParentOfType(element, XmlTag::class.java), XmlTag::class.java).toBoolean()
+            !PsiTreeUtil.findChildOfType(PsiTreeUtil.getParentOfType(element, XmlTag::class.java), XmlTag::class.java).toBoolean() &&
+            !element.text.startsWith("i18n.t") //Could not get any better criteria
+    override fun text(element: PsiElement): String =
+        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)?.value?.textElements?.map {it.text}?.joinToString(" ") ?: element.parent.text
 
-    override fun text(element: PsiElement): String {
-        val parentOfType = PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
-        return if (parentOfType != null) {
-            parentOfType.value.textElements.map { item -> item.text}.joinToString(" ")
-        } else {
-            element.parent.text
-        }
-    }
     override fun textRange(element: PsiElement): TextRange =
         PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
             ?.value
@@ -63,12 +63,19 @@ internal class JsxDialectExtractor: Extractor {
 
 internal class PhpExtractor: Extractor {
     override fun canExtract(element: PsiElement): Boolean =
-        listOf("double quoted string", "single quoted string").contains(element.type())
+        listOf("double quoted string", "single quoted string").contains(element.type()) &&
+        !PhpPatternsExt.phpArgument("t", 0).accepts(element.parent)
     override fun template(element: PsiElement): (argument: String) -> String = {"t($it)"}
 }
 
 internal class VueExtractor: Extractor {
-    override fun canExtract(element: PsiElement): Boolean = element.isVue()
+    override fun canExtract(element: PsiElement): Boolean =
+        if (element.isVueJs() || element.isJs()) {
+            !JSPatterns.jsArgument("\$t", 0).accepts(element.parent)
+        } else {
+            element.isVue() && !element.text.startsWith("\$t")
+        }
+
     override fun text(element: PsiElement): String =
         element.whenMatches { it.isVueText() }?.parent.default(element).text.unQuote()
     override fun textRange(element: PsiElement): TextRange =
@@ -79,11 +86,10 @@ internal class VueExtractor: Extractor {
             element.isVue() -> ({"{{ \$t($it) }}"})
             else -> ({"\$t($it)"})
         }
-
+    private fun PsiElement.isJs(): Boolean = this.language == JavascriptLanguage.INSTANCE
+    private fun PsiElement.isVueJs(): Boolean = this.language == VueJSLanguage.INSTANCE
     private fun PsiElement.isVue():Boolean = this.containingFile.fileType == VueFileType.INSTANCE
-
     private fun PsiElement.isVueTemplate():Boolean = this.isVue() && PsiTreeUtil.findFirstParent(this, {it is HtmlTag && it.name == "script"}).toBoolean()
-
     private fun PsiElement.isVueText(): Boolean = (this is PsiWhiteSpace) || (this is XmlToken)
 }
 
