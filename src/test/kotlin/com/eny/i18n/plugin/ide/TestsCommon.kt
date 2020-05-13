@@ -1,20 +1,18 @@
 package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.intellij.testFramework.fixtures.IdeaProjectTestFixture
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KMutableProperty
 
-internal fun IdeaProjectTestFixture.runVue (block: () -> Unit) {
-    val settings = Settings.getInstance(this.project)
-    settings.vue = true
-    block()
-    settings.vue = false
-}
+internal fun CodeInsightTestFixture.runVue (block: () -> Unit) = runVuePack(SettingsPack(), block)
 
-internal fun IdeaProjectTestFixture.runVuePack (settingsPack: SettingsPack, block: () -> Unit) {
+internal fun CodeInsightTestFixture.runVuePack (settingsPack: SettingsPack, block: () -> Unit) {
     val settings = Settings.getInstance(this.project)
     val restore = settingsPack.with(Settings::vue, true).build(settings)
-    block()
+    runBlocking {
+        block()
+    }
     restore.build(settings)
 }
 

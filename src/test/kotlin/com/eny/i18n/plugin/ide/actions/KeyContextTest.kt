@@ -26,6 +26,7 @@ class KeyContextVueTest: ExtractionTestBase() {
     }
 
     fun testKeyContextScript() = myFixture.runVue {
+        myFixture.tempDirPath
         doUnavailable("vue/keyContextScript.vue")
     }
 }

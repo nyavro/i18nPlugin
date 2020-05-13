@@ -23,13 +23,13 @@ abstract class TranslationFileGenerationBase(private val ext: String): Extractio
         SettingsPack()
             .with(Settings::yamlContentGenerationEnabled, ext == "yml")
             .with(Settings::jsonContentGenerationEnabled, ext == "json")) {
+        myFixture.tempDirFixture.findOrCreateDir("locales")
         doRunUnknownNs(
             "vue/simpleVue.vue",
             "vue/unknownNsExtractedVue.vue",
             "locales/en.$ext",
             "locales/enExpected.$ext",
-            "component.header.title",
-            "locales/dummy.txt"
+            "component.header.title"
         )
     }
 }
