@@ -7,6 +7,8 @@ import com.intellij.openapi.command.WriteCommandAction
 
 abstract class TranslationFileGenerationBase(private val ext: String): ExtractionTestBase() {
 
+    override fun getTestDataPath(): String = "src/test/resources/keyExtraction/translationFileGeneration"
+
     fun testTranslationFileGeneration() {
         val settings = Settings.getInstance(myFixture.project)
         settings.yamlContentGenerationEnabled = ext == "yml"
