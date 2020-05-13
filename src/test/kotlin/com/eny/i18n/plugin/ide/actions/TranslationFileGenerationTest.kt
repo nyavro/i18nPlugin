@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.SettingsPack
 import com.eny.i18n.plugin.ide.runVuePack
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.intellij.openapi.command.WriteCommandAction
 
 abstract class TranslationFileGenerationBase(private val ext: String): ExtractionTestBase() {
 
@@ -23,7 +24,7 @@ abstract class TranslationFileGenerationBase(private val ext: String): Extractio
         SettingsPack()
             .with(Settings::yamlContentGenerationEnabled, ext == "yml")
             .with(Settings::jsonContentGenerationEnabled, ext == "json")) {
-        myFixture.tempDirFixture.findOrCreateDir("locales")
+        val locales = myFixture.tempDirFixture.findOrCreateDir("locales")
         doRunUnknownNs(
             "vue/simpleVue.vue",
             "vue/unknownNsExtractedVue.vue",
@@ -31,6 +32,9 @@ abstract class TranslationFileGenerationBase(private val ext: String): Extractio
             "locales/enExpected.$ext",
             "component.header.title"
         )
+        WriteCommandAction.writeCommandAction(myFixture.project).run<RuntimeException> {
+            locales.delete(this)
+        }
     }
 }
 
