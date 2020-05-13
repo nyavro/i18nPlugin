@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.ide.completion
 
+import com.eny.i18n.plugin.ide.SettingsPack
+import com.eny.i18n.plugin.ide.runVuePack
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -30,14 +32,12 @@ internal class CodeCompletionTest : BasePlatformTestCase() {
         myFixture.checkResultByFile(expectedFilePath)
     }
 
-    private fun checkVue(filePath: String, expectedFilePath: String) {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
-        settings.vueDirectory = "assets"
+    private fun checkVue(filePath: String, expectedFilePath: String) = myFixture.runVuePack(
+        SettingsPack().with(Settings::vueDirectory, "assets")
+    ) {
         myFixture.configureByFiles(filePath, "assets/en-US.json")
         myFixture.complete(CompletionType.BASIC, 1)
         myFixture.checkResultByFile(expectedFilePath)
-        settings.vue = false
     }
 
     fun testNsCompletion() {

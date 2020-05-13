@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.ide.settings.Settings
 
 class ExtractionCancellation: ExtractionTestBase() {
@@ -100,21 +101,18 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
 //    }
 
     fun testKeyExtraction() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
-        doRun(
-            "vue/simpleVue.vue",
-            "vue/simpleKeyExtractedVue.vue",
-            "locales/en-US.$translationFormat",
-            "locales/en-USKeyExtracted.$translationFormat",
-            "ref.value3"
-        )
-        settings.vue = false
+        myFixture.runVue {
+            doRun(
+                "vue/simpleVue.vue",
+                "vue/simpleKeyExtractedVue.vue",
+                "locales/en-US.$translationFormat",
+                "locales/en-USKeyExtracted.$translationFormat",
+                "ref.value3"
+            )
+        }
     }
 
-    fun testKeyExtraction2() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testKeyExtraction2() = myFixture.runVue {
         doRun(
             "vue/App.vue",
             "vue/AppExtracted.vue",
@@ -122,12 +120,9 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
             "locales/en-USKeyExtracted.$translationFormat",
             "ref.value3"
         )
-        settings.vue = false
     }
 
-    fun testScriptKeyExtraction() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testScriptKeyExtraction() = myFixture.runVue {
         doRun(
             "vue/scriptVue.vue",
             "vue/scriptKeyExtractedVue.vue",
@@ -135,7 +130,6 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
             "locales/en-USKeyExtracted.$translationFormat",
             "ref.value3"
         )
-        settings.vue = false
     }
 }
 

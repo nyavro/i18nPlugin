@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.runVue
 
 abstract class KeyContextBase(private val language: String): ExtractionTestBase() {
 
@@ -21,17 +21,11 @@ class KeyContextPhpTest: KeyContextBase("php")
 
 class KeyContextVueTest: ExtractionTestBase() {
 
-    fun testKeyContext() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testKeyContext() = myFixture.runVue {
         doUnavailable("vue/keyContext.vue")
-        settings.vue = false
     }
 
-    fun testKeyContextScript() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testKeyContextScript() = myFixture.runVue {
         doUnavailable("vue/keyContextScript.vue")
-        settings.vue = false
     }
 }

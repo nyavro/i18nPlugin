@@ -1,5 +1,8 @@
 package com.eny.i18n.plugin.ide.folding
 
+import com.eny.i18n.plugin.ide.SettingsPack
+import com.eny.i18n.plugin.ide.runVue
+import com.eny.i18n.plugin.ide.runVuePack
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -82,6 +85,11 @@ internal abstract class FoldingTestI18nVueBase(private val translationLang:Strin
         return "src/test/resources/folding"
     }
 
+    private val settingsPack = SettingsPack()
+        .with(Settings::foldingPreferredLanguage, "en")
+        .with(Settings::foldingMaxLength, 20)
+        .with(Settings::foldingEnabled, true)
+
     override fun setUp() {
         super.setUp()
         val settings = Settings.getInstance(myFixture.project)
@@ -96,55 +104,41 @@ internal abstract class FoldingTestI18nVueBase(private val translationLang:Strin
         super.tearDown()
     }
 
-    fun testFolding() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testFolding() = myFixture.runVuePack(settingsPack) {
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/simpleTestVue.vue")
-        settings.vue = false
     }
 
-    fun testPreferredLanguage() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.foldingPreferredLanguage = "ru-RU"
-        settings.foldingMaxLength = 26
-        settings.vue = true
+    fun testPreferredLanguage() = myFixture.runVuePack(
+        SettingsPack()
+            .with(Settings::foldingPreferredLanguage, "ru-RU")
+            .with(Settings::foldingMaxLength, 26)
+            .with(Settings::foldingEnabled, true)
+    ) {
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/preferredLanguageTestVue.vue")
-        settings.vue = false
     }
 
-    fun testPreferredLanguageInvalidConfiguration() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.foldingPreferredLanguage = "fr"
-        settings.vue = true
+    fun testPreferredLanguageInvalidConfiguration() = myFixture.runVuePack(
+        SettingsPack().with(Settings::foldingPreferredLanguage, "fr")
+    ) {
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/noFoldingVue.vue")
-        settings.vue = false
     }
 
-    fun testIncompleteKey() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testIncompleteKey() = myFixture.runVue {
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/incompleteKeysVue.vue")
-        settings.vue = false
     }
 
-    fun testFoldingDisabled() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testFoldingDisabled() = myFixture.runVue {
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/noFoldingVue.vue")
-        settings.vue = false
     }
 
-    fun testFoldingParametrizedTranslation() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = true
+    fun testFoldingParametrizedTranslation() = myFixture.runVue {
         myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
         myFixture.testFolding("$testDataPath/vue/parametersTestVue.vue")
-        settings.vue = false
     }
 }
 

@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.plugin.ide.SettingsPack
+import com.eny.i18n.plugin.ide.runVuePack
 import com.eny.i18n.plugin.ide.settings.Settings
 
 abstract class TranslationFileGenerationBase(private val ext: String): ExtractionTestBase() {
@@ -17,11 +19,10 @@ abstract class TranslationFileGenerationBase(private val ext: String): Extractio
         )
     }
 
-    fun testTranslationFileGenerationVue() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.yamlContentGenerationEnabled = ext == "yml"
-        settings.jsonContentGenerationEnabled = ext == "json"
-        settings.vue = true
+    fun testTranslationFileGenerationVue() = myFixture.runVuePack(
+        SettingsPack()
+            .with(Settings::yamlContentGenerationEnabled, ext == "yml")
+            .with(Settings::jsonContentGenerationEnabled, ext == "json")) {
         doRunUnknownNs(
             "vue/simpleVue.vue",
             "vue/unknownNsExtractedVue.vue",
@@ -30,7 +31,6 @@ abstract class TranslationFileGenerationBase(private val ext: String): Extractio
             "component.header.title",
             "locales/dummy.txt"
         )
-        settings.vue = false
     }
 }
 
