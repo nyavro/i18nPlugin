@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.ide.references
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-internal class JsConfiguredReferencesTest : BasePlatformTestCase() {
+abstract class JsConfiguredReferences : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
         return "src/test/resources/references"
@@ -25,11 +25,11 @@ internal class JsConfiguredReferencesTest : BasePlatformTestCase() {
         super.tearDown()
     }
 
-    fun testReference() {
-        myFixture.configureByFiles(
-            "vue/testReference.vue", "jsConfigured/i18n/index.js", "jsConfigured/i18n/en-uk/index.js", "jsConfigured/i18n/en-uk/profile.js")
-        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-        assertNotNull(element)
-        assertEquals("'Form title'", element!!.references[0].resolve()?.text)
-    }
+//    fun testReference() {
+//        myFixture.configureByFiles(
+//            "vue/testReference.vue", "jsConfigured/i18n/index.js", "jsConfigured/i18n/en-uk/index.js", "jsConfigured/i18n/en-uk/profile.js")
+//        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+//        assertNotNull(element)
+//        assertEquals("'Form title'", element!!.references[0].resolve()?.text)
+//    }
 }

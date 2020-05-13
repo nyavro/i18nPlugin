@@ -67,8 +67,13 @@ abstract class ExtractionTestBase: BasePlatformTestCase() {
             patched: String,
             translationCreated: String,
             translationExpected: String,
-            newKey: String) {
-        myFixture.configureByFiles(src)
+            newKey: String,
+            extraFile: String? = null) {
+        if (extraFile != null) {
+            myFixture.configureByFiles(src, extraFile)
+        } else {
+            myFixture.configureByFiles(src)
+        }
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
         Messages.setTestInputDialog(predefinedTextInputDialog(newKey))

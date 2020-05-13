@@ -32,7 +32,8 @@ class Vue18nTranslationFolderSelector(val project: Project) : TranslationFolderS
     private val settings = Settings.getInstance(project)
     override fun select(callback: (List<PsiFileSystemItem>) -> Unit) {
         callback(
-            FilenameIndex.getFilesByName(project, settings.vueDirectory, settings.searchScope(project), true)
+            FilenameIndex
+                .getFilesByName(project, settings.vueDirectory, settings.searchScope(project), true)
                 .asList()
         )
     }
