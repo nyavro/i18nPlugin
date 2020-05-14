@@ -35,22 +35,23 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is JsonObject
     override fun findChild(name: String): Tree<PsiElement>? =
-        if (element is JsonObject) element.findProperty(name)?.value?.let { child -> JsonElementTree(child) }
-        else null
+        (element as JsonObject).findProperty(name)?.value?.let{ JsonElementTree(it) }
     override fun findChildren(regex: Regex): List<Tree<PsiElement>> =
         element
             .node
             .getChildren(TokenSet.create(JsonElementTypes.PROPERTY))
             .asList()
             .map {item -> item.firstChildNode.psi}
-            .filter {item -> item != null && item.text.unQuote().matches(regex)}
-            .map {item -> JsonElementTree(item)}
+            .filter {it.text.unQuote().matches(regex)}
+            .map {JsonElementTree(it)}
     companion object {
         /**
          * Creates instance of JsonElementTree
          */
         fun create(file: PsiElement): JsonElementTree? =
-            PsiTreeUtil.getChildOfType(file, JsonObject::class.java)?.let{ fileRoot -> JsonElementTree(fileRoot)}
+            PsiTreeUtil
+                .getChildOfType(file, JsonObject::class.java)
+                ?.let{ JsonElementTree(it)}
     }
 }
 
@@ -125,7 +126,7 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
          */
         fun create(file: PsiElement): YamlElementTree? {
             val fileRoot = PsiTreeUtil.getChildOfType(file, YAMLDocument::class.java)
-            return PsiTreeUtil.getChildOfType(fileRoot, YAMLMapping::class.java)?.let{ root -> YamlElementTree(root)}
+            return PsiTreeUtil.getChildOfType(fileRoot, YAMLMapping::class.java)?.let{YamlElementTree(it)}
         }
     }
 }
