@@ -103,7 +103,7 @@ internal class CodeCompletionInvalidTest: BasePlatformTestCase() {
 internal class CodeCompletionTsJsonTest: CodeCompletionTestBase("ts","json")
 internal class CodeCompletionJsJsonTest: CodeCompletionTestBase("js","json")
 internal class CodeCompletionTsxJsonTest: CodeCompletionTestBase("tsx","json")
-internal class CodeCompletionJsxJsonTest: CodeCompletionTestBase("jsx","json")
+//internal class CodeCompletionJsxJsonTest: CodeCompletionTestBase("jsx","json")
 internal class CodeCompletionPhpJsonTest: CodeCompletionTestBasePhp("php","json")
 internal class CodeCompletionTsYamlTest: CodeCompletionTestBase("ts", "yml")
 internal class CodeCompletionJsYamlTest: CodeCompletionTestBase("js", "yml")
