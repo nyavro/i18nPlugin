@@ -93,23 +93,15 @@ class ExtractI18nIntentionActionPhpJsonTest: ExtractI18nIntentionActionPhpBase("
 class ExtractI18nIntentionActionPhpYamlTest: ExtractI18nIntentionActionPhpBase("yml")
 
 abstract class ExtractI18nIntentionActionVueI18nBase(private val translationFormat: String): ExtractionTestBase() {
-//
-//    override fun setUp() {
-//        super.setUp()
-//        val settings = Settings.getInstance(myFixture.project)
-//        settings.vue = true
-//    }
 
-    fun testKeyExtraction() {
-        myFixture.runVue {
-            doRun(
-                "vue/simpleVue.vue",
-                "vue/simpleKeyExtractedVue.vue",
-                "locales/en-US.$translationFormat",
-                "locales/en-USKeyExtracted.$translationFormat",
-                "ref.value3"
-            )
-        }
+    fun testKeyExtraction() = myFixture.runVue {
+        doRun(
+            "vue/simpleVue.vue",
+            "vue/simpleKeyExtractedVue.vue",
+            "locales/en-US.$translationFormat",
+            "locales/en-USKeyExtracted.$translationFormat",
+            "ref.value3"
+        )
     }
 
     fun testKeyExtraction2() = myFixture.runVue {
@@ -133,5 +125,5 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
     }
 }
 
-//class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
-//class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
+class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
+class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
