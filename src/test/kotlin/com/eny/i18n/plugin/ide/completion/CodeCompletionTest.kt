@@ -35,7 +35,7 @@ internal class DefaultNsChecker(fixture: CodeInsightTestFixture): Checker {
     }
 }
 
-internal class NsChecker(private val fixture: CodeInsightTestFixture): Checker {
+internal class NsChecker(fixture: CodeInsightTestFixture): Checker {
     private val checker = BasicChecker(fixture)
     override fun doCheck(fileName: String, lang: String, ext: String) {
         checker.doCheck("$lang/$fileName.$lang", "$lang/${fileName}Result.$lang", "assets/test.$ext")
@@ -108,17 +108,17 @@ internal class CodeCompletionPhpJsonTest: CodeCompletionTestBasePhp("php","json"
 internal class CodeCompletionTsYamlTest: CodeCompletionTestBase("ts", "yml")
 internal class CodeCompletionJsYamlTest: CodeCompletionTestBase("js", "yml")
 internal class CodeCompletionTsxYamlTest: CodeCompletionTestBase("tsx", "yml")
-internal class CodeCompletionJsxYamlTest: CodeCompletionTestBase("jsx", "yml")
+//    internal class CodeCompletionJsxYamlTest: CodeCompletionTestBase("jsx", "yml")
 internal class CodeCompletionPhpYamlTest: CodeCompletionTestBase("php", "yml")
-internal class CodeCompletionTsJsonDefNsTest: CodeCompletionTestBase("ts","json", ::DefaultNsChecker)
-internal class CodeCompletionJsJsonDefNsTest: CodeCompletionTestBase("js","json", ::DefaultNsChecker)
-internal class CodeCompletionTsxJsonDefNsTest: CodeCompletionTestBase("tsx","json", ::DefaultNsChecker)
-//internal class CodeCompletionJsxJsonDefNsTest: CodeCompletionTestBase("jsx","json", ::DefaultNsChecker)
-internal class CodeCompletionPhpJsonDefNsTest: CodeCompletionTestBase("php","json", ::DefaultNsChecker)
-internal class CodeCompletionTsYamlDefNsTest: CodeCompletionTestBase("ts", "yml", ::DefaultNsChecker)
-internal class CodeCompletionJsYamlDefNsTest: CodeCompletionTestBase("js", "yml", ::DefaultNsChecker)
-internal class CodeCompletionTsxYamlDefNsTest: CodeCompletionTestBase("tsx", "yml", ::DefaultNsChecker)
-internal class CodeCompletionJsxYamlDefNsTest: CodeCompletionTestBase("jsx", "yml", ::DefaultNsChecker)
-internal class CodeCompletionPhpYamlDefNsTest: CodeCompletionTestBasePhp("php", "yml", ::DefaultNsChecker)
+    internal class CodeCompletionTsJsonDefNsTest: CodeCompletionTestBase("ts","json", ::DefaultNsChecker)
+    internal class CodeCompletionJsJsonDefNsTest: CodeCompletionTestBase("js","json", ::DefaultNsChecker)
+    internal class CodeCompletionTsxJsonDefNsTest: CodeCompletionTestBase("tsx","json", ::DefaultNsChecker)
+//    internal class CodeCompletionJsxJsonDefNsTest: CodeCompletionTestBase("jsx","json", ::DefaultNsChecker)
+    internal class CodeCompletionPhpJsonDefNsTest: CodeCompletionTestBase("php","json", ::DefaultNsChecker)
+    internal class CodeCompletionTsYamlDefNsTest: CodeCompletionTestBase("ts", "yml", ::DefaultNsChecker)
+    internal class CodeCompletionJsYamlDefNsTest: CodeCompletionTestBase("js", "yml", ::DefaultNsChecker)
+    internal class CodeCompletionTsxYamlDefNsTest: CodeCompletionTestBase("tsx", "yml", ::DefaultNsChecker)
+//    internal class CodeCompletionJsxYamlDefNsTest: CodeCompletionTestBase("jsx", "yml", ::DefaultNsChecker)
+    internal class CodeCompletionPhpYamlDefNsTest: CodeCompletionTestBasePhp("php", "yml", ::DefaultNsChecker)
 internal class CodeCompletionVueJsonTest: CodeCompletionTestBase("vue", "json", ::VueChecker)
 internal class CodeCompletionVueYamlTest: CodeCompletionTestBase("vue", "yml", ::VueChecker)
