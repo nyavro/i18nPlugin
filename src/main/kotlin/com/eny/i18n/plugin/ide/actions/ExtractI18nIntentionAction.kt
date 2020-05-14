@@ -70,9 +70,15 @@ internal class JsxDialectExtractor: Extractor {
 
 internal class PhpExtractor: Extractor {
     override fun canExtract(element: PsiElement): Boolean =
-        listOf("double quoted string", "single quoted string").contains(element.type()) &&
-        !PhpPatternsExt.phpArgument("t", 0).accepts(element.parent)
+        (element.isPhpStringLiteral() || element.isBorderToken()) &&
+        !PhpPatternsExt.phpArgument("t", 0).accepts(getTextElement(element.parent))
     override fun template(element: PsiElement): (argument: String) -> String = {"t($it)"}
+    override fun text(element: PsiElement): String = getTextElement(element).text.unQuote()
+    override fun textRange(element: PsiElement): TextRange = getTextElement(element).parent.textRange
+    private fun getTextElement(element: PsiElement) =
+        element.whenMatches {it.isBorderToken()}?.prevSibling.default(element)
+    private fun PsiElement.isBorderToken(): Boolean = listOf("right double quote", "right single quote").contains(this.type())
+    private fun PsiElement.isPhpStringLiteral(): Boolean = listOf("double quoted string", "single quoted string").contains(this.type())
 }
 
 internal class VueExtractor: Extractor {
@@ -84,20 +90,30 @@ internal class VueExtractor: Extractor {
         }
 
     override fun text(element: PsiElement): String =
-        element.whenMatches { it.isVueText() }?.parent.default(element).text.unQuote()
+        getTextElement(element).text.unQuote()
+
     override fun textRange(element: PsiElement): TextRange =
-        element.whenMatches { it.isVueText() }?.parent.default(element).textRange
+        getTextElement(element).textRange
+
     override fun template(element: PsiElement): (argument: String) -> String =
         when {
             element.isVueTemplate() -> ({"this.\$t($it)"})
             element.isVue() -> ({"{{ \$t($it) }}"})
             else -> ({"\$t($it)"})
         }
+
+    private fun getTextElement(element: PsiElement): PsiElement =
+        if (element.isBorderToken()) {
+            element.prevSibling
+        } else {
+            element.whenMatches { it.isVueText() }?.parent.default(element)
+        }
     private fun PsiElement.isJs(): Boolean = this.language == JavascriptLanguage.INSTANCE
     private fun PsiElement.isVueJs(): Boolean = this.language == VueJSLanguage.INSTANCE
     private fun PsiElement.isVue():Boolean = this.containingFile.fileType == VueFileType.INSTANCE
     private fun PsiElement.isVueTemplate():Boolean = this.isVue() && PsiTreeUtil.findFirstParent(this, {it is HtmlTag && it.name == "script"}).toBoolean()
     private fun PsiElement.isVueText(): Boolean = (this is PsiWhiteSpace) || (this is XmlToken)
+    private fun PsiElement.isBorderToken(): Boolean = this.text == "</"
 }
 
 internal class DefaultExtractor: Extractor {

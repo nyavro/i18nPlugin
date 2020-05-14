@@ -12,7 +12,7 @@ fun String.isQuoted(): Boolean =
 fun String.unQuote(): String {
     return listOf('\'', '\"', '`').fold(this) {
         acc, quote ->
-            if (acc.endsWith(quote) && acc.startsWith(quote))
+            if (acc.endsWith(quote) && acc.startsWith(quote) && acc.length > 1)
                 acc.substring(1, this.length - 1)
             else acc
     }

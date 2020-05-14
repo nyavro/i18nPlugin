@@ -1,3 +1,3 @@
 <?php
 
-echo str_replace("\n", '<br>', t<caret>('test:ref.value3'));
+echo str_replace("\n", '<br>', t('test:ref.value3'));

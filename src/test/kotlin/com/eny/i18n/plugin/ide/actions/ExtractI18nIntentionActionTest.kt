@@ -46,6 +46,15 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "test:ref.value3")
     }
 
+    fun testRightBorderKeyExtraction() {
+        doRun(
+            "$language/rightBorder.$language",
+            "$language/simpleKeyExtracted.$language",
+            "assets/test.$translationFormat",
+            "assets/testKeyExtracted.$translationFormat",
+            "test:ref.value3")
+    }
+
     fun testDefNsKeyExtraction() {
         doRun(
             "$language/simple.$language",
@@ -74,6 +83,15 @@ abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: 
     fun testKeyExtractionSingleQuoted() {
         doRun(
             "php/simpleSingleQuoted.php",
+            "php/simpleKeyExtracted.php",
+            "assets/test.$translationFormat",
+            "assets/testKeyExtracted.$translationFormat",
+            "test:ref.value3")
+    }
+
+    fun testRightBorderSingleQuoted() {
+        doRun(
+            "php/rightBorderSingleQuoted.php",
             "php/simpleKeyExtracted.php",
             "assets/test.$translationFormat",
             "assets/testKeyExtracted.$translationFormat",
@@ -114,6 +132,26 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
         )
     }
 
+    fun testKeyExtractionBorder() = myFixture.runVue {
+        doRun(
+            "vue/AppBorderVue.vue",
+            "vue/AppExtracted.vue",
+            "locales/en-US.$translationFormat",
+            "locales/en-USKeyExtracted.$translationFormat",
+            "ref.value3"
+        )
+    }
+
+    fun testKeyExtractionLeftBorder() = myFixture.runVue {
+        doRun(
+            "vue/AppLeftBorderVue.vue",
+            "vue/AppExtracted.vue",
+            "locales/en-US.$translationFormat",
+            "locales/en-USKeyExtracted.$translationFormat",
+            "ref.value3"
+        )
+    }
+
     fun testScriptKeyExtraction() = myFixture.runVue {
         doRun(
             "vue/scriptVue.vue",
@@ -125,5 +163,5 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
     }
 }
 
-class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
-class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
+//class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
+//class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
