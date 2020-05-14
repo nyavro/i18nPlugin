@@ -109,17 +109,12 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is YAMLMapping
     override fun findChild(name: String): Tree<PsiElement>? =
-        if (element is YAMLMapping) element.getKeyValueByKey(name)?.value?.let { child -> YamlElementTree(child) }
-        else null
-
-    override fun findChildren(regex: Regex): List<Tree<PsiElement>> {
-        return (element as YAMLMapping)
+        (element as YAMLMapping).getKeyValueByKey(name)?.value?.let(::YamlElementTree)
+    override fun findChildren(regex: Regex): List<Tree<PsiElement>> =
+        (element as YAMLMapping)
             .keyValues
-            .filter {
-                keyValue -> keyValue.key?.text?.matches(regex) ?: false
-            }
-            .mapNotNull {item -> item.key?.let { key -> YamlElementTree(key)}}
-    }
+            .filter {it.key?.text?.matches(regex) ?: false}
+            .mapNotNull {it.key?.let (::YamlElementTree)}
     companion object {
         /**
          * Creates YamlElementTree instance
