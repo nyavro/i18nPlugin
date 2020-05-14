@@ -13,10 +13,19 @@
         <li>navigation from i18n json/yaml reference to code usage</li>
         <li>code completion</li>
         <li>missing namespace/key quick fixes</li>
+        <li>text to translation extraction</li>
     </ul>
     ]]></description>
 
     <change-notes><![CDATA[
+        <div>
+            <h3>1.8.3</h3>
+            <ul>
+                <li>Vue folding issue fixed</li>
+                <li>Special cases of vue translation extraction</li>
+                <li>Minor fixes</li>
+            </ul>
+        </div>
         <div>
             <h3>1.8.2</h3>
             <ul>
