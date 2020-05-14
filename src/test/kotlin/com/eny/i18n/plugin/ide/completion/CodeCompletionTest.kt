@@ -62,13 +62,6 @@ internal abstract class CodeCompletionTestBase(
     fun testSingle() = check("single")
     fun testSingleNoDot() = check("singleNoDot")
     fun testPlural() = check("plural")
-
-
-//    fun testDefaultCompletion() {
-//        checkDefault("js/default/invalid.js", "js/default/invalidResult.js")
-//        checkDefault("php/default/dQuote.php", "php/default/dQuoteResult.php")
-//    }
-
 //
 //    fun testRename() {
 //        myFixture.configureByFiles("RenameTestData.java", "RenameTestData.simple")
