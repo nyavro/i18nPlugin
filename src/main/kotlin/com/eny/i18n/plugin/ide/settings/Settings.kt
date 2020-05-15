@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.ide.settings
 
+import com.eny.i18n.plugin.utils.default
+import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
@@ -42,6 +44,9 @@ class Settings : PersistentStateComponent<Settings> {
     var jsonContentGenerationEnabled = true
 
     var yamlContentGenerationEnabled = true
+
+    fun defaultNamespaces(): List<String> =
+        defaultNs.whenMatches {it.isNotBlank()}.default("translation").split("[;|,\\s]".toRegex()).filter {it.isNotBlank()}
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 

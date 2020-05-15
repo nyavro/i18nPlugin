@@ -72,6 +72,13 @@ internal class KeyComposerTest {
     fun substituteDefaultNs() {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("second31", "first1", "BASE", "Common"))
-        assertEquals("BASE.first1.second31", composer.composeKey(tree, "\$", ".", "-", "Common"))
+        assertEquals("BASE.first1.second31", composer.composeKey(tree, "\$", ".", "-", listOf("Common")))
+    }
+
+    @Test
+    fun substituteDefaultNsMulti() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("second31", "first1", "BASE", "First"))
+        assertEquals("BASE.first1.second31", composer.composeKey(tree, "\$", ".", "-", listOf("First", "Second")))
     }
 }

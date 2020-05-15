@@ -8,9 +8,9 @@ interface KeyComposer<T> {
      * Composes string representation of key by given path
      */
     fun composeKey(tree: FlippedTree<T>,
-           nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: String = "translation", dropRoot: Boolean = false): String {
+           nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: List<String> = listOf("translation"), dropRoot: Boolean = false): String {
         val parents = tree.parents()
-        val criteria = {node: FlippedTree<T> -> node.isRoot() && (node.name()==defaultNs || dropRoot)}
+        val criteria = {node: FlippedTree<T> -> node.isRoot() && (defaultNs.contains(node.name()) || dropRoot)}
         val fixPlural = {node: FlippedTree<T> -> if(node.isRoot()) node.name() else node.name().substringBefore(pluralSeparator)}
         val processNode = {node: FlippedTree<T>, index: Int ->
             fixPlural(node) + if (index < parents.size - 1) if (node.isRoot()) nsSeparator else keySeparator else ""}
