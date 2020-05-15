@@ -5,16 +5,18 @@ import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KMutableProperty
 
-internal fun CodeInsightTestFixture.runVue (block: () -> Unit) = runVuePack(SettingsPack(), block)
-
-internal fun CodeInsightTestFixture.runVuePack (settingsPack: SettingsPack, block: () -> Unit) {
+internal fun CodeInsightTestFixture.runWithSettings (settingsPack: SettingsPack, block: () -> Unit) {
     val settings = Settings.getInstance(this.project)
-    val restore = settingsPack.with(Settings::vue, true).build(settings)
+    val restore = settingsPack.build(settings)
     runBlocking {
         block()
     }
     restore.build(settings)
 }
+
+internal fun CodeInsightTestFixture.runVuePack (settingsPack: SettingsPack, block: () -> Unit) = runWithSettings(settingsPack.with(Settings::vue, true), block)
+
+internal fun CodeInsightTestFixture.runVue (block: () -> Unit) = runVuePack(SettingsPack(), block)
 
 internal class SettingsPack {
     private val values: MutableMap<KMutableProperty<*>, Any> = mutableMapOf()
