@@ -1,3 +1,3 @@
 export const test1 = (t: (string) => string) => {
-    return <div>{"tst1.base<caret>"}</div>;
+    return <div>{"test:tst1.base.si<caret>"}</div>;
 };

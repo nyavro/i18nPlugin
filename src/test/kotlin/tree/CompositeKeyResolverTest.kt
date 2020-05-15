@@ -13,7 +13,7 @@ internal class TestTree(private val value: String, private val children: List<Te
     override fun findChild(name: String) = children.find {item -> item.value==name}
     override fun isTree() = children.isNotEmpty()
     override fun value() = value
-    override fun findChildren(regex: Regex): List<Tree<String>> = children.filter {item -> item.value.matches(regex)}
+    override fun findChildren(prefix: String): List<Tree<String>> = children.filter { item -> item.value.startsWith(prefix)}
 }
 
 internal fun root(tree: TestTree) = TestTree("", listOf(tree))

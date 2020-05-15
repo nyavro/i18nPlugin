@@ -7,8 +7,8 @@ import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.Literal
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.utils.nullableToList
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionInitializationContext
@@ -26,51 +26,33 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
         super.fillCompletionVariants(parameters, result)
-        val settings = Settings.getInstance(parameters.position.project)
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
         keyExtractor.extractI18nKeyLiteral(parameters.position)?.let {
             fullKey ->
-            if (fullKey.source.endsWith(".$DUMMY_KEY")) {
-                processKey(fullKey, result, parameters, settings)
-            } else {
-                processKey(endWithDot(fullKey), result, parameters, settings)
-            }
-            result.stopHere()
+                result.addAllElements(processKey(fullKey, parameters))
+                result.stopHere()
         }
     }
 
-    private fun groupPlurals(set: Set<String>, pluralSeparator: String):List<String> =
-        set.groupBy {it.substringBeforeLast(pluralSeparator)}
+    private fun groupPlurals(completions: List<String>, pluralSeparator: String):List<String> =
+        completions.groupBy {it.substringBeforeLast(pluralSeparator)}
             .entries.flatMap {
                 entry -> if(entry.value.size == 3 && entry.value.containsAll(listOf(1,2,5).map{entry.key+pluralSeparator+it})) {
                 listOf(entry.key)} else entry.value
             }
 
-    private fun endWithDot(fullKey: FullKey): FullKey = fullKey.copy(
-        source = fullKey.source.replace(DUMMY_KEY, ".$DUMMY_KEY"),
-        compositeKey =
-            fullKey.compositeKey.dropLast(1) +
-            fullKey.compositeKey.takeLast(1).map {key -> Literal(key.text.replace(DUMMY_KEY, ""))} +
-            Literal(DUMMY_KEY)
-    )
-
-    private fun processKey(fullKey: FullKey, result: CompletionResultSet, parameters: CompletionParameters, settings: Settings) {
-        val fixedKey = fullKey.compositeKey.dropLast(1)
-        fullKey.compositeKey.lastOrNull()?.let { last ->
-            val search = last.text.let { value -> Regex(value.replace(DUMMY_KEY, ".*")) }
+    private fun processKey(fullKey: FullKey, parameters: CompletionParameters): List<LookupElementBuilder> =
+        fullKey.compositeKey.lastOrNull().nullableToList().flatMap { last ->
             val source = fullKey.source.replace(last.text, "")
-            result.addAllElements(
-                groupPlurals(
-                    LocalizationSourceSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
-                        listCompositeKeyVariants(
-                            fixedKey,
-                            PsiElementTree.create(it.element),
-                            search
-                        )
-                    }.map { key -> key.value().text.unQuote() }.toSet(),
-                    settings.pluralSeparator
-                ).map { item -> LookupElementBuilder.create(source + item) }
-            )
+            groupPlurals(
+                LocalizationSourceSearch(parameters.position.project).findFilesByName(fullKey.ns?.text).flatMap {
+                    listCompositeKeyVariants(
+                        fullKey.compositeKey.dropLast(1),
+                        PsiElementTree.create(it.element),
+                        last.text.replace(DUMMY_KEY, "")
+                    ).map { it.value().text.unQuote() }
+                },
+                Settings.getInstance(parameters.position.project).pluralSeparator
+            ).map { LookupElementBuilder.create(source + it) }
         }
-    }
 }

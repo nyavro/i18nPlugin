@@ -36,13 +36,13 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
     override fun isTree(): Boolean = element is JsonObject
     override fun findChild(name: String): Tree<PsiElement>? =
         (element as JsonObject).findProperty(name)?.value?.let{ JsonElementTree(it) }
-    override fun findChildren(regex: Regex): List<Tree<PsiElement>> =
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> =
         element
             .node
             .getChildren(TokenSet.create(JsonElementTypes.PROPERTY))
             .asList()
             .map {item -> item.firstChildNode.psi}
-            .filter {it.text.unQuote().matches(regex)}
+            .filter {it.text.unQuote().startsWith(prefix)}
             .map {JsonElementTree(it)}
     companion object {
         /**
@@ -110,10 +110,10 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
     override fun isTree(): Boolean = element is YAMLMapping
     override fun findChild(name: String): Tree<PsiElement>? =
         (element as YAMLMapping).getKeyValueByKey(name)?.value?.let(::YamlElementTree)
-    override fun findChildren(regex: Regex): List<Tree<PsiElement>> =
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> =
         (element as YAMLMapping)
             .keyValues
-            .filter {it.key?.text?.matches(regex) ?: false}
+            .filter {it.key?.text?.startsWith(prefix) ?: false}
             .mapNotNull {it.key?.let (::YamlElementTree)}
     companion object {
         /**

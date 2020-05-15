@@ -58,10 +58,17 @@ internal abstract class CodeCompletionTestBase(
 
     protected fun check(filePath: String) = checker.doCheck(filePath, lang, ext)
 
+    //No completion happens
     fun testNoCompletion() = check("none")
+
+    //Simple case - one possible completion of key: 'test:tst1.base.<caret>'
     fun testSingle() = check("single")
-    fun testSingleNoDot() = check("singleNoDot")
+
+    //Completion of plural key: 'test:tst2.plurals.<caret>'
     fun testPlural() = check("plural")
+
+    //Completion of partially typed key: 'test:tst1.base.si<caret>'
+    fun testPartial() = check("partial")
 //
 //    fun testRename() {
 //        myFixture.configureByFiles("RenameTestData.java", "RenameTestData.simple")
@@ -103,7 +110,7 @@ internal class CodeCompletionInvalidTest: BasePlatformTestCase() {
 internal class CodeCompletionTsJsonTest: CodeCompletionTestBase("ts","json")
 internal class CodeCompletionJsJsonTest: CodeCompletionTestBase("js","json")
 internal class CodeCompletionTsxJsonTest: CodeCompletionTestBase("tsx","json")
-//internal class CodeCompletionJsxJsonTest: CodeCompletionTestBase("jsx","json")
+//    internal class CodeCompletionJsxJsonTest: CodeCompletionTestBase("jsx","json")
 internal class CodeCompletionPhpJsonTest: CodeCompletionTestBasePhp("php","json")
 internal class CodeCompletionTsYamlTest: CodeCompletionTestBase("ts", "yml")
 internal class CodeCompletionJsYamlTest: CodeCompletionTestBase("js", "yml")

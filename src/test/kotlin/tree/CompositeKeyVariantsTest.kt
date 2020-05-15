@@ -3,7 +3,6 @@ package tree
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.Literal
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -11,68 +10,57 @@ import org.junit.Test
  */
 internal class CompositeKeyVariantsTest {
 
-    @Test
-    fun listCompositeKeyVariants() {
+    /**
+     * main.acti        -> activity
+     * main.activity.   -> swimming
+     * main.activity    -> swimming
+     * main.place.ff    ->
+     * main.place.      -> jungle, forest, sea
+     * main.place.fo    -> forest
+     */
+    fun check(request: String, fixed: List<String>, expected: Set<String>) {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val variants = resolver.listCompositeKeyVariants(
-            listOf(Literal("top1"), Literal("under2")),
-            root(
-                TestTree("top1",
-                    listOf(
-                        TestTree("under1", listOf(TestTree("subunder1"))),
-                        TestTree("under2", listOf(TestTree("subunder2"), TestTree("busunder2"), TestTree("subunder4"))),
-                        TestTree("under3", listOf(TestTree("subunder3")))
-                    )
-                )
-            ),
-            Regex("sub.*")
+            fixed.map{Literal(it)},
+            testTree(),
+            request
         )
-        assertTrue(variants.isNotEmpty())
-        assertEquals(2, variants.size)
-        assertEquals("subunder2", variants.get(0).value())
-        assertEquals("subunder4", variants.get(1).value())
+        assertEquals(expected, variants.map {it.value()}.toSet())
     }
 
     @Test
-    fun listCompositeKeyVariants2() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
-        val variants = resolver.listCompositeKeyVariants(
-            listOf(Literal("top2"), Literal("under5")),
-            root(
-                TestTree("top2",
-                    listOf(
-                        TestTree("under4", listOf(TestTree("subunder5"))),
-                        TestTree("under5", listOf(TestTree("undsuber6"), TestTree("busunder7"), TestTree("subunder8und"), TestTree("subuder8ud"), TestTree("subu9nder8und"))),
-                        TestTree("under6", listOf(TestTree("subunder9")))
-                    )
-                )
-            ),
-            Regex(".*und.*")
-        )
-        assertTrue(variants.isNotEmpty())
-        assertEquals(4, variants.size)
-        assertEquals(listOf("undsuber6", "busunder7", "subunder8und", "subu9nder8und"), variants.map {item -> item.value()})
+    fun runRequests() {
+        check("acti", listOf("main"), setOf("activity"))
+        check("", listOf("main", "activity"), setOf("swimming"))
+        check("activity", listOf("main"), setOf("activity"))
+        check("", listOf("main", "place"), setOf("jungle", "forest", "sea"))
+        check("fo", listOf("main", "place"), setOf("forest"))
     }
 
-    @Test
-    fun listCompositeKeyVariants3() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
-        val variants = resolver.listCompositeKeyVariants(
-            listOf(Literal("top3"), Literal("under8")),
-            root(
-                TestTree("top3",
-                    listOf(
-                        TestTree("under7", listOf(TestTree("subunder10"))),
-                        TestTree("under8", listOf(TestTree("undsuber12"), TestTree("busunder13"), TestTree("subunder14und"), TestTree("subuder15ud"), TestTree("subu16nder17und"))),
-                        TestTree("under9", listOf(TestTree("subunder11")))
-                    )
+    /**
+     * main
+     *   food
+     *     fruit
+     *   place
+     *      jungle
+     *      forest
+     *      sea
+     *   activity
+     *      swimming
+     */
+    private fun testTree(): TestTree {
+        return root(
+            TestTree("main",
+                listOf(
+                    TestTree("food",
+                        listOf(TestTree("fruit"))),
+                    TestTree("place",
+                        listOf(TestTree("jungle"), TestTree("forest"), TestTree("sea"))),
+                    TestTree("activity",
+                        listOf(TestTree("swimming")))
                 )
-            ),
-            Regex(".*und")
+            )
         )
-        assertTrue(variants.isNotEmpty())
-        assertEquals(2, variants.size)
-        assertEquals(listOf("subunder14und", "subu16nder17und"), variants.map {item -> item.value()})
     }
 
     @Test

@@ -78,7 +78,6 @@ interface CompositeKeyResolver<T> {
     /**
      * Returns keys at current composite key position
      */
-    fun listCompositeKeyVariants(fixedKey: List<Literal>, root: Tree<T>?, regex: Regex): List<Tree<T>> {
-        return resolveCompositeKeyProperty(fixedKey, root)?.findChildren(regex) ?: listOf()
-    }
+    fun listCompositeKeyVariants(fixedKey: List<Literal>, root: Tree<T>?, prefix: String): List<Tree<T>> =
+        resolveCompositeKeyProperty(fixedKey, root)?.findChildren(prefix) ?: listOf()
 }
