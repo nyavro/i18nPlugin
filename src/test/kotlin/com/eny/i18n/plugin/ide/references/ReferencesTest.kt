@@ -14,6 +14,13 @@ abstract class ReferencesTestBase(private val ext: String) : BasePlatformTestCas
         assertEquals("Reference in json", element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    fun testDefaultNsReference() {
+        myFixture.configureByFiles("jsx/defNsReference.jsx", "assets/translation.$ext")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertEquals("Default ns reference", element!!.references[0].resolve()?.text?.unQuote())
+    }
+
     fun testPartiallyResolvedReference() {
         myFixture.configureByFiles("tsx/testPartiallyResolvedReference.tsx", "assets/test.$ext")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
