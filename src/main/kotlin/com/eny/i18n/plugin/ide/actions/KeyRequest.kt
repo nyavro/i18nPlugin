@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.parser.ExpressionKeyParser
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
@@ -19,7 +19,7 @@ class KeyRequestResult(val key: FullKey?, val isCancelled: Boolean)
  */
 class KeyRequest {
 
-    private val parser = ExpressionKeyParser()
+    private val parser = KeyParser()
 
     /**
      * Requests key

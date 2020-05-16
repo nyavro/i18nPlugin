@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
@@ -16,7 +17,7 @@ class StringLiteralKeyExtractor: KeyExtractor {
             element.type().contains(item)
     }
 
-    override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
+    override fun extract(element: PsiElement, parser: KeyParser, settings: Settings): FullKey? =
         parser.parse(
             listOf(KeyElement.literal(element.text.unQuote())),
             false,

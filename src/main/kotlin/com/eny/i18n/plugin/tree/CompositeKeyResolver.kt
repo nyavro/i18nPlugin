@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.tree
 
-import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.key.lexer.Literal
 
 /**
  * Property reference represents PsiElement and it's path from Json file root

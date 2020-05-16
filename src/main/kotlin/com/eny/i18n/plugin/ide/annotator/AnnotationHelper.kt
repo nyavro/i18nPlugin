@@ -3,8 +3,8 @@ package com.eny.i18n.plugin.ide.annotator
 import com.eny.i18n.plugin.ide.quickfix.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.RangesCalculator
 import com.intellij.lang.annotation.AnnotationHolder

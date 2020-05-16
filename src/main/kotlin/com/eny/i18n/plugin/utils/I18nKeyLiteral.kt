@@ -11,11 +11,6 @@ enum class KeyElementType {
 }
 
 /**
- * Represents translation key
- */
-data class FullKey(val source: String, val ns:Literal?, val compositeKey:List<Literal>, val isTemplate: Boolean = false)
-
-/**
  * Represents element of translation key
  */
 data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyElementType) {

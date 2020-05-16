@@ -1,7 +1,7 @@
 package utils
 
 import com.eny.i18n.plugin.utils.KeyRangesCalculator
-import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.openapi.util.TextRange
 
 /**

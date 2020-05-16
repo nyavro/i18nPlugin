@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.parser.DummyContext
-import com.eny.i18n.plugin.parser.FullKeyExtractor
+import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference

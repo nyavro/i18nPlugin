@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.quickfix.*
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.editor.Editor
@@ -16,7 +16,7 @@ class KeyExtractor {
     /**
      * Tries to resolve translation file
      */
-    fun tryToResolveTranslationFile(project:Project, i18nKey:FullKey, source: String, editor:Editor, onComplete: () -> Unit) {
+    fun tryToResolveTranslationFile(project:Project, i18nKey: FullKey, source: String, editor:Editor, onComplete: () -> Unit) {
         val search = LocalizationSourceSearch(project)
         val settings = Settings.getInstance(project)
         val files = search.findFilesByName(i18nKey.ns?.text)

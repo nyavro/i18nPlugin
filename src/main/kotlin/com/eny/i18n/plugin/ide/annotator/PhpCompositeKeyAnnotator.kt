@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide.annotator
 
 import com.eny.i18n.plugin.language.php.PhpCallContext
-import com.eny.i18n.plugin.parser.FullKeyExtractor
+import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.parser.KeyExtractorImpl
 
 /**

@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParser
 import com.intellij.psi.PsiElement
 
 /**
@@ -16,5 +17,5 @@ interface KeyExtractor {
     /**
      * Extracts key from psi element
      */
-    fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey?
+    fun extract(element: PsiElement, parser: KeyParser, settings: Settings): FullKey?
 }

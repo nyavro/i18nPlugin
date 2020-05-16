@@ -1,7 +1,9 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.FullKeyExtractor
+import com.eny.i18n.plugin.key.parser.KeyParser
 import com.intellij.psi.PsiElement
 
 /**
@@ -12,6 +14,6 @@ class TemplatePartKeyExtractor: KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean = element.type() == "JS:STRING_TEMPLATE_PART"
 
-    override fun extract(element: PsiElement, parser: ExpressionKeyParser, settings: Settings): FullKey? =
+    override fun extract(element: PsiElement, parser: KeyParser, settings: Settings): FullKey? =
         keyExtractor.extractI18nKeyLiteral(element.parent)
 }

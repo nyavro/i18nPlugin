@@ -1,8 +1,9 @@
 package com.eny.i18n.plugin.parser
 
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.key.lexer.Literal
 
 /**
  * Base class and utils for parser unit tests
@@ -24,5 +25,5 @@ interface ParserTestBase {
      */
     fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".",
               stopCharacters: String = "", emptyNamespace: Boolean = false): FullKey? =
-        ExpressionKeyParser(object : KeyNormalizer {}).parse(elements, isTemplate, nsSeparator, keySeparator, stopCharacters, emptyNamespace)
+        KeyParser(object : KeyNormalizer {}).parse(elements, isTemplate, nsSeparator, keySeparator, stopCharacters, emptyNamespace)
 }

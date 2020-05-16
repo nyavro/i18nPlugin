@@ -2,7 +2,8 @@ package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParser
 import com.intellij.psi.PsiElement
 
 /**
@@ -19,20 +20,11 @@ class DummyContext: CallContext {
 }
 
 /**
- *
- */
-class FullKeyExtractor(val context: CallContext, val extractor: Extractor): Extractor {
-    override fun extractI18nKeyLiteral(element: PsiElement): FullKey? =
-        if (context.accepts(element)) extractor.extractI18nKeyLiteral(element)
-        else null
-}
-
-/**
  * Extracts translation key from psi element
  */
 class KeyExtractorImpl: Extractor {
 
-    private val parser: ExpressionKeyParser = ExpressionKeyParser()
+    private val parser: KeyParser = KeyParser()
     /**
      * Converts element to it's literal value, if possible
      */

@@ -1,7 +1,7 @@
 package utils
 
-import com.eny.i18n.plugin.utils.FullKey
-import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.openapi.util.TextRange
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -28,7 +28,7 @@ internal class AnnotationHolderFacadeTest : TestBase {
             ),
             Check(
                 TextRange(19, 36),
-                FullKey("ROOB.Keb1.keb31",null, literalsList("ROOB", "Keb1", "keb31")),
+                FullKey("ROOB.Keb1.keb31", null, literalsList("ROOB", "Keb1", "keb31")),
                 TextRange(20, 35)
             ),
             Check(
@@ -40,7 +40,7 @@ internal class AnnotationHolderFacadeTest : TestBase {
             ),
             Check(
                 TextRange(19, 36),
-                FullKey("ROOL.Kel1.kel31",null, literalsList("ROOL", "Kel1", "kel31")),
+                FullKey("ROOL.Kel1.kel31", null, literalsList("ROOL", "Kel1", "kel31")),
                 TextRange(19, 34),
                 listOf(),
                 false
@@ -144,7 +144,7 @@ internal class AnnotationHolderFacadeTest : TestBase {
             ),
             Check(
                 TextRange(19, 43),
-                FullKey("Ex.Sub.Val",null, literalsList("Ex", "Sub", "Val")),
+                FullKey("Ex.Sub.Val", null, literalsList("Ex", "Sub", "Val")),
                 TextRange(20, 20)
             ),
             Check(

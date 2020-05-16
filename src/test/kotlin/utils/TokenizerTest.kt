@@ -1,6 +1,11 @@
 package utils
 
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.key.lexer.KeySeparator
+import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.key.lexer.NsSeparator
+import com.eny.i18n.plugin.key.lexer.Tokenizer
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.KeyElementType
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -14,15 +19,15 @@ internal class TokenizerTest {
         val nsSeparator = NsSeparator
         assertEquals(
             listOf(
-                Literal("item", 4, 0),
+                Literal("item", 4),
                 keySeparator,
-                Literal("value", 5, 0),
+                Literal("value", 5),
                 nsSeparator,
-                Literal("some", 4, 0),
+                Literal("some", 4),
                 keySeparator,
-                Literal("test", 4, 0),
+                Literal("test", 4),
                 nsSeparator,
-                Literal("another", 7, 0)
+                Literal("another", 7)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -63,7 +68,7 @@ internal class TokenizerTest {
         val keyElement = KeyElement.literal(".some.")
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
-            listOf(KeySeparator, Literal("some", 4, 0), KeySeparator),
+            listOf(KeySeparator, Literal("some", 4), KeySeparator),
             tokenizer.tokenize(keyElement)
         )
     }
@@ -76,11 +81,11 @@ internal class TokenizerTest {
         val nsSeparator = NsSeparator
         assertEquals(
             listOf(
-                Literal("abc", 6, 0),
+                Literal("abc", 6),
                 keySeparator,
-                Literal("def", 0, 0),
+                Literal("def", 0),
                 nsSeparator,
-                Literal("ghi", 0, 0)
+                Literal("ghi", 0)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -95,11 +100,11 @@ internal class TokenizerTest {
         assertEquals(
             listOf(
                 keySeparator,
-                Literal("abc", 6, 1),
+                Literal("abc", 6),
                 keySeparator,
-                Literal("def", 0, 0),
+                Literal("def", 0),
                 nsSeparator,
-                Literal("ghi", 0, 0)
+                Literal("ghi", 0)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -111,7 +116,7 @@ internal class TokenizerTest {
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
             listOf(
-                Literal("*", 6, 0, true)
+                Literal("*", 6, true)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -125,15 +130,15 @@ internal class TokenizerTest {
         val nsSeparator = NsSeparator
         assertEquals(
             listOf(
-                Literal("item", 4, 0),
+                Literal("item", 4),
                 keySeparator,
-                Literal("value", 5, 0),
+                Literal("value", 5),
                 nsSeparator,
-                Literal("some", 4, 0),
+                Literal("some", 4),
                 keySeparator,
-                Literal("test", 4, 0),
+                Literal("test", 4),
                 nsSeparator,
-                Literal("another", 7, 0)
+                Literal("another", 7)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -174,7 +179,7 @@ internal class TokenizerTest {
         val keyElement = KeyElement.literal("^some^")
         val tokenizer = Tokenizer("*", "^")
         assertEquals(
-            listOf(KeySeparator, Literal("some", 4, 0), KeySeparator),
+            listOf(KeySeparator, Literal("some", 4), KeySeparator),
             tokenizer.tokenize(keyElement)
         )
     }
@@ -187,11 +192,11 @@ internal class TokenizerTest {
         val nsSeparator = NsSeparator
         assertEquals(
             listOf(
-                Literal("abc", 6, 0),
+                Literal("abc", 6),
                 keySeparator,
-                Literal("def", 0, 0),
+                Literal("def", 0),
                 nsSeparator,
-                Literal("ghi", 0, 0)
+                Literal("ghi", 0)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -206,11 +211,11 @@ internal class TokenizerTest {
         assertEquals(
             listOf(
                 keySeparator,
-                Literal("abc", 6, 1),
+                Literal("abc", 6),
                 keySeparator,
-                Literal("def", 0, 0),
+                Literal("def", 0),
                 nsSeparator,
-                Literal("ghi", 0, 0)
+                Literal("ghi", 0)
             ),
             tokenizer.tokenize(keyElement)
         )
@@ -222,7 +227,7 @@ internal class TokenizerTest {
         val tokenizer = Tokenizer("^", "#")
         assertEquals(
             listOf(
-                Literal("*", 6, 0, true)
+                Literal("*", 6, true)
             ),
             tokenizer.tokenize(keyElement)
         )

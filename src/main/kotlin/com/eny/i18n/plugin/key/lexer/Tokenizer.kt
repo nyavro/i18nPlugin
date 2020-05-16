@@ -1,5 +1,7 @@
-package com.eny.i18n.plugin.utils
+package com.eny.i18n.plugin.key.lexer
 
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.KeyElementType
 import java.util.*
 
 /**
@@ -25,11 +27,11 @@ object KeySeparator: Separator
 /**
  * Represents key literal
  */
-data class Literal(val text: String, val length: Int = text.length, val dot: Int = 0, val isTemplate: Boolean = false): Token {
+data class Literal(val text: String, val length: Int = text.length, val isTemplate: Boolean = false): Token {
     /**
      * Merges two tokens
      */
-    fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length, 0)
+    fun merge(token: Literal): Literal = Literal(text + token.text, length + token.length)
 }
 
 /**
@@ -40,7 +42,7 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
     /**
      * Tokenize list of key elements into list of tokens
      */
-    fun tokenizeAll(elements: List<KeyElement>): List<Token> = elements.flatMap {item -> tokenize(item)}
+    fun tokenizeAll(elements: List<KeyElement>): List<Token> = elements.flatMap { item -> tokenize(item)}
 
     /**
      * Tokenizes single key element into list of tokens
@@ -55,7 +57,7 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
         setChildLengths(
             text,
             if (resolvedTo != null) tokenizeLiteral(resolvedTo)
-            else listOf(Literal("*", 1, 0, true))
+            else listOf(Literal("*", 1,  true))
         )
 
     private fun tokenizeLiteral(literal: String): List<Token> =
@@ -69,8 +71,6 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
         }
 
     private fun setChildLengths(expression: String, resolved: List<Token>): List<Token> {
-        val endsWithSeparator = resolved.takeLast(1).contains(KeySeparator)
-        val startsWithSeparator = resolved.take(1).contains(KeySeparator)
         return resolved.foldIndexed(Pair(false, listOf<Token>())) {
             index, (isFirstLiteralSet, result), token ->
                 if (token is Literal)
@@ -79,7 +79,6 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
                         result + Literal(
                             token.text,
                             if (isFirstLiteralSet) 0 else expression.length,
-                            if (startsWithSeparator && (index == 1) || endsWithSeparator && (index == resolved.lastIndex - 1)) 1 else 0,
                             token.isTemplate
                         )
                     )

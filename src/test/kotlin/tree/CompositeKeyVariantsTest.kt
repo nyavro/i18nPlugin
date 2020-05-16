@@ -1,7 +1,7 @@
 package tree
 
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.utils.Literal
+import com.eny.i18n.plugin.key.lexer.Literal
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

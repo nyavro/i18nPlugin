@@ -2,11 +2,11 @@ package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.parser.ExpressionKeyParser
+import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.FullKey
+import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.ellipsis
 import com.eny.i18n.plugin.utils.unQuote
@@ -25,7 +25,7 @@ internal data class ElementToReferenceBinding(val psiElement: PsiElement, val re
  */
 abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
 
-    private val parser: ExpressionKeyParser = ExpressionKeyParser()
+    private val parser: KeyParser = KeyParser()
 
     override fun getPlaceholderText(node: ASTNode): String? = ""
 
