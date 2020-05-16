@@ -1,5 +1,11 @@
 package com.eny.i18n.plugin.ide.settings
 
+import com.eny.i18n.plugin.factory.ApplicationFactory
+import com.eny.i18n.plugin.factory.MainFactory
+import com.eny.i18n.plugin.language.js.JsLanguageFactory
+import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
+import com.eny.i18n.plugin.language.php.PhpLanguageFactory
+import com.eny.i18n.plugin.language.vue.VueLanguageFactory
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.components.PersistentStateComponent
@@ -61,4 +67,13 @@ class Settings : PersistentStateComponent<Settings> {
          */
         fun getInstance(project: Project): Settings = ServiceManager.getService(project, Settings::class.java)
     }
+
+
+    fun mainFactory(): ApplicationFactory =
+        MainFactory(
+            listOf(
+                listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
+                if (this.vue) listOf(VueLanguageFactory()) else emptyList()
+            ).flatten()
+        )
 }
