@@ -20,7 +20,7 @@ internal class CustomSeparatorsParserTest: ParserTestBase {
     @Test
     fun parseExpressionWithFilePartInTemplate2() {
         val elements = listOf(
-                KeyElement.unresolvedTemplate("\${fileExpr}"),
+                KeyElement.template("\${fileExpr}"),
                 KeyElement.literal("\$ROOT^Key1^Key31")
         )
         val parsed = parse(elements, false, "$", "^")

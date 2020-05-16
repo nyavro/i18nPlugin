@@ -1,8 +1,5 @@
 package com.eny.i18n.plugin.parser
 
-import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
@@ -12,17 +9,9 @@ import com.intellij.psi.PsiElement
  */
 class StringLiteralKeyExtractor: KeyExtractor {
 
-    override fun canExtract(element: PsiElement): Boolean = listOf("JS:STRING_LITERAL", "quoted string", "String").any{
-        item ->
-            element.type().contains(item)
-    }
+    override fun canExtract(element: PsiElement): Boolean =
+        listOf("JS:STRING_LITERAL", "quoted string", "String").any{element.type().contains(it)}
 
-    override fun extract(element: PsiElement, parser: KeyParser, settings: Settings): FullKey? =
-        parser.parse(
-            listOf(KeyElement.literal(element.text.unQuote())),
-            false,
-            settings.nsSeparator,
-            settings.keySeparator,
-            emptyNamespace = settings.vue
-        )
+    override fun extract(element: PsiElement): List<KeyElement> =
+        listOf(KeyElement.literal(element.text.unQuote()))
 }

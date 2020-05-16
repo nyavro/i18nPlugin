@@ -30,12 +30,12 @@ class KeyExtractorImpl: Extractor {
      */
     override fun extractI18nKeyLiteral(element: PsiElement): FullKey? {
         val settings = Settings.getInstance(element.project)
-        val extractors = listOf(
+        return listOf(
             TemplateKeyExtractor(),
             LiteralKeyExtractor(),
-            StringLiteralKeyExtractor(),
-            TemplatePartKeyExtractor()
+            StringLiteralKeyExtractor()
         )
-        return extractors.find { extractor -> extractor.canExtract(element) }?.extract(element, parser, settings)
+            .find {it.canExtract(element)}
+            ?.let{parser.parse(it.extract(element), settings.nsSeparator, settings.keySeparator)}
     }
 }

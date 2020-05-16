@@ -13,16 +13,16 @@ enum class KeyElementType {
 /**
  * Represents element of translation key
  */
-data class KeyElement(val text: String, val resolvedTo: String?, val type: KeyElementType) {
+data class KeyElement(val text: String, val type: KeyElementType) {
     companion object {
         /**
          * Creates Literal key element
          */
-        fun literal(value: String): KeyElement = KeyElement(value, value, KeyElementType.LITERAL)
+        fun literal(value: String): KeyElement = KeyElement(value, KeyElementType.LITERAL)
 
         /**
          * Creates unresolved template key element
          */
-        fun unresolvedTemplate(expression: String): KeyElement = KeyElement(expression, null, KeyElementType.TEMPLATE)
+        fun template(expression: String): KeyElement = KeyElement(expression, KeyElementType.TEMPLATE)
     }
 }

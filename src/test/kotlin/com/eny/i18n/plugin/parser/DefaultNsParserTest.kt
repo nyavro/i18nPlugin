@@ -23,7 +23,7 @@ internal class DefaultNsParserTest : ParserTestBase {
             CheckDefaultNs(
                 listOf(
                     KeyElement.literal("roor.starr"),
-                    KeyElement.unresolvedTemplate("\${kej}")
+                    KeyElement.template("\${kej}")
                 ),
                 "roor{4}.starr*{11}"
             ),
@@ -31,7 +31,7 @@ internal class DefaultNsParserTest : ParserTestBase {
             CheckDefaultNs(
                 listOf(
                     KeyElement.literal("filename."),
-                    KeyElement.unresolvedTemplate("\${ker}")
+                    KeyElement.template("\${ker}")
                 ),
                 "filename{8}.*{6}"
             ),
@@ -39,7 +39,7 @@ internal class DefaultNsParserTest : ParserTestBase {
             CheckDefaultNs(
                 listOf(
                     KeyElement.literal("filename.root."),
-                    KeyElement.unresolvedTemplate("\${ket}")
+                    KeyElement.template("\${ket}")
                 ),
                 "filename{8}.root{4}.*{6}"
             ),
@@ -47,7 +47,7 @@ internal class DefaultNsParserTest : ParserTestBase {
             CheckDefaultNs(
                 listOf(
                     KeyElement.literal("filenama."),
-                    KeyElement.unresolvedTemplate("\${kep}"),
+                    KeyElement.template("\${kep}"),
                     KeyElement.literal("item")
                 ),
                 "filenama{8}.*item{10}"
@@ -56,7 +56,7 @@ internal class DefaultNsParserTest : ParserTestBase {
             CheckDefaultNs(
                 listOf(
                     KeyElement.literal("filenamb."),
-                    KeyElement.unresolvedTemplate("\${keb}"),
+                    KeyElement.template("\${keb}"),
                     KeyElement.literal(".item")
                 ),
                 "filenamb{8}.*{6}.item{4}"

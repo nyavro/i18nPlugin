@@ -11,7 +11,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     @Test
     fun parseExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement.unresolvedTemplate("\${fileExpa}"),
+            KeyElement.template("\${fileExpa}"),
             KeyElement.literal(":ROOT.Key1.Key31")
         )
         val parsed = parse(elements)
@@ -23,7 +23,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun parsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefia"),
-            KeyElement.unresolvedTemplate("\${fileExpb}"),
+            KeyElement.template("\${fileExpb}"),
             KeyElement.literal(":ROOT.Kea4.Key5")
         )
         val parsed = parse(elements)
@@ -34,7 +34,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     @Test
     fun parsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
-            KeyElement.unresolvedTemplate("\${fileExpc}"),
+            KeyElement.template("\${fileExpc}"),
             KeyElement.literal("postfin"),
             KeyElement.literal(":ROOT.Key4.Key5")
         )
@@ -47,7 +47,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun parseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefib"),
-            KeyElement.unresolvedTemplate("\${fileExpd}"),
+            KeyElement.template("\${fileExpd}"),
             KeyElement.literal("postfim"),
             KeyElement.literal(":ROOT.Key4.Key5")
         )
@@ -60,7 +60,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun parseNsSeparatorInExpression() {
         val elements = listOf(
             KeyElement.literal("prefic"),
-            KeyElement.unresolvedTemplate("\${fileExpr}"),
+            KeyElement.template("\${fileExpr}"),
             KeyElement.literal("postfih"),
             KeyElement.literal(".ROOT.Key4.Key5")
         )
@@ -73,7 +73,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun parseExpressionWithKeyInTemplate() {
         val elements = listOf(
             KeyElement.literal("filenamz:"),
-            KeyElement.unresolvedTemplate("\${kez}")
+            KeyElement.template("\${kez}")
         )
         val parsed = parse(elements)
         assertEquals("filenamz{8}:*{6}", toTestString(parsed))
@@ -84,7 +84,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun parseExpressionWithKeyInTemplate2() {
         val elements = listOf(
             KeyElement.literal("filenamw:"),
-            KeyElement.unresolvedTemplate("\${kew}"),
+            KeyElement.template("\${kew}"),
             KeyElement.literal("itew")
         )
         val parsed = parse(elements)
@@ -96,7 +96,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun parseExpressionWithKeyInTemplate3() {
         val elements = listOf(
             KeyElement.literal("filename:"),
-            KeyElement.unresolvedTemplate("\${kei}"),
+            KeyElement.template("\${kei}"),
             KeyElement.literal(".item")
         )
         val parsed = parse(elements)
@@ -108,7 +108,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun partOfKeyIsExpression() {
         val elements = listOf(
             KeyElement.literal("filename:root."),
-            KeyElement.unresolvedTemplate("\${keo}")
+            KeyElement.template("\${keo}")
         )
         val parsed = parse(elements)
         assertEquals("filename{8}:root{4}.*{6}", toTestString(parsed))
@@ -119,7 +119,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
     fun partOfKeyIsExpression2() {
         val elements = listOf(
             KeyElement.literal("filename:root"),
-            KeyElement.unresolvedTemplate("\${key}")
+            KeyElement.template("\${key}")
         )
         val parsed = parse(elements)
         assertEquals("filename{8}:root*{10}", toTestString(parsed))

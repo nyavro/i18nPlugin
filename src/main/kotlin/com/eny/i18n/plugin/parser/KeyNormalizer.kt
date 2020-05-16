@@ -41,15 +41,12 @@ private class ExpressionNormalizer: KeyNormalizer {
 private class DummyTextNormalizer: KeyNormalizer {
     override fun normalize(element: KeyElement?): KeyElement? =
         element?.let {
-            value ->
-                val fixed = value.text.replace(
+            it.copy(
+                text = it.text.replace(
                     CompletionInitializationContext.DUMMY_IDENTIFIER,
                     CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED
                 )
-                value.copy(
-                    text = fixed,
-                    resolvedTo = value.resolvedTo?.let {fixed}
-                )
+            )
         }
 }
 

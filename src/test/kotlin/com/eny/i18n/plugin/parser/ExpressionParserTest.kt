@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.KeyElementType
 import com.eny.i18n.plugin.utils.KeysNormalizer
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -11,18 +10,18 @@ internal class ExpressionParserTest {
     fun parse() {
         val text = ":ROOT.Key1.Key31"
         val elements = listOf(
-            KeyElement("`", "`", KeyElementType.LITERAL),
-            KeyElement("$", "$", KeyElementType.LITERAL),
-            KeyElement("{", "{", KeyElementType.LITERAL),
-            KeyElement("fileExpr", "sample", KeyElementType.TEMPLATE),
-            KeyElement("}", "}", KeyElementType.LITERAL),
-            KeyElement(text, text, KeyElementType.LITERAL),
-            KeyElement("`", "`", KeyElementType.LITERAL)
+            KeyElement.literal("`"),
+            KeyElement.literal("$"),
+            KeyElement.literal("{"),
+            KeyElement.template("fileExpr"),
+            KeyElement.literal("}"),
+            KeyElement.literal(text),
+            KeyElement.literal("`")
         )
         val parser = KeysNormalizer()
         val expected = listOf(
-            KeyElement("\${fileExpr}", "sample", KeyElementType.TEMPLATE),
-            KeyElement(text, text, KeyElementType.LITERAL)
+            KeyElement.template("\${fileExpr}"),
+            KeyElement.literal(text)
         )
         assertEquals(parser.normalize(elements), expected)
     }

@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.key.lexer.*
 import com.eny.i18n.plugin.parser.KeyNormalizer
 import com.eny.i18n.plugin.parser.KeyNormalizerImpl
 import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.KeyElementType
 
 /**
  * Parses list of normalized key elements into FullKey
@@ -15,14 +16,13 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
      * Parses text to i18n key
      */
     fun parse(text: String, nsSeparator: String, keySeparator: String, stopCharacters: String, emptyNamespace: Boolean) =
-        parse(listOf(KeyElement.literal(text)), false, nsSeparator, keySeparator, emptyNamespace)
+        parse(listOf(KeyElement.literal(text)), nsSeparator, keySeparator, emptyNamespace)
 
     /**
      * Parses list of key elements into i18n key
      */
     fun parse(
         elements: List<KeyElement>,
-        isTemplate: Boolean = false,
         nsSeparator: String = ":",
         keySeparator: String = ".",
         emptyNamespace: Boolean = false
@@ -34,6 +34,7 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
         } else {
             Start(null)
         }
+        val isTemplate = normalized.any { it.type == KeyElementType.TEMPLATE }
         return Tokenizer(nsSeparator, keySeparator)
             .tokenizeAll(normalized)
             .fold(startState) { state, token ->

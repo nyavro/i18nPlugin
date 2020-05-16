@@ -5,7 +5,6 @@ import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.key.lexer.NsSeparator
 import com.eny.i18n.plugin.key.lexer.Tokenizer
 import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.KeyElementType
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -75,7 +74,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeUnresolvedTemplate() {
-        val keyElement = KeyElement("\${reh}", null, KeyElementType.TEMPLATE)
+        val keyElement = KeyElement.template("\${reh}")
         val tokenizer = Tokenizer(":", ".")
         assertEquals(
             listOf(
@@ -149,7 +148,7 @@ internal class TokenizerTest {
 
     @Test
     fun tokenizeUnresolvedTemplateCustomSeparator() {
-        val keyElement = KeyElement("\${rel}", null, KeyElementType.TEMPLATE)
+        val keyElement = KeyElement.template("\${rel}")
         val tokenizer = Tokenizer("^", "#")
         assertEquals(
             listOf(
