@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.folding
 
+import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.parser.ExpressionKeyParser
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
@@ -16,18 +17,13 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
 
 internal data class ElementToReferenceBinding(val psiElement: PsiElement, val reference: PropertyReference<PsiElement>)
 
 /**
  * Provides folding mechanism for i18n keys
  */
-abstract class FoldingBuilderBase<C: PsiElement>(
-        private val callExpressionClass: Class<C>,
-        private val collectFoldingContainers: (root: PsiElement) -> List<PsiElement>,
-        private val collectLiterals: (container: PsiElement) -> Pair<List<PsiElement>, Int> = fun (container: PsiElement) = Pair(listOf(container), 0)
-) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
+abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
 
     private val parser: ExpressionKeyParser = ExpressionKeyParser()
 
@@ -38,21 +34,20 @@ abstract class FoldingBuilderBase<C: PsiElement>(
         if (!settings.foldingEnabled) return arrayOf()
         val search = LocalizationSourceSearch(root.project)
         val group = FoldingGroup.newGroup("i18n")
-        return collectFoldingContainers(root)
+        val foldingProvider = languageFactory.foldingProvider()
+        return foldingProvider.collectContainers(root)
             .flatMap { container ->
-                val (literals, offset) = collectLiterals(container)
+                val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
                     parser
                         .parse(literal.text.unQuote(), settings.nsSeparator, settings.keySeparator, settings.stopCharacters, settings.vue)
                         ?.let { key -> resolve(literal, search, settings, key) }
                         ?.let { resolved ->
-                            val callElement = PsiTreeUtil.getParentOfType(resolved.psiElement, callExpressionClass) ?: resolved.psiElement
                             val placeholder = resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(settings.foldingMaxLength) ?: ""
+                            val textRange = foldingProvider.getFoldingRange(container, offset, resolved.psiElement)
                             FoldingDescriptor(
                                 container.node,
-                                callElement.textRange.shiftRight(
-                                    if (container != literal) (container.textOffset + offset) else 0
-                                ),
+                                textRange,
                                 group,
                                 placeholder
                             )

@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.factory.extractor.TranslationExtractor
+import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.whenMatches

@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.language.jsx
 
+import com.eny.i18n.plugin.factory.FoldingProvider
 import com.eny.i18n.plugin.factory.LanguageFactory
-import com.eny.i18n.plugin.factory.extractor.TranslationExtractor
+import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.utils.toBoolean
 import com.intellij.lang.ecmascript6.JSXHarmonyFileType
 import com.intellij.lang.javascript.JavascriptLanguage
@@ -17,6 +18,14 @@ import com.intellij.psi.xml.XmlTag
  */
 class JsxLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsxTranslationExtractor()
+    /**
+     * No special implementation for folding builder is required
+     */
+    override fun foldingProvider(): FoldingProvider = object: FoldingProvider {
+        override fun collectContainers(root: PsiElement): List<PsiElement> = emptyList()
+        override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> = Pair(emptyList(), 0)
+        override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange = TextRange.EMPTY_RANGE
+    }
 }
 
 internal class JsxTranslationExtractor: TranslationExtractor {

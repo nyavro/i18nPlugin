@@ -1,12 +1,11 @@
 package com.eny.i18n.plugin.factory
 
-import com.eny.i18n.plugin.factory.extractor.TranslationExtractor
-
 /**
  * Language components factory
  */
 interface LanguageFactory {
     fun translationExtractor(): TranslationExtractor
+    fun foldingProvider(): FoldingProvider
 }
 
 /**

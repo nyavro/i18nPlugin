@@ -1,20 +1,28 @@
 package com.eny.i18n.plugin.language.vue
 
+import com.eny.i18n.plugin.factory.FoldingProvider
 import com.eny.i18n.plugin.factory.LanguageFactory
-import com.eny.i18n.plugin.factory.extractor.TranslationExtractor
+import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.toBoolean
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.patterns.JSPatterns
+import com.intellij.lang.javascript.psi.JSCallExpression
+import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.openapi.util.TextRange
+import com.intellij.patterns.PatternCondition
+import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlText
 import com.intellij.psi.xml.XmlToken
+import com.intellij.util.ProcessingContext
 import org.jetbrains.vuejs.lang.expr.VueJSLanguage
+import org.jetbrains.vuejs.lang.expr.parser.VueJSEmbeddedExprTokenType
 import org.jetbrains.vuejs.lang.html.VueFileType
 
 /**
@@ -22,6 +30,7 @@ import org.jetbrains.vuejs.lang.html.VueFileType
  */
 class VueLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = VueTranslationExtractor()
+    override fun foldingProvider(): FoldingProvider = VueFoldingProvider()
 }
 
 internal class VueTranslationExtractor: TranslationExtractor {
@@ -60,4 +69,85 @@ internal class VueTranslationExtractor: TranslationExtractor {
     private fun PsiElement.isVueTemplate():Boolean = this.isVue() && PsiTreeUtil.findFirstParent(this, {it is HtmlTag && it.name == "script"}).toBoolean()
     private fun PsiElement.isVueText(): Boolean = (this is PsiWhiteSpace) || (this is XmlToken)
     private fun PsiElement.isBorderToken(): Boolean = this.text == "</"
+}
+
+internal class VueFoldingProvider: FoldingProvider {
+    override fun collectContainers(root: PsiElement): List<PsiElement> =
+        PsiTreeUtil
+            .findChildrenOfType(root, XmlText::class.java)
+            .filter { PlatformPatterns.psiElement(XmlText::class.java).with(TemplateText()).accepts(it)}
+
+    override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> {
+        val vueParser = VueJSEmbeddedExprTokenType.createInterpolationExpression(container.project)
+        val copy = trimLeft(unwrapTemplate(container))
+        return Pair(
+            collectChildren(vueParser.parseContents(copy.node).psi) { item -> item is JSLiteralExpression && JSPatterns.jsArgument("\$t", 0).accepts(item)},
+            container.text.indexOf(copy.text)
+        )
+    }
+
+    override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange =
+        PsiTreeUtil
+            .getParentOfType(psiElement, JSCallExpression::class.java)
+            .default(psiElement)
+            .textRange
+            .shiftRight(container.textOffset + offset)
+
+    /**
+     * Pattern condition for embedded vue js elements
+     */
+    class TemplateText : PatternCondition<XmlText>("vueContext") {
+        override fun accepts(xmlText: XmlText, context: ProcessingContext?): Boolean {
+            val text = xmlText.value.trim()
+            return text.startsWith("{{") && text.endsWith("}}")
+        }
+    }
+
+    /**
+     * Unwraps contents of vue template
+     */
+    fun unwrapTemplate(element: PsiElement): PsiElement {
+        val copy = element.copy()
+        val firstChild = copy.node.firstChildNode
+        val lastChild = copy.node.lastChildNode
+        if (firstChild.text == "{{") {
+            copy.node.removeChild(firstChild)
+        }
+        if (lastChild.text == "}}") {
+            copy.node.removeChild(lastChild)
+        }
+        return copy
+    }
+
+    /**
+     * Trims left psi elements
+     */
+    fun trimLeft(element: PsiElement): PsiElement {
+        val copy = element.copy()
+        copy.node.getChildren(null).takeWhile {
+            it.text.isBlank()
+        }.forEach {
+            copy.node.removeChild(it)
+        }
+        return copy
+    }
+
+    /**
+     * Utility function for collecting elements of Psi tree by predicate.
+     * For cases when text gets parsed on the fly, it is impossible to use PsiTreeUtil, since it fails to check if elements are physical.
+     */
+    fun collectChildren(element: PsiElement, predicate: (psiElement: PsiElement) -> Boolean): List<PsiElement> {
+        val acc: MutableList<PsiElement> = mutableListOf()
+        fun inner(item: PsiElement) {
+            if (predicate (item)) {
+                acc.add(item)
+                //Won't go deeper:
+                return
+            } else {
+                item.children.forEach {inner(it)}
+            }
+        }
+        inner(element)
+        return acc.toList()
+    }
 }
