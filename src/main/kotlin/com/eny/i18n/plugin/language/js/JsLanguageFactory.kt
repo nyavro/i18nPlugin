@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.language.js
 
+import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.factory.FoldingProvider
 import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.factory.TranslationExtractor
@@ -19,6 +20,7 @@ import com.intellij.psi.util.PsiTreeUtil
 class JsLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsTranslationExtractor()
     override fun foldingProvider(): FoldingProvider = JsFoldingProvider()
+    override fun callContext(): CallContext = JsCallContext()
 }
 
 internal class JsTranslationExtractor: TranslationExtractor {
@@ -36,4 +38,8 @@ internal class JsFoldingProvider: FoldingProvider {
     override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> = Pair(listOf(container), 0)
     override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange =
         PsiTreeUtil.getParentOfType(psiElement, JSCallExpression::class.java).default(psiElement).textRange
+}
+
+internal class JsCallContext: CallContext {
+    override fun accepts(element: PsiElement): Boolean = JSPatterns.jsArgument("t", 0).accepts(element)
 }

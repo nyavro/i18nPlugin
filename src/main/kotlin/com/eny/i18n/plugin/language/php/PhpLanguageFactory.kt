@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.language.php
 
+import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.factory.FoldingProvider
 import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.factory.TranslationExtractor
@@ -19,6 +20,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 class PhpLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = PhpTranslationExtractor()
     override fun foldingProvider(): FoldingProvider = PhpFoldingProvider()
+    override fun callContext(): CallContext = PhpCallContext()
 }
 
 internal class PhpTranslationExtractor: TranslationExtractor {
@@ -43,4 +45,8 @@ internal class PhpFoldingProvider: FoldingProvider {
     override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> = Pair(listOf(container), 0)
     override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange =
         PsiTreeUtil.getParentOfType(psiElement, FunctionReference::class.java).default(psiElement).textRange
+}
+
+internal class PhpCallContext: CallContext {
+    override fun accepts(element: PsiElement): Boolean = PhpPatternsExt.phpArgument("t", 0).accepts(element)
 }

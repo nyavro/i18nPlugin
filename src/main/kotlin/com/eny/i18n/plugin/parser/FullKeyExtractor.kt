@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.parser
 
+import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.utils.FullKey
-import com.intellij.patterns.PsiElementPattern
 import com.intellij.psi.PsiElement
 
 /**
@@ -14,18 +14,8 @@ interface Extractor {
     fun extractI18nKeyLiteral(element: PsiElement): FullKey?
 }
 
-interface CallContext {
-    fun accepts(element: PsiElement): Boolean
-}
-
 class DummyContext: CallContext {
     override fun accepts(element: PsiElement): Boolean = true
-}
-
-class CaptureContext<P: PsiElement, T: PsiElementPattern<P, T>>(private val captures: List<T>): CallContext {
-    override fun accepts(element: PsiElement): Boolean {
-        return captures.any {capture -> capture.accepts(element)}
-    }
 }
 
 /**

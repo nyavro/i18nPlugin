@@ -19,3 +19,7 @@ interface FoldingProvider {
     fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int>
     fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange
 }
+
+interface CallContext {
+    fun accepts(element: PsiElement): Boolean
+}

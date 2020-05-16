@@ -1,15 +1,15 @@
 package com.eny.i18n.plugin.ide.annotator
 
-import com.eny.i18n.plugin.language.php.PhpCallContext
+import com.eny.i18n.plugin.language.vue.VueCallContext
 import com.eny.i18n.plugin.parser.FullKeyExtractor
 import com.eny.i18n.plugin.parser.KeyExtractorImpl
 
 /**
- * i18n annotator for php
+ * i18n annotator for js
  */
-class PhpCompositeKeyAnnotator: CompositeKeyAnnotatorBase(
+class VueCompositeKeyAnnotator : CompositeKeyAnnotatorBase(
     FullKeyExtractor(
-        PhpCallContext(),
+        VueCallContext(),
         KeyExtractorImpl()
     )
 )

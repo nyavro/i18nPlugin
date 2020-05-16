@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.language.vue
 
+import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.factory.FoldingProvider
 import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.factory.TranslationExtractor
@@ -31,6 +32,7 @@ import org.jetbrains.vuejs.lang.html.VueFileType
 class VueLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = VueTranslationExtractor()
     override fun foldingProvider(): FoldingProvider = VueFoldingProvider()
+    override fun callContext(): CallContext = VueCallContext()
 }
 
 internal class VueTranslationExtractor: TranslationExtractor {
@@ -150,4 +152,8 @@ internal class VueFoldingProvider: FoldingProvider {
         inner(element)
         return acc.toList()
     }
+}
+
+internal class VueCallContext: CallContext {
+    override fun accepts(element: PsiElement): Boolean = JSPatterns.jsArgument("\$t", 0).accepts(element)
 }

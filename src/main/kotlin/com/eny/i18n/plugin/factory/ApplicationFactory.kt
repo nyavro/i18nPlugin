@@ -6,6 +6,7 @@ package com.eny.i18n.plugin.factory
 interface LanguageFactory {
     fun translationExtractor(): TranslationExtractor
     fun foldingProvider(): FoldingProvider
+    fun callContext(): CallContext
 }
 
 /**

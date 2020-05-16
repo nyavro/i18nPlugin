@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.language.jsx
 
+import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.factory.FoldingProvider
 import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.factory.TranslationExtractor
@@ -25,6 +26,10 @@ class JsxLanguageFactory: LanguageFactory {
         override fun collectContainers(root: PsiElement): List<PsiElement> = emptyList()
         override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> = Pair(emptyList(), 0)
         override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange = TextRange.EMPTY_RANGE
+    }
+
+    override fun callContext() = object: CallContext {
+        override fun accepts(element: PsiElement): Boolean = false
     }
 }
 

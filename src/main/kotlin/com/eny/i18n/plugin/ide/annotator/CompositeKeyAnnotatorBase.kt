@@ -6,17 +6,18 @@ import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
 import com.intellij.lang.annotation.AnnotationHolder
+import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
 
 /**
  * Annotator for i18n keys
  */
-class CompositeKeyAnnotator(private val keyExtractor: FullKeyExtractor):  CompositeKeyResolver<PsiElement> {
+abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtractor): Annotator, CompositeKeyResolver<PsiElement> {
 
     /**
      * Tries to parse element as i18n key and annotates it when succeeded
      */
-    fun annotate(element: PsiElement, holder: AnnotationHolder) =
+    override fun annotate(element: PsiElement, holder: AnnotationHolder) =
         keyExtractor.extractI18nKeyLiteral(element).nullableToList().forEach {
             annotateI18nLiteral(it, element, holder)
         }
