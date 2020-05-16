@@ -74,43 +74,6 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeTemplate() {
-        val keyElement = KeyElement("\${rea}", "abc.def:ghi", KeyElementType.TEMPLATE)
-        val tokenizer = Tokenizer(":", ".")
-        val keySeparator = KeySeparator
-        val nsSeparator = NsSeparator
-        assertEquals(
-            listOf(
-                Literal("abc", 6),
-                keySeparator,
-                Literal("def", 0),
-                nsSeparator,
-                Literal("ghi", 0)
-            ),
-            tokenizer.tokenize(keyElement)
-        )
-    }
-
-    @Test
-    fun tokenizeTemplateWithDotCorrection() {
-        val keyElement = KeyElement("\${reg}", ".abc.def:ghi", KeyElementType.TEMPLATE)
-        val tokenizer = Tokenizer(":", ".")
-        val keySeparator = KeySeparator
-        val nsSeparator = NsSeparator
-        assertEquals(
-            listOf(
-                keySeparator,
-                Literal("abc", 6),
-                keySeparator,
-                Literal("def", 0),
-                nsSeparator,
-                Literal("ghi", 0)
-            ),
-            tokenizer.tokenize(keyElement)
-        )
-    }
-
-    @Test
     fun tokenizeUnresolvedTemplate() {
         val keyElement = KeyElement("\${reh}", null, KeyElementType.TEMPLATE)
         val tokenizer = Tokenizer(":", ".")
@@ -180,43 +143,6 @@ internal class TokenizerTest {
         val tokenizer = Tokenizer("*", "^")
         assertEquals(
             listOf(KeySeparator, Literal("some", 4), KeySeparator),
-            tokenizer.tokenize(keyElement)
-        )
-    }
-
-    @Test
-    fun tokenizeTemplateCustomSeparator() {
-        val keyElement = KeyElement("\${rej}", "abc&def(ghi", KeyElementType.TEMPLATE)
-        val tokenizer = Tokenizer("(", "&")
-        val keySeparator = KeySeparator
-        val nsSeparator = NsSeparator
-        assertEquals(
-            listOf(
-                Literal("abc", 6),
-                keySeparator,
-                Literal("def", 0),
-                nsSeparator,
-                Literal("ghi", 0)
-            ),
-            tokenizer.tokenize(keyElement)
-        )
-    }
-
-    @Test
-    fun tokenizeTemplateWithDotCorrectionCustomSeparator() {
-        val keyElement = KeyElement("\${rek}", "&abc&def\$ghi", KeyElementType.TEMPLATE)
-        val tokenizer = Tokenizer("$", "&")
-        val keySeparator = KeySeparator
-        val nsSeparator = NsSeparator
-        assertEquals(
-            listOf(
-                keySeparator,
-                Literal("abc", 6),
-                keySeparator,
-                Literal("def", 0),
-                nsSeparator,
-                Literal("ghi", 0)
-            ),
             tokenizer.tokenize(keyElement)
         )
     }

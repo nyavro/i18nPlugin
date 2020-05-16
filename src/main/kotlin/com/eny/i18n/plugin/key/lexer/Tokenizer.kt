@@ -42,7 +42,7 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
     /**
      * Tokenize list of key elements into list of tokens
      */
-    fun tokenizeAll(elements: List<KeyElement>): List<Token> = elements.flatMap { item -> tokenize(item)}
+    fun tokenizeAll(elements: List<KeyElement>): List<Token> = elements.flatMap (::tokenize)
 
     /**
      * Tokenizes single key element into list of tokens
@@ -50,15 +50,15 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
     fun tokenize(element: KeyElement): List<Token> =
         when {
             element.type == KeyElementType.LITERAL -> tokenizeLiteral(element.text)
-            else -> flattenTemplateExpression(element.text, element.resolvedTo)
+            else -> listOf(
+                Literal(
+                    "*",
+                    element.text.length,
+                    true
+                )
+            )
         }
 
-    private fun flattenTemplateExpression(text: String, resolvedTo: String?): List<Token> =
-        setChildLengths(
-            text,
-            if (resolvedTo != null) tokenizeLiteral(resolvedTo)
-            else listOf(Literal("*", 1,  true))
-        )
 
     private fun tokenizeLiteral(literal: String): List<Token> =
         StringTokenizer(literal, nsSeparator + keySeparator, true).toList().map {
@@ -69,20 +69,4 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
                     else -> Literal(token.toString(), token.toString().length)
                 }
         }
-
-    private fun setChildLengths(expression: String, resolved: List<Token>): List<Token> {
-        return resolved.foldIndexed(Pair(false, listOf<Token>())) {
-            index, (isFirstLiteralSet, result), token ->
-                if (token is Literal)
-                    Pair (
-                        true,
-                        result + Literal(
-                            token.text,
-                            if (isFirstLiteralSet) 0 else expression.length,
-                            token.isTemplate
-                        )
-                    )
-                else Pair (isFirstLiteralSet, result + token)
-        }.second
-    }
 }

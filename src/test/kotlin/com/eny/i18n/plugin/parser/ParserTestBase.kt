@@ -25,5 +25,5 @@ interface ParserTestBase {
      */
     fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".",
               stopCharacters: String = "", emptyNamespace: Boolean = false): FullKey? =
-        KeyParser(object : KeyNormalizer {}).parse(elements, isTemplate, nsSeparator, keySeparator, stopCharacters, emptyNamespace)
+        KeyParser(object : KeyNormalizer {}).parse(elements, isTemplate, nsSeparator, keySeparator, emptyNamespace)
 }

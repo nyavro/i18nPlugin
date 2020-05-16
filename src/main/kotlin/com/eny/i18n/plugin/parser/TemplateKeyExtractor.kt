@@ -43,8 +43,7 @@ class TemplateKeyExtractor : KeyExtractor {
         return parser.parse(
             transformed,
             true,
-            settings.nsSeparator, settings.keySeparator, settings.stopCharacters,
-            emptyNamespace = settings.vue
+            settings.nsSeparator, settings.keySeparator, emptyNamespace = settings.vue
         )
     }
 }

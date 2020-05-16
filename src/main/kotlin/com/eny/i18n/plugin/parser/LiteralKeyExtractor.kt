@@ -24,7 +24,6 @@ class LiteralKeyExtractor: KeyExtractor {
                 false,
                 settings.nsSeparator,
                 settings.keySeparator,
-                settings.stopCharacters,
                 emptyNamespace = settings.vue
             )
         else

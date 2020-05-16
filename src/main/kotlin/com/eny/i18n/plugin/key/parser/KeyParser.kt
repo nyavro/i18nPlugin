@@ -11,13 +11,11 @@ import com.eny.i18n.plugin.utils.KeyElement
  */
 class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
 
-    private val regex = "\\s".toRegex()
-
     /**
      * Parses text to i18n key
      */
     fun parse(text: String, nsSeparator: String, keySeparator: String, stopCharacters: String, emptyNamespace: Boolean) =
-        parse(listOf(KeyElement.literal(text)), false, nsSeparator, keySeparator, stopCharacters, emptyNamespace)
+        parse(listOf(KeyElement.literal(text)), false, nsSeparator, keySeparator, emptyNamespace)
 
     /**
      * Parses list of key elements into i18n key
@@ -27,18 +25,10 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
         isTemplate: Boolean = false,
         nsSeparator: String = ":",
         keySeparator: String = ".",
-        stopCharacters: String = "",
         emptyNamespace: Boolean = false
     ): FullKey? {
         val normalized = normalizer.normalize(elements)
-        val source = normalized.fold(""){
-            acc, item ->
-                val text = item.resolvedTo
-                if (text != null && (text.contains(regex) || stopCharacters.any {char -> text.contains(char)})) {
-                    return null
-                }
-                acc + item.text
-        }
+        val source = normalized.fold(""){ acc, item -> acc + item.text }
         val startState = if (emptyNamespace) {
             WaitingLiteral(file = null, key = emptyList())
         } else {

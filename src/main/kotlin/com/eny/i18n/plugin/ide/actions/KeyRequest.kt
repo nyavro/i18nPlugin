@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
@@ -40,7 +40,6 @@ class KeyRequest {
                 parser.parse(listOf(KeyElement.literal(keyStr)),
                     nsSeparator = settings.nsSeparator,
                     keySeparator = settings.keySeparator,
-                    stopCharacters = settings.stopCharacters,
                     emptyNamespace = settings.vue
                 ),
                 false

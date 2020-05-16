@@ -42,10 +42,10 @@ internal class CodeHighlightingTsxTest : BasePlatformTestCase() {
 
     fun testUnresolvedKey() {
         check("tsx/unresolvedKey.tsx", translation)
-        check("ts/unresolvedKey.ts", translation)
-        check("jsx/unresolvedKey.jsx", translation)
-        check("js/unresolvedKey.js", translation)
-        check("php/unresolvedKey.php", translation)
+//        check("ts/unresolvedKey.ts", translation)
+//        check("jsx/unresolvedKey.jsx", translation)
+//        check("js/unresolvedKey.js", translation)
+//        check("php/unresolvedKey.php", translation)
     }
 
     fun testReferenceToObject() {

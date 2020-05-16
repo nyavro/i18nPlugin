@@ -23,7 +23,6 @@ class StringLiteralKeyExtractor: KeyExtractor {
             false,
             settings.nsSeparator,
             settings.keySeparator,
-            settings.stopCharacters,
             emptyNamespace = settings.vue
         )
 }
