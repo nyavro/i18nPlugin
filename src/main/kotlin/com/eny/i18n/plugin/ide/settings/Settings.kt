@@ -1,6 +1,5 @@
 package com.eny.i18n.plugin.ide.settings
 
-import com.eny.i18n.plugin.factory.ApplicationFactory
 import com.eny.i18n.plugin.factory.MainFactory
 import com.eny.i18n.plugin.language.js.JsLanguageFactory
 import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
@@ -68,8 +67,7 @@ class Settings : PersistentStateComponent<Settings> {
         fun getInstance(project: Project): Settings = ServiceManager.getService(project, Settings::class.java)
     }
 
-
-    fun mainFactory(): ApplicationFactory =
+    fun mainFactory(): MainFactory =
         MainFactory(
             listOf(
                 listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
