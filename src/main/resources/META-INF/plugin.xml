@@ -94,9 +94,9 @@
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
-        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.ReferenceContributor"/>
-        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.JsonReferenceContributor"/>
-        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.YamlReferenceContributor"/>
+        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.code.JsReferenceContributor"/>
+        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.translation.JsonReferenceContributor"/>
+        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.translation.YamlReferenceContributor"/>
         <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.completion.CompositeKeyCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>

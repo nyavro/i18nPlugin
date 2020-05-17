@@ -1,6 +1,8 @@
 package com.eny.i18n.plugin.factory
 
+import com.eny.i18n.plugin.key.FullKey
 import com.intellij.openapi.util.TextRange
+import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
 
 /**
@@ -22,4 +24,9 @@ interface FoldingProvider {
 
 interface CallContext {
     fun accepts(element: PsiElement): Boolean
+}
+
+interface ReferenceAssistant {
+    fun pattern(): ElementPattern<out PsiElement>
+    fun extractKey(element: PsiElement): FullKey?
 }

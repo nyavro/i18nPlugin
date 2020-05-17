@@ -19,7 +19,7 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
      * Tries to parse element as i18n key and annotates it when succeeded
      */
     override fun annotate(element: PsiElement, holder: AnnotationHolder) =
-        keyExtractor.extractI18nKeyLiteral(element).nullableToList().forEach {
+        keyExtractor.extractFullKey(element).nullableToList().forEach {
             annotateI18nLiteral(it, element, holder)
         }
 

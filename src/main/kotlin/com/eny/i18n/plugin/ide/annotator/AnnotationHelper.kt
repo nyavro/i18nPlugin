@@ -46,12 +46,8 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
         )
         val fileName = ns.text
         val folderSelector = I18NextTranslationFolderSelector(project)
-        val settings = Settings.getInstance(project)
-        if (settings.jsonContentGenerationEnabled) {
-            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, JsonContentGenerator(), folderSelector, fileName))
-        }
-        if (settings.yamlContentGenerationEnabled) {
-            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, YamlContentGenerator(), folderSelector, fileName))
+        Settings.getInstance(project).mainFactory().contentGenerators().forEach {
+            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, it, folderSelector, fileName))
         }
     }
 
@@ -74,10 +70,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             errorSeverity,
             rangesCalculator.unresolvedKey(fullKey, mostResolvedReference.path),
             PluginBundle.getMessage("annotator.unresolved.key"))
-        val generators = listOf(
-            ContentGeneratorAdapter(YamlContentGenerator(), YamlPsiContentGenerator()),
-            ContentGeneratorAdapter(JsonContentGenerator(), JsonPsiContentGenerator())
-        )
+        val generators = Settings.getInstance(project).mainFactory().contentGenerators()
         unresolvedPropertyAnnotation.registerFix(
             CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
         unresolvedPropertyAnnotation.registerFix(

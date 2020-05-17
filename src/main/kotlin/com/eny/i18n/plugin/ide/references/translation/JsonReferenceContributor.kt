@@ -1,16 +1,11 @@
-package com.eny.i18n.plugin.ide.references
+package com.eny.i18n.plugin.ide.references.translation
 
-import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
-import com.eny.i18n.plugin.tree.PsiProperty
-import com.eny.i18n.plugin.utils.searchScope
 import com.intellij.json.psi.JsonStringLiteral
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.*
-import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.util.ProcessingContext
-import org.jetbrains.yaml.psi.YAMLKeyValue
 
 /**
  * Provides navigation from i18n key to it's value in json

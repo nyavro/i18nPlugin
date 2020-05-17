@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.quickfix
 
+import com.eny.i18n.plugin.factory.ContentGenerator
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.key.FullKey
@@ -17,12 +18,12 @@ import com.intellij.psi.PsiElement
  * Quick fix for missing key creation
  */
 class CreateKeyQuickFix(
-    private val fullKey: FullKey,
-    private val selector: SourcesSelector,
-    private val commandCaption: String,
-    private val generators: List<ContentGeneratorAdapter>,
-    private val translationValue: String? = null,
-    private val onComplete: () -> Unit = {}): QuickFix(), CompositeKeyResolver<PsiElement> {
+        private val fullKey: FullKey,
+        private val selector: SourcesSelector,
+        private val commandCaption: String,
+        private val generators: List<ContentGenerator>,
+        private val translationValue: String? = null,
+        private val onComplete: () -> Unit = {}): QuickFix(), CompositeKeyResolver<PsiElement> {
 
     override fun getText(): String = commandCaption
 

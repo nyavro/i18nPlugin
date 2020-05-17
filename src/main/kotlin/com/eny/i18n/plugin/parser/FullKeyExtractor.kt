@@ -12,7 +12,7 @@ import com.intellij.psi.PsiElement
 fun PsiElement.type(): String = this.node?.elementType.toString()
 
 interface Extractor {
-    fun extractI18nKeyLiteral(element: PsiElement): FullKey?
+    fun extractFullKey(element: PsiElement): FullKey?
 }
 
 class DummyContext: CallContext {
@@ -28,7 +28,7 @@ class KeyExtractorImpl: Extractor {
     /**
      * Converts element to it's literal value, if possible
      */
-    override fun extractI18nKeyLiteral(element: PsiElement): FullKey? {
+    override fun extractFullKey(element: PsiElement): FullKey? {
         val settings = Settings.getInstance(element.project)
         return listOf(
             TemplateKeyExtractor(),

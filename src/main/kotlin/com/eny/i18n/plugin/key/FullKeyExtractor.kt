@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement
  *
  */
 class FullKeyExtractor(val context: CallContext, val extractor: Extractor): Extractor {
-    override fun extractI18nKeyLiteral(element: PsiElement): FullKey? =
-        if (context.accepts(element)) extractor.extractI18nKeyLiteral(element)
+    override fun extractFullKey(element: PsiElement): FullKey? =
+        if (context.accepts(element)) extractor.extractFullKey(element)
         else null
 }

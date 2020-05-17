@@ -27,7 +27,7 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
         super.fillCompletionVariants(parameters, result)
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
-        keyExtractor.extractI18nKeyLiteral(parameters.position)?.let {
+        keyExtractor.extractFullKey(parameters.position)?.let {
             fullKey ->
                 result.addAllElements(processKey(fullKey, parameters))
                 result.stopHere()

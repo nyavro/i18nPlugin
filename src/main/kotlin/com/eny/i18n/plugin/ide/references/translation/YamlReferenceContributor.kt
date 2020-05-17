@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide.references
+package com.eny.i18n.plugin.ide.references.translation
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns

@@ -9,8 +9,10 @@ import com.intellij.psi.xml.XmlElementType
  */
 class LiteralKeyExtractor: KeyExtractor {
 
-    override fun canExtract(element: PsiElement): Boolean =
-        element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE
+    override fun canExtract(element: PsiElement): Boolean {
+        val b = element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE
+        return b
+    }
 
     override fun extract(element: PsiElement): List<KeyElement> =
         (element as PsiLiteralValue).value?.let {it as? String}?.let {

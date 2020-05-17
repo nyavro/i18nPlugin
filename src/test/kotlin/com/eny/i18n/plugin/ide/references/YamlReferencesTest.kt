@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.ide.SettingsPack
+import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.runVuePack
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase

@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide.references
+package com.eny.i18n.plugin.ide.references.translation
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
