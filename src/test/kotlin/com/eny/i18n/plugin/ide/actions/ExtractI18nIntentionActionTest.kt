@@ -86,7 +86,11 @@ class ExtractI18nIntentionActionJsxYamlTest: ExtractI18nIntentionActionBase("jsx
 
 abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: String): ExtractI18nIntentionActionBase("php", translationFormat) {
 
-    fun testKeyExtractionSingleQuoted() {
+    private val settingsPack = SettingsPack()
+        .with(Settings::jsonContentGenerationEnabled, translationFormat == "json")
+        .with(Settings::yamlContentGenerationEnabled, translationFormat == "yml")
+
+    fun testKeyExtractionSingleQuoted() = myFixture.runWithSettings(settingsPack) {
         doRun(
             "php/simpleSingleQuoted.php",
             "php/simpleKeyExtracted.php",
@@ -95,7 +99,7 @@ abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: 
             "test:ref.value3")
     }
 
-    fun testRightBorderSingleQuoted() {
+    fun testRightBorderSingleQuoted() = myFixture.runWithSettings(settingsPack) {
         doRun(
             "php/rightBorderSingleQuoted.php",
             "php/simpleKeyExtracted.php",
@@ -104,7 +108,7 @@ abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: 
             "test:ref.value3")
     }
 
-    fun testDefNsKeyExtractionSingleQuoted() {
+    fun testDefNsKeyExtractionSingleQuoted() = myFixture.runWithSettings(settingsPack) {
         doRun(
             "php/simpleSingleQuoted.php",
             "php/simpleDefNsKeyExtracted.php",
