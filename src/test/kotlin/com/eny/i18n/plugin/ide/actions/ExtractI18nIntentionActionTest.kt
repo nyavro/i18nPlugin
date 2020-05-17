@@ -1,6 +1,8 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.plugin.ide.SettingsPack
 import com.eny.i18n.plugin.ide.runVue
+import com.eny.i18n.plugin.ide.runWithSettings
 import com.eny.i18n.plugin.ide.settings.Settings
 
 class ExtractionCancellation: ExtractionTestBase() {
@@ -37,7 +39,11 @@ class ExtractionCancellation: ExtractionTestBase() {
 
 abstract class ExtractI18nIntentionActionBase(private val language: String, private val translationFormat: String): ExtractionTestBase() {
 
-    fun testKeyExtraction() {
+    private val settingsPack = SettingsPack()
+        .with(Settings::jsonContentGenerationEnabled, translationFormat == "json")
+        .with(Settings::yamlContentGenerationEnabled, translationFormat == "yml")
+
+    fun testKeyExtraction() = myFixture.runWithSettings(settingsPack) {
         doRun(
             "$language/simple.$language",
             "$language/simpleKeyExtracted.$language",
@@ -46,7 +52,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "test:ref.value3")
     }
 
-    fun testRightBorderKeyExtraction() {
+    fun testRightBorderKeyExtraction() = myFixture.runWithSettings(settingsPack) {
         doRun(
             "$language/rightBorder.$language",
             "$language/simpleKeyExtracted.$language",
@@ -55,7 +61,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "test:ref.value3")
     }
 
-    fun testDefNsKeyExtraction() {
+    fun testDefNsKeyExtraction() = myFixture.runWithSettings(settingsPack) {
         doRun(
             "$language/simple.$language",
             "$language/simpleDefNsKeyExtracted.$language",
