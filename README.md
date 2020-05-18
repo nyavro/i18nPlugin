@@ -3,9 +3,10 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ec904e969c348eeb9b1a010ab76d1b9)](https://app.codacy.com/manual/nyavro/i18nPlugin?utm_source=github.com&utm_medium=referral&utm_content=nyavro/i18nPlugin&utm_campaign=Badge_Grade_Dashboard)
 [![codebeat badge](https://codebeat.co/badges/efe74563-add4-4309-a673-dfce2e839677)](https://codebeat.co/projects/github-com-nyavro-i18nplugin-master)
 [![Build Status](https://travis-ci.com/nyavro/i18nPlugin.svg?branch=master)](https://travis-ci.com/nyavro/i18nPlugin)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b9d170510bcb7bdd4ef0/maintainability)](https://codeclimate.com/github/nyavro/i18nPlugin/maintainability)
+[![codecov](https://codecov.io/gh/nyavro/i18nPlugin/branch/master/graph/badge.svg)](https://codecov.io/gh/nyavro/i18nPlugin)
 [![Hits-of-Code](https://hitsofcode.com/github/nyavro/i18nPlugin)](https://hitsofcode.com/view/github/nyavro/i18nPlugin)
 ![](https://tokei.rs/b1/github/nyavro/i18nPlugin)
-[![codecov](https://codecov.io/gh/nyavro/i18nPlugin/branch/master/graph/badge.svg)](https://codecov.io/gh/nyavro/i18nPlugin)
 
 [![Downloads Badge](https://img.shields.io/jetbrains/plugin/d/12981-i18n-support.svg)](https://plugins.jetbrains.com/plugin/12981-i18n-support)
 
