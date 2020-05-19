@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.json.JsonFileType
+import com.intellij.json.json5.Json5FileType
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
@@ -33,7 +34,7 @@ class LocalizationSourceSearch(private val project: Project) {
         findVirtualFilesByName(fileName?.let {listOf(it)} ?: settings.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map {LocalizationSource(it, it.name, it.containingDirectory.name)}} +
             if (settings.vue) {
                 findVirtualFilesUnder(settings.vueDirectory)
-                    .filter {file -> listOf(JsonFileType.INSTANCE, YAMLFileType.YML).any {file.fileType==it}}
+                    .filter {file -> listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE, YAMLFileType.YML).any {file.fileType==it}}
                     .map {LocalizationSource(it, it.name, it.containingDirectory.name)}
 //                val index = vueTranslationFiles.find {it.name.matches("index\\.(js|ts)".toRegex())}
 //                if (index == null) {
