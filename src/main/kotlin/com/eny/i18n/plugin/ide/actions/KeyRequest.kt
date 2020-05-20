@@ -25,7 +25,7 @@ class KeyRequest {
      * Requests key
      */
     fun key(project: Project, text: String): KeyRequestResult {
-        val settings = Settings.getInstance(project)
+        val config = Settings.getInstance(project).config()
         val keyStr = Messages.showInputDialog(
             project,
             String.format(PluginBundle.getMessage("action.intention.extract.key.hint"), text),
@@ -38,9 +38,9 @@ class KeyRequest {
         } else {
             KeyRequestResult(
                 parser.parse(listOf(KeyElement.literal(keyStr)),
-                    nsSeparator = settings.nsSeparator,
-                    keySeparator = settings.keySeparator,
-                    emptyNamespace = settings.vue
+                    nsSeparator = config.nsSeparator,
+                    keySeparator = config.keySeparator,
+                    emptyNamespace = config.vue
                 ),
                 false
             )

@@ -1,8 +1,7 @@
 package com.eny.i18n.plugin.ide.references.code
 
-import com.eny.i18n.plugin.ide.SettingsPack
-import com.eny.i18n.plugin.ide.runWithSettings
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.runWithConfig
+import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -32,9 +31,7 @@ abstract class ReferencesTestBase(private val ext: String) : BasePlatformTestCas
         assertEquals(setOf("Welcome", "Willkommen"), getResolvedValues(element))
     }
 
-    fun testReferenceMultiDefaultNs() = myFixture.runWithSettings(
-        SettingsPack().with(Settings::defaultNs, "third,second;first ")
-    ) {
+    fun testReferenceMultiDefaultNs() = myFixture.runWithConfig(Config(defaultNs = "third,second;first ")) {
         //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
         myFixture.configureByFiles("jsx/multiDefNs.jsx",
             "assets/en/first.$ext", "assets/en/second.$ext", "assets/en/third.$ext",

@@ -1,33 +1,24 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.SettingsPack
-import com.eny.i18n.plugin.ide.runVue
-import com.eny.i18n.plugin.ide.runWithSettings
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.runWithConfig
+import com.eny.i18n.plugin.ide.settings.Config
 
-class ExtractionCancellation: ExtractionTestBase() {
+class ExtractionCancellationTest: ExtractionTestBase() {
 
     fun testTsCancel() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
         doCancel("js/simple.js", "assets/test.json")
     }
 
     fun testTsCancelInvalid() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
         doCancelInvalid("ts/simple.ts", "assets/test.json")
     }
 
     fun testExtractionUnavailable() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
         doUnavailable("tsx/unavailable.tsx")
     }
 
     fun testInvalidSource() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.vue = false
         doRun("jsx/strange.jsx",
             "jsx/strangeKeyExtracted.jsx",
             "assets/test.json",
@@ -39,11 +30,9 @@ class ExtractionCancellation: ExtractionTestBase() {
 
 abstract class ExtractI18nIntentionActionBase(private val language: String, private val translationFormat: String): ExtractionTestBase() {
 
-    private val settingsPack = SettingsPack()
-        .with(Settings::jsonContentGenerationEnabled, translationFormat == "json")
-        .with(Settings::yamlContentGenerationEnabled, translationFormat == "yml")
+    protected val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")
 
-    fun testKeyExtraction() = myFixture.runWithSettings(settingsPack) {
+    fun testKeyExtraction() = myFixture.runWithConfig(testConfig) {
         doRun(
             "$language/simple.$language",
             "$language/simpleKeyExtracted.$language",
@@ -52,7 +41,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "test:ref.value3")
     }
 
-    fun testRightBorderKeyExtraction() = myFixture.runWithSettings(settingsPack) {
+    fun testRightBorderKeyExtraction() = myFixture.runWithConfig(testConfig) {
         doRun(
             "$language/rightBorder.$language",
             "$language/simpleKeyExtracted.$language",
@@ -61,7 +50,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "test:ref.value3")
     }
 
-    fun testDefNsKeyExtraction() = myFixture.runWithSettings(settingsPack) {
+    fun testDefNsKeyExtraction() = myFixture.runWithConfig(testConfig) {
         doRun(
             "$language/simple.$language",
             "$language/simpleDefNsKeyExtracted.$language",
@@ -86,11 +75,7 @@ class ExtractI18nIntentionActionJsxYamlTest: ExtractI18nIntentionActionBase("jsx
 
 abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: String): ExtractI18nIntentionActionBase("php", translationFormat) {
 
-    private val settingsPack = SettingsPack()
-        .with(Settings::jsonContentGenerationEnabled, translationFormat == "json")
-        .with(Settings::yamlContentGenerationEnabled, translationFormat == "yml")
-
-    fun testKeyExtractionSingleQuoted() = myFixture.runWithSettings(settingsPack) {
+    fun testKeyExtractionSingleQuoted() = myFixture.runWithConfig(testConfig) {
         doRun(
             "php/simpleSingleQuoted.php",
             "php/simpleKeyExtracted.php",
@@ -99,7 +84,7 @@ abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: 
             "test:ref.value3")
     }
 
-    fun testRightBorderSingleQuoted() = myFixture.runWithSettings(settingsPack) {
+    fun testRightBorderSingleQuoted() = myFixture.runWithConfig(testConfig) {
         doRun(
             "php/rightBorderSingleQuoted.php",
             "php/simpleKeyExtracted.php",
@@ -108,7 +93,7 @@ abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: 
             "test:ref.value3")
     }
 
-    fun testDefNsKeyExtractionSingleQuoted() = myFixture.runWithSettings(settingsPack) {
+    fun testDefNsKeyExtractionSingleQuoted() = myFixture.runWithConfig(testConfig) {
         doRun(
             "php/simpleSingleQuoted.php",
             "php/simpleDefNsKeyExtracted.php",
@@ -122,7 +107,9 @@ class ExtractI18nIntentionActionPhpYamlTest: ExtractI18nIntentionActionPhpBase("
 
 abstract class ExtractI18nIntentionActionVueI18nBase(private val translationFormat: String): ExtractionTestBase() {
 
-    fun testKeyExtraction() = myFixture.runVue {
+    private val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")
+
+    fun testKeyExtraction() = myFixture.runVueConfig(testConfig) {
         doRun(
             "vue/simpleVue.vue",
             "vue/simpleKeyExtractedVue.vue",
@@ -132,7 +119,7 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
         )
     }
 
-    fun testKeyExtraction2() = myFixture.runVue {
+    fun testKeyExtraction2() = myFixture.runVueConfig(testConfig) {
         doRun(
             "vue/App.vue",
             "vue/AppExtracted.vue",
@@ -142,7 +129,7 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
         )
     }
 
-    fun testKeyExtractionBorder() = myFixture.runVue {
+    fun testKeyExtractionBorder() = myFixture.runVueConfig(testConfig) {
         doRun(
             "vue/AppBorderVue.vue",
             "vue/AppExtracted.vue",
@@ -152,7 +139,7 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
         )
     }
 
-    fun testKeyExtractionLeftBorder() = myFixture.runVue {
+    fun testKeyExtractionLeftBorder() = myFixture.runVueConfig(testConfig) {
         doRun(
             "vue/AppLeftBorderVue.vue",
             "vue/AppExtracted.vue",
@@ -162,7 +149,7 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
         )
     }
 
-    fun testScriptKeyExtraction() = myFixture.runVue {
+    fun testScriptKeyExtraction() = myFixture.runVueConfig(testConfig) {
         doRun(
             "vue/scriptVue.vue",
             "vue/scriptKeyExtractedVue.vue",
@@ -173,5 +160,5 @@ abstract class ExtractI18nIntentionActionVueI18nBase(private val translationForm
     }
 }
 
-//class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
-//class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")
+class ExtractI18nIntentionActionVueI18nJsonTest: ExtractI18nIntentionActionVueI18nBase("json")
+class ExtractI18nIntentionActionVueI18nYamlTest: ExtractI18nIntentionActionVueI18nBase("yml")

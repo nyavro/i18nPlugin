@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.factory.LanguageFactory
+import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
@@ -30,8 +31,8 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
     override fun getPlaceholderText(node: ASTNode): String? = ""
 
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
-        val settings = Settings.getInstance(root.project)
-        if (!settings.foldingEnabled) return arrayOf()
+        val config = Settings.getInstance(root.project).config()
+        if (!config.foldingEnabled) return arrayOf()
         val search = LocalizationSourceSearch(root.project)
         val group = FoldingGroup.newGroup("i18n")
         val foldingProvider = languageFactory.foldingProvider()
@@ -40,10 +41,10 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
                     parser
-                        .parse(literal.text.unQuote(), settings.nsSeparator, settings.keySeparator, settings.stopCharacters, settings.vue)
-                        ?.let { key -> resolve(literal, search, settings, key) }
+                        .parse(literal.text.unQuote(), config.nsSeparator, config.keySeparator, config.vue)
+                        ?.let { key -> resolve(literal, search, config, key) }
                         ?.let { resolved ->
-                            val placeholder = resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(settings.foldingMaxLength) ?: ""
+                            val placeholder = resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(config.foldingMaxLength) ?: ""
                             val textRange = foldingProvider.getFoldingRange(container, offset, resolved.psiElement)
                             FoldingDescriptor(
                                 container.node,
@@ -56,12 +57,12 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             }.toTypedArray()
     }
 
-    private fun resolve(element: PsiElement, search: LocalizationSourceSearch, settings: Settings, fullKey: FullKey): ElementToReferenceBinding? {
+    private fun resolve(element: PsiElement, search: LocalizationSourceSearch, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
         return search
             .findFilesByName(fullKey.ns?.text)
             .filter {
-                if (settings.vue) it.name.contains(settings.foldingPreferredLanguage)
-                else it.parent == settings.foldingPreferredLanguage
+                if (config.vue) it.name.contains(config.foldingPreferredLanguage)
+                else it.parent == config.foldingPreferredLanguage
             }
             .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)) }
             .firstOrNull { it.unresolved.isEmpty() && it.element?.isLeaf() == true }

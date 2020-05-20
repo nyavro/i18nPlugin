@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.ide.quickfix
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.nullableToList
-import com.eny.i18n.plugin.utils.searchScope
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
@@ -29,11 +28,11 @@ interface TranslationFolderSelector {
  * Vue translation folder selector
  */
 class Vue18nTranslationFolderSelector(val project: Project) : TranslationFolderSelector {
-    private val settings = Settings.getInstance(project)
+    private val config = Settings.getInstance(project).config()
     override fun select(callback: (List<PsiFileSystemItem>) -> Unit) {
         callback(
             FilenameIndex
-                .getFilesByName(project, settings.vueDirectory, settings.searchScope(project), true)
+                .getFilesByName(project, config.vueDirectory, config.searchScope(project), true)
                 .asList()
         )
     }

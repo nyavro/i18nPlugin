@@ -25,15 +25,15 @@ data class LocalizationSource(val element: PsiElement, val name: String, val par
  */
 class LocalizationSourceSearch(private val project: Project) {
 
-    val settings = Settings.getInstance(project)
+    val config = Settings.getInstance(project).config()
 
     /**
      * Finds json roots by json file name
      */
     fun findFilesByName(fileName: String?): List<LocalizationSource> =
-        findVirtualFilesByName(fileName?.let {listOf(it)} ?: settings.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map {LocalizationSource(it, it.name, it.containingDirectory.name)}} +
-            if (settings.vue) {
-                findVirtualFilesUnder(settings.vueDirectory)
+        findVirtualFilesByName(fileName?.let {listOf(it)} ?: config.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map {LocalizationSource(it, it.name, it.containingDirectory.name)}} +
+            if (config.vue) {
+                findVirtualFilesUnder(config.vueDirectory)
                     .filter {file -> listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE, YAMLFileType.YML).any {file.fileType==it}}
                     .map {LocalizationSource(it, it.name, it.containingDirectory.name)}
 //                val index = vueTranslationFiles.find {it.name.matches("index\\.(js|ts)".toRegex())}
@@ -80,7 +80,7 @@ class LocalizationSourceSearch(private val project: Project) {
 //    }
 
     private fun findVirtualFilesUnder(directory: String): List<PsiFile> =
-        FilenameIndex.getFilesByName(project, directory, settings.searchScope(project), true).toList().flatMap {
+        FilenameIndex.getFilesByName(project, directory, config.searchScope(project), true).toList().flatMap {
             item -> item.children.toList().mapNotNull {root -> root.containingFile}
         }
 
@@ -95,7 +95,7 @@ class LocalizationSourceSearch(private val project: Project) {
         return FileTypeIndex
             .getFiles(
                 fileType,
-                if (settings.searchInProjectOnly) GlobalSearchScope.projectScope(project)
+                if (config.searchInProjectOnly) GlobalSearchScope.projectScope(project)
                 else GlobalSearchScope.allScope(project)
             )
             .filter { file -> fileNames.find {"$it.$ext" == file.name}.toBoolean()}

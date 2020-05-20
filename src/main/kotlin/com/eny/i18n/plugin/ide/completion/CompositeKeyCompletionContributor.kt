@@ -52,7 +52,7 @@ class CompositeKeyCompletionContributor: CompletionContributor(), CompositeKeyRe
                         last.text.replace(DUMMY_KEY, "")
                     ).map { it.value().text.unQuote() }
                 },
-                Settings.getInstance(parameters.position.project).pluralSeparator
+                Settings.getInstance(parameters.position.project).config().pluralSeparator
             ).map { LookupElementBuilder.create(source + it) }
         }
 }
