@@ -29,13 +29,13 @@ class KeyExtractorImpl: Extractor {
      * Converts element to it's literal value, if possible
      */
     override fun extractFullKey(element: PsiElement): FullKey? {
-        val settings = Settings.getInstance(element.project)
+        val config = Settings.getInstance(element.project).config()
         return listOf(
             TemplateKeyExtractor(),
             LiteralKeyExtractor(),
             StringLiteralKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let{parser.parse(it.extract(element), settings.nsSeparator, settings.keySeparator)}
+            ?.let{parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
     }
 }

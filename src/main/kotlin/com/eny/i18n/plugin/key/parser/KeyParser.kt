@@ -15,7 +15,7 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
     /**
      * Parses text to i18n key
      */
-    fun parse(text: String, nsSeparator: String, keySeparator: String, stopCharacters: String, emptyNamespace: Boolean) =
+    fun parse(text: String, nsSeparator: String, keySeparator: String, emptyNamespace: Boolean) =
         parse(listOf(KeyElement.literal(text)), nsSeparator, keySeparator, emptyNamespace)
 
     /**

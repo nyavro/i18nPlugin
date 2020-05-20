@@ -3,9 +3,9 @@ package com.eny.i18n.plugin.language.php
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.key.parser.KeyParser
-import com.eny.i18n.plugin.parser.*
+import com.eny.i18n.plugin.parser.StringLiteralKeyExtractor
+import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
@@ -62,9 +62,9 @@ internal class PhpReferenceAssistant: ReferenceAssistant {
     override fun pattern(): ElementPattern<out PsiElement> = PlatformPatterns.psiElement(PsiElement::class.java)
 
     override fun extractKey(element: PsiElement): FullKey? {
-        val settings = Settings.getInstance(element.project)
+        val config = Settings.getInstance(element.project).config()
         return listOf(StringLiteralKeyExtractor())
             .find {it.canExtract(element)}
-            ?.let{parser.parse(it.extract(element), settings.nsSeparator, settings.keySeparator)}
+            ?.let{parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
     }
 }

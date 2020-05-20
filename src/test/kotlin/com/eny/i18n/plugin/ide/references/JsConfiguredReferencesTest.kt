@@ -1,8 +1,7 @@
 package com.eny.i18n.plugin.ide.references
 
-import com.eny.i18n.plugin.ide.SettingsPack
-import com.eny.i18n.plugin.ide.runVuePack
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.settings.Config
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 abstract class JsConfiguredReferencesTest : BasePlatformTestCase() {
@@ -11,9 +10,7 @@ abstract class JsConfiguredReferencesTest : BasePlatformTestCase() {
         return "src/test/resources/references"
     }
 
-    fun testReference() = myFixture.runVuePack(
-        SettingsPack().with(Settings::vueDirectory, "i18n")
-    ) {
+    fun testReference() = myFixture.runVueConfig(Config(vueDirectory = "i18n")) {
         myFixture.configureByFiles(
             "vue/testReference.vue", "jsConfigured/i18n/index.js", "jsConfigured/i18n/en-uk/index.js", "jsConfigured/i18n/en-uk/profile.js")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
