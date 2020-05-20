@@ -1,9 +1,9 @@
 package com.eny.i18n.plugin.ide.references
 
-import com.eny.i18n.plugin.ide.SettingsPack
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
-import com.eny.i18n.plugin.ide.runVuePack
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.runWithConfig
+import com.eny.i18n.plugin.ide.settings.Config
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 internal abstract class TranslationToCodeTestBase(private val assetExt:String, private val ext:String) : BasePlatformTestCase() {
@@ -60,9 +60,7 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
         )
     }
 
-    fun testDefaultNs() {
-        val settings = Settings.getInstance(myFixture.project)
-        settings.defaultNs = "Common"
+    fun testDefaultNs() = myFixture.runWithConfig(Config(defaultNs = "Common")) {
         myFixture.configureByFiles("assets/Common.$assetExt", "jsx/testDefaultNs.$ext")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
@@ -74,9 +72,7 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
         )
     }
 
-    fun testVue() = myFixture.runVuePack(
-        SettingsPack().with(Settings::vueDirectory, "assets")
-    ) {
+    fun testVue() = myFixture.runVueConfig(Config(vueDirectory = "assets")) {
         myFixture.configureByFiles("assets/en-US.$assetExt", "vue/test.vue")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
@@ -87,9 +83,7 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
         )
     }
 
-    fun testVueIncorrectConfiguration() = myFixture.runVuePack(
-        SettingsPack().with(Settings::vueDirectory, "translations")
-    ) {
+    fun testVueIncorrectConfiguration() = myFixture.runVueConfig(Config(vueDirectory = "translations")) {
         myFixture.configureByFiles("assets/en-US.$assetExt", "vue/test.vue")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)

@@ -26,7 +26,7 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
     private fun annotateI18nLiteral(fullKey: FullKey, element: PsiElement, holder: AnnotationHolder) {
         val fileName = fullKey.ns?.text
         val compositeKey = fullKey.compositeKey
-        val settings = Settings.getInstance(element.project)
+        val config = Settings.getInstance(element.project).config()
         val annotationHelper = AnnotationHelper(holder, KeyRangesCalculator(element.textRange, element.text.isQuoted()), element.project)
         val files = LocalizationSourceSearch(element.project).findFilesByName(fileName)
         if (files.isEmpty()) {
@@ -37,7 +37,7 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             }
         }
         else {
-            val pluralSeparator = settings.pluralSeparator
+            val pluralSeparator = config.pluralSeparator
             val mostResolvedReference = files
                 .flatMap { resolve(compositeKey, PsiElementTree.create(it.element), pluralSeparator) }
                 .maxBy { v -> v.path.size }!!

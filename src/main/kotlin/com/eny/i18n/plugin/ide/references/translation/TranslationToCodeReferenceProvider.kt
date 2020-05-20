@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.ide.references.translation
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.PsiProperty
-import com.eny.i18n.plugin.utils.searchScope
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
@@ -18,17 +17,17 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
      */
     fun getReferences(element: PsiElement, textRange: TextRange): Array<PsiReference> {
         val project = element.project
-        val settings = Settings.getInstance(project)
+        val config = Settings.getInstance(project).config()
         val key = composeKey(
                 PsiProperty.create(element),
-                settings.nsSeparator,
-                settings.keySeparator,
-                settings.pluralSeparator,
-                settings.defaultNamespaces(),
-                settings.vue && element.containingFile.parent?.name == settings.vueDirectory
+                config.nsSeparator,
+                config.keySeparator,
+                config.pluralSeparator,
+                config.defaultNamespaces(),
+                config.vue && element.containingFile.parent?.name == config.vueDirectory
         )
         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES ==
-                PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, settings.searchScope(project), null, null)) {
+                PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, config.searchScope(project), null, null)) {
             return arrayOf(TranslationToCodeReference(element, textRange, key))
         }
         return PsiReference.EMPTY_ARRAY
@@ -78,7 +77,7 @@ class TranslationToCodeReference(element: PsiElement, textRange: TextRange, val 
         val project = element.project
         val referencesAccumulator = ReferencesAccumulator(composedKey)
         PsiSearchHelper.getInstance(project).processElementsWithWord(
-            referencesAccumulator.process(), Settings.getInstance(project).searchScope(project), composedKey, UsageSearchContext.ANY, true
+            referencesAccumulator.process(), Settings.getInstance(project).config().searchScope(project), composedKey, UsageSearchContext.ANY, true
         )
         return referencesAccumulator.entries()
     }
