@@ -26,6 +26,8 @@ internal data class ElementToReferenceBinding(val psiElement: PsiElement, val re
  */
 abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
 
+    private val group = FoldingGroup.newGroup("i18n")
+
     private val parser: KeyParser = KeyParser()
 
     override fun getPlaceholderText(node: ASTNode): String? = ""
@@ -34,7 +36,6 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
         val config = Settings.getInstance(root.project).config()
         if (!config.foldingEnabled) return arrayOf()
         val search = LocalizationSourceSearch(root.project)
-        val group = FoldingGroup.newGroup("i18n")
         val foldingProvider = languageFactory.foldingProvider()
         return foldingProvider.collectContainers(root)
             .flatMap { container ->
@@ -44,13 +45,11 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
                         .parse(literal.text.unQuote(), config.nsSeparator, config.keySeparator, config.vue)
                         ?.let { key -> resolve(literal, search, config, key) }
                         ?.let { resolved ->
-                            val placeholder = resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(config.foldingMaxLength) ?: ""
-                            val textRange = foldingProvider.getFoldingRange(container, offset, resolved.psiElement)
                             FoldingDescriptor(
                                 container.node,
-                                textRange,
+                                foldingProvider.getFoldingRange(container, offset, resolved.psiElement),
                                 group,
-                                placeholder
+                                resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(config.foldingMaxLength) ?: ""
                             )
                         }
                 }
