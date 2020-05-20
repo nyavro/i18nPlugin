@@ -14,6 +14,10 @@ interface LanguageFactory {
  * Localization components factory
  */
 interface LocalizationFactory {
+
+    /**
+     * Content generator
+     */
     fun contentGenerator(): ContentGenerator
 }
 
@@ -22,9 +26,15 @@ interface LocalizationFactory {
  */
 class MainFactory(private val languageFactories: List<LanguageFactory>, private val localizationFactories: List<LocalizationFactory>) {
 
+    /**
+     * Get available translation extractors
+     */
     fun translationExtractors(): List<TranslationExtractor> =
         languageFactories.map {it.translationExtractor()}
 
+    /**
+     * Get available content generators
+     */
     fun contentGenerators(): List<ContentGenerator> =
         localizationFactories.map {it.contentGenerator()}
 }

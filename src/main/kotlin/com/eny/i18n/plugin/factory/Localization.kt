@@ -16,7 +16,6 @@ interface ContentGenerator {
      */
     fun generateContent(fullKey: FullKey, value: String?): String = generateContent(fullKey.compositeKey, value ?: "TODO-${fullKey.source}")
 
-
     /**
      * Generates content by given composite key
      */
@@ -53,7 +52,6 @@ interface ContentGenerator {
      * @param {String} value Translation value
      */
     fun generateTranslationEntry(element: PsiElement, key: String, value: String)
-
 
     /**
      * Generates content and psi element
