@@ -23,33 +23,33 @@ class Settings : PersistentStateComponent<Settings> {
 
     private val default: Config = Config()
 
-    private var searchInProjectOnly = default.searchInProjectOnly
+    internal var searchInProjectOnly = default.searchInProjectOnly
 
-    private var nsSeparator = default.nsSeparator
+    internal var nsSeparator = default.nsSeparator
 
-    private var keySeparator = default.keySeparator
+    internal var keySeparator = default.keySeparator
 
-    private var pluralSeparator = default.pluralSeparator
+    internal var pluralSeparator = default.pluralSeparator
 
-    private var defaultNs = default.defaultNs
+    internal var defaultNs = default.defaultNs
 
-    private var vue = default.vue
+    internal var vue = default.vue
 
-    private var vueDirectory = default.vueDirectory
+    internal var vueDirectory = default.vueDirectory
 
-    private var jsConfiguration = default.jsConfiguration
+    internal var jsConfiguration = default.jsConfiguration
 
-    private var preferYamlFilesGeneration = default.preferYamlFilesGeneration
+    internal var preferYamlFilesGeneration = default.preferYamlFilesGeneration
 
-    private var foldingEnabled = default.foldingEnabled
+    internal var foldingEnabled = default.foldingEnabled
 
-    private var foldingPreferredLanguage = default.foldingPreferredLanguage
+    internal var foldingPreferredLanguage = default.foldingPreferredLanguage
 
-    private var foldingMaxLength = default.foldingMaxLength
+    internal var foldingMaxLength = default.foldingMaxLength
 
-    private var jsonContentGenerationEnabled = default.jsonContentGenerationEnabled
+    internal var jsonContentGenerationEnabled = default.jsonContentGenerationEnabled
 
-    private var yamlContentGenerationEnabled = default.yamlContentGenerationEnabled
+    internal var yamlContentGenerationEnabled = default.yamlContentGenerationEnabled
 
     fun config(): Config {
         if (ApplicationManager.getApplication().isHeadlessEnvironment) {
