@@ -81,7 +81,7 @@ class LocalizationSourceSearch(private val project: Project) {
 
     private fun findVirtualFilesUnder(directory: String): List<PsiFile> =
         FilenameIndex.getFilesByName(project, directory, config.searchScope(project), true).toList().flatMap {
-            item -> item.children.toList().mapNotNull {root -> root.containingFile}
+            it.children.toList().map {root -> root.containingFile}
         }
 
 
@@ -95,8 +95,7 @@ class LocalizationSourceSearch(private val project: Project) {
         return FileTypeIndex
             .getFiles(
                 fileType,
-                if (config.searchInProjectOnly) GlobalSearchScope.projectScope(project)
-                else GlobalSearchScope.allScope(project)
+                config.searchScope(project)
             )
             .filter { file -> fileNames.find {"$it.$ext" == file.name}.toBoolean()}
     }
