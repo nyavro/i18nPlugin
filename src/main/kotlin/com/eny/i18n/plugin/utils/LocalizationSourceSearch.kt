@@ -19,13 +19,13 @@ import org.jetbrains.yaml.YAMLFileType
  * May be root of json, yaml file, js object
  */
 data class LocalizationSource(val element: PsiElement, val name: String, val parent: String)
-
 /**
  * Provides search of localization files (json, yaml)
  */
 class LocalizationSourceSearch(private val project: Project) {
 
-    val config = Settings.getInstance(project).config()
+    private val translationFileTypes = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE, YAMLFileType.YML)
+    private val config = Settings.getInstance(project).config()
 
     /**
      * Finds json roots by json file name
@@ -34,7 +34,7 @@ class LocalizationSourceSearch(private val project: Project) {
         findVirtualFilesByName(fileName?.let {listOf(it)} ?: config.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map {LocalizationSource(it, it.name, it.containingDirectory.name)}} +
             if (config.vue) {
                 findVirtualFilesUnder(config.vueDirectory)
-                    .filter {file -> listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE, YAMLFileType.YML).any {file.fileType==it}}
+                    .filter {file -> translationFileTypes.any {file.fileType==it}}
                     .map {LocalizationSource(it, it.name, it.containingDirectory.name)}
 //                val index = vueTranslationFiles.find {it.name.matches("index\\.(js|ts)".toRegex())}
 //                if (index == null) {
@@ -87,7 +87,7 @@ class LocalizationSourceSearch(private val project: Project) {
 
 //    Finds virtual files by file name
     private fun findVirtualFilesByName(fileNames: List<String>) =
-        findVirtualFilesByName(fileNames, JsonFileType.INSTANCE) + findVirtualFilesByName(fileNames, YAMLFileType.YML)
+        translationFileTypes.flatMap {findVirtualFilesByName(fileNames, it)}
 
 //    Finds virtual files by names and type
     private fun findVirtualFilesByName(fileNames: List<String>, fileType: FileType): List<VirtualFile> {

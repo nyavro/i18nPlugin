@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.references.code
 
+import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.unQuote
@@ -82,3 +83,21 @@ abstract class ReferencesTestBase(private val ext: String) : BasePlatformTestCas
 
 class ReferencesToJsonTranslationTest: ReferencesTestBase("json")
 class ReferencesToYamlTranslationTest: ReferencesTestBase("yml")
+
+class ReferenceToJson5Test: BasePlatformTestCase() {
+    override fun getTestDataPath(): String = "src/test/resources/references"
+
+    fun testReference() {
+        myFixture.configureByFiles("jsx/testReference.jsx", "assets/test.json5")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        BasePlatformTestCase.assertNotNull(element)
+        BasePlatformTestCase.assertEquals("Reference in json", element!!.references[0].resolve()?.text?.unQuote())
+    }
+
+    fun testReferenceVue() = myFixture.runVue {
+        myFixture.configureByFiles("vue/testReference2.vue", "locales/en-US.json5")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertEquals("Reference in json", element!!.references[0].resolve()?.text?.unQuote())
+    }
+}
