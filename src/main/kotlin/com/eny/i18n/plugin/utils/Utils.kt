@@ -15,6 +15,11 @@ inline fun <C> C.whenMatches(predicate: (arg: C) -> Boolean): C? {
 }
 
 /**
+ * Modifies source with block when predicate matches
+ */
+inline fun <C> C.whenMatchesDo(predicate: (arg: C) -> Boolean, block: (C) -> C): C = this.whenMatches(predicate)?.let(block) ?: this
+
+/**
  * Converts nullable to Boolean
  */
 fun <C> C?.toBoolean(): Boolean {
@@ -34,3 +39,8 @@ fun <C> C?.default(value: C): C {
 fun <C> C?.nullableToList(): List<C> {
     return if (this == null) emptyList() else listOf(this)
 }
+
+/**
+ * Splits list to head and tail
+ */
+fun <C> List<C>.headTail(): Pair<C?, List<C>?> = Pair(this.firstOrNull(), this.drop(1).whenMatches {it.isNotEmpty()})

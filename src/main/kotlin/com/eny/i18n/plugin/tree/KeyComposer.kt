@@ -1,23 +1,31 @@
 package com.eny.i18n.plugin.tree
 
+import com.eny.i18n.plugin.utils.headTail
+import com.eny.i18n.plugin.utils.whenMatches
+import com.eny.i18n.plugin.utils.whenMatchesDo
+
 /**
  * Composes key from element's location in tree
  */
 interface KeyComposer<T> {
+
+    private fun fixPlural(item:String, pluralSeparator: String): String =
+        item.whenMatchesDo(
+            {listOf(1,2,5).any {item.endsWith(pluralSeparator + it)}},
+            {it.substringBeforeLast(pluralSeparator)}
+        )
+
     /**
      * Composes string representation of key by given path
      */
     fun composeKey(tree: FlippedTree<T>,
            nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: List<String> = listOf("translation"), dropRoot: Boolean = false): String {
-        val parents = tree.parents()
-        val criteria = {node: FlippedTree<T> -> node.isRoot() && (defaultNs.contains(node.name()) || dropRoot)}
-        val fixPlural = {node: FlippedTree<T> -> if(node.isRoot()) node.name() else node.name().substringBefore(pluralSeparator)}
-        val processNode = {node: FlippedTree<T>, index: Int ->
-            fixPlural(node) + if (index < parents.size - 1) if (node.isRoot()) nsSeparator else keySeparator else ""}
-        val fixDefaultNs = {node: FlippedTree<T>, index: Int -> if(criteria(node)) "" else processNode(node, index)}
-        return parents.foldIndexed("") {
-            index, acc, item ->
-                acc + fixDefaultNs(item, index)
-        }
+        val pair = tree.parents().map {it.name()}.headTail()
+        return listOf(
+            pair.first.whenMatches {!(defaultNs.contains(it) || dropRoot)},
+            pair.second?.joinToString(keySeparator)?.let {fixPlural(it, pluralSeparator)}
+        )
+            .mapNotNull {it}
+            .joinToString(nsSeparator)
     }
 }

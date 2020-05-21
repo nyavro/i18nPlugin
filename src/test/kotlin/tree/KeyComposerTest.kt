@@ -41,6 +41,13 @@ internal class KeyComposerTest {
     }
 
     @Test
+    fun composeLookLikePlural() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("key31z-8", "key1z", "ROOTz", "samplz"))
+        assertEquals("samplz:ROOTz.key1z.key31z-8", composer.composeKey(tree))
+    }
+
+    @Test
     fun pluralFixDoesntAffectNs() {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("key312", "key1", "ROOT", "sample-1"))
@@ -80,5 +87,12 @@ internal class KeyComposerTest {
         val composer = object : KeyComposer<String>{}
         val tree = TestFlippedTree(listOf("second31", "first1", "BASE", "First"))
         assertEquals("BASE.first1.second31", composer.composeKey(tree, "\$", ".", "-", listOf("First", "Second")))
+    }
+
+    @Test
+    fun dropRoot() {
+        val composer = object : KeyComposer<String>{}
+        val tree = TestFlippedTree(listOf("second31k", "first1k", "BASEk", "Firstk"))
+        assertEquals("BASEk.first1k.second31k", composer.composeKey(tree, "\$", ".", "-", listOf(), true))
     }
 }
