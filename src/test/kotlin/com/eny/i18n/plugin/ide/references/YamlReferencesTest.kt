@@ -79,7 +79,6 @@ internal abstract class TranslationToCodeTestBase(
             "multiTest.$assetExt",
             contentGenerator.generateContent("ref", "section", "subsection1", "key1<caret>2", "Translation")
         )
-        myFixture.configureByFiles("assets/multiTest.$assetExt", "jsx/testMultiReference1.$ext", "jsx/testMultiReference2.$ext")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
         assertTrue(ref is TranslationToCodeReference)
