@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.utils.generator.translation
 
-class YamlContentGenerator: ContentGenerator {
+class YamlTranslationGenerator: TranslationGenerator {
 
     override fun extension(): String = "yml"
 

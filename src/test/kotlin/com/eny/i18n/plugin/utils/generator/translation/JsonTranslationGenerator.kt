@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.utils.generator.translation
 
-class JsonContentGenerator: ContentGenerator {
+class JsonTranslationGenerator: TranslationGenerator {
 
     override fun extension(): String = "json"
 

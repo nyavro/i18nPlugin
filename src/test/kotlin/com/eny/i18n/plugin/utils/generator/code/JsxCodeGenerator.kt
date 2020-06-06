@@ -6,7 +6,7 @@ class JsxCodeGenerator: CodeGenerator {
 
     override fun generate(key: String, index: Int): String = """
         export const test{$index} = () => {
-            return (<div>{i18n.t('$key')}</div>);
+            return (<div>{i18n.t($key)}</div>);
         };
     """
 }
