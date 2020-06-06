@@ -44,3 +44,8 @@ fun <C> C?.nullableToList(): List<C> {
  * Splits list to head and tail
  */
 fun <C> List<C>.headTail(): Pair<C?, List<C>?> = Pair(this.firstOrNull(), this.drop(1).whenMatches {it.isNotEmpty()})
+
+/**
+ * flips function arguments
+ */
+fun <C, D, E> ((c: C, d: D) -> E).flip(): ((d: D, c: C) -> E) = {d: D, c: C -> this(c, d)}

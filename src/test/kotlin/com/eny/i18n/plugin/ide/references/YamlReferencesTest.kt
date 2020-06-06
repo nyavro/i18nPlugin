@@ -4,15 +4,34 @@ import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.JsxCodeGenerator
+import com.eny.i18n.plugin.utils.generator.translation.ContentGenerator
+import com.eny.i18n.plugin.utils.generator.translation.JsonContentGenerator
+import com.eny.i18n.plugin.utils.generator.translation.YamlContentGenerator
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-internal abstract class TranslationToCodeTestBase(private val assetExt:String, private val ext:String) : BasePlatformTestCase() {
+internal abstract class TranslationToCodeTestBase(
+        private val assetExt:String,
+        private val ext:String,
+        private val contentGenerator: ContentGenerator,
+        private val codeGenerator: CodeGenerator
+) : BasePlatformTestCase() {
 
     fun testSingleReference() {
-        myFixture.configureByFiles("assets/test.$assetExt", "$ext/testReference.$ext")
+        val key = "test:ref.section.key"
+        myFixture.addFileToProject(
+            "testReference.${codeGenerator.extension()}",
+            codeGenerator.generate(key)
+        )
+        myFixture.configureByText(
+            "test.${contentGenerator.extension()}",
+            contentGenerator.generateContent("ref", "section", "key<caret>", "Translation at ref section key")
+        )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
-        assertEquals("'test:ref.section.key'", element!!.references[0].resolve()?.text)
+        assertEquals(key, element!!.references[0].resolve()?.text?.unQuote())
     }
 
     fun testInvalidYaml() {
@@ -23,7 +42,10 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
     }
 
     fun testNoReference() {
-        myFixture.configureByFiles("assets/test.$assetExt")
+        myFixture.configureByText(
+            "test.${contentGenerator.extension()}",
+            contentGenerator.generateContent("ref", "section", "key<caret>", "Translation at ref section key")
+        )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
         assertTrue(element!!.references.isEmpty())
@@ -37,15 +59,31 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
     }
 
     fun testMultipleReferences() {
+        val key = "multiTest:ref.section.subsection1.key12"
+        myFixture.configureByText(
+            "multiReference1.${codeGenerator.extension()}",
+            codeGenerator.multiGenerate(
+                key,
+                "skip-multiTest:ref.section.subsection1.key12",
+                key
+            )
+        )
+        myFixture.configureByText(
+            "multiReference2.${codeGenerator.extension()}",
+            codeGenerator.multiGenerate(
+                key,
+                "skip-multiTest2:ref.section.subsection1.key12"
+            )
+        )
+        myFixture.configureByText(
+            "multiTest.$assetExt",
+            contentGenerator.generateContent("ref", "section", "subsection1", "key1<caret>2", "Translation")
+        )
         myFixture.configureByFiles("assets/multiTest.$assetExt", "jsx/testMultiReference1.$ext", "jsx/testMultiReference2.$ext")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
         assertTrue(ref is TranslationToCodeReference)
-        val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
-        assertEquals(
-                setOf("'multiTest:ref.section.subsection1.key12'"),
-                refs
-        )
+        assertEquals(setOf(key), (ref as TranslationToCodeReference).findRefs().map { item -> item.text.unQuote()}.toSet())
     }
 
     fun testObjectReference() {
@@ -91,14 +129,14 @@ internal abstract class TranslationToCodeTestBase(private val assetExt:String, p
     }
 }
 
-internal class YamlReferencesTest : TranslationToCodeTestBase("yml", "jsx") {
+internal class YamlReferencesTest : TranslationToCodeTestBase("yml", "jsx", YamlContentGenerator(), JsxCodeGenerator()) {
 
     override fun getTestDataPath(): String {
         return "src/test/resources/yamlReferences"
     }
 }
 
-internal class JsonReferencesTest : TranslationToCodeTestBase("json", "jsx") {
+internal class JsonReferencesTest : TranslationToCodeTestBase("json", "jsx", JsonContentGenerator(), JsxCodeGenerator()) {
 
     override fun getTestDataPath(): String {
         return "src/test/resources/jsonReferences"
