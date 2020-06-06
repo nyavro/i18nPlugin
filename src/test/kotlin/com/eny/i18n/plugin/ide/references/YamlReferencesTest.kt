@@ -128,24 +128,6 @@ internal abstract class TranslationToCodeTestBase(
             refs
         )
     }
-
-    fun testVue() = myFixture.runVueConfig(Config(vueDirectory = "assets")) {
-        myFixture.configureByFiles("assets/en-US.${translationGenerator.extension()}", "vue/test.vue")
-        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-        val ref = element!!.references[0]
-        assertTrue(ref is TranslationToCodeReference)
-        assertEquals(
-                setOf("'ref.section.key2'", "'ref.section.key5'"),
-                (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
-        )
-    }
-
-    fun testVueIncorrectConfiguration() = myFixture.runVueConfig(Config(vueDirectory = "translations")) {
-        myFixture.configureByFiles("assets/en-US.${translationGenerator.extension()}", "vue/test.vue")
-        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-        assertNotNull(element)
-        assertTrue(element!!.references.isEmpty())
-    }
 }
 
 internal class YamlReferencesTest : TranslationToCodeTestBase(YamlTranslationGenerator(), JsxCodeGenerator()) {
@@ -181,5 +163,56 @@ internal class JsonReferencesTest : TranslationToCodeTestBase(JsonTranslationGen
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
         assertTrue(element!!.references.isEmpty())
+    }
+}
+
+abstract class VueReferencesTestBase(protected val translationGenerator: TranslationGenerator): BasePlatformTestCase() {
+
+    private val codeGenerator = VueCodeGenerator()
+
+    private val testVue = codeGenerator.multiGenerate(
+        "'skip.ref.section.key1'",
+        "'ref.section.key2'",
+        "'drop.ref.section.key3'",
+        "'skpref.section.key4'",
+        "'ref.section.key5'"
+    )
+    private val translation = translationGenerator.generateContent("ref", "section<caret>", "key1", "val 1")
+
+    fun testVue() = myFixture.runVueConfig(Config(vueDirectory = "assets")) {
+        myFixture.addFileToProject("test.vue", testVue)
+        myFixture.configureFromExistingVirtualFile(
+            myFixture.addFileToProject("assets/en-US.${translationGenerator.extension()}", translation).virtualFile
+        )
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        val ref = element!!.references[0]
+        assertTrue(ref is TranslationToCodeReference)
+        assertEquals(
+            setOf("'ref.section.key2'", "'ref.section.key5'"),
+            (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
+        )
+    }
+
+    fun testVueIncorrectConfiguration() = myFixture.runVueConfig(Config(vueDirectory = "translations")) {
+        myFixture.configureByText("test.vue", testVue)
+        myFixture.configureFromExistingVirtualFile(
+            myFixture.addFileToProject("assets/en-US.${translationGenerator.extension()}", translation).virtualFile
+        )
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertTrue(element!!.references.isEmpty())
+    }
+}
+
+class VueJsonReferencesTest: VueReferencesTestBase(JsonTranslationGenerator()) {
+
+    override fun getTestDataPath(): String {
+        return "src/test/resources/jsonReferences"
+    }
+}
+class VueYamlReferencesTest: VueReferencesTestBase(YamlTranslationGenerator()) {
+
+    override fun getTestDataPath(): String {
+        return "src/test/resources/yamlReferences"
     }
 }
