@@ -4,16 +4,14 @@ import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
-import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
-import com.eny.i18n.plugin.utils.generator.code.JsxCodeGenerator
-import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-internal abstract class TranslationToCodeTestBase(
+abstract class TranslationToCodeTestBase(
         protected val translationGenerator: TranslationGenerator,
         protected val codeGenerator: CodeGenerator
 ) : BasePlatformTestCase() {
@@ -128,14 +126,19 @@ internal abstract class TranslationToCodeTestBase(
             refs
         )
     }
+
+    fun testClickOnValue() {
+        myFixture.configureByText(
+            "testValue.${translationGenerator.extension()}",
+            translationGenerator.generateContent("ref", "section", "key", "transla<caret>tion")
+        )
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertTrue(element!!.references.isEmpty())
+    }
 }
 
-internal class YamlReferencesTest : TranslationToCodeTestBase(YamlTranslationGenerator(), JsxCodeGenerator()) {
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/yamlReferences"
-    }
-
+abstract class YamlReferencesTestBase(codeGenerator: CodeGenerator) : TranslationToCodeTestBase(YamlTranslationGenerator(), codeGenerator) {
     fun testSingleReferenceQuoted() {
         val key = "'testQuoted:ref.section.key'"
         myFixture.addFileToProject(
@@ -148,23 +151,11 @@ internal class YamlReferencesTest : TranslationToCodeTestBase(YamlTranslationGen
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
-        assertEquals(key, element!!.references[0].resolve()?.text)
+        assertEquals(key.unQuote(), element!!.references[0].resolve()?.text?.unQuote())
     }
 }
 
-internal class JsonReferencesTest : TranslationToCodeTestBase(JsonTranslationGenerator(), JsxCodeGenerator()) {
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/jsonReferences"
-    }
-
-    fun testValue() {
-        myFixture.configureByText("testValue.json", translationGenerator.generateContent("ref", "section", "key", "transla<caret>tion"))
-        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-        assertNotNull(element)
-        assertTrue(element!!.references.isEmpty())
-    }
-}
+abstract class JsonReferencesTestBase(codeGenerator: CodeGenerator) : TranslationToCodeTestBase(JsonTranslationGenerator(), codeGenerator)
 
 abstract class VueReferencesTestBase(protected val translationGenerator: TranslationGenerator): BasePlatformTestCase() {
 
@@ -203,16 +194,14 @@ abstract class VueReferencesTestBase(protected val translationGenerator: Transla
         assertTrue(element!!.references.isEmpty())
     }
 }
-
-class VueJsonReferencesTest: VueReferencesTestBase(JsonTranslationGenerator()) {
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/jsonReferences"
-    }
-}
-class VueYamlReferencesTest: VueReferencesTestBase(YamlTranslationGenerator()) {
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/yamlReferences"
-    }
-}
+//
+class VueJsonReferencesTest: VueReferencesTestBase(JsonTranslationGenerator())
+class VueYamlReferencesTest: VueReferencesTestBase(YamlTranslationGenerator())
+class JsxJsonReferencesTest: JsonReferencesTestBase(JsxCodeGenerator())
+class JsxYamlReferencesTest: YamlReferencesTestBase(JsxCodeGenerator())
+class JsJsonReferencesTest: JsonReferencesTestBase(JsCodeGenerator())
+class JsYamlReferencesTest: YamlReferencesTestBase(JsCodeGenerator())
+class TsxJsonReferencesTest: JsonReferencesTestBase(TsxCodeGenerator())
+class TsxYamlReferencesTest: YamlReferencesTestBase(TsxCodeGenerator())
+class TsJsonReferencesTest: JsonReferencesTestBase(TsCodeGenerator())
+class TsYamlReferencesTest: YamlReferencesTestBase(TsCodeGenerator())
