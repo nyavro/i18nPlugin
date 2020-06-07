@@ -19,11 +19,11 @@ abstract class TranslationToCodeTestBase(
     fun testSingleReference() {
         val key = "'test:ref.section.key'"
         myFixture.addFileToProject(
-            "testReference.${codeGenerator.extension()}",
+            "testReference.${codeGenerator.ext()}",
             codeGenerator.generate(key)
         )
         myFixture.configureByText(
-            "test.${translationGenerator.extension()}",
+            "test.${translationGenerator.ext()}",
             translationGenerator.generateContent("ref", "section", "key<caret>", "Translation at ref section key")
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -32,7 +32,7 @@ abstract class TranslationToCodeTestBase(
     }
 
     fun testInvalidYaml() {
-        myFixture.configureByText("invalid.${translationGenerator.extension()}", "item<caret> text")
+        myFixture.configureByText("invalid.${translationGenerator.ext()}", "item<caret> text")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
         assertTrue(element!!.references.isEmpty())
@@ -40,7 +40,7 @@ abstract class TranslationToCodeTestBase(
 
     fun testNoReference() {
         myFixture.configureByText(
-            "test.${translationGenerator.extension()}",
+            "test.${translationGenerator.ext()}",
             translationGenerator.generateContent("ref", "section", "key<caret>", "Translation at ref section key")
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -51,7 +51,7 @@ abstract class TranslationToCodeTestBase(
     fun testMultipleReferences() {
         val key = "'multiTest:ref.section.subsection1.key12'"
         myFixture.configureByText(
-            "multiReference1.${codeGenerator.extension()}",
+            "multiReference1.${codeGenerator.ext()}",
             codeGenerator.multiGenerate(
                 key,
                 "skip-multiTest:ref.section.subsection1.key12",
@@ -59,14 +59,14 @@ abstract class TranslationToCodeTestBase(
             )
         )
         myFixture.configureByText(
-            "multiReference2.${codeGenerator.extension()}",
+            "multiReference2.${codeGenerator.ext()}",
             codeGenerator.multiGenerate(
                 key,
                 "skip-multiTest2:ref.section.subsection1.key12"
             )
         )
         myFixture.configureByText(
-            "multiTest.${translationGenerator.extension()}",
+            "multiTest.${translationGenerator.ext()}",
             translationGenerator.generateContent("ref", "section", "subsection1", "key1<caret>2", "Translation")
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -77,7 +77,7 @@ abstract class TranslationToCodeTestBase(
 
     fun testObjectReference() {
         myFixture.addFileToProject(
-            "testReference.${codeGenerator.extension()}",
+            "testReference.${codeGenerator.ext()}",
             codeGenerator.multiGenerate(
                 "'skip-objectRef:ref.section.key1'",
                 "'objectRef:ref.section.key2'",
@@ -88,7 +88,7 @@ abstract class TranslationToCodeTestBase(
             )
         )
         myFixture.configureByText(
-            "objectRef.${translationGenerator.extension()}",
+            "objectRef.${translationGenerator.ext()}",
             translationGenerator.generateContent("ref", "section<caret>", "key1", "val 1")
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -103,7 +103,7 @@ abstract class TranslationToCodeTestBase(
 
     fun testDefaultNs() = myFixture.runWithConfig(Config(defaultNs = "Common")) {
         myFixture.addFileToProject(
-            "testDefaultNs.${codeGenerator.extension()}",
+            "testDefaultNs.${codeGenerator.ext()}",
             codeGenerator.multiGenerate(
                 "'objectRef:ref.section.key1'",
                 "'ref.section.key2'",
@@ -114,13 +114,13 @@ abstract class TranslationToCodeTestBase(
             )
         )
         myFixture.configureByText(
-            "Common.${translationGenerator.extension()}",
+            "Common.${translationGenerator.ext()}",
             translationGenerator.generateContent("ref", "section<caret>", "key1", "val 1")
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
         assertTrue(ref is TranslationToCodeReference)
-        val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text}.toSet()
+        val refs = (ref as TranslationToCodeReference).findRefs().map {item -> item.text}.toSet()
         assertEquals(
             setOf("'ref.section.key1'", "'ref.section.key2'", "`ref.section.\${key3}`"),
             refs
@@ -129,7 +129,7 @@ abstract class TranslationToCodeTestBase(
 
     fun testClickOnValue() {
         myFixture.configureByText(
-            "testValue.${translationGenerator.extension()}",
+            "testValue.${translationGenerator.ext()}",
             translationGenerator.generateContent("ref", "section", "key", "transla<caret>tion")
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -142,11 +142,11 @@ abstract class YamlReferencesTestBase(codeGenerator: CodeGenerator) : Translatio
     fun testSingleReferenceQuoted() {
         val key = "'testQuoted:ref.section.key'"
         myFixture.addFileToProject(
-            "testReferenceQuoted.${codeGenerator.extension()}",
+            "testReferenceQuoted.${codeGenerator.ext()}",
             codeGenerator.generate(key)
         )
         myFixture.configureByText(
-            "testQuoted.${translationGenerator.extension()}",
+            "testQuoted.${translationGenerator.ext()}",
             translationGenerator.generateContent("ref", "section", "\"key<caret>\"", "Reference in yaml")
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -173,7 +173,7 @@ abstract class VueReferencesTestBase(protected val translationGenerator: Transla
     fun testVue() = myFixture.runVueConfig(Config(vueDirectory = "assets")) {
         myFixture.addFileToProject("test.vue", testVue)
         myFixture.configureFromExistingVirtualFile(
-            myFixture.addFileToProject("assets/en-US.${translationGenerator.extension()}", translation).virtualFile
+            myFixture.addFileToProject("assets/en-US.${translationGenerator.ext()}", translation).virtualFile
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
@@ -187,7 +187,7 @@ abstract class VueReferencesTestBase(protected val translationGenerator: Transla
     fun testVueIncorrectConfiguration() = myFixture.runVueConfig(Config(vueDirectory = "translations")) {
         myFixture.configureByText("test.vue", testVue)
         myFixture.configureFromExistingVirtualFile(
-            myFixture.addFileToProject("assets/en-US.${translationGenerator.extension()}", translation).virtualFile
+            myFixture.addFileToProject("assets/en-US.${translationGenerator.ext()}", translation).virtualFile
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)

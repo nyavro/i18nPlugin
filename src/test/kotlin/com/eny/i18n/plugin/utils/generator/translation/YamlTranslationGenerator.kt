@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.utils.generator.translation
 
 class YamlTranslationGenerator: TranslationGenerator {
 
-    override fun extension(): String = "yml"
+    override fun ext(): String = "yml"
 
     override fun generateContent(root: String, first: String, key: String, value: String): String = """ 
         $root:  

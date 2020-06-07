@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.utils.generator.code
 
 class VueCodeGenerator: CodeGenerator {
 
-    override fun extension(): String = "vue"
+    override fun ext(): String = "vue"
 
     override fun generate(key: String, index: Int): String = """
         <template>

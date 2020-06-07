@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.utils.generator.code
 
 class PhpCodeGenerator: CodeGenerator {
 
-    override fun extension(): String = "php"
+    override fun ext(): String = "php"
 
     override fun generate(key: String, index: Int): String = """
         <?php
