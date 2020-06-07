@@ -121,7 +121,13 @@ internal abstract class CodeCompletionTestBase(
     )
 
     //Completion of plural key: 'test:tst2.plurals.<caret>'
-    fun testPlural() = check("plural")
+    fun testPlural() = checker.doCheck(
+        "plural.${codeGenerator.ext()}",
+        codeGenerator.generate(keyGenerator.generate("test", "tst2.plurals.<caret>")),
+        codeGenerator.generate(keyGenerator.generate("test","tst2.plurals.value")),
+        translationGenerator.ext(),
+        translationGenerator.generatePlural("tst2", "plurals", "value", "tt", "qq", "vv")
+    )
 
     //Completion of partially typed key: 'test:tst1.base.si<caret>'
     fun testPartial() = check("partial")
