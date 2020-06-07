@@ -16,15 +16,15 @@ internal interface Checker {
 }
 
 interface KeyGenerator {
-    fun generate(ns: String, compositeKey: String): String
+    fun generate(ns: String, compositeKey: String, quote: String = "'"): String
 }
 
 class DefaultNsKeyGenerator: KeyGenerator {
-    override fun generate(ns: String, compositeKey: String): String = "\"$compositeKey\""
+    override fun generate(ns: String, compositeKey: String, quote: String): String = "$quote$compositeKey$quote"
 }
 
 class NsKeyGenerator: KeyGenerator {
-    override fun generate(ns: String, compositeKey: String): String = "\"$ns:$compositeKey\""
+    override fun generate(ns: String, compositeKey: String, quote: String): String = "$quote$ns:$compositeKey$quote"
 }
 
 internal class BasicChecker(private val fixture: CodeInsightTestFixture) {
@@ -91,7 +91,7 @@ internal abstract class CodeCompletionTestBase(
     private val keyGenerator: KeyGenerator,
     private val checkerProducer: (fixture: CodeInsightTestFixture) -> Checker = ::NsChecker) : BasePlatformTestCase() {
 
-    private lateinit var checker: Checker
+    protected lateinit var checker: Checker
 
     override fun getTestDataPath(): String = "src/test/resources/codeCompletion"
 
@@ -159,7 +159,14 @@ internal abstract class CodeCompletionTestBasePhp(
     checkerProducer: (fixture: CodeInsightTestFixture) -> Checker = ::NsChecker) :
         CodeCompletionTestBase(lang, ext, codeGenerator, translationGenerator, keyGenerator, checkerProducer) {
 
-    fun testDQuote() = check("dQuote")
+    fun testDQuote() = checker.doCheck(
+        "dQuote.${codeGenerator.ext()}",
+        codeGenerator.generate(keyGenerator.generate("test", "tst1.base.<caret>", "\"")),
+        codeGenerator.generate(keyGenerator.generate("test","tst1.base.single", "\"")),
+        translationGenerator.ext(),
+        translationGenerator.generateContent("tst1", "base", "single", "only one value")
+    )
+//            = check("dQuote")
 }
 
 internal class CodeCompletionInvalidTest: BasePlatformTestCase() {
