@@ -130,7 +130,13 @@ internal abstract class CodeCompletionTestBase(
     )
 
     //Completion of partially typed key: 'test:tst1.base.si<caret>'
-    fun testPartial() = check("partial")
+    fun testPartial() = checker.doCheck(
+        "partial.${codeGenerator.ext()}",
+        codeGenerator.generate(keyGenerator.generate("test", "tst1.base.si<caret>")),
+        codeGenerator.generate(keyGenerator.generate("test","tst1.base.single")),
+        translationGenerator.ext(),
+        translationGenerator.generateContent("tst1", "base", "single", "only one value")
+    )
 
 //    fun testRename() {
 //        myFixture.configureByFiles("RenameTestData.java", "RenameTestData.simple")
