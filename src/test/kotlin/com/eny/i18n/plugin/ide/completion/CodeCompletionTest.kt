@@ -169,23 +169,6 @@ internal abstract class CodeCompletionTestBasePhp(
 //            = check("dQuote")
 }
 
-internal class CodeCompletionInvalidTest: BasePlatformTestCase() {
-
-    override fun getTestDataPath(): String = "src/test/resources/codeCompletion"
-
-    fun testInvalid() {
-        myFixture.configureByFiles("js/invalid.js")
-        myFixture.complete(CompletionType.BASIC, 1)
-        myFixture.checkResultByFile("js/invalidResult.js")
-    }
-
-    fun testInvalidDefNs() {
-        myFixture.configureByFiles("js/default/invalid.js")
-        myFixture.complete(CompletionType.BASIC, 1)
-        myFixture.checkResultByFile("js/default/invalidResult.js")
-    }
-}
-
 internal class CodeCompletionTsJsonTest: CodeCompletionTestBase("ts","json", TsCodeGenerator(), JsonTranslationGenerator(), NsKeyGenerator())
 internal class CodeCompletionJsJsonTest: CodeCompletionTestBase("js","json", JsCodeGenerator(), JsonTranslationGenerator(), NsKeyGenerator())
 internal class CodeCompletionTsxJsonTest: CodeCompletionTestBase("tsx","json", TsxCodeGenerator(), JsonTranslationGenerator(), NsKeyGenerator())
