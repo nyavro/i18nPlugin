@@ -7,7 +7,6 @@ class YamlTranslationGenerator: TranslationGenerator {
     override fun generateContent(root: String, first: String, key: String, value: String): String = """ 
         $root:  
             $first: 
-                key11: ref11
                 $key: $value
             subsection2: 
                 key21: Ref
@@ -18,7 +17,6 @@ class YamlTranslationGenerator: TranslationGenerator {
         $root: 
             $first: 
                 $second: 
-                    key11: ref11
                     $key: $value
                 subsection2: 
                     key21: Ref

@@ -5,7 +5,7 @@ class TsCodeGenerator: CodeGenerator {
     override fun ext(): String = "ts"
 
     override fun generate(key: String, index: Int): String = """
-        export const test{$index} = (i18n: {t: Function}) => {
+        export const test$index = (i18n: {t: Function}) => {
             return i18n.t($key);
         };
     """

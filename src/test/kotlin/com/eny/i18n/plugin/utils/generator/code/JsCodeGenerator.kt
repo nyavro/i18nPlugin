@@ -5,7 +5,7 @@ class JsCodeGenerator: CodeGenerator {
     override fun ext(): String = "js"
 
     override fun generate(key: String, index: Int): String = """
-        export const test{$index} = (i18n) => {
+        export const test$index = (i18n) => {
             return i18n.t($key);
         };
     """

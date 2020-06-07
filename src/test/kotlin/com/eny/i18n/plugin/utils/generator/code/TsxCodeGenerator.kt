@@ -5,7 +5,7 @@ class TsxCodeGenerator: CodeGenerator {
     override fun ext(): String = "tsx"
 
     override fun generate(key: String, index: Int): String = """
-        export const test{$index} = (i18n: {t: Function}) => {
+        export const test$index = (i18n: {t: Function}) => {
             return (<div>{i18n.t($key)}</div>);
         };
     """
