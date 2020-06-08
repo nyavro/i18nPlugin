@@ -2,7 +2,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="PHP" implementationClass="com.eny.i18n.plugin.ide.annotator.PhpCompositeKeyAnnotator"/>
         <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.references.code.PhpReferenceContributor"/>
-        <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.completion.CompositeKeyCompletionContributor"/>
+        <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.completion.PhpCompletionContributor"/>
         <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.plugin.ide.folding.PhpFoldingBuilder"/>
     </extensions>
 </idea-plugin>

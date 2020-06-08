@@ -1,7 +1,5 @@
 package com.eny.i18n.plugin.ide.completion
 
-import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
@@ -10,7 +8,7 @@ import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 
-internal interface Checker {
+interface Checker {
     fun doCheck(sourceName: String, sourceCode: String, expectedCode: String, ext: String, translationContent: String)
 }
 
@@ -35,17 +33,6 @@ internal class BasicChecker(private val fixture: CodeInsightTestFixture) {
     }
 }
 
-internal class VueChecker(private val fixture: CodeInsightTestFixture): Checker {
-    private val checker = BasicChecker(fixture)
-    override fun doCheck(sourceName: String, sourceCode: String, expectedCode: String, ext: String, translationContent: String) = fixture.runVueConfig(
-        Config(vueDirectory = "assets")
-    ) {
-        checker.doCheck(
-            sourceName, sourceCode, expectedCode, "assets/en-US.$ext", translationContent
-        )
-    }
-}
-
 internal class DefaultNsChecker(fixture: CodeInsightTestFixture): Checker {
     private val checker = BasicChecker(fixture)
     override fun doCheck(sourceName: String, sourceCode: String, expectedCode: String, ext: String, translationContent: String) {
@@ -64,11 +51,11 @@ internal class NsChecker(fixture: CodeInsightTestFixture): Checker {
     }
 }
 
-internal abstract class CodeCompletionTestBase(
-    private val codeGenerator: CodeGenerator,
-    private val translationGenerator: TranslationGenerator,
-    private val keyGenerator: KeyGenerator,
-    private val checkerProducer: (fixture: CodeInsightTestFixture) -> Checker = ::NsChecker) : BasePlatformTestCase() {
+abstract class CodeCompletionTestBase(
+    protected val codeGenerator: CodeGenerator,
+    protected val translationGenerator: TranslationGenerator,
+    protected val keyGenerator: KeyGenerator = NsKeyGenerator(),
+    protected val checkerProducer: (fixture: CodeInsightTestFixture) -> Checker = ::NsChecker) : BasePlatformTestCase() {
 
     protected lateinit var checker: Checker
 
@@ -133,15 +120,3 @@ internal class CodeCompletionTsYamlTest: CodeCompletionTestBase(TsCodeGenerator(
 internal class CodeCompletionJsYamlTest: CodeCompletionTestBase(JsCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())
 internal class CodeCompletionTsxYamlTest: CodeCompletionTestBase(TsxCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())
 internal class CodeCompletionJsxYamlTest: CodeCompletionTestBase(JsxCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionPhpYamlTest: CodeCompletionTestBase(PhpCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionTsJsonDefNsTest: CodeCompletionTestBase(TsCodeGenerator(), JsonTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionJsJsonDefNsTest: CodeCompletionTestBase(JsCodeGenerator(), JsonTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionTsxJsonDefNsTest: CodeCompletionTestBase(TsxCodeGenerator(), JsonTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionJsxJsonDefNsTest: CodeCompletionTestBase(JsxCodeGenerator(), JsonTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionPhpJsonDefNsTest: CodeCompletionTestBase(PhpCodeGenerator(), JsonTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionTsYamlDefNsTest: CodeCompletionTestBase(TsCodeGenerator(), YamlTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionJsYamlDefNsTest: CodeCompletionTestBase(JsCodeGenerator(), YamlTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionTsxYamlDefNsTest: CodeCompletionTestBase(TsxCodeGenerator(), YamlTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionJsxYamlDefNsTest: CodeCompletionTestBase(JsxCodeGenerator(), YamlTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
-internal class CodeCompletionVueJsonTest: CodeCompletionTestBase(VueCodeGenerator(), JsonTranslationGenerator(), DefaultNsKeyGenerator(), ::VueChecker)
-internal class CodeCompletionVueYamlTest: CodeCompletionTestBase(VueCodeGenerator(), YamlTranslationGenerator(), DefaultNsKeyGenerator(), ::VueChecker)

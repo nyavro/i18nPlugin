@@ -2,7 +2,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="VueJS" implementationClass="com.eny.i18n.plugin.ide.annotator.VueCompositeKeyAnnotator"/>
         <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.references.code.VueReferenceContributor"/>
-        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.completion.CompositeKeyCompletionContributor"/>
+        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.completion.VueCompletionContributor"/>
         <lang.foldingBuilder language="HTML" implementationClass="com.eny.i18n.plugin.ide.folding.VueJsFoldingBuilder"/>
     </extensions>
 </idea-plugin>
