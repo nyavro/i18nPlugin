@@ -47,4 +47,12 @@ internal class StringUtilsTest : TestBase {
             assertEquals(wrapped.unQuote(), "subs")
         }
     }
+
+    @Test
+    fun doubleUnQuote() {
+        listOf("'", "`", "\"").forEach {
+            val wrapped = "\"${it}'`subs`'${it}\""
+            assertEquals(wrapped.unQuote(), "${it}'`subs`'${it}")
+        }
+    }
 }

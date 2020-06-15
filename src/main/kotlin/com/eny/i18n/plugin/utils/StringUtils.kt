@@ -7,16 +7,9 @@ fun String.isQuoted(): Boolean =
     (this.length > 1) && listOf("\"", "'", "`").any {quote -> this.startsWith(quote) && this.endsWith(quote)}
 
 /**
- * Unquotes the string
+ * Unquotes a string
  */
-fun String.unQuote(): String {
-    return listOf('\'', '\"', '`').fold(this) {
-        acc, quote ->
-            if (acc.endsWith(quote) && acc.startsWith(quote) && acc.length > 1)
-                acc.substring(1, this.length - 1)
-            else acc
-    }
-}
+fun String.unQuote(): String = if (this.isQuoted()) this.substring(1, this.length - 1) else this
 
 /**
  * String ellipsis
