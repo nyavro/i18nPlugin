@@ -65,6 +65,16 @@ abstract class CodeHighlightingTestBase(private val codeGenerator: CodeGenerator
         "assets/translation.${translationGenerator.ext()}",
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
+
+    fun testDefNsUnresolved() = check(
+        "defNsUnresolved.${codeGenerator.ext()}",
+        codeGenerator.multiGenerate(
+            "\"<warning descr=\"Missing default translation file\">missing.default.translation</warning>\"",
+            "`<warning descr=\"Missing default translation file\">missing.default.in.{\$template}</warning>`"
+        ),
+        "assets/test.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 }
 
 class CodeHighlightingRandomTest: CodeHighlightingTestBase(
@@ -133,10 +143,6 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testDefaultNsUnresolved() = myFixture.runWithConfig(testConfig) {
-        check("tsx/defNsUnresolved.tsx", translation)
-        check("ts/defNsUnresolved.ts", translation)
-        check("jsx/defNsUnresolved.jsx", translation)
-        check("js/defNsUnresolved.js", translation)
         check("php/defNsUnresolved.php", translation)
     }
 
