@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.utils.generator.code
 
 import com.eny.i18n.plugin.utils.flip
+import kotlin.random.Random
 
 interface CodeGenerator {
     fun ext(): String

@@ -6,9 +6,11 @@ import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
+import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import utils.randomOf
 
-abstract class CodeHighlightingBase(private val codeGenerator: CodeGenerator, private val translationGenerator: TranslationGenerator): BasePlatformTestCase() {
+abstract class CodeHighlightingTestBase(private val codeGenerator: CodeGenerator, private val translationGenerator: TranslationGenerator): BasePlatformTestCase() {
 
     private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
 
@@ -27,12 +29,33 @@ abstract class CodeHighlightingBase(private val codeGenerator: CodeGenerator, pr
         "test.${translationGenerator.ext()}",
         translationGenerator.generateContent("root", "first", "key", "value")
     )
+
+    fun testUnresolvedKey() = check(
+        "unresolvedKey.${codeGenerator.ext()}",
+        codeGenerator.multiGenerate(
+            "\"test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.key</warning>\"",
+            "\"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\"",
+            "`test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.key.\${arg}</warning>`",
+            "`test:<warning descr=\"Unresolved key\">unresolved.whole.\${arg}</warning>`",
+            "`test:<warning descr=\"Unresolved key\">unresolved.whole.\${arg}</warning>`",
+            "`test:<warning descr=\"Unresolved key\">unresolved.whole.\${b ? 'key' : 'key2'}</warning>`",
+            "`test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.\${b ? 'key' : 'key2'}</warning>`"
+        ),
+        "test.${translationGenerator.ext()}",
+        translationGenerator.generateContent("tst1", "base", "single", "only one value")
+    )
 }
 
-class JsJsonCodeHighlightingTest(): CodeHighlightingBase(JsCodeGenerator(), JsonTranslationGenerator())
-class TsJsonCodeHighlightingTest(): CodeHighlightingBase(TsCodeGenerator(), JsonTranslationGenerator())
-class JsxJsonCodeHighlightingTest(): CodeHighlightingBase(JsxCodeGenerator(), JsonTranslationGenerator())
-class TsxJsonCodeHighlightingTest(): CodeHighlightingBase(TsxCodeGenerator(), JsonTranslationGenerator())
+class CodeHighlightingRandomTest: CodeHighlightingTestBase(
+    randomOf(
+        ::JsCodeGenerator,
+        ::TsCodeGenerator,
+        ::JsxCodeGenerator,
+        ::TsxCodeGenerator)(),
+    randomOf(
+        ::JsonTranslationGenerator,
+        ::YamlTranslationGenerator)()
+)
 //class PhpJsonCodeHighlightingTest(): CodeHighlightingBase(PhpCodeGenerator(), JsonTranslationGenerator())
 
 internal class CodeHighlightingTest : BasePlatformTestCase() {
@@ -60,10 +83,6 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testUnresolvedKey() = myFixture.runWithConfig(testConfig) {
-        check("tsx/unresolvedKey.tsx", translation)
-        check("ts/unresolvedKey.ts", translation)
-        check("jsx/unresolvedKey.jsx", translation)
-        check("js/unresolvedKey.js", translation)
         check("php/unresolvedKey.php", translation)
     }
 
