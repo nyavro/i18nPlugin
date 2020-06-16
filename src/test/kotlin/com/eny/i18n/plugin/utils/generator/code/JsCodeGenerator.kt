@@ -9,4 +9,8 @@ class JsCodeGenerator: CodeGenerator {
             return i18n.t($key);
         };
     """
+
+    override fun generateInvalid(key: String): String = """
+        const key = (t) => "$key";
+    """
 }

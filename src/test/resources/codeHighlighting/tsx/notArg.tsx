@@ -1,1 +1,0 @@
-const key = () => (<div>{"test:tst1.base5.single"}</div>);

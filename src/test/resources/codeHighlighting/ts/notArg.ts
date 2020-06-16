@@ -1,1 +1,0 @@
-const key = (s: Function) => s("test:tst18.base.single");

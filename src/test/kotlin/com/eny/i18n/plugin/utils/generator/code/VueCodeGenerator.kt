@@ -16,5 +16,11 @@ class VueCodeGenerator: CodeGenerator {
         </template>
     """
 
+    override fun generateInvalid(key: String): String = """
+        <template>
+            <h1>{{\$\d($key)}}</h1>
+        </template>
+    """
+
     private fun generateDiv(key: String): String = "    <div>{{ \$t($key) }}</div>\n"
 }

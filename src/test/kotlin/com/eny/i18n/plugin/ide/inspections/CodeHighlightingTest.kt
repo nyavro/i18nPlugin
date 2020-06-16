@@ -75,6 +75,15 @@ abstract class CodeHighlightingTestBase(private val codeGenerator: CodeGenerator
         "assets/test.${translationGenerator.ext()}",
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
+
+    fun testNotArg() = check(
+        "defNsUnresolved.${codeGenerator.ext()}",
+        codeGenerator.generateInvalid(
+            "\"test:tst1.base5.single\""
+        ),
+        "assets/test.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 }
 
 class CodeHighlightingRandomTest: CodeHighlightingTestBase(
@@ -130,7 +139,6 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testResolved() = myFixture.runWithConfig(testConfig) {
-
         check("php/resolved.php", translation)
     }
 
@@ -151,10 +159,6 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testNotTranslationArgument() = myFixture.runWithConfig(testConfig) {
-        check("tsx/notArg.tsx", translation)
-        check("ts/notArg.ts", translation)
-        check("jsx/notArg.jsx", translation)
-        check("js/notArg.js", translation)
         check("php/notArg.php", translation)
     }
 

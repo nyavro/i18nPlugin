@@ -14,5 +14,11 @@ class PhpCodeGenerator: CodeGenerator {
             ${keys.map(::generateLine).joinToString("\\n")}
     """
 
+    override fun generateInvalid(key: String): String = """
+        <?php
+        
+        echo str_replace("\n", '<br>', ts($key));
+    """
+
     private fun generateLine(key: String): String = """          echo str_replace("\n", '<br>', t($key));"""
 }

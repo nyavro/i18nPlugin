@@ -9,4 +9,8 @@ class TsCodeGenerator: CodeGenerator {
             return i18n.t($key);
         };
     """
+
+    override fun generateInvalid(key: String): String = """
+        const key = (s: Function) => s($key);
+    """
 }

@@ -9,4 +9,8 @@ class TsxCodeGenerator: CodeGenerator {
             return (<div>{i18n.t($key)}</div>);
         };
     """
+
+    override fun generateInvalid(key: String): String = """
+        const key = () => (<div>{"$key"}</div>);
+    """
 }
