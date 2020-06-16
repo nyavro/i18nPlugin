@@ -3,7 +3,37 @@ package com.eny.i18n.plugin.ide.inspections
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.utils.generator.code.*
+import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
+import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+
+abstract class CodeHighlightingBase(private val codeGenerator: CodeGenerator, private val translationGenerator: TranslationGenerator): BasePlatformTestCase() {
+
+    private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
+
+    private fun check(fileName: String, code: String, translationName: String, translation: String) = myFixture.runWithConfig(testConfig) {
+        myFixture.addFileToProject(translationName, translation)
+        myFixture.configureByText(fileName, code)
+        myFixture.checkHighlighting(true, true, true, true)
+    }
+
+    fun testUnresolvedNs() = check(
+        "unresolvdNs.${codeGenerator.ext()}",
+        codeGenerator.multiGenerate(
+            "\"<warning descr=\"Unresolved namespace\">unresolved</warning>:tst1.base\"",
+            "`<warning descr=\"Unresolved namespace\">unresolved</warning>:tst1.base.\${arg}`"
+        ),
+        "test.${translationGenerator.ext()}",
+        translationGenerator.generateContent("root", "first", "key", "value")
+    )
+}
+
+class JsJsonCodeHighlightingTest(): CodeHighlightingBase(JsCodeGenerator(), JsonTranslationGenerator())
+class TsJsonCodeHighlightingTest(): CodeHighlightingBase(TsCodeGenerator(), JsonTranslationGenerator())
+class JsxJsonCodeHighlightingTest(): CodeHighlightingBase(JsxCodeGenerator(), JsonTranslationGenerator())
+class TsxJsonCodeHighlightingTest(): CodeHighlightingBase(TsxCodeGenerator(), JsonTranslationGenerator())
+//class PhpJsonCodeHighlightingTest(): CodeHighlightingBase(PhpCodeGenerator(), JsonTranslationGenerator())
 
 internal class CodeHighlightingTest : BasePlatformTestCase() {
 
@@ -26,10 +56,6 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testUnresolvedNs() = myFixture.runWithConfig(testConfig) {
-        check("tsx/unresolvedNs.tsx")
-        check("ts/unresolvedNs.ts")
-        check("jsx/unresolvedNs.jsx")
-        check("js/unresolvedNs.js")
         check("php/unresolvedNs.php")
     }
 
