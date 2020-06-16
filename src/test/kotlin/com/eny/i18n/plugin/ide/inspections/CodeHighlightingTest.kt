@@ -58,6 +58,13 @@ abstract class CodeHighlightingTestBase(private val codeGenerator: CodeGenerator
         "assets/translation.${translationGenerator.ext()}",
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
+
+    fun testResolved() = check(
+        "resolved.${codeGenerator.ext()}",
+        codeGenerator.generate("\"test:tst1.base.single\""),
+        "assets/translation.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 }
 
 class CodeHighlightingRandomTest: CodeHighlightingTestBase(
@@ -113,10 +120,7 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testResolved() = myFixture.runWithConfig(testConfig) {
-        check("tsx/resolved.tsx", translation)
-        check("ts/resolved.ts", translation)
-        check("jsx/resolved.jsx", translation)
-        check("js/resolved.js", translation)
+
         check("php/resolved.php", translation)
     }
 
