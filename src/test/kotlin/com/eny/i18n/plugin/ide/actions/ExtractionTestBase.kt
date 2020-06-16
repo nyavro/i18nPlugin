@@ -34,6 +34,11 @@ abstract class ExtractionTestBase: BasePlatformTestCase() {
         assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
     }
 
+    protected fun doUnavailable(fileName: String, code: String) {
+        myFixture.configureByText(fileName, code)
+        assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
+    }
+
     protected fun doRun(src: String, patched: String, translation: String, patchedTranslation: String, newKey: String) {
         doRun(src, patched, translation, patchedTranslation, predefinedTextInputDialog(newKey))
     }

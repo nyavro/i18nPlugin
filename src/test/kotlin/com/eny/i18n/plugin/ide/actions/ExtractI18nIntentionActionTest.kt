@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.utils.generator.code.*
 
 class ExtractionCancellationTest: ExtractionTestBase() {
 
@@ -28,7 +29,7 @@ class ExtractionCancellationTest: ExtractionTestBase() {
     }
 }
 
-abstract class ExtractI18nIntentionActionBase(private val language: String, private val translationFormat: String): ExtractionTestBase() {
+abstract class ExtractI18nIntentionActionBase(private val language: String, private val translationFormat: String, private val codeGenerator: CodeGenerator): ExtractionTestBase() {
 
     protected val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")
 
@@ -60,20 +61,20 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
     }
 
     fun testKeyContext() {
-        doUnavailable("$language/keyContext.$language")
+        doUnavailable("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"test:ref<caret>.value.sub1\""))
     }
 }
 
-class ExtractI18nIntentionActionJsJsonTest: ExtractI18nIntentionActionBase("js","json")
-class ExtractI18nIntentionActionTsJsonTest: ExtractI18nIntentionActionBase("ts", "json")
-class ExtractI18nIntentionActionTsxJsonTest: ExtractI18nIntentionActionBase("tsx", "json")
-class ExtractI18nIntentionActionJsxJsonTest: ExtractI18nIntentionActionBase("jsx", "json")
-class ExtractI18nIntentionActionJsYamlTest: ExtractI18nIntentionActionBase("js","yml")
-class ExtractI18nIntentionActionTsYamlTest: ExtractI18nIntentionActionBase("ts", "yml")
-class ExtractI18nIntentionActionTsxYamlTest: ExtractI18nIntentionActionBase("tsx", "yml")
-class ExtractI18nIntentionActionJsxYamlTest: ExtractI18nIntentionActionBase("jsx", "yml")
+class ExtractI18nIntentionActionJsJsonTest: ExtractI18nIntentionActionBase("js","json", JsCodeGenerator())
+class ExtractI18nIntentionActionTsJsonTest: ExtractI18nIntentionActionBase("ts", "json", TsCodeGenerator())
+class ExtractI18nIntentionActionTsxJsonTest: ExtractI18nIntentionActionBase("tsx", "json", TsxCodeGenerator())
+class ExtractI18nIntentionActionJsxJsonTest: ExtractI18nIntentionActionBase("jsx", "json", JsxCodeGenerator())
+class ExtractI18nIntentionActionJsYamlTest: ExtractI18nIntentionActionBase("js","yml", JsCodeGenerator())
+class ExtractI18nIntentionActionTsYamlTest: ExtractI18nIntentionActionBase("ts", "yml", TsCodeGenerator())
+class ExtractI18nIntentionActionTsxYamlTest: ExtractI18nIntentionActionBase("tsx", "yml", TsxCodeGenerator())
+class ExtractI18nIntentionActionJsxYamlTest: ExtractI18nIntentionActionBase("jsx", "yml", JsxCodeGenerator())
 
-abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: String): ExtractI18nIntentionActionBase("php", translationFormat) {
+abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: String): ExtractI18nIntentionActionBase("php", translationFormat, PhpCodeGenerator()) {
 
     fun testKeyExtractionSingleQuoted() = myFixture.runWithConfig(testConfig) {
         doRun(
