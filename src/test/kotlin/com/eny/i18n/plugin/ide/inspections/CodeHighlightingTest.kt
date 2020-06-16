@@ -44,6 +44,13 @@ abstract class CodeHighlightingTestBase(private val codeGenerator: CodeGenerator
         "test.${translationGenerator.ext()}",
         translationGenerator.generateContent("tst1", "base", "single", "only one value")
     )
+
+    fun testReferenceToObject() = check(
+        "refToObject.${codeGenerator.ext()}",
+        codeGenerator.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+        "test.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 }
 
 class CodeHighlightingRandomTest: CodeHighlightingTestBase(
@@ -87,10 +94,6 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
     }
 
     fun testReferenceToObject() = myFixture.runWithConfig(testConfig) {
-        check("tsx/refToObject.tsx", translation)
-        check("ts/refToObject.ts", translation)
-        check("jsx/refToObject.jsx", translation)
-        check("js/refToObject.js", translation)
         check("php/refToObject.php", translation)
     }
 
