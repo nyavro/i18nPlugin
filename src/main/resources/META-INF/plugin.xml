@@ -19,7 +19,7 @@
 
     <change-notes><![CDATA[
         <div>
-            <h3>2.0.1</h3>
+            <h3>2.0.2</h3>
             <ul>
                 <li>Multiple default namespaces support</li>
                 <li>Vue i18n code completion for root key fragments</li>
