@@ -1,1 +1,0 @@
-const key = (t: (string) => string, arg: string) => (<div>{t(`test:tst1.base.${arg}`)}</div>);
