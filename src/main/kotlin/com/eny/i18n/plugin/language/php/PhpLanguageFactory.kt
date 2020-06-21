@@ -52,7 +52,12 @@ internal class PhpFoldingProvider: FoldingProvider {
 }
 
 internal class PhpCallContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean = PhpPatternsExt.phpArgument("t", 0).accepts(element)
+    override fun accepts(element: PsiElement): Boolean =
+        listOf("String").contains(element.type()) &&
+            PhpPatternsExt.phpArgument("t", 0).let { pattern ->
+                pattern.accepts(element) ||
+                pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list"}))
+            }
 }
 
 internal class PhpReferenceAssistant: ReferenceAssistant {

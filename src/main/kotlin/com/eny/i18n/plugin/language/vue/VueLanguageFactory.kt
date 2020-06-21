@@ -3,11 +3,7 @@ package com.eny.i18n.plugin.language.vue
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.FullKeyExtractor
-import com.eny.i18n.plugin.key.parser.KeyParser
-import com.eny.i18n.plugin.parser.DummyContext
-import com.eny.i18n.plugin.parser.KeyExtractorImpl
-import com.eny.i18n.plugin.parser.StringLiteralKeyExtractor
+import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.toBoolean
 import com.eny.i18n.plugin.utils.unQuote
@@ -161,7 +157,13 @@ internal class VueFoldingProvider: FoldingProvider {
 }
 
 internal class VueCallContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean = JSPatterns.jsArgument("\$t", 0).accepts(element)
+    override fun accepts(element: PsiElement): Boolean =
+        listOf("JS:STRING_LITERAL", "JS:LITERAL_EXPRESSION", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION")
+            .contains(element.type()) &&
+            JSPatterns.jsArgument("\$t", 0).let { pattern ->
+                pattern.accepts(element) ||
+                        pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
+            }
 }
 
 internal class VueReferenceAssistant: ReferenceAssistant {
