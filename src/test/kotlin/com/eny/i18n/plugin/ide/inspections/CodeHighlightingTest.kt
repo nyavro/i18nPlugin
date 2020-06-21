@@ -48,6 +48,13 @@ abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerat
         "assets/test.${translationGenerator.ext()}",
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
+
+    fun testExpressionInsideTranslation() = check(
+        "expressionInTranslation.${codeGenerator.ext()}",
+        codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
+        "test.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 }
 
 abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, translationGenerator: TranslationGenerator): CodeHighlightingTestBase(codeGenerator, translationGenerator) {
@@ -55,7 +62,7 @@ abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, t
         "defNsUnresolved.${codeGenerator.ext()}",
         codeGenerator.multiGenerate(
             "\"<warning descr=\"Missing default translation file\">missing.default.translation</warning>\"",
-            "`<warning descr=\"Missing default translation file\">missing.default.in.{\$template}</warning>`"
+            "`<warning descr=\"Missing default translation file\">missing.default.in.\${template}</warning>`"
         ),
         "assets/test.${translationGenerator.ext()}",
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
@@ -126,28 +133,12 @@ abstract class PhpHighlightingTest(translationGenerator: TranslationGenerator): 
         "test.${translationGenerator.ext()}",
         translationGenerator.generateContent("root", "first", "key", "value")
     )
+
 }
 
-class JsDialectCodeHighlightingRandomTest: JsDialectCodeHighlightingTestBase(
-    randomOf(
-        ::JsCodeGenerator,
-        ::TsCodeGenerator,
-        ::JsxCodeGenerator,
-        ::TsxCodeGenerator)(),
-    randomOf(
-        ::JsonTranslationGenerator,
-        ::YamlTranslationGenerator)()
-)
+abstract class VueHighlightingTest(private val translationGenerator: TranslationGenerator) : BasePlatformTestCase() {
 
-class PhpCodeHighlightingRandomTest: PhpHighlightingTest(
-    randomOf(
-        ::JsonTranslationGenerator,
-        ::YamlTranslationGenerator)()
-)
-
-internal class CodeHighlightingTest : BasePlatformTestCase() {
-
-    private val translation = "assets/test.json"
+    private val codeGenerator = VueCodeGenerator()
 
     override fun getTestDataPath(): String {
         return "src/test/resources/codeHighlighting"
@@ -160,19 +151,72 @@ internal class CodeHighlightingTest : BasePlatformTestCase() {
         myFixture.checkHighlighting(true, true, true, true)
     }
 
-    fun testReferenceToObjectVue() = myFixture.runVueConfig(testConfig) {
-        check("vue/refToObject.vue", "assets/en-US.json")
+    private fun check(fileName: String, code: String, translationName: String, translation: String) = myFixture.runVueConfig(testConfig) {
+        myFixture.addFileToProject(translationName, translation)
+        myFixture.configureByText(fileName, code)
+        myFixture.checkHighlighting(true, true, true, true)
     }
 
-    fun testResolvedVue() = myFixture.runVueConfig(testConfig) {
-        check("vue/resolved.vue", "assets/test.json")
-    }
+    fun testReferenceToObjectVue() = check(
+        "refToObject.${codeGenerator.ext()}",
+        codeGenerator.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+        "assets/en-US.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 
-    fun testDefaultNsUnresolvedVue() = myFixture.runVueConfig(testConfig) {
-        check("vue/unresolvedKey.vue", "assets/en-US.json")
-    }
+    fun testResolvedVue() = check(
+        "resolved.${codeGenerator.ext()}",
+        codeGenerator.generate("\"test:tst1.base.single\""),
+        "assets/en-US.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 
-    fun testNotTranslationArgumentVue() = myFixture.runVueConfig(testConfig) {
-        check("vue/unresolvedKey.vue", "assets/en-US.json")
-    }
+    fun testDefaultNsUnresolvedVue() = check(
+        "defNsUnresolved.${codeGenerator.ext()}",
+        codeGenerator.multiGenerate(
+            "\"<warning descr=\"Unresolved key\">missing.default.translation</warning>\"",
+            "`<warning descr=\"Unresolved key\">missing.default.in.\${template}</warning>`"
+        ),
+        "assets/none.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
+
+    fun testNotArg() = check(
+        "defNsUnresolved.${codeGenerator.ext()}",
+        codeGenerator.generateInvalid(
+            "\"test:tst1.base5.single\""
+        ),
+        "assets/en-US.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
+
+    fun testExpressionInsideTranslation() = check(
+        "expressionInTranslation.${codeGenerator.ext()}",
+        codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
+        "assets/en-US.${translationGenerator.ext()}",
+        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
 }
+
+class JsDialectCodeHighlightingRandomTest: JsDialectCodeHighlightingTestBase(
+        randomOf(
+                ::JsCodeGenerator,
+                ::TsCodeGenerator,
+                ::JsxCodeGenerator,
+                ::TsxCodeGenerator)(),
+        randomOf(
+                ::JsonTranslationGenerator,
+                ::YamlTranslationGenerator)()
+)
+
+class PhpCodeHighlightingRandomTest: PhpHighlightingTest(
+        randomOf(
+                ::JsonTranslationGenerator,
+                ::YamlTranslationGenerator)()
+)
+
+class VueCodeHighlightingRandomTest: VueHighlightingTest(
+        randomOf(
+                ::JsonTranslationGenerator,
+                ::YamlTranslationGenerator)()
+)

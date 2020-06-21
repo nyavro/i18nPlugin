@@ -5,7 +5,7 @@ import com.intellij.util.ProcessingContext
 import com.jetbrains.php.injection.PhpElementPattern
 import com.jetbrains.php.lang.psi.elements.FunctionReference
 import com.jetbrains.php.lang.psi.elements.ParameterList
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
+import com.jetbrains.php.lang.psi.elements.PhpExpression
 
 /**
  * Php platform extended patterns
@@ -17,11 +17,11 @@ class PhpPatternsExt {
         /**
          * Captures argument of php function call
          */
-        fun phpArgument(functionName: String, index: Int): PhpElementPattern.Capture<StringLiteralExpression> =
-            PhpElementPattern.Capture<StringLiteralExpression>(
-                object : InitialPatternCondition<StringLiteralExpression>(StringLiteralExpression::class.java) {
+        fun phpArgument(functionName: String, index: Int): PhpElementPattern.Capture<PhpExpression> =
+            PhpElementPattern.Capture<PhpExpression>(
+                object : InitialPatternCondition<PhpExpression>(PhpExpression::class.java) {
                     override fun accepts(o: Any?, context: ProcessingContext): Boolean =
-                        (o as? StringLiteralExpression)
+                        (o as? PhpExpression)
                             ?.let { it.parent as? ParameterList }
                             ?.let {
                                 val function = it.parent

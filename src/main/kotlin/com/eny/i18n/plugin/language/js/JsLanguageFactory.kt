@@ -47,7 +47,13 @@ internal class JsFoldingProvider: FoldingProvider {
 }
 
 internal class JsCallContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean = JSPatterns.jsArgument("t", 0).accepts(element)
+    override fun accepts(element: PsiElement): Boolean =
+        listOf("JS:STRING_LITERAL", "JS:LITERAL_EXPRESSION", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION")
+            .contains(element.type()) &&
+            JSPatterns.jsArgument("t", 0).let { pattern ->
+                pattern.accepts(element) ||
+                pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
+            }
 }
 
 internal class JsReferenceAssistant: ReferenceAssistant {
