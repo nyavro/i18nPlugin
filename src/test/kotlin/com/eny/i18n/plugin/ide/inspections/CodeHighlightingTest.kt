@@ -146,11 +146,6 @@ abstract class VueHighlightingTest(private val translationGenerator: Translation
 
     private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
 
-    private fun check(filePath: String, assetPath: String) {
-        myFixture.configureByFiles(filePath, assetPath)
-        myFixture.checkHighlighting(true, true, true, true)
-    }
-
     private fun check(fileName: String, code: String, translationName: String, translation: String) = myFixture.runVueConfig(testConfig) {
         myFixture.addFileToProject(translationName, translation)
         myFixture.configureByText(fileName, code)
