@@ -4,6 +4,12 @@ class JsonTranslationGenerator: TranslationGenerator {
 
     override fun ext(): String = "json"
 
+    override fun generateContent(key: String, value: String): String = """
+    { 
+        "$key": "$value"  
+    }   
+    """.trimIndent()
+
     override fun generateContent(root: String, key: String, value: String): String = """
     {
         "$root": { 

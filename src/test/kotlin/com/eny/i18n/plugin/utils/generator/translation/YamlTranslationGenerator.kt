@@ -4,6 +4,13 @@ class YamlTranslationGenerator: TranslationGenerator {
 
     override fun ext(): String = "yml"
 
+    override fun generateContent(key: String, value: String): String = """
+    $key: $value
+    subsection2: 
+        key21: Ref
+        key22: Etwas
+    """.trimIndent()
+
     override fun generateContent(root: String, key: String, value: String): String = """ 
     $root:   
         $key: $value
