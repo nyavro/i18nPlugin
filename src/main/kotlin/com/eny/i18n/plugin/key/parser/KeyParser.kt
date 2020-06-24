@@ -77,6 +77,7 @@ private class Start(private val init: Literal?) : State {
             token is Literal -> Start(init?.merge(token) ?: token)
             else -> Error("Invalid ns separator position (0)") // Never get here
         }
+    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = init?.let {FullKey(source, null, listOf(it), isTemplate)}
 }
 
 /**

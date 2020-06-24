@@ -100,6 +100,14 @@ abstract class CodeCompletionTestBase(
         translationGenerator.generateContent("tst1", "base", "single", "only one value")
     )
 
+    fun testInvalidCompletion() = checker.doCheck(
+            "partial.${codeGenerator.ext()}",
+            codeGenerator.generate(keyGenerator.generate("test", "tst1.base.si<caret>ng")),
+            codeGenerator.generate(keyGenerator.generate("test","tst1.base.sing")),
+            translationGenerator.ext(),
+            translationGenerator.generateContent("tst1", "base", "single", "only one value")
+    )
+
 //    fun testRename() {
 //        myFixture.configureByFiles("RenameTestData.java", "RenameTestData.simple")
 //        myFixture.renameElementAtCaret("websiteUrl")

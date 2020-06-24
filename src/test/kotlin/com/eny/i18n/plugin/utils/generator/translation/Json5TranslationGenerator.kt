@@ -1,19 +1,19 @@
 package com.eny.i18n.plugin.utils.generator.translation
 
-class JsonTranslationGenerator: TranslationGenerator {
+class Json5TranslationGenerator: TranslationGenerator {
 
-    override fun ext(): String = "json"
+    override fun ext(): String = "json5"
 
     override fun generateContent(key: String, value: String): String = """
     { 
-        "$key": "$value"  
+        $key: '$value'  
     }   
     """.trimIndent()
 
     override fun generateContent(root: String, key: String, value: String): String = """
     {
-        "$root": { 
-            "$key": "$value" 
+        $root: { 
+            "$key": '$value' 
         }
     }   
     """.trimIndent()
@@ -21,8 +21,8 @@ class JsonTranslationGenerator: TranslationGenerator {
     override fun generateContent(root: String, first: String, key: String, value: String): String = """
     {
         "$root": {
-            "$first": {
-                "$key": "$value"
+            $first: {
+                '$key': "$value"
             },
             "plurals": {
                 "value-1": "tt",
@@ -35,11 +35,11 @@ class JsonTranslationGenerator: TranslationGenerator {
 
     override fun generateContent(root: String, first: String, second: String, key: String, value: String): String = """
     {
-        "$root": {
+        '$root': {
             "$first": {
-                "$second": {
+                $second: {
                     "key11": "ref11",
-                    "$key": "$value"
+                    '$key': "$value"
                 },
                 "subsection2": {
                     "key21": "Ref",
@@ -52,11 +52,11 @@ class JsonTranslationGenerator: TranslationGenerator {
 
     override fun generatePlural(root: String, first: String, key: String, value1: String, value2: String, value5: String): String = """
     {
-        "$root": {
-            "$first": {
+        $root: {
+            '$first': {
                 "$key-1": "$value1"
                 "$key-2": "$value2"
-                "$key-5": "$value5"
+                '$key-5': '$value5'
             },
             "second": {
                 "value": "tt"
@@ -67,9 +67,9 @@ class JsonTranslationGenerator: TranslationGenerator {
 
     override fun generateInvalid(): String = """
         {
-          "ref": {
+          ref: {
             "section": {
-              "key": "Reference in json",
+              key: 'Reference in json',
               "invalid":
             }
           }

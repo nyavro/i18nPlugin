@@ -60,13 +60,4 @@ internal class InvalidExpressionTest : ParserTestBase {
         )
         assertNull(parse(invalidExpression))
     }
-
-//probably_not_a_reference_to_i18n
-    @Test
-    fun tooShortToBeKey() {
-        val literal = listOf(
-            KeyElement.literal("probably_not_a_reference_to_i18n")
-        )
-        assertNull(parse(literal))
-    }
 }

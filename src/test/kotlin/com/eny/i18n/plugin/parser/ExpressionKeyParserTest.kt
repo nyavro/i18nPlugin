@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.parser
 import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 internal class ExpressionKeyParserTest : ParserTestBase {
 

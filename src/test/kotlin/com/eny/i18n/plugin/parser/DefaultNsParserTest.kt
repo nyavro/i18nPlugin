@@ -88,6 +88,17 @@ internal class DefaultNsParserTest : ParserTestBase {
             assertEquals(it.expected, toTestString(fullKey))
         }
     }
+
+    @Test
+    fun rootLevelKey() {
+        val literal = listOf(
+            KeyElement.literal("root")
+        )
+        val fullKey = parse(literal)
+        assertNotNull(fullKey)
+        assertNull(fullKey.ns)
+        assertEquals("root{4}", toTestString(fullKey))
+    }
 }
 
 
