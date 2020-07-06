@@ -19,6 +19,13 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>2.1.0</h3>
+            <ul>
+                <li>Expressions inside translation function</li>
+                <li>Root level keys for default namespace support</li>
+            </ul>
+        </div>
+        <div>
             <h3>2.0.2</h3>
             <ul>
                 <li>Multiple default namespaces support</li>
