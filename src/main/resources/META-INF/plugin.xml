@@ -113,5 +113,6 @@
         <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
+        <lang.documentationProvider language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.hint.JsHintProvider"/>
     </extensions>
 </idea-plugin>
