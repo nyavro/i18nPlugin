@@ -51,3 +51,17 @@ Intellij idea i18next support plugin
 -   In the case of a single translation matching to given key the translation displayed as a hint (Ctrl + hover):
  
     ![Single translatin hint](docs/gif/translation-as-hint.gif)
+    
+ ### Configuration options 
+ 
+ ##### File -> Tools -> I18n plugin configuration 
+ 
+ -  Default namespace
+ 
+    Configure default namespace translation file. 
+    Multiple default namespaces separated by comma, semicolon or whitespace:
+    
+        first;second third,fourth
+        
+    will resolve translations in files first.json, second.json, third.json, fourth.json
+     
