@@ -4,5 +4,6 @@
         <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.references.code.PhpReferenceContributor"/>
         <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.completion.PhpCompletionContributor"/>
         <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.plugin.ide.folding.PhpFoldingBuilder"/>
+        <lang.documentationProvider language="PHP" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
     </extensions>
 </idea-plugin>

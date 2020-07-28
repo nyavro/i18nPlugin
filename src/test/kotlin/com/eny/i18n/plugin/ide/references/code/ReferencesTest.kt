@@ -98,7 +98,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
 
     fun testExpressionReference() {
         myFixture.addFileToProject(
-        "assets/test.${tg.ext()}",
+            "assets/test.${tg.ext()}",
             tg.generateContent("ref", "section", "key", "value"))
         myFixture.configureByText("testPartiallyResolvedReference.${cg.ext()}", cg.generate("`test:ref.section<caret>.\${b ? 'key' : 'key2'}`"))
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
