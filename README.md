@@ -40,8 +40,14 @@ Intellij idea i18next support plugin
 
 -   I18nPlugin provides navigation from key to its declaration in Json resource    
 
-    ![Reference to plural value](docs/img/p6.png)
+    ![Navigation from key to translation](docs/img/p6.png)
 
 -   and to partially resolved keys:
 
-    ![Reference to plural value](docs/img/p7.png)
+    ![Navigation from partially resolved](docs/img/p7.png)
+    
+ ### Hints
+ 
+-   In the case of a single translation matching to given key the translation displayed as a hint (Ctrl + hover):
+ 
+    ![Single translatin hint](docs/gif/translation-as-hint.gif)
