@@ -48,6 +48,6 @@ Intellij idea i18next support plugin
     
  ### Hints
  
- -  In the case of a single translation matching to given key the translation displayed as a hint (Ctrl + hover):
+-   In the case of a single translation matching to given key the translation displayed as a hint (Ctrl + hover):
  
     ![Single translatin hint](docs/gif/translation-as-hint.gif)
