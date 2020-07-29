@@ -53,10 +53,9 @@ Intellij idea i18next support plugin
     ![Single translatin hint](docs/gif/translation-as-hint.gif)
     
    ### Configuration options 
+   (File->Tools->I18n plugin configuration) 
  
-   ##### File -> Tools -> I18n plugin configuration 
- 
- -  Default namespace
+-   Default namespace
  
     Configure up to 100 default namespace translation files. 
     Multiple default namespaces separated by comma, semicolon or whitespace:
