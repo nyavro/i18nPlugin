@@ -23,10 +23,20 @@ data class Config (
 ) {
 
     /**
+     * Max count of default namespaces
+     */
+    private val MAX_DEFAULT_NAMESPACES = 100
+
+    /**
      * Gets list of default namespaces
      */
     fun defaultNamespaces(): List<String> =
-        defaultNs.whenMatches {it.isNotBlank()}.default(Config().defaultNs).split("[;|,\\s]".toRegex()).filter {it.isNotBlank()}
+        defaultNs
+            .whenMatches {it.isNotBlank()}
+            .default(Config().defaultNs)
+            .split("[;|,\\s]".toRegex())
+            .filter{it.isNotBlank()}
+            .take(MAX_DEFAULT_NAMESPACES)
 
     /**
      * Gets project's search scope

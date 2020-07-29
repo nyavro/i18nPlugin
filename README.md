@@ -58,7 +58,7 @@ Intellij idea i18next support plugin
  
  -  Default namespace
  
-    Configure default namespace translation file. 
+    Configure up to 100 default namespace translation files. 
     Multiple default namespaces separated by comma, semicolon or whitespace:
     
         first;second third,fourth
