@@ -51,6 +51,9 @@ class Settings : PersistentStateComponent<Settings> {
 
     internal var yamlContentGenerationEnabled = default.yamlContentGenerationEnabled
 
+    /**
+     * Returns plugin configuration
+     */
     fun config(): Config {
         if (ApplicationManager.getApplication().isHeadlessEnvironment) {
             synchronized(this) {
