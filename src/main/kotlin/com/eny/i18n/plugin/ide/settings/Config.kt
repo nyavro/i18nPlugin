@@ -5,6 +5,9 @@ import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.project.Project
 import com.intellij.psi.search.GlobalSearchScope
 
+/**
+ * Configuration holder
+ */
 data class Config (
     val searchInProjectOnly: Boolean = true,
     val nsSeparator: String = ":",
@@ -22,11 +25,18 @@ data class Config (
     val yamlContentGenerationEnabled: Boolean = true
 ) {
 
+    private val MAX_DEFAULT_NAMESPACES = 100
+
     /**
      * Gets list of default namespaces
      */
     fun defaultNamespaces(): List<String> =
-        defaultNs.whenMatches {it.isNotBlank()}.default(Config().defaultNs).split("[;|,\\s]".toRegex()).filter {it.isNotBlank()}
+        defaultNs
+            .whenMatches {it.isNotBlank()}
+            .default(Config().defaultNs)
+            .split("[;|,\\s]".toRegex())
+            .filter{it.isNotBlank()}
+            .take(MAX_DEFAULT_NAMESPACES)
 
     /**
      * Gets project's search scope

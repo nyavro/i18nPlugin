@@ -13,7 +13,7 @@
 Intellij idea i18next support plugin
 
 ## Features
- ### Annotations
+   ### Annotations
 
 -   Annotates correct i18n keys:
 
@@ -36,12 +36,31 @@ Intellij idea i18next support plugin
     ![Reference to plural value](docs/img/p5.png)
 
 
- ### Navigation
+    ### Navigation
 
 -   I18nPlugin provides navigation from key to its declaration in Json resource    
 
-    ![Reference to plural value](docs/img/p6.png)
+    ![Navigation from key to translation](docs/img/p6.png)
 
 -   and to partially resolved keys:
 
-    ![Reference to plural value](docs/img/p7.png)
+    ![Navigation from partially resolved](docs/img/p7.png)
+    
+   ### Hints
+ 
+-   In the case of a single translation matching to given key the translation displayed as a hint (Ctrl + hover):
+ 
+    ![Single translatin hint](docs/gif/translation-as-hint.gif)
+    
+   ### Configuration options 
+   (File->Tools->I18n plugin configuration) 
+ 
+-   Default namespace
+ 
+    Configure up to 100 default namespace translation files. 
+    Multiple default namespaces separated by comma, semicolon or whitespace:
+    
+        first;second third,fourth
+        
+    will resolve translations in files first.json, second.json, third.json, fourth.json
+     

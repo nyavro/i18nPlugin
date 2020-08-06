@@ -57,7 +57,10 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals(setOf("Welcome", "Willkommen"), getResolvedValues(element))
     }
 
-    fun testReferenceMultiDefaultNs() = myFixture.runWithConfig(Config(defaultNs = "third,second;first ")) {
+    private fun genMultiNs(namespaces: List<String>) =
+        namespaces.fold(""){acc, ns -> acc + ns + ",; ".random()}
+
+    fun testReferenceMultiDefaultNs() = myFixture.runWithConfig(Config(defaultNs = genMultiNs(listOf("second","third","first")))) {
         //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
         myFixture.addFileToProject("assets/en/first.${tg.ext()}", tg.generateContent("main","fruit", "apple"))
         myFixture.addFileToProject("assets/en/second.${tg.ext()}", tg.generateContent("main", "fruit", "orange"))
@@ -98,7 +101,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
 
     fun testExpressionReference() {
         myFixture.addFileToProject(
-        "assets/test.${tg.ext()}",
+            "assets/test.${tg.ext()}",
             tg.generateContent("ref", "section", "key", "value"))
         myFixture.configureByText("testPartiallyResolvedReference.${cg.ext()}", cg.generate("`test:ref.section<caret>.\${b ? 'key' : 'key2'}`"))
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
