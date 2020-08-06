@@ -19,6 +19,13 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>2.2.0</h3>
+            <ul>
+                <li>Show translation as a ctrl+hover hint</li>
+                <li>Default namespace expanded up to 1000 characters (and up to 100 default namespaces)</li>
+            </ul>
+        </div>
+        <div>
             <h3>2.1.0</h3>
             <ul>
                 <li>Expressions inside translation function</li>
