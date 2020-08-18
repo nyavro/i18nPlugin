@@ -8,3 +8,5 @@
 /examples/vue-i18n-js-config-simple/node_modules/**
 /examples/vue-i18n-files-simple/.idea/**
 /examples/vue-i18n-files-simple/node_modules/**
+/examples/react-i18n-using-hooks/node_modules/**
+/examples/react-i18n-using-hooks/.idea/**
