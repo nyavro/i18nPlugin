@@ -27,10 +27,11 @@ class KeyExtractor {
         val quickFix = if (files.isEmpty()) {
             val contentGenerator = if (config.preferYamlFilesGeneration) YamlContentGenerator() else JsonContentGenerator()
             val folderSelector = if (config.vue) Vue18nTranslationFolderSelector(project) else I18NextTranslationFolderSelector(project)
+            //TODO - get rid of hardcoded 'en' value
             val fileName = if (config.vue) "en" else (i18nKey.ns?.text ?: config.defaultNamespaces().first())
             CreateTranslationFileQuickFix(i18nKey, contentGenerator, folderSelector, fileName, source, onComplete)
         } else {
-            CreateKeyQuickFix(i18nKey, UserChoice(),  PluginBundle.getMessage("quickfix.create.key"), generators, source, onComplete)
+            CreateKeyQuickFix(i18nKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators, source, onComplete)
         }
         quickFix.invoke(project, editor)
     }

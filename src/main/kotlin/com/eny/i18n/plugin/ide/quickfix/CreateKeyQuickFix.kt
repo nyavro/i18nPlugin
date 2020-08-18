@@ -1,10 +1,10 @@
 package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.factory.ContentGenerator
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.LocalizationSource
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.intellij.openapi.application.ApplicationManager
@@ -22,6 +22,7 @@ class CreateKeyQuickFix(
         private val selector: SourcesSelector,
         private val commandCaption: String,
         private val generators: List<ContentGenerator>,
+        //TODO: request translation value after invoking 'Create i18n key' quickfix
         private val translationValue: String? = null,
         private val onComplete: () -> Unit = {}): QuickFix(), CompositeKeyResolver<PsiElement> {
 
@@ -37,8 +38,8 @@ class CreateKeyQuickFix(
             }
         }
 
-    private fun createPropertyInFiles(project: Project, editor: Editor, jsonFiles: List<LocalizationSource>) =
-        selector.select(jsonFiles, {source: LocalizationSource -> createPropertyInFile(project, source)}, onComplete, editor)
+    private fun createPropertyInFiles(project: Project, editor: Editor, sources: List<LocalizationSource>) =
+        selector.select(sources, { source: LocalizationSource -> createPropertyInFile(project, source)}, onComplete, editor)
 
     private fun createPropertyInFile(project: Project, target: LocalizationSource) {
         val ref = resolveCompositeKey(

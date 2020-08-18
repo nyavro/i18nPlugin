@@ -11,14 +11,14 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.FilenameIndex
-import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.yaml.YAMLFileType
+import java.io.File
 
 /**
  * Describes localization source.
  * May be root of json, yaml file, js object
  */
-data class LocalizationSource(val element: PsiElement, val name: String, val parent: String)
+data class LocalizationSource(val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: FileType)
 /**
  * Provides search of localization files (json, yaml)
  */
@@ -31,11 +31,11 @@ class LocalizationSourceSearch(private val project: Project) {
      * Finds json roots by json file name
      */
     fun findFilesByName(fileName: String?): List<LocalizationSource> =
-        findVirtualFilesByName(fileName?.let {listOf(it)} ?: config.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map {LocalizationSource(it, it.name, it.containingDirectory.name)}} +
+        findVirtualFilesByName(fileName?.let {listOf(it)} ?: config.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map (::localizationSource)} +
             if (config.vue) {
                 findVirtualFilesUnder(config.vueDirectory)
                     .filter {file -> translationFileTypes.any {file.fileType==it}}
-                    .map {LocalizationSource(it, it.name, it.containingDirectory.name)}
+                    .map (::localizationSource)
 //                val index = vueTranslationFiles.find {it.name.matches("index\\.(js|ts)".toRegex())}
 //                if (index == null) {
 //                    if (settings.jsConfiguration.isNotBlank()) {
@@ -48,6 +48,21 @@ class LocalizationSourceSearch(private val project: Project) {
 //                }
             }
             else listOf()
+
+    private fun localizationSource(file: PsiFile): LocalizationSource =
+        LocalizationSource(
+            file,
+            file.name,
+            file.containingDirectory.name,
+            pathToRoot(
+            file.project.basePath ?: "",
+            file
+                .containingDirectory
+                .virtualFile
+                .path
+            ).trim(File.separatorChar) + File.separator + file.name,
+            file.fileType
+        )
 
 //    private fun resolveJsRootsFromI18nObject(file: PsiFile?): List<LocalizationSource> {
 //        if (file == null) {
