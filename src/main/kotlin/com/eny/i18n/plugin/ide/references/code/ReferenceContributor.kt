@@ -58,7 +58,7 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                             .findFilesByName(fullKey.ns?.text)
                             .map {resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element))}
                             .filter {it.path.isNotEmpty()}
-                            .whenNonEmpty {listOf(I18nReference(element, TextRange(1, element.textLength - 1), it))}
+                            .whenNonEmpty {listOf(I18nReference(element, TextRange(1 + element.text.indexOf(fullKey.source), element.textLength - 1), it)) }
                     } ?: emptyList()
                 }
             }

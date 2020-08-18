@@ -13,7 +13,7 @@ const SampleComponent = () => (
         </Trans>
         <br/>
         Trans namespace:
-        <Trans i18nKey="main:trans.description">
+        <Trans i18nKey="main:trans.description1">
             (With namespace) To get started, edit <code>src/App.js</code> and save to reload. ::SampleComponent::NS::
         </Trans>
     </div>

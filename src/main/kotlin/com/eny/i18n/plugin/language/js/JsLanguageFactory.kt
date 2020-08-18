@@ -17,6 +17,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlAttribute
 
 /**
  * Vue language components factory
@@ -53,7 +54,8 @@ internal class JsCallContext: CallContext {
             JSPatterns.jsArgument("t", 0).let { pattern ->
                 pattern.accepts(element) ||
                 pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
-            }
+            } ||
+            (element is XmlAttribute) && element.name == "i18nKey"
 }
 
 internal class JsReferenceAssistant: ReferenceAssistant {

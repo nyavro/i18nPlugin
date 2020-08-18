@@ -5,7 +5,10 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.KeyRangesCalculator
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.utils.isQuoted
+import com.eny.i18n.plugin.utils.nullableToList
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
@@ -24,7 +27,11 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
         }
 
     private fun annotateI18nLiteral(fullKey: FullKey, element: PsiElement, holder: AnnotationHolder) {
-        val annotationHelper = AnnotationHelper(holder, KeyRangesCalculator(element.textRange, element.text.isQuoted()), element.project)
+        val annotationHelper = AnnotationHelper(
+            holder,
+            KeyRangesCalculator(element.textRange.shiftRight(element.text.indexOf(fullKey.source)), element.text.isQuoted()),
+            element.project
+        )
         val files = LocalizationSourceSearch(element.project).findFilesByName(fullKey.ns?.text)
         if (files.isEmpty()) {
             if (fullKey.ns == null) {

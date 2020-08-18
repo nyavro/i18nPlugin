@@ -33,7 +33,8 @@ class KeyExtractorImpl: Extractor {
         return listOf(
             TemplateKeyExtractor(),
             LiteralKeyExtractor(),
-            StringLiteralKeyExtractor()
+            StringLiteralKeyExtractor(),
+            XmlAttributeKeyExtractor()
         )
             .find {it.canExtract(element)}
             ?.let{parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
