@@ -37,7 +37,8 @@ class KeyRequest {
             KeyRequestResult(null, true)
         } else {
             KeyRequestResult(
-                parser.parse(listOf(KeyElement.literal(keyStr)),
+                parser.parse(
+                    Pair(listOf(KeyElement.literal(keyStr)), null),
                     nsSeparator = config.nsSeparator,
                     keySeparator = config.keySeparator,
                     emptyNamespace = config.vue

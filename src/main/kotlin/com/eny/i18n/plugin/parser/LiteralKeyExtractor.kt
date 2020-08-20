@@ -9,15 +9,15 @@ import com.intellij.psi.xml.XmlElementType
  */
 class LiteralKeyExtractor: KeyExtractor {
 
-    override fun canExtract(element: PsiElement): Boolean {
-        val b = element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE
-        return b
-    }
+    override fun canExtract(element: PsiElement): Boolean =
+        element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE
 
-    override fun extract(element: PsiElement): List<KeyElement> =
-        (element as PsiLiteralValue).value?.let {it as? String}?.let {
-            listOf(KeyElement.literal(it))
-        } ?: listOf()
-
+    override fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?> =
+        Pair(
+            (element as PsiLiteralValue).value?.let {it as? String}?.let {
+                listOf(KeyElement.literal(it))
+            } ?: listOf(),
+            null
+        )
 }
 

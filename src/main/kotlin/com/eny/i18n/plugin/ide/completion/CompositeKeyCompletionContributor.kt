@@ -66,7 +66,7 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
 
     private fun findCompletions(project: Project, prefix: String, source: String, ns: String?, compositeKey: List<Literal>): List<LookupElementBuilder> {
         return groupPlurals(
-            LocalizationSourceSearch(project).findFilesByName(ns).flatMap {
+            LocalizationSourceSearch(project).findFilesByNames(ns.nullableToList()).flatMap {
                 listCompositeKeyVariants(
                     compositeKey,
                     PsiElementTree.create(it.element),

@@ -12,6 +12,6 @@ class StringLiteralKeyExtractor: KeyExtractor {
     override fun canExtract(element: PsiElement): Boolean =
         listOf("JS:STRING_LITERAL", "quoted string", "String").any{element.type().contains(it)}
 
-    override fun extract(element: PsiElement): List<KeyElement> =
-        listOf(KeyElement.literal(element.text.unQuote()))
+    override fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?> =
+        Pair(listOf(KeyElement.literal(element.text.unQuote())), null)
 }

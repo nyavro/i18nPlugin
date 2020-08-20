@@ -12,9 +12,12 @@ class XmlAttributeKeyExtractor: KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean = (element is XmlAttribute) && element.name == "i18nKey"
 
-    override fun extract(element: PsiElement): List<KeyElement> =
-        (element as? XmlAttribute)
-            ?.value
-            .nullableToList()
-            .map {KeyElement.literal(it)}
+    override fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?> =
+        Pair(
+            (element as? XmlAttribute)
+                ?.value
+                .nullableToList()
+                .map {KeyElement.literal(it)},
+            null
+        )
 }

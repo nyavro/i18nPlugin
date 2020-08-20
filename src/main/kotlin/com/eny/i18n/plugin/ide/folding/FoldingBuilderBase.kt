@@ -3,11 +3,11 @@ package com.eny.i18n.plugin.ide.folding
 import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.ellipsis
 import com.eny.i18n.plugin.utils.unQuote
@@ -58,7 +58,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
 
     private fun resolve(element: PsiElement, search: LocalizationSourceSearch, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
         return search
-            .findFilesByName(fullKey.ns?.text)
+            .findFilesByNames(fullKey.allNamespaces())
             .filter {
                 if (config.vue) it.name.contains(config.foldingPreferredLanguage)
                 else it.parent == config.foldingPreferredLanguage

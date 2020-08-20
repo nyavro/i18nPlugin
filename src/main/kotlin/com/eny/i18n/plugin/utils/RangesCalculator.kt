@@ -53,7 +53,7 @@ class KeyRangesCalculator(private val textRange: TextRange, isQuoted: Boolean = 
         )
 
     private fun FullKey.compositeKeyStartOffset(): Int =
-        textRange.startOffset + (this.ns?.let { text -> text.length + nsSeparatorOffset } ?: 0) + quoteOffset
+        textRange.startOffset + (this.ns?.let { it.length + nsSeparatorOffset } ?: 0) + quoteOffset
 
     private fun FullKey.compositeKeyEndOffset(): Int =
         textRange.startOffset + quoteOffset + this.source.length

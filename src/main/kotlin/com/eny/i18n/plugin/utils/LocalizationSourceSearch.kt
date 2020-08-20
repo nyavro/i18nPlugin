@@ -30,8 +30,8 @@ class LocalizationSourceSearch(private val project: Project) {
     /**
      * Finds json roots by json file name
      */
-    fun findFilesByName(fileName: String?): List<LocalizationSource> =
-        findVirtualFilesByName(fileName?.let {listOf(it)} ?: config.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map (::localizationSource)} +
+    fun findFilesByNames(fileNames: List<String>): List<LocalizationSource> =
+        findVirtualFilesByName(fileNames.whenMatches {it.isNotEmpty()} ?: config.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map (::localizationSource)} +
             if (config.vue) {
                 findVirtualFilesUnder(config.vueDirectory)
                     .filter {file -> translationFileTypes.any {file.fileType==it}}

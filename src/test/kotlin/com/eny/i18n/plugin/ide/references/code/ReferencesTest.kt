@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.ide.runVue
-import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
@@ -124,7 +123,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         myFixture.addFileToProject(
             "assets/invalidTranslationValue.${tg.ext()}",
             tg.generateContent("ref", "section", "key", "value"))
-        myFixture.configureByText("testInvalidTranslationValue.${cg.ext()}", "'invalidTranslationValue:ref.section<caret>.invalid'")
+        myFixture.configureByText("testInvalidTranslationValue.${cg.ext()}", "t('invalidTranslationValue:ref.section<caret>.invalid')")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
         assertEquals("section", element!!.references[0].resolve()?.text?.unQuote())
@@ -216,7 +215,7 @@ abstract class ReferenceTestVue(private val tg: TranslationGenerator): BasePlatf
         myFixture.addFileToProject(
                 "locales/en-US.${tg.ext()}",
                 tg.generateContent("ref", "Reference in json"))
-        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("'ref<caret>'"))
+        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("t('ref<caret>')"))
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
         assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)

@@ -5,19 +5,29 @@ import {LegacyWelcomeClass} from "./LegacyWelcomeClass";
 
 const Welcome = withTranslation()(LegacyWelcomeClass);
 
-const SampleComponent = () => (
-    <div>
+const TransComponent = () => (
+    <div style={{background: '#ABFFAB'}}>
         Trans:
-        <Trans i18nKey="description.part1">
+        <Trans i18nKey="description.part3">
             To get started, edit <code>src/App.js</code> and save to reload. ::SampleComponent::
         </Trans>
         <br/>
         Trans namespace:
-        <Trans i18nKey="main:trans.description1">
+        <Trans i18nKey="main:trans.description">
             (With namespace) To get started, edit <code>src/App.js</code> and save to reload. ::SampleComponent::NS::
         </Trans>
     </div>
 );
+
+const UseTranslationHookComponent = () => {
+    const { t, i18n } = useTranslation('hook');
+    return (
+        <div style={{background: '#32F0AB'}}>
+            <div>useTranslation hook:</div>
+            <div>{t('example.title')}</div>
+        </div>
+    );
+};
 
 const MainComponent = () => {
     const { t, i18n } = useTranslation();
@@ -35,7 +45,8 @@ const MainComponent = () => {
                 <button onClick={() => changeLanguage('en')}>en</button>
             </div>
             <div className="App-intro">
-                <SampleComponent/>
+                <TransComponent/>
+                <UseTranslationHookComponent/>
             </div>
             <div>{t('description.part2')}</div>
             <div>{'Namespace: ' + t('main:header.title')}</div>
