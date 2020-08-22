@@ -39,6 +39,6 @@ class ReactUseTranslationHookExtractor: KeyExtractor {
     private fun resolveHook(literal: PsiElement): JSCallExpression? {
         return resolveTranslationFunctionDefinition(literal)
             ?.let { resolveDestructuringElement(it) }
-            ?.let { it.initializer as JSCallExpression}
+            ?.let { it.initializer as? JSCallExpression}
     }
 }
