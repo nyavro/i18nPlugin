@@ -42,7 +42,7 @@ class JsxReferenceAssistant: ReferenceAssistant {
     private val parser: KeyParser = KeyParser()
 
     override fun pattern(): ElementPattern<out PsiElement> {
-        return XmlPatterns.xmlAttribute("i18nKey")
+        return XmlPatterns.xmlAttributeValue("i18nKey")
     }
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
