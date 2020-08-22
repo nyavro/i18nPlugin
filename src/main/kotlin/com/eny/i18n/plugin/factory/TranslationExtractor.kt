@@ -63,10 +63,6 @@ interface CallContext {
     fun accepts(element: PsiElement): Boolean
 }
 
-class CompositeCallContext(private val contexts: List<CallContext>): CallContext {
-    override fun accepts(element: PsiElement): Boolean = contexts.any {it.accepts(element)}
-}
-
 /**
  * Reference assistant
  */

@@ -48,12 +48,10 @@ class ReferencesAccumulator(private val key: String) {
         entry: PsiElement, _:Int ->
         val typeName = entry.node.elementType.toString()
         if (entry.text.unQuote().startsWith(key)) {
-            if (listOf("JS:STRING_LITERAL", "quoted string").any { item -> typeName.contains(item) }) {
+            if (listOf("JS:STRING_LITERAL", "quoted string", "JS:STRING_TEMPLATE_EXPRESSION").any { typeName.contains(it) }) {
                 res.add(entry)
             } else if (typeName == "JS:STRING_TEMPLATE_PART") {
                 res.add(entry.parent)
-            } else if (typeName == "JS:STRING_TEMPLATE_EXPRESSION") {
-                res.add(entry)
             }
         }
         true

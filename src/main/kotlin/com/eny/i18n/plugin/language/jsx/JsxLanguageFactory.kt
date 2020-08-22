@@ -1,10 +1,10 @@
 package com.eny.i18n.plugin.language.jsx
 
 import com.eny.i18n.plugin.factory.*
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.FullKeyExtractor
-import com.eny.i18n.plugin.parser.DummyContext
-import com.eny.i18n.plugin.parser.KeyExtractorImpl
+import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.parser.XmlAttributeKeyExtractor
 import com.eny.i18n.plugin.utils.toBoolean
 import com.intellij.lang.ecmascript6.JSXHarmonyFileType
 import com.intellij.lang.javascript.JavascriptLanguage
@@ -12,7 +12,7 @@ import com.intellij.lang.javascript.TypeScriptJSXFileType
 import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
-import com.intellij.patterns.PlatformPatterns
+import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
@@ -35,9 +35,22 @@ class JsxLanguageFactory: LanguageFactory {
         override fun accepts(element: PsiElement): Boolean = false
     }
 
-    override fun referenceAssistant(): ReferenceAssistant = object : ReferenceAssistant {
-        override fun pattern(): ElementPattern<out PsiElement> = PlatformPatterns.psiElement(PsiElement::class.java)
-        override fun extractKey(element: PsiElement): FullKey? = null
+    override fun referenceAssistant(): ReferenceAssistant = JsxReferenceAssistant()
+}
+
+class JsxReferenceAssistant: ReferenceAssistant {
+    private val parser: KeyParser = KeyParser()
+
+    override fun pattern(): ElementPattern<out PsiElement> {
+        return XmlPatterns.xmlAttributeValue("i18nKey")
+    }
+    override fun extractKey(element: PsiElement): FullKey? {
+        val config = Settings.getInstance(element.project).config()
+        return listOf(
+            XmlAttributeKeyExtractor()
+        )
+            .find {it.canExtract(element)}
+            ?.let {parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
     }
 }
 

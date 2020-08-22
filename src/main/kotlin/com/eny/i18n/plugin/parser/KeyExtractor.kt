@@ -15,5 +15,5 @@ interface KeyExtractor {
     /**
      * Extracts key from psi element
      */
-    fun extract(element: PsiElement): List<KeyElement>
+    fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?>
 }

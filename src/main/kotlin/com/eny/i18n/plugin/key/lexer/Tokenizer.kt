@@ -59,7 +59,6 @@ class Tokenizer(private val nsSeparator: String, private val keySeparator: Strin
             )
         }
 
-
     private fun tokenizeLiteral(literal: String): List<Token> =
         StringTokenizer(literal, nsSeparator + keySeparator, true).toList().map {
             token ->

@@ -31,9 +31,11 @@ class KeyExtractorImpl: Extractor {
     override fun extractFullKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
         return listOf(
+            ReactUseTranslationHookExtractor(),
             TemplateKeyExtractor(),
             LiteralKeyExtractor(),
-            StringLiteralKeyExtractor()
+            StringLiteralKeyExtractor(),
+            XmlAttributeKeyExtractor()
         )
             .find {it.canExtract(element)}
             ?.let{parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}

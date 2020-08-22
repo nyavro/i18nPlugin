@@ -22,7 +22,7 @@ class KeyExtractor {
         val search = LocalizationSourceSearch(project)
         val settings = Settings.getInstance(project)
         val config = settings.config()
-        val files = search.findFilesByName(i18nKey.ns?.text)
+        val files = search.findFilesByNames(i18nKey.allNamespaces())
         val generators = settings.mainFactory().contentGenerators()
         val quickFix = if (files.isEmpty()) {
             val contentGenerator = if (config.preferYamlFilesGeneration) YamlContentGenerator() else JsonContentGenerator()

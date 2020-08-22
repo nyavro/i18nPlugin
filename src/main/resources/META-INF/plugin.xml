@@ -116,6 +116,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
         <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.code.JsReferenceContributor"/>
+        <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.plugin.ide.references.code.JsxReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.translation.JsonReferenceContributor"/>
         <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.translation.YamlReferenceContributor"/>
         <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.completion.JsCompletionContributor"/>

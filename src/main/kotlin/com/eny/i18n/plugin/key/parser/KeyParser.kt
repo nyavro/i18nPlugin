@@ -16,17 +16,19 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
      * Parses text to i18n key
      */
     fun parse(text: String, nsSeparator: String, keySeparator: String, emptyNamespace: Boolean) =
-        parse(listOf(KeyElement.literal(text)), nsSeparator, keySeparator, emptyNamespace)
+        parse(Pair(listOf(KeyElement.literal(text)), null), nsSeparator, keySeparator, emptyNamespace)
 
     /**
      * Parses list of key elements into i18n key
      */
     fun parse(
-        elements: List<KeyElement>,
+        pair: Pair<List<KeyElement>, List<String>?>,
         nsSeparator: String = ":",
         keySeparator: String = ".",
         emptyNamespace: Boolean = false
     ): FullKey? {
+        val elements = pair.first
+        val namespaces = pair.second
         val normalized = normalizer.normalize(elements)
         val source = normalized.fold(""){ acc, item -> acc + item.text }
         val startState = if (emptyNamespace) {
@@ -40,7 +42,7 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
             .fold(startState) { state, token ->
                 state.next(token)
             }
-            .fullKey(isTemplate, source)
+            .fullKey(isTemplate, source, namespaces)
     }
 }
 
@@ -56,7 +58,7 @@ private interface State {
     /**
      * Get current parsed key
      */
-    fun fullKey(isTemplate: Boolean, source: String): FullKey? = null
+    fun fullKey(isTemplate: Boolean, source: String, namespaces: List<String>?): FullKey? = null
 }
 
 /**
@@ -77,7 +79,8 @@ private class Start(private val init: Literal?) : State {
             token is Literal -> Start(init?.merge(token) ?: token)
             else -> Error("Invalid ns separator position (0)") // Never get here
         }
-    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = init?.let {FullKey(source, null, listOf(it), isTemplate)}
+    override fun fullKey(isTemplate: Boolean, source: String, namespaces: List<String>?): FullKey? =
+        init?.let {FullKey(source, null, listOf(it), isTemplate, namespaces)}
 }
 
 /**
@@ -89,7 +92,8 @@ private class WaitingLiteral(private val file: Literal?, val key: List<Literal>)
             is Literal -> WaitingLiteralOrSeparator(file, key + token)
             else -> Error("Invalid token $token")
         }
-    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key + Literal("", 0), isTemplate)
+    override fun fullKey(isTemplate: Boolean, source: String, namespaces: List<String>?): FullKey? =
+        FullKey(source, file, key + Literal("", 0), isTemplate, namespaces)
 }
 
 /**
@@ -106,5 +110,6 @@ private class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Litera
             }
             else -> Error("Invalid token $token")
         }
-    override fun fullKey(isTemplate: Boolean, source: String): FullKey? = FullKey(source, file, key, isTemplate)
+    override fun fullKey(isTemplate: Boolean, source: String, namespaces: List<String>?): FullKey? =
+        FullKey(source, file, key, isTemplate, namespaces)
 }

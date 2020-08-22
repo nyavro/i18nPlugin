@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
+import com.eny.i18n.plugin.parser.ReactUseTranslationHookExtractor
 import com.eny.i18n.plugin.parser.TemplateKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
@@ -15,6 +16,7 @@ import com.intellij.lang.javascript.psi.JSCallExpression
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
+import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 
@@ -53,18 +55,20 @@ internal class JsCallContext: CallContext {
             JSPatterns.jsArgument("t", 0).let { pattern ->
                 pattern.accepts(element) ||
                 pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
-            }
+            } ||
+            XmlPatterns.xmlAttributeValue("i18nKey").accepts(element)
 }
 
 internal class JsReferenceAssistant: ReferenceAssistant {
 
     private val parser: KeyParser = KeyParser()
 
-    override fun pattern(): ElementPattern<out PsiElement> = JSPatterns.jsLiteralExpression()
+    override fun pattern(): ElementPattern<out PsiElement> = JSPatterns.jsArgument("t", 0)
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
         return listOf(
+            ReactUseTranslationHookExtractor(),
             TemplateKeyExtractor(),
             LiteralKeyExtractor()
         )

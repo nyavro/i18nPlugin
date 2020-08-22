@@ -1,0 +1,8 @@
+{
+  "header": {
+    "title": "Welcome to i18n react with hooks"
+  },
+  "trans": {
+    "description": "From namespace"
+  }
+}

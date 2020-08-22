@@ -1,9 +1,9 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.key.lexer.Literal
 
 /**
  * Base class and utils for parser unit tests
@@ -25,5 +25,5 @@ interface ParserTestBase {
      */
     fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".",
               stopCharacters: String = "", emptyNamespace: Boolean = false): FullKey? =
-        KeyParser(object : KeyNormalizer {}).parse(elements, nsSeparator, keySeparator, emptyNamespace)
+        KeyParser(object : KeyNormalizer {}).parse(Pair(elements, null), nsSeparator, keySeparator, emptyNamespace)
 }
