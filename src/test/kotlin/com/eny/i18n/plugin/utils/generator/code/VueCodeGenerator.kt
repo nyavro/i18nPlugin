@@ -22,5 +22,11 @@ class VueCodeGenerator: CodeGenerator {
         </template>
     """
 
+    override fun generateCodeForExtraction(text: String): String = """
+        export const test = () => {
+            const text = "$text";
+        };
+    """
+
     private fun generateDiv(key: String): String = "    <div>{{ \$t($key) }}</div>\n"
 }

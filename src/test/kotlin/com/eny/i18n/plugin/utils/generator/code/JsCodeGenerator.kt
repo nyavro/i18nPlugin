@@ -13,4 +13,10 @@ class JsCodeGenerator: CodeGenerator {
     override fun generateInvalid(key: String): String = """
         const key = (t) => "$key";
     """
+
+    override fun generateCodeForExtraction(text: String): String = """
+        export const test = () => {
+            const text = "$text";
+        };
+    """
 }

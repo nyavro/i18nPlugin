@@ -20,5 +20,11 @@ class PhpCodeGenerator: CodeGenerator {
         echo str_replace("\n", '<br>', ts($key));
     """
 
+    override fun generateCodeForExtraction(text: String): String = """
+        export const test = () => {
+            const text = "$text";
+        };
+    """
+
     private fun generateLine(key: String): String = """          echo str_replace("\n", '<br>', t($key));"""
 }

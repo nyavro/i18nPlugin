@@ -43,30 +43,6 @@ abstract class ExtractionTestBase: BasePlatformTestCase() {
         doRun(src, patched, translation, patchedTranslation, predefinedTextInputDialog(newKey))
     }
 
-    protected fun doCancel(src: String, translation: String) {
-        doRun(src, src, translation, translation,
-            object : TestInputDialog {
-                override fun show(message: String): String? = null
-                override fun show(message: String, validator: InputValidator?) = null
-            }
-        )
-    }
-
-    protected fun doCancelInvalid(src: String, translation: String) {
-        doRun(src, src, translation, translation,
-            object : TestInputDialog {
-                override fun show(message: String): String? = null
-                override fun show(message: String, validator: InputValidator?) = "not:a:key{here}"
-            },
-            object: TestDialog {
-                override fun show(message: String): Int {
-                    assertEquals("Invalid i18n key", message)
-                    return 1
-                }
-            }
-        )
-    }
-
     protected fun doRunUnknownNs(
             src: String,
             patched: String,

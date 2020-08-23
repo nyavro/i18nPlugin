@@ -13,4 +13,10 @@ class TsxCodeGenerator: CodeGenerator {
     override fun generateInvalid(key: String): String = """
         const key = () => (<div>{"$key"}</div>);
     """
+
+    override fun generateCodeForExtraction(text: String): String = """
+        export const test = () => {
+            const text = "$text";
+        };
+    """
 }

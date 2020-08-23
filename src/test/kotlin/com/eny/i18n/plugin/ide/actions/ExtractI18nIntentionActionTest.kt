@@ -5,30 +5,6 @@ import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
 
-class ExtractionCancellationTest: ExtractionTestBase() {
-
-    fun testTsCancel() {
-        doCancel("js/simple.js", "assets/test.json")
-    }
-
-    fun testTsCancelInvalid() {
-        doCancelInvalid("ts/simple.ts", "assets/test.json")
-    }
-
-    fun testExtractionUnavailable() {
-        doUnavailable("tsx/unavailable.tsx")
-    }
-
-    fun testInvalidSource() {
-        doRun("jsx/strange.jsx",
-            "jsx/strangeKeyExtracted.jsx",
-            "assets/test.json",
-            "assets/testKeyExtracted.json",
-            "test:ref.value3"
-        )
-    }
-}
-
 abstract class ExtractI18nIntentionActionBase(private val language: String, private val translationFormat: String, private val codeGenerator: CodeGenerator): ExtractionTestBase() {
 
     protected val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")

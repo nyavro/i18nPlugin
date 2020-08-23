@@ -1,7 +1,5 @@
 package com.eny.i18n.plugin.ide.hint
 
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.Json5TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
@@ -31,8 +29,8 @@ class HintTest: JsHintTestBase(
         ::TsCodeGenerator,
         ::JsxCodeGenerator,
         ::TsxCodeGenerator,
-        ::PhpCodeGenerator,
-        ::VueCodeGenerator
+        ::PhpCodeGenerator
+//        ::VueCodeGenerator
     )(),
     randomOf(::JsonTranslationGenerator, ::YamlTranslationGenerator, ::Json5TranslationGenerator)()
 )
