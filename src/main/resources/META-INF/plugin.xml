@@ -7,6 +7,7 @@
     <h4>i18next TypeScript/JavaScript/PHP plugin</h4>
     i18n plugin provides:
     <ul>
+        <li>react-i18next support</li>
         <li>annotation of invalid i18n keys</li>
         <li>navigation to i18n property value definition</li>
         <li>yaml translation files support</li>
@@ -18,6 +19,14 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        <div>
+            <h3>2.3.0</h3>
+            <ul>
+                <li>Basic support of react-i18next useTranslation React hook: key annotation, navigation from code to translation</li>
+                <li>Basic support of react-i18next 'Trans' element: key annotation, navigation from code to translation</li>
+                <li>Show translation file full path in key creation action</li>
+            </ul>
+        </div>
         <div>
             <h3>2.2.0</h3>
             <ul>
