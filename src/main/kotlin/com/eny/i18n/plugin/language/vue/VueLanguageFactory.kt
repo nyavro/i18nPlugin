@@ -3,6 +3,8 @@ package com.eny.i18n.plugin.language.vue
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.toBoolean
@@ -157,6 +159,7 @@ internal class VueFoldingProvider: FoldingProvider {
 }
 
 internal class VueCallContext: CallContext {
+
     override fun accepts(element: PsiElement): Boolean =
         listOf("JS:STRING_LITERAL", "JS:LITERAL_EXPRESSION", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION")
             .contains(element.type()) &&
@@ -168,13 +171,14 @@ internal class VueCallContext: CallContext {
 
 internal class VueReferenceAssistant: ReferenceAssistant {
 
+    private val parser: KeyParser = KeyParser()
+
     override fun pattern(): ElementPattern<out PsiElement> = JSPatterns.jsLiteralExpression()
 
     override fun extractKey(element: PsiElement): FullKey? {
         val settings = Settings.getInstance(element.project)
-        return null
-//        listOf(StringLiteralKeyExtractor())
-//                .find {it.canExtract(element)}
-//                ?.let{parser.parse(it.extract(element), settings.nsSeparator, settings.keySeparator)}
+        return listOf(LiteralKeyExtractor())
+                .find {it.canExtract(element)}
+                ?.let{parser.parse(it.extract(element), settings.nsSeparator, settings.keySeparator)}
     }
 }
