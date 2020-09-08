@@ -1,9 +1,9 @@
 package com.eny.i18n.plugin.ide.references.code
 
-import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
-import com.eny.i18n.plugin.utils.generator.code.*
+import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.PhpCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.Json5TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
@@ -151,22 +151,22 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Reference in json", element!!.references[0].resolve()?.text?.unQuote())
     }
 }
-
-class CodeReferencesTranslationTest: ReferencesTestBase(
-    randomOf(
-        ::JsCodeGenerator,
-        ::TsCodeGenerator,
-        ::JsxCodeGenerator,
-        ::TsxCodeGenerator
-//            ::PhpCodeGenerator
+//
+//class CodeReferencesTranslationTest: ReferencesTestBase(
+//    randomOf(
+//        ::JsCodeGenerator,
+//        ::TsCodeGenerator,
+//        ::JsxCodeGenerator,
+//        ::TsxCodeGenerator,
+//        ::PhpCodeGenerator,
 //            ::VueCodeGenerator
-    )(),
-    randomOf(::JsonTranslationGenerator, ::YamlTranslationGenerator, ::Json5TranslationGenerator)()
-)
-
-abstract class ReferenceTestVue(private val tg: TranslationGenerator): BasePlatformTestCase() {
-    private val cg = VueCodeGenerator()
-
+//    )(),
+//    randomOf(::JsonTranslationGenerator, ::YamlTranslationGenerator, ::Json5TranslationGenerator)()
+//)
+//
+//abstract class ReferenceTestVue(private val tg: TranslationGenerator): BasePlatformTestCase() {
+//    private val cg = VueCodeGenerator()
+//
 //    fun testMultiReferenceDefNs() = myFixture.runVue {
 //        myFixture.addFileToProject(
 //                "assets/en/translation.${tg.ext()}",
@@ -210,22 +210,22 @@ abstract class ReferenceTestVue(private val tg: TranslationGenerator): BasePlatf
 //        assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)
 //        assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Default ns reference", element!!.references[0].resolve()?.text?.unQuote())
 //    }
-
-    fun testRootKey() = myFixture.runVue {
-        myFixture.addFileToProject(
-                "locales/en-US.${tg.ext()}",
-                tg.generateContent("ref", "Reference in json"))
-        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("t('ref<caret>')"))
-        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-        assertNotNull(element)
-        assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)
-        assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Reference in json", element!!.references[0].resolve()?.text?.unQuote())
-    }
-}
-
-class VueRandomTest: ReferenceTestVue(
-    randomOf(::Json5TranslationGenerator, ::JsonTranslationGenerator, ::YamlTranslationGenerator)()
-)
+//
+//    fun testRootKey() = myFixture.runVue {
+//        myFixture.addFileToProject(
+//                "locales/en-US.${tg.ext()}",
+//                tg.generateContent("ref", "Reference in json"))
+//        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("t('ref<caret>')"))
+//        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+//        assertNotNull(element)
+//        assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)
+//        assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Reference in json", element!!.references[0].resolve()?.text?.unQuote())
+//    }
+//}
+//
+//class VueRandomTest: ReferenceTestVue(
+//    randomOf(::Json5TranslationGenerator, ::JsonTranslationGenerator, ::YamlTranslationGenerator)()
+//)
 
 abstract class ReferenceTestPhp(private val tg: TranslationGenerator) : BasePlatformTestCase() {
 
@@ -242,21 +242,21 @@ abstract class ReferenceTestPhp(private val tg: TranslationGenerator) : BasePlat
         assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Reference in json", element!!.references[0].resolve()?.text?.unQuote())
     }
 
-//    fun testMultiReference() {
-//        myFixture.addFileToProject(
-//                "assets/en/multi.${tg.ext()}",
-//                tg.generateContent("main", "header", "title", "Welcome")
-//        )
-//        myFixture.addFileToProject(
-//                "assets/de/multi.${tg.ext()}",
-//                tg.generateContent("main", "header", "title", "Willkommen")
-//        )
-//        myFixture.configureByText("multiReference.${cg.ext()}", cg.generate("\"multi:main.header.title<caret>\""))
-//        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-//        assertNotNull(element)
-//        assertEquals(setOf("Welcome", "Willkommen"), getResolvedValues(element))
-//    }
-
+    fun testMultiReference() {
+        myFixture.addFileToProject(
+                "assets/en/multi.${tg.ext()}",
+                tg.generateContent("main", "header", "title", "Welcome")
+        )
+        myFixture.addFileToProject(
+                "assets/de/multi.${tg.ext()}",
+                tg.generateContent("main", "header", "title", "Willkommen")
+        )
+        myFixture.configureByText("multiReference.${cg.ext()}", cg.generate("\"multi:main.header.title<caret>\""))
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertEquals(setOf("Welcome", "Willkommen"), getResolvedValues(element))
+    }
+//
 //    fun testMultiReferenceDefNs() {
 //        myFixture.addFileToProject(
 //                "assets/en/translation.${tg.ext()}",
@@ -271,20 +271,20 @@ abstract class ReferenceTestPhp(private val tg: TranslationGenerator) : BasePlat
 //        assertNotNull(element)
 //        assertEquals(setOf("Welcome", "Willkommen"), getResolvedValues(element))
 //    }
-//
-//    fun testReferenceMultiDefaultNs() = myFixture.runWithConfig(Config(defaultNs = "third,second;first ")) {
-//        //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
-//        myFixture.addFileToProject("assets/en/first.${tg.ext()}", tg.generateContent("main","fruit", "apple"))
-//        myFixture.addFileToProject("assets/en/second.${tg.ext()}", tg.generateContent("main", "fruit", "orange"))
-//        myFixture.addFileToProject("assets/en/third.${tg.ext()}", tg.generateContent("main", "fruit", "pear"))
-//        myFixture.addFileToProject("assets/de/first.${tg.ext()}", tg.generateContent("main","fruit", "apfel"))
-//        myFixture.addFileToProject("assets/de/second.${tg.ext()}", tg.generateContent("main", "fruit", "apfelsine"))
-//        myFixture.addFileToProject("assets/de/third.${tg.ext()}", tg.generateContent("main", "fruit", "birne"))
-//        myFixture.configureByText("multiDefNs.${cg.ext()}", cg.generate("\"main.fruit<caret>\""))
-//        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-//        assertNotNull(element)
-//        assertEquals(setOf("apfel", "apfelsine", "apple", "birne", "orange", "pear"), getResolvedValues(element))
-//    }
+
+    fun testReferenceMultiDefaultNs() = myFixture.runWithConfig(Config(defaultNs = "third,second;first ")) {
+        //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
+        myFixture.addFileToProject("assets/en/first.${tg.ext()}", tg.generateContent("main","fruit", "apple"))
+        myFixture.addFileToProject("assets/en/second.${tg.ext()}", tg.generateContent("main", "fruit", "orange"))
+        myFixture.addFileToProject("assets/en/third.${tg.ext()}", tg.generateContent("main", "fruit", "pear"))
+        myFixture.addFileToProject("assets/de/first.${tg.ext()}", tg.generateContent("main","fruit", "apfel"))
+        myFixture.addFileToProject("assets/de/second.${tg.ext()}", tg.generateContent("main", "fruit", "apfelsine"))
+        myFixture.addFileToProject("assets/de/third.${tg.ext()}", tg.generateContent("main", "fruit", "birne"))
+        myFixture.configureByText("multiDefNs.${cg.ext()}", cg.generate("\"main.fruit<caret>\""))
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertEquals(setOf("apfel", "apfelsine", "apple", "birne", "orange", "pear"), getResolvedValues(element))
+    }
 
     private fun getResolvedValues(element: PsiElement?) =
             (element?.reference as I18nReference).references.map { it.element?.value()?.text?.unQuote() }.toSet()
@@ -321,15 +321,16 @@ abstract class ReferenceTestPhp(private val tg: TranslationGenerator) : BasePlat
         assertEmpty(element!!.references)
     }
 
-//    fun testInvalidTranslationValue() {
-//        myFixture.addFileToProject(
-//                "assets/invalidTranslationValue.${tg.ext()}",
-//                tg.generateContent("ref", "section", "key", "value"))
-//        myFixture.configureByText("testInvalidTranslationValue.${cg.ext()}", "'invalidTranslationValue:ref.section<caret>.invalid'")
-//        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-//        assertNotNull(element)
-//        assertEquals("section", element!!.references[0].resolve()?.text?.unQuote())
-//    }
+    fun testInvalidTranslationValue() {
+        myFixture.addFileToProject(
+                "assets/invalidTranslationValue.${tg.ext()}",
+                tg.generateContent("ref", "section", "key", "value"))
+        myFixture.configureByText("testInvalidTranslationValue.${cg.ext()}", "'invalidTranslationValue:ref.section<caret>.invalid'")
+        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+        assertNotNull(element)
+        assertEquals("section", element!!.references[0].resolve()?.text?.unQuote())
+    }
+
     fun testRootKeyDefNs() {
         myFixture.addFileToProject(
             "assets/translation.${tg.ext()}",

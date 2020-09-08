@@ -11,7 +11,6 @@ import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
-import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.jetbrains.php.lang.psi.elements.FunctionReference
@@ -64,7 +63,9 @@ internal class PhpReferenceAssistant: ReferenceAssistant {
 
     private val parser: KeyParser = KeyParser()
 
-    override fun pattern(): ElementPattern<out PsiElement> = PlatformPatterns.psiElement(PsiElement::class.java)
+    override fun pattern(): ElementPattern<out PsiElement> {
+        return PhpPatternsExt.phpArgument("t", 0)
+    }
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
