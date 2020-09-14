@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import org.junit.jupiter.api.Test
 
 internal abstract class CodeCompletionTestBasePhp(
     translationGenerator: TranslationGenerator,
@@ -12,6 +13,7 @@ internal abstract class CodeCompletionTestBasePhp(
     checkerProducer: (fixture: CodeInsightTestFixture) -> Checker = ::NsChecker) :
         CodeCompletionTestBase(PhpCodeGenerator(), translationGenerator, keyGenerator, checkerProducer) {
 
+    @Test
     fun testDQuote() = checker.doCheck(
         "dQuote.${codeGenerator.ext()}",
         codeGenerator.generate(keyGenerator.generate("test", "tst1.base.<caret>", "\"")),

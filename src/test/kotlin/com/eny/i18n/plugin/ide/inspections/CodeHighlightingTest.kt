@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.inspections
 
+import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
@@ -8,9 +9,10 @@ import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.junit.jupiter.api.Test
 import utils.randomOf
 
-abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerator, protected val translationGenerator: TranslationGenerator): BasePlatformTestCase() {
+abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerator, protected val translationGenerator: TranslationGenerator): PlatformBaseTest() {
     private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
 
     protected fun check(fileName: String, code: String, translationName: String, translation: String) = myFixture.runWithConfig(testConfig) {
@@ -19,6 +21,7 @@ abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerat
         myFixture.checkHighlighting(true, true, true, true)
     }
 
+    @Test
     fun testReferenceToObject() = check(
         "refToObject.${codeGenerator.ext()}",
         codeGenerator.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),

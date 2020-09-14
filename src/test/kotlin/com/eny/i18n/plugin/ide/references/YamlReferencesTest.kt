@@ -1,21 +1,23 @@
 package com.eny.i18n.plugin.ide.references
 
+import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
-import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
+import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.junit.jupiter.api.Test
 
 abstract class TranslationToCodeTestBase(
         protected val translationGenerator: TranslationGenerator,
         protected val codeGenerator: CodeGenerator
-) : BasePlatformTestCase() {
+) : PlatformBaseTest() {
 
+    @Test
     fun testSingleReference() {
         val key = "'test:ref.section.key'"
         myFixture.addFileToProject(
@@ -31,6 +33,7 @@ abstract class TranslationToCodeTestBase(
         assertEquals(key.unQuote(), element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    @Test
     fun testInvalidYaml() {
         myFixture.configureByText("invalid.${translationGenerator.ext()}", "item<caret> text")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -38,6 +41,7 @@ abstract class TranslationToCodeTestBase(
         assertTrue(element!!.references.isEmpty())
     }
 
+    @Test
     fun testNoReference() {
         myFixture.configureByText(
             "test.${translationGenerator.ext()}",
@@ -48,6 +52,7 @@ abstract class TranslationToCodeTestBase(
         assertTrue(element!!.references.isEmpty())
     }
 
+    @Test
     fun testMultipleReferences() {
         val key = "'multiTest:ref.section.subsection1.key12'"
         myFixture.configureByText(
@@ -75,6 +80,7 @@ abstract class TranslationToCodeTestBase(
         assertEquals(setOf(key.unQuote()), (ref as TranslationToCodeReference).findRefs().map { item -> item.text.unQuote()}.toSet())
     }
 
+    @Test
     fun testObjectReference() {
         myFixture.addFileToProject(
             "testReference.${codeGenerator.ext()}",
@@ -101,6 +107,7 @@ abstract class TranslationToCodeTestBase(
         )
     }
 
+    @Test
     fun testDefaultNs() = myFixture.runWithConfig(Config(defaultNs = "Common")) {
         myFixture.addFileToProject(
             "testDefaultNs.${codeGenerator.ext()}",
@@ -127,6 +134,7 @@ abstract class TranslationToCodeTestBase(
         )
     }
 
+    @Test
     fun testClickOnValue() {
         myFixture.configureByText(
             "testValue.${translationGenerator.ext()}",
@@ -139,6 +147,8 @@ abstract class TranslationToCodeTestBase(
 }
 
 abstract class YamlReferencesTestBase(codeGenerator: CodeGenerator) : TranslationToCodeTestBase(YamlTranslationGenerator(), codeGenerator) {
+
+    @Test
     fun testSingleReferenceQuoted() {
         val key = "'testQuoted:ref.section.key'"
         myFixture.addFileToProject(
@@ -157,7 +167,7 @@ abstract class YamlReferencesTestBase(codeGenerator: CodeGenerator) : Translatio
 
 abstract class JsonReferencesTestBase(codeGenerator: CodeGenerator) : TranslationToCodeTestBase(JsonTranslationGenerator(), codeGenerator)
 
-abstract class VueReferencesTestBase(protected val translationGenerator: TranslationGenerator): BasePlatformTestCase() {
+abstract class VueReferencesTestBase(protected val translationGenerator: TranslationGenerator): PlatformBaseTest() {
 
     private val codeGenerator = VueCodeGenerator()
 
@@ -170,6 +180,7 @@ abstract class VueReferencesTestBase(protected val translationGenerator: Transla
     )
     private val translation = translationGenerator.generateContent("ref", "section<caret>", "key1", "val 1")
 
+    @Test
     fun testVue() = myFixture.runVueConfig(Config(vueDirectory = "assets")) {
         myFixture.addFileToProject("test.vue", testVue)
         myFixture.configureFromExistingVirtualFile(
@@ -184,6 +195,7 @@ abstract class VueReferencesTestBase(protected val translationGenerator: Transla
         )
     }
 
+    @Test
     fun testVueIncorrectConfiguration() = myFixture.runVueConfig(Config(vueDirectory = "translations")) {
         myFixture.configureByText("test.vue", testVue)
         myFixture.configureFromExistingVirtualFile(

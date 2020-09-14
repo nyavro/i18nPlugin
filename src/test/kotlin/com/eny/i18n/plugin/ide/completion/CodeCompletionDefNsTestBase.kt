@@ -4,9 +4,11 @@ import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import org.junit.jupiter.api.Test
 
 abstract class CodeCompletionDefNsTestBase(codeGenerator: CodeGenerator, translationGenerator: TranslationGenerator): CodeCompletionTestBase(codeGenerator, translationGenerator, DefaultNsKeyGenerator(), ::DefaultNsChecker) {
 
+    @Test
     fun testEmptyKeyCompletion() {
         myFixture.addFileToProject("assets/translation.${translationGenerator.ext()}", translationGenerator.generateContent("tstw", "fstt", "leu", "value"))
         myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate( "\"<caret>\""))
@@ -14,6 +16,7 @@ abstract class CodeCompletionDefNsTestBase(codeGenerator: CodeGenerator, transla
         assertTrue(vars.find {it.lookupString == "tstw"} != null)
     }
 
+    @Test
     fun testRootKeyCompletion() {
         myFixture.addFileToProject("assets/translation.${translationGenerator.ext()}", translationGenerator.generateContent("tst1", "base", "single", "only one value"))
         myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate("\"tst<caret>\""))

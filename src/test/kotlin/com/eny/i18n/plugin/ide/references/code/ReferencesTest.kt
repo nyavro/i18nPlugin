@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.references.code
 
+import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
@@ -12,9 +13,11 @@ import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.junit.jupiter.api.Test
 
-abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg: TranslationGenerator) : BasePlatformTestCase() {
+abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg: TranslationGenerator) : PlatformBaseTest() {
 
+    @Test
     fun testReference() {
         myFixture.addFileToProject(
             "assets/test.${tg.ext()}",
@@ -26,6 +29,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Reference in json", element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    @Test
     fun testMultiReference() {
         myFixture.addFileToProject(
             "assets/en/multi.${tg.ext()}",
@@ -41,6 +45,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals(setOf("Welcome", "Willkommen"), getResolvedValues(element))
     }
 
+    @Test
     fun testMultiReferenceDefNs() {
         myFixture.addFileToProject(
             "assets/en/translation.${tg.ext()}",
@@ -59,6 +64,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
     private fun genMultiNs(namespaces: List<String>) =
         namespaces.fold(""){acc, ns -> acc + ns + ",; ".random()}
 
+    @Test
     fun testReferenceMultiDefaultNs() = myFixture.runWithConfig(Config(defaultNs = genMultiNs(listOf("second","third","first")))) {
         //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
         myFixture.addFileToProject("assets/en/first.${tg.ext()}", tg.generateContent("main","fruit", "apple"))
@@ -76,6 +82,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
     private fun getResolvedValues(element: PsiElement?) =
         (element?.reference as I18nReference).references.map { it.element?.value()?.text?.unQuote() }.toSet()
 
+    @Test
     fun testDefaultNsReference() {
         myFixture.addFileToProject(
             "assets/translation.${tg.ext()}",
@@ -87,6 +94,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Default ns reference", element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    @Test
     fun testPartiallyResolvedReference() {
         myFixture.addFileToProject(
                 "assets/test.${tg.ext()}",
@@ -98,10 +106,11 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals("section", element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    @Test
     fun testExpressionReference() {
         myFixture.addFileToProject(
-            "assets/test.${tg.ext()}",
-            tg.generateContent("ref", "section", "key", "value"))
+                "assets/test.${tg.ext()}",
+                tg.generateContent("ref", "section", "key", "value"))
         myFixture.configureByText("testPartiallyResolvedReference.${cg.ext()}", cg.generate("`test:ref.section<caret>.\${b ? 'key' : 'key2'}`"))
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         assertNotNull(element)
@@ -109,6 +118,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals("section", element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    @Test
     fun testInvalidTranslationRoot() {
         myFixture.addFileToProject(
             "assets/invalidRoot.${tg.ext()}",
@@ -119,6 +129,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEmpty(element!!.references)
     }
 
+    @Test
     fun testInvalidTranslationValue() {
         myFixture.addFileToProject(
             "assets/invalidTranslationValue.${tg.ext()}",
@@ -129,6 +140,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals("section", element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    @Test
     fun testRootKeyDefNs() {
         myFixture.addFileToProject(
             "assets/translation.${tg.ext()}",
@@ -140,6 +152,7 @@ abstract class ReferencesTestBase(private val cg: CodeGenerator, private val tg:
         assertEquals("Failed ${tg.ext()}, ${cg.ext()}","Reference in json", element!!.references[0].resolve()?.text?.unQuote())
     }
 
+    @Test
     fun testRootKey() {
         myFixture.addFileToProject(
                 "assets/test.${tg.ext()}",

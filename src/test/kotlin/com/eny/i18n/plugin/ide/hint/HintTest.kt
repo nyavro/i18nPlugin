@@ -1,18 +1,17 @@
 package com.eny.i18n.plugin.ide.hint
 
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.Json5TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.codeInsight.documentation.DocumentationManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import utils.randomOf
 
-abstract class JsHintTestBase(private val cg: CodeGenerator, private val tg: TranslationGenerator): BasePlatformTestCase() {
+abstract class JsHintTestBase(private val cg: CodeGenerator, private val tg: TranslationGenerator): PlatformBaseTest() {
 
+//    @Test TODO test
     fun testSingleHint() {
         val translation = "translation here"
         myFixture.addFileToProject("test.${tg.ext()}", tg.generateContent("root", "first", "second", translation))

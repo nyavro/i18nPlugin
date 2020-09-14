@@ -4,9 +4,11 @@ import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
+import org.junit.jupiter.api.Test
 
 class ExtractionCancellationTest: ExtractionTestBase() {
 
+    @Test
     fun testTsCancel() {
         doCancel("js/simple.js", "assets/test.json")
     }
