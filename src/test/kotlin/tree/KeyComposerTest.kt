@@ -2,7 +2,7 @@ package tree
 
 import com.eny.i18n.plugin.tree.FlippedTree
 import com.eny.i18n.plugin.tree.KeyComposer
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class TestFlippedTree(val list: List<String>): FlippedTree<String> {

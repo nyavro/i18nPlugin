@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.key.lexer.Literal
 import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * Test tree wrapper

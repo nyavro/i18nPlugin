@@ -3,7 +3,7 @@ package utils
 import com.eny.i18n.plugin.utils.isQuoted
 import com.eny.i18n.plugin.utils.unQuote
 import org.junit.Assert.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 //@Ignore
 internal class StringUtilsTest : TestBase {

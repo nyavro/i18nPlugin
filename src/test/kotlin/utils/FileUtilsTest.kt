@@ -3,7 +3,7 @@ package utils
 import com.eny.i18n.plugin.utils.distance
 import com.eny.i18n.plugin.utils.pathToRoot
 import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.io.File
 
 class FileUtilsTest {

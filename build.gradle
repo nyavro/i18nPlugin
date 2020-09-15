@@ -34,7 +34,6 @@ test {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
         testCompile 'org.junit.jupiter:junit-jupiter-api:5.6.2'
         testCompile 'org.junit.jupiter:junit-jupiter-params:5.6.2'
-        testCompile 'org.junit.jupiter:junit-platform-runner:5.6.2'
         testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
     }
 
