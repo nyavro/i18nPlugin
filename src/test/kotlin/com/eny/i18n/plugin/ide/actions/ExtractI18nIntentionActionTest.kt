@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
 import org.junit.jupiter.api.Test
+import kotlin.concurrent.thread
 
 class ExtractionCancellationTest: ExtractionTestBase() {
 
@@ -13,21 +14,26 @@ class ExtractionCancellationTest: ExtractionTestBase() {
         doCancel("js/simple.js", "assets/test.json")
     }
 
+    @Test
     fun testTsCancelInvalid() {
         doCancelInvalid("ts/simple.ts", "assets/test.json")
     }
 
+    @Test
     fun testExtractionUnavailable() {
         doUnavailable("tsx/unavailable.tsx")
     }
 
+    @Test
     fun testInvalidSource() {
-        doRun("jsx/strange.jsx",
-            "jsx/strangeKeyExtracted.jsx",
-            "assets/test.json",
-            "assets/testKeyExtracted.json",
-            "test:ref.value3"
-        )
+        thread {
+            doRun("jsx/strange.jsx",
+                    "jsx/strangeKeyExtracted.jsx",
+                    "assets/test.json",
+                    "assets/testKeyExtracted.json",
+                    "test:ref.value3"
+            )
+        }
     }
 }
 
@@ -35,6 +41,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
 
     protected val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")
 
+    @Test
     fun testKeyExtraction() = myFixture.runWithConfig(testConfig) {
         doRun(
             "$language/simple.$language",
@@ -44,6 +51,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "test:ref.value3")
     }
 
+    @Test
     fun testRightBorderKeyExtraction() = myFixture.runWithConfig(testConfig) {
         doRun(
             "$language/rightBorder.$language",
@@ -53,6 +61,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "test:ref.value3")
     }
 
+    @Test
     fun testDefNsKeyExtraction() = myFixture.runWithConfig(testConfig) {
         doRun(
             "$language/simple.$language",
@@ -62,6 +71,7 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
             "ref.value.sub1")
     }
 
+    @Test
     fun testKeyContext() {
         doUnavailable("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"test:ref<caret>.value.sub1\""))
     }

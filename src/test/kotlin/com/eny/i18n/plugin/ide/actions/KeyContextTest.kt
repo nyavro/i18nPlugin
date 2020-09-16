@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.utils.generator.code.*
 import org.junit.jupiter.api.Test
+import kotlin.concurrent.thread
 
 abstract class KeyContextBase(private val codeGenerator: CodeGenerator): ExtractionTestBase() {
 
@@ -27,14 +28,22 @@ class KeyContextVueTest: ExtractionTestBase() {
 
     private val codeGenerator = VueCodeGenerator()
 
-    //@Test: TODO test
-    fun testKeyContext() = myFixture.runVue {
-        doUnavailable("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"ref<caret>.value.sub1\""))
+    @Test
+    fun testKeyContext() {
+        thread {
+            myFixture.runVue {
+                doUnavailable("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"ref<caret>.value.sub1\""))
+            }
+        }
     }
 
     @Test
-    fun testKeyContextScript() = myFixture.runVue {
-        myFixture.tempDirPath
-        doUnavailable("vue/keyContextScript.vue")
+    fun testKeyContextScript() {
+        thread {
+            myFixture.runVue {
+                myFixture.tempDirPath
+                doUnavailable("vue/keyContextScript.vue")
+            }
+        }
     }
 }
