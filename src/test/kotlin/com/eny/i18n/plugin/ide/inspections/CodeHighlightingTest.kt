@@ -11,6 +11,7 @@ import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.jupiter.api.Test
 import utils.randomOf
+import kotlin.concurrent.thread
 
 abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerator, protected val translationGenerator: TranslationGenerator): PlatformBaseTest() {
     private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
@@ -29,6 +30,7 @@ abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerat
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
+    @Test
     fun testReferenceToObjectDefaultNs() = check(
         "refToObjectDefNs.${codeGenerator.ext()}",
         codeGenerator.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
@@ -36,6 +38,7 @@ abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerat
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
+    @Test
     fun testResolved() = check(
         "resolved.${codeGenerator.ext()}",
         codeGenerator.generate("\"test:tst1.base.single\""),
@@ -43,6 +46,7 @@ abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerat
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
+    @Test
     fun testNotArg() = check(
         "defNsUnresolved.${codeGenerator.ext()}",
         codeGenerator.generateInvalid(
@@ -52,6 +56,7 @@ abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerat
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
+    @Test
     fun testExpressionInsideTranslation() = check(
         "expressionInTranslation.${codeGenerator.ext()}",
         codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
@@ -61,6 +66,8 @@ abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerat
 }
 
 abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, translationGenerator: TranslationGenerator): CodeHighlightingTestBase(codeGenerator, translationGenerator) {
+
+    @Test
     fun testDefNsUnresolved() = check(
         "defNsUnresolved.${codeGenerator.ext()}",
         codeGenerator.multiGenerate(
@@ -71,6 +78,7 @@ abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, t
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
+    @Test
     fun testUnresolvedKey() = check(
         "unresolvedKey.${codeGenerator.ext()}",
         codeGenerator.multiGenerate(
@@ -86,6 +94,7 @@ abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, t
         translationGenerator.generateContent("tst1", "base", "single", "only one value")
     )
 
+    @Test
     fun testUnresolvedNs() = check(
         "unresolvdNs.${codeGenerator.ext()}",
         codeGenerator.multiGenerate(
@@ -96,6 +105,7 @@ abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, t
         translationGenerator.generateContent("root", "first", "key", "value")
     )
 
+    @Test
     fun testResolvedTemplate() = check(
         "resolvedTemplate.${codeGenerator.ext()}",
         codeGenerator.generate("`test:tst1.base.\${arg}`"),
@@ -105,6 +115,8 @@ abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, t
 }
 
 abstract class PhpHighlightingTest(translationGenerator: TranslationGenerator): CodeHighlightingTestBase(PhpCodeGenerator(), translationGenerator) {
+
+    @Test
     fun testDefNsUnresolved() = check(
         "defNsUnresolved.${codeGenerator.ext()}",
         codeGenerator.multiGenerate(
@@ -115,6 +127,7 @@ abstract class PhpHighlightingTest(translationGenerator: TranslationGenerator): 
         translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
+    @Test
     fun testUnresolvedKey() = check(
         "unresolvedKey.${codeGenerator.ext()}",
         codeGenerator.multiGenerate(
@@ -127,6 +140,7 @@ abstract class PhpHighlightingTest(translationGenerator: TranslationGenerator): 
         translationGenerator.generateContent("tst1", "base", "single", "only one value")
     )
 
+    @Test
     fun testUnresolvedNs() = check(
         "unresolvdNs.${codeGenerator.ext()}",
         codeGenerator.multiGenerate(
@@ -155,45 +169,70 @@ abstract class VueHighlightingTest(private val translationGenerator: Translation
         myFixture.checkHighlighting(true, true, true, true)
     }
 
-    fun testReferenceToObjectVue() = check(
-        "refToObject.${codeGenerator.ext()}",
-        codeGenerator.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
-        "assets/en-US.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
+    @Test
+    fun testReferenceToObjectVue() {
+        thread {
+            check(
+                "refToObject.${codeGenerator.ext()}",
+                codeGenerator.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+                "assets/en-US.${translationGenerator.ext()}",
+                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+            )
+        }
+    }
 
-    fun testResolvedVue() = check(
-        "resolved.${codeGenerator.ext()}",
-        codeGenerator.generate("\"test:tst1.base.single\""),
-        "assets/en-US.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
+    @Test
+    fun testResolvedVue() {
+        thread {
+            check(
+                "resolved.${codeGenerator.ext()}",
+                codeGenerator.generate("\"test:tst1.base.single\""),
+                "assets/en-US.${translationGenerator.ext()}",
+                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+            )
+        }
+    }
 
-    fun testDefaultNsUnresolvedVue() = check(
-        "defNsUnresolved.${codeGenerator.ext()}",
-        codeGenerator.multiGenerate(
-            "\"<warning descr=\"Unresolved key\">missing.default.translation</warning>\"",
-            "`<warning descr=\"Unresolved key\">missing.default.in.\${template}</warning>`"
-        ),
-        "assets/none.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
+    @Test
+    fun testDefaultNsUnresolvedVue() {
+        thread {
+            check(
+                "defNsUnresolved.${codeGenerator.ext()}",
+                codeGenerator.multiGenerate(
+                        "\"<warning descr=\"Unresolved key\">missing.default.translation</warning>\"",
+                        "`<warning descr=\"Unresolved key\">missing.default.in.\${template}</warning>`"
+                ),
+                "assets/none.${translationGenerator.ext()}",
+                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+            )
+        }
+    }
 
-    fun testNotArg() = check(
-        "defNsUnresolved.${codeGenerator.ext()}",
-        codeGenerator.generateInvalid(
-            "\"test:tst1.base5.single\""
-        ),
-        "assets/en-US.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
+    @Test
+    fun testNotArg() {
+        thread {
+            check(
+                "defNsUnresolved.${codeGenerator.ext()}",
+                codeGenerator.generateInvalid(
+                        "\"test:tst1.base5.single\""
+                ),
+                "assets/en-US.${translationGenerator.ext()}",
+                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+            )
+        }
+    }
 
-    fun testExpressionInsideTranslation() = check(
-        "expressionInTranslation.${codeGenerator.ext()}",
-        codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
-        "assets/en-US.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
+    @Test
+    fun testExpressionInsideTranslation() {
+        thread {
+            check(
+                "expressionInTranslation.${codeGenerator.ext()}",
+                codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
+                "assets/en-US.${translationGenerator.ext()}",
+                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+            )
+        }
+    }
 }
 
 class JsDialectCodeHighlightingRandomTest: JsDialectCodeHighlightingTestBase(
