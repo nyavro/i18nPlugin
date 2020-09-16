@@ -12,7 +12,6 @@ import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.jupiter.api.Test
 import kotlin.concurrent.thread
 

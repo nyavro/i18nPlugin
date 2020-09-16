@@ -174,7 +174,6 @@ internal class CompositeKeyResolverTest {
 
 internal class CompositeKeyResolverUnresolvedTest {
 
-
     @Test
     fun unresolvedPathIsNull() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
