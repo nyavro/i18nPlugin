@@ -7,6 +7,7 @@ import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import org.junit.jupiter.api.Test
 
 internal class VueChecker(private val fixture: CodeInsightTestFixture): Checker {
     private val checker = BasicChecker(fixture)
@@ -22,6 +23,7 @@ internal class VueChecker(private val fixture: CodeInsightTestFixture): Checker 
 internal abstract class CodeCompletionTestBaseVue(translationGenerator: TranslationGenerator) :
     CodeCompletionTestBase(VueCodeGenerator(), translationGenerator, DefaultNsKeyGenerator(), ::VueChecker) {
 
+    @Test
     fun testEmptyKeyCompletion() = myFixture.runVueConfig(
         Config(vueDirectory = "assets")
     ) {
@@ -31,6 +33,7 @@ internal abstract class CodeCompletionTestBaseVue(translationGenerator: Translat
         assertTrue(vars.find {it.lookupString == "tstw"} != null)
     }
 
+    @Test
     fun testRootKeyCompletion() = myFixture.runVueConfig(
         Config(vueDirectory = "assets")
     ) {

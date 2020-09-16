@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
+import org.junit.jupiter.api.Test
 
 abstract class TranslationFileGenerationBase(private val ext: String): ExtractionTestBase() {
 
@@ -10,6 +11,7 @@ abstract class TranslationFileGenerationBase(private val ext: String): Extractio
 
     private val testConfig = Config(yamlContentGenerationEnabled = ext == "yml", jsonContentGenerationEnabled = ext == "json")
 
+    @Test
     fun testTranslationFileGeneration() = myFixture.runWithConfig(testConfig) {
         doRunUnknownNs(
             "js/simple.js",
@@ -20,6 +22,7 @@ abstract class TranslationFileGenerationBase(private val ext: String): Extractio
         )
     }
 
+    @Test
     fun testTranslationFileGenerationVue() = myFixture.runVueConfig(testConfig) {
         val locales = myFixture.tempDirFixture.findOrCreateDir("locales")
         doRunUnknownNs(

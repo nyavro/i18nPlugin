@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import com.intellij.codeInsight.completion.CompletionInitializationContext
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class KeyNormalizerTest {

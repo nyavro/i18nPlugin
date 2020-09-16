@@ -2,13 +2,17 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.utils.generator.code.*
+import org.junit.jupiter.api.Test
+import kotlin.concurrent.thread
 
 abstract class KeyContextBase(private val codeGenerator: CodeGenerator): ExtractionTestBase() {
 
+    @Test
     fun testKeyContext() {
         doUnavailable("keyContextDefNs.${codeGenerator.ext()}", codeGenerator.generate("\"test:ref<caret>.value.sub1\""))
     }
 
+    @Test
     fun testKeyContextDefaultNs() {
         doUnavailable("keyContextDefNs.${codeGenerator.ext()}", codeGenerator.generate("\"ref<caret>.value.sub1\""))
     }
@@ -24,12 +28,22 @@ class KeyContextVueTest: ExtractionTestBase() {
 
     private val codeGenerator = VueCodeGenerator()
 
-    fun testKeyContext() = myFixture.runVue {
-        doUnavailable("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"ref<caret>.value.sub1\""))
+    @Test
+    fun testKeyContext() {
+        thread {
+            myFixture.runVue {
+                doUnavailable("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"ref<caret>.value.sub1\""))
+            }
+        }
     }
 
-    fun testKeyContextScript() = myFixture.runVue {
-        myFixture.tempDirPath
-        doUnavailable("vue/keyContextScript.vue")
+    @Test
+    fun testKeyContextScript() {
+        thread {
+            myFixture.runVue {
+                myFixture.tempDirPath
+                doUnavailable("vue/keyContextScript.vue")
+            }
+        }
     }
 }

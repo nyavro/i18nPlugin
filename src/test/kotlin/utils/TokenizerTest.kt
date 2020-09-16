@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.key.lexer.NsSeparator
 import com.eny.i18n.plugin.key.lexer.Tokenizer
 import com.eny.i18n.plugin.utils.KeyElement
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class TokenizerTest {

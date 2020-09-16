@@ -1,13 +1,13 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.plugin.PlatformBaseTest
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestInputDialog
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
-abstract class ExtractionTestBase: BasePlatformTestCase() {
+abstract class ExtractionTestBase: PlatformBaseTest() {
     private val hint = "Extract i18n key"
 
     override fun getTestDataPath(): String = "src/test/resources/keyExtraction"

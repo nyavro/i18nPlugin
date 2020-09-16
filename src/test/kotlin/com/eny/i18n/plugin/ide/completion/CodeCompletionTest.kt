@@ -1,12 +1,14 @@
 package com.eny.i18n.plugin.ide.completion
 
+import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.codeInsight.completion.CompletionType
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import org.junit.jupiter.api.Test
+import kotlin.concurrent.thread
 
 interface Checker {
     fun doCheck(sourceName: String, sourceCode: String, expectedCode: String, ext: String, translationContent: String)
@@ -55,7 +57,7 @@ abstract class CodeCompletionTestBase(
     protected val codeGenerator: CodeGenerator,
     protected val translationGenerator: TranslationGenerator,
     protected val keyGenerator: KeyGenerator = NsKeyGenerator(),
-    protected val checkerProducer: (fixture: CodeInsightTestFixture) -> Checker = ::NsChecker) : BasePlatformTestCase() {
+    protected val checkerProducer: (fixture: CodeInsightTestFixture) -> Checker = ::NsChecker) : PlatformBaseTest() {
 
     protected lateinit var checker: Checker
 
@@ -65,6 +67,7 @@ abstract class CodeCompletionTestBase(
     }
 
     //No completion happens
+    @Test
     fun testNoCompletion() = checker.doCheck(
         "none.${codeGenerator.ext()}",
         codeGenerator.generate(keyGenerator.generate("test", "none.base.<caret>")),
@@ -74,32 +77,48 @@ abstract class CodeCompletionTestBase(
     )
 
     //Simple case - one possible completion of key: 'test:tst1.base.<caret>'
-    fun testSingle() = checker.doCheck(
-        "single.${codeGenerator.ext()}",
-        codeGenerator.generate(keyGenerator.generate("test", "tst1.base.<caret>")),
-        codeGenerator.generate(keyGenerator.generate("test","tst1.base.single")),
-        translationGenerator.ext(),
-        translationGenerator.generateContent("tst1", "base", "single", "only one value")
-    )
+    @Test
+    fun testSingle() {
+        thread {
+            checker.doCheck(
+                "single.${codeGenerator.ext()}",
+                codeGenerator.generate(keyGenerator.generate("test", "tst1.base.<caret>")),
+                codeGenerator.generate(keyGenerator.generate("test","tst1.base.single")),
+                translationGenerator.ext(),
+                translationGenerator.generateContent("tst1", "base", "single", "only one value")
+            )
+        }
+    }
 
     //Completion of plural key: 'test:tst2.plurals.<caret>'
-    fun testPlural() = checker.doCheck(
-        "plural.${codeGenerator.ext()}",
-        codeGenerator.generate(keyGenerator.generate("test", "tst2.plurals.<caret>")),
-        codeGenerator.generate(keyGenerator.generate("test","tst2.plurals.value")),
-        translationGenerator.ext(),
-        translationGenerator.generatePlural("tst2", "plurals", "value", "tt", "qq", "vv")
-    )
+    @Test
+    fun testPlural() {
+        thread {
+            checker.doCheck(
+                    "plural.${codeGenerator.ext()}",
+                    codeGenerator.generate(keyGenerator.generate("test", "tst2.plurals.<caret>")),
+                    codeGenerator.generate(keyGenerator.generate("test", "tst2.plurals.value")),
+                    translationGenerator.ext(),
+                    translationGenerator.generatePlural("tst2", "plurals", "value", "tt", "qq", "vv")
+            )
+        }
+    }
 
     //Completion of partially typed key: 'test:tst1.base.si<caret>'
-    fun testPartial() = checker.doCheck(
-        "partial.${codeGenerator.ext()}",
-        codeGenerator.generate(keyGenerator.generate("test", "tst1.base.si<caret>")),
-        codeGenerator.generate(keyGenerator.generate("test","tst1.base.single")),
-        translationGenerator.ext(),
-        translationGenerator.generateContent("tst1", "base", "single", "only one value")
-    )
+    @Test
+    fun testPartial() {
+        thread {
+            checker.doCheck(
+                "partial.${codeGenerator.ext()}",
+                codeGenerator.generate(keyGenerator.generate("test", "tst1.base.si<caret>")),
+                codeGenerator.generate(keyGenerator.generate("test","tst1.base.single")),
+                translationGenerator.ext(),
+                translationGenerator.generateContent("tst1", "base", "single", "only one value")
+            )
+        }
+    }
 
+    @Test
     fun testInvalidCompletion() = checker.doCheck(
             "partial.${codeGenerator.ext()}",
             codeGenerator.generate(keyGenerator.generate("test", "tst1.base.si<caret>ng")),
