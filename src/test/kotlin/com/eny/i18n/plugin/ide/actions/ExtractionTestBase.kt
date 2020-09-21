@@ -8,7 +8,8 @@ import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestInputDialog
 
 abstract class ExtractionTestBase: PlatformBaseTest() {
-    private val hint = "Extract i18n key"
+
+    protected val hint = "Extract i18n key"
 
     override fun getTestDataPath(): String = "src/test/resources/keyExtraction"
 
@@ -29,42 +30,8 @@ abstract class ExtractionTestBase: PlatformBaseTest() {
         myFixture.checkResultByFile(origTranslation, patchedTranslation, false)
     }
 
-    protected fun doUnavailable(src: String) {
-        myFixture.configureByFile(src)
-        assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
-    }
-
-    protected fun doUnavailable(fileName: String, code: String) {
-        myFixture.configureByText(fileName, code)
-        assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
-    }
-
     protected fun doRun(src: String, patched: String, translation: String, patchedTranslation: String, newKey: String) {
         doRun(src, patched, translation, patchedTranslation, predefinedTextInputDialog(newKey))
-    }
-
-    protected fun doCancel(src: String, translation: String) {
-        doRun(src, src, translation, translation,
-            object : TestInputDialog {
-                override fun show(message: String): String? = null
-                override fun show(message: String, validator: InputValidator?) = null
-            }
-        )
-    }
-
-    protected fun doCancelInvalid(src: String, translation: String) {
-        doRun(src, src, translation, translation,
-            object : TestInputDialog {
-                override fun show(message: String): String? = null
-                override fun show(message: String, validator: InputValidator?) = "not:a:key{here}"
-            },
-            object: TestDialog {
-                override fun show(message: String): Int {
-                    assertEquals("Invalid i18n key", message)
-                    return 1
-                }
-            }
-        )
     }
 
     protected fun doRunUnknownNs(
@@ -87,7 +54,7 @@ abstract class ExtractionTestBase: PlatformBaseTest() {
         myFixture.checkResultByFile(translationCreated, translationExpected, false)
     }
 
-    private fun predefinedTextInputDialog(newKey: String): TestInputDialog {
+    protected fun predefinedTextInputDialog(newKey: String): TestInputDialog {
         return object : TestInputDialog {
             override fun show(message: String): String? = null
             override fun show(message: String, validator: InputValidator?): String {

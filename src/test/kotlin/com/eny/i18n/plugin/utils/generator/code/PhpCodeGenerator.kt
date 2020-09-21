@@ -20,5 +20,11 @@ class PhpCodeGenerator: CodeGenerator {
         echo str_replace("\n", '<br>', ts($key));
     """
 
+    override fun generateNotExtracted(text: String, index: Int): String = """
+        <?php
+            ${generateLineNotExtracted(text)} 
+    """
+
     private fun generateLine(key: String): String = """          echo str_replace("\n", '<br>', t($key));"""
+    private fun generateLineNotExtracted(text: String): String = """          echo str_replace("\n", '<br>', $text);"""
 }

@@ -18,20 +18,13 @@ class JsonTranslationGenerator: TranslationGenerator {
     }   
     """.trimIndent()
 
-    override fun generateContent(root: String, first: String, key: String, value: String): String = """
-    {
-        "$root": {
-            "$first": {
-                "$key": "$value"
-            },
-            "plurals": {
-                "value-1": "tt",
-                "value-2": "qq",
-                "value-5": "vv"
-            }
-        }
-    }        
-    """
+    override fun generateContent(root: String, first: String, key: String, value: String): String = """{
+  "$root": {
+    "$first": {
+      "$key": "$value"
+    }
+  }
+}"""
 
     override fun generateContent(root: String, first: String, second: String, key: String, value: String): String = """
     {

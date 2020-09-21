@@ -14,19 +14,11 @@ class YamlTranslationGenerator: TranslationGenerator {
     override fun generateContent(root: String, key: String, value: String): String = """ 
     $root:   
         $key: $value
-    subsection2: 
-        key21: Ref
-        key22: Etwas
-    """.trimIndent()
-
-    override fun generateContent(root: String, first: String, key: String, value: String): String = """ 
-    $root:  
-        $first: 
-            $key: $value
-        subsection2: 
-            key21: Ref
-            key22: Etwas
     """
+
+    override fun generateContent(root: String, first: String, key: String, value: String): String = """$root: 
+  $first: 
+    $key: $value"""
 
     override fun generateContent(root: String, first: String, second: String, key: String, value: String): String = """ 
     $root: 

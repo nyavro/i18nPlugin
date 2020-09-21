@@ -22,5 +22,63 @@ class VueCodeGenerator: CodeGenerator {
         </template>
     """
 
+    fun generateScript(text: String): String {
+        val f = 't'
+        return """
+            <template>
+                <div id="app">
+                    <h1>{{ \$$f('ref.section.key') }}</h1>
+                    <div>{{title}}</div>
+                </div>
+            </template>
+            <style>
+                h1 {color: #42b983;}
+            </style>
+            <script>
+                export default {
+                    name: "AppHeader",
+                    computed: {
+                        title() {
+                            return $text;
+                        }
+                    }
+                }
+            </script>
+        """
+    }
+
+    fun generateScript2(text: String): String {
+        val f = 't'
+        return """
+            <template>
+                <div id="app">
+                    <h1>{{ \$$f('ref.section.key') }}</h1>
+                    <div>{{title}}</div>
+                </div>
+            </template>
+            <style>
+                h1 {color: #42b983;}
+            </style>
+            <script>
+                export default {
+                    name: "AppH1eader",
+                    computed: {
+                        title() {
+                            return $text;
+                        }
+                    }
+                }
+            </script>
+        """
+    }
+
+    override fun generateNotExtracted(text: String, index: Int): String = """
+        <template>
+            ${generateDivNotExtracted(text)}
+        </template>
+    """
+
     private fun generateDiv(key: String): String = "    <div>{{ \$t($key) }}</div>\n"
+
+    private fun generateDivNotExtracted(text: String): String = "    <div>{{ $text }}</div>\n"
 }

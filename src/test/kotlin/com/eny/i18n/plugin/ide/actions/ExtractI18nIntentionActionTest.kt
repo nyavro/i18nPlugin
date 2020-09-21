@@ -7,36 +7,6 @@ import com.eny.i18n.plugin.utils.generator.code.*
 import org.junit.jupiter.api.Test
 import kotlin.concurrent.thread
 
-class ExtractionCancellationTest: ExtractionTestBase() {
-
-    @Test
-    fun testTsCancel() {
-        doCancel("js/simple.js", "assets/test.json")
-    }
-
-    @Test
-    fun testTsCancelInvalid() {
-        doCancelInvalid("ts/simple.ts", "assets/test.json")
-    }
-
-    @Test
-    fun testExtractionUnavailable() {
-        doUnavailable("tsx/unavailable.tsx")
-    }
-
-    @Test
-    fun testInvalidSource() {
-        thread {
-            doRun("jsx/strange.jsx",
-                    "jsx/strangeKeyExtracted.jsx",
-                    "assets/test.json",
-                    "assets/testKeyExtracted.json",
-                    "test:ref.value3"
-            )
-        }
-    }
-}
-
 abstract class ExtractI18nIntentionActionBase(private val language: String, private val translationFormat: String, private val codeGenerator: CodeGenerator): ExtractionTestBase() {
 
     protected val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")
@@ -72,8 +42,15 @@ abstract class ExtractI18nIntentionActionBase(private val language: String, priv
     }
 
     @Test
-    fun testKeyContext() {
-        doUnavailable("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"test:ref<caret>.value.sub1\""))
+    fun testRootSource() {
+        thread {
+            doRun("jsx/strange.jsx",
+                    "jsx/strangeKeyExtracted.jsx",
+                    "assets/test.json",
+                    "assets/testKeyExtracted.json",
+                    "test:ref.value3"
+            )
+        }
     }
 }
 
