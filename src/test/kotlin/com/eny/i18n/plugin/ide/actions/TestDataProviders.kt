@@ -31,9 +31,11 @@ class CodeGenerators : ArgumentsProvider {
         cgs.map {Arguments.of(it)}.stream()
 }
 
-class ОыщтНфьдCodeGenerators : ArgumentsProvider {
+class JsonYamlCodeGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-            cgs.map {Arguments.of(it)}.stream()
+        listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).flatMap {
+            tg -> cgs.map {Arguments.of(it, tg)}
+        }.stream()
 }
 
 class CodeAndTranslationGenerators : ArgumentsProvider {

@@ -80,5 +80,5 @@ class VueCodeGenerator: CodeGenerator {
 
     private fun generateDiv(key: String): String = "    <div>{{ \$t($key) }}</div>\n"
 
-    private fun generateDivNotExtracted(text: String): String = "    <div>{{ $text }}</div>\n"
+    private fun generateDivNotExtracted(text: String): String = "    <div>{{ \"$text\" }}</div>\n"
 }

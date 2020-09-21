@@ -14,16 +14,18 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.provider.ValueSource
 
+private fun config(ext: String) =
+        Config(yamlContentGenerationEnabled = ext == "yml",
+                jsonContentGenerationEnabled = ext == "json",
+                preferYamlFilesGeneration = ext == "yml"
+        )
+
 class TranslationFileGenerationTest: ExtractionTestBase() {
 
     @ParameterizedTest
-    @ArgumentsSource(CodeGenerators::class)
-    @ValueSource(strings = ["yml", "json"])
-    fun testTranslationFileGeneration(cg: CodeGenerator, ext: String) = myFixture.runWithConfig(
-        Config(yamlContentGenerationEnabled = ext == "yml", jsonContentGenerationEnabled = ext == "json")
-    ) {
-        val tg = translationGenerator(ext)!!
-        myFixture.configureByText("simple.${cg.ext()}", cg.generateNotExtracted("\"<caret>I want to move it to translation\""))
+    @ArgumentsSource(JsonYamlCodeGenerators::class)
+    fun testTranslationFileGeneration(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
+        myFixture.configureByText("simple.${cg.ext()}", cg.generateNotExtracted("<caret>I want to move it to translation"))
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
         Messages.setTestInputDialog(predefinedTextInputDialog("main:component.header.title"))
@@ -43,9 +45,7 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
 
     @ParameterizedTest
     @ValueSource(strings = ["yml", "json"])
-    fun testTranslationFileGenerationVue(ext: String) = myFixture.runVueConfig(
-        Config(yamlContentGenerationEnabled = ext == "yml", jsonContentGenerationEnabled = ext == "json", preferYamlFilesGeneration = ext == "yml")
-    ) {
+    fun testTranslationFileGenerationVue(ext: String) = myFixture.runVueConfig(config(ext)) {
         val tg = translationGenerator(ext)!!
         myFixture.tempDirFixture.findOrCreateDir("locales")
         myFixture.configureByText("simple.${cg.ext()}", cg.generateScript("\"I want<caret> to move it to translation\""))

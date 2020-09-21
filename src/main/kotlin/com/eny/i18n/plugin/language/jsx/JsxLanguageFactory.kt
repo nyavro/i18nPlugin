@@ -84,5 +84,6 @@ internal class JsxTranslationExtractor: TranslationExtractor {
             element.parent.textRange.startOffset,
             element.parent.textRange.endOffset
         )
+    override fun template(element: PsiElement): (argument: String) -> String = {"{i18n.t($it)}"}
     private fun PsiElement.isJs(): Boolean = this.language == JavascriptLanguage.INSTANCE
 }

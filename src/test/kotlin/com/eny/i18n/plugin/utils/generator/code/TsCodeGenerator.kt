@@ -16,7 +16,7 @@ class TsCodeGenerator: CodeGenerator {
 
     override fun generateNotExtracted(text: String, index: Int): String = """
         export const test$index = (i18n: {t: Function}) => {
-            return $text;
+            return "$text";
         };
     """
 }
