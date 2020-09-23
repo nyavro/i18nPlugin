@@ -13,10 +13,11 @@ abstract class ExtractionTestBase: PlatformBaseTest() {
 
     override fun getTestDataPath(): String = "src/test/resources/keyExtraction"
 
-    protected fun config(ext: String) =
+    protected fun config(ext: String, extractSorted: Boolean = false) =
             Config(yamlContentGenerationEnabled = ext == "yml",
                     jsonContentGenerationEnabled = ext == "json",
-                    preferYamlFilesGeneration = ext == "yml"
+                    preferYamlFilesGeneration = ext == "yml",
+                    extractSorted = extractSorted
             )
 
     protected fun runTestCase(

@@ -47,6 +47,33 @@ class VueCodeGenerator: CodeGenerator {
         """
     }
 
+    fun generateTemplate(text: String): String {
+        val f = 't'
+        return """
+            <template>
+              <div id="app">
+                <div>$text</div>
+                <div>{{title}}</div>
+              </div>
+            </template>
+            <style>
+              h1 {
+                color: #42b983;
+              }
+            </style>
+            <script>
+              export default {
+                name: "AppHeader",
+                computed: {
+                  title() {
+                    return this.$f('tit.le');
+                  }
+                }
+              }
+            </script>
+        """
+    }
+
     override fun generateNotExtracted(text: String, index: Int): String = """
         <template>
             ${generateDivNotExtracted(text)}

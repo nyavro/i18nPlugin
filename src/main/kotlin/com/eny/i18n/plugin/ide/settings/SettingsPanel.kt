@@ -133,6 +133,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(checkbox(PluginBundle.getMessage("settings.folding.isEnabled"), settings::foldingEnabled))
         panel.add(textInput(PluginBundle.getMessage("settings.folding.preferredLanguage"), settings::foldingPreferredLanguage))
         panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
+        panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(vue())
         panel.add(textInput("Vue locales directory", settings::vueDirectory))
         root.add(panel, BorderLayout.PAGE_START)
