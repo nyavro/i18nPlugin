@@ -49,4 +49,19 @@ class YamlTranslationGenerator: TranslationGenerator {
     """.trimIndent()
 
     override fun generateInvalidRoot(): String = ""
+
+    private fun generateBranchByList(list: List<String>): String {
+        val keyValue = list.takeLast(2)
+        return list
+            .dropLast(2)
+            .foldRight(Pair("${"   ".repeat(list.size-1)}${keyValue[0]}: ${keyValue[1]}", 0)) {
+                item, acc ->
+                val tabs = "   ".repeat(list.size-acc.second-2)
+                Pair("$tabs${item}: \n${acc.first}${tabs}#$tabs", acc.second+1)
+            }.first
+    }
+
+    override fun generate(root: String, vararg branches: Array<String>): String {
+        return "$root: \n${branches.map{generateBranchByList(it.toList())}.joinToString("\n")}"
+    }
 }

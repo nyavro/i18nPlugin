@@ -3,111 +3,102 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
-import com.eny.i18n.plugin.utils.generator.code.*
-import org.junit.jupiter.api.Test
+import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ArgumentsSource
 import kotlin.concurrent.thread
 
-abstract class ExtractI18nIntentionActionBase(private val language: String, private val translationFormat: String, private val codeGenerator: CodeGenerator): ExtractionTestBase() {
+class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 
-    protected val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")
-
-    @Test
-    fun testKeyExtraction() = myFixture.runWithConfig(testConfig) {
-        doRun(
-            "$language/simple.$language",
-            "$language/simpleKeyExtracted.$language",
-            "assets/test.$translationFormat",
-            "assets/testKeyExtracted.$translationFormat",
-            "test:ref.value3")
+    @ParameterizedTest
+    @ArgumentsSource(JsonYamlCodeGenerators::class)
+    fun testKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
+        runTestCase(
+            "simple.${cg.ext()}",
+            cg.generateNotExtracted("<caret>I want to move it to translation"),
+            cg.generate("'test:ref.value3'"),
+            "assets/test.${tg.ext()}",
+            tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+            tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+            predefinedTextInputDialog("test:ref.value3")
+        )
     }
 
-    @Test
-    fun testRightBorderKeyExtraction() = myFixture.runWithConfig(testConfig) {
-        doRun(
-            "$language/rightBorder.$language",
-            "$language/simpleKeyExtracted.$language",
-            "assets/test.$translationFormat",
-            "assets/testKeyExtracted.$translationFormat",
-            "test:ref.value3")
+    @ParameterizedTest
+    @ArgumentsSource(JsonYamlCodeGenerators::class)
+    fun testDefNsKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
+        runTestCase(
+            "simple.${cg.ext()}",
+                cg.generateNotExtracted("<caret>I want to move it to translation"),
+            cg.generate("'ref.value3'"),
+            "assets/translation.${tg.ext()}",
+            tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+            tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+            predefinedTextInputDialog("ref.value3")
+        )
     }
 
-    @Test
-    fun testDefNsKeyExtraction() = myFixture.runWithConfig(testConfig) {
-        doRun(
-            "$language/simple.$language",
-            "$language/simpleDefNsKeyExtracted.$language",
-            "assets/translation.$translationFormat",
-            "assets/translationKeyExtracted.$translationFormat",
-            "ref.value.sub1")
+    @ParameterizedTest
+    @ArgumentsSource(JsonYamlCodeGenerators::class)
+    fun testRightBorderKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
+        runTestCase(
+            "simple.${cg.ext()}",
+            cg.generateNotExtracted("I want to move it to translation<caret>"),
+            cg.generate("'test:ref.value3'"),
+            "assets/test.${tg.ext()}",
+            tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+            tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+            predefinedTextInputDialog("test:ref.value3")
+        )
     }
 
-    @Test
-    fun testRootSource() {
+    @ParameterizedTest
+    @ArgumentsSource(JsonYamlCodeGenerators::class)
+    fun testRootSource(cg: CodeGenerator, tg: TranslationGenerator) {
         thread {
-            doRun("jsx/strange.jsx",
-                    "jsx/strangeKeyExtracted.jsx",
-                    "assets/test.json",
-                    "assets/testKeyExtracted.json",
-                    "test:ref.value3"
-            )
+            myFixture.runWithConfig(config(tg.ext())) {
+                runTestCase(
+                    "simple.${cg.ext()}",
+                    "I want to <caret>move it to translation",
+                    "i18n.t<caret>('test:ref.value3')",
+                    "assets/test.${tg.ext()}",
+                    tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+                    tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+                    predefinedTextInputDialog("test:ref.value3")
+                )
+            }
         }
     }
 }
 
-class ExtractI18nIntentionActionJsJsonTest: ExtractI18nIntentionActionBase("js","json", JsCodeGenerator())
-class ExtractI18nIntentionActionTsJsonTest: ExtractI18nIntentionActionBase("ts", "json", TsCodeGenerator())
-class ExtractI18nIntentionActionTsxJsonTest: ExtractI18nIntentionActionBase("tsx", "json", TsxCodeGenerator())
-class ExtractI18nIntentionActionJsxJsonTest: ExtractI18nIntentionActionBase("jsx", "json", JsxCodeGenerator())
-class ExtractI18nIntentionActionJsYamlTest: ExtractI18nIntentionActionBase("js","yml", JsCodeGenerator())
-class ExtractI18nIntentionActionTsYamlTest: ExtractI18nIntentionActionBase("ts", "yml", TsCodeGenerator())
-class ExtractI18nIntentionActionTsxYamlTest: ExtractI18nIntentionActionBase("tsx", "yml", TsxCodeGenerator())
-class ExtractI18nIntentionActionJsxYamlTest: ExtractI18nIntentionActionBase("jsx", "yml", JsxCodeGenerator())
+class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
 
-abstract class ExtractI18nIntentionActionPhpBase(private val translationFormat: String): ExtractI18nIntentionActionBase("php", translationFormat, PhpCodeGenerator()) {
+    private val cg = VueCodeGenerator()
 
-    fun testKeyExtractionSingleQuoted() = myFixture.runWithConfig(testConfig) {
-        doRun(
-            "php/simpleSingleQuoted.php",
-            "php/simpleKeyExtracted.php",
-            "assets/test.$translationFormat",
-            "assets/testKeyExtracted.$translationFormat",
-            "test:ref.value3")
-    }
-
-    fun testRightBorderSingleQuoted() = myFixture.runWithConfig(testConfig) {
-        doRun(
-            "php/rightBorderSingleQuoted.php",
-            "php/simpleKeyExtracted.php",
-            "assets/test.$translationFormat",
-            "assets/testKeyExtracted.$translationFormat",
-            "test:ref.value3")
-    }
-
-    fun testDefNsKeyExtractionSingleQuoted() = myFixture.runWithConfig(testConfig) {
-        doRun(
-            "php/simpleSingleQuoted.php",
-            "php/simpleDefNsKeyExtracted.php",
-            "assets/translation.$translationFormat",
-            "assets/translationKeyExtracted.$translationFormat",
-            "ref.value.sub1")
+    @ParameterizedTest
+    @ArgumentsSource(JsonYamlTranslationGenerators::class)
+    fun testKeyExtraction(tg: TranslationGenerator) {
+        thread {
+            myFixture.runVueConfig(config(tg.ext())) {
+                runTestCase(
+                    "simple.${cg.ext()}",
+                    cg.generateNotExtracted("<caret>I want to move it to translation"),
+                    cg.generate("'ref.value3'"),
+                    "locales/en-US.${tg.ext()}",
+                    tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+                    tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+                    predefinedTextInputDialog("ref.value3")
+                )
+            }
+        }
     }
 }
-class ExtractI18nIntentionActionPhpJsonTest: ExtractI18nIntentionActionPhpBase("json")
-class ExtractI18nIntentionActionPhpYamlTest: ExtractI18nIntentionActionPhpBase("yml")
 
 abstract class ExtractI18nIntentionActionVueI18nBase(private val translationFormat: String): ExtractionTestBase() {
 
     private val testConfig = Config(jsonContentGenerationEnabled = translationFormat == "json", yamlContentGenerationEnabled = translationFormat == "yml")
-
-    fun testKeyExtraction() = myFixture.runVueConfig(testConfig) {
-        doRun(
-            "vue/simpleVue.vue",
-            "vue/simpleKeyExtractedVue.vue",
-            "locales/en-US.$translationFormat",
-            "locales/en-USKeyExtracted.$translationFormat",
-            "ref.value3"
-        )
-    }
 
     fun testKeyExtraction2() = myFixture.runVueConfig(testConfig) {
         doRun(

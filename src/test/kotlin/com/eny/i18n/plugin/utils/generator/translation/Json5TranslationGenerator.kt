@@ -77,4 +77,18 @@ class Json5TranslationGenerator: TranslationGenerator {
     """.trimIndent()
 
     override fun generateInvalidRoot(): String = ""
+
+    private fun generateBranchByList(list: List<String>): String {
+        val keyValue = list.takeLast(2)
+        return list
+                .dropLast(2)
+                .foldRight(Pair("${"\t".repeat(list.size)}\"${keyValue[0]}\": \"${keyValue[1]}\"\n", 0)) {
+                    item, acc ->
+                    val tabs = "\t".repeat(list.size-acc.second-1)
+                    Pair("$tabs\"${item}\": {\n${acc.first}${tabs}\n$tabs}", acc.second+1)
+                }.first
+    }
+
+    override fun generate(root: String, vararg branches: Array<String>): String =
+            "{\n\t\"$root\": {\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n\t}\n}"
 }

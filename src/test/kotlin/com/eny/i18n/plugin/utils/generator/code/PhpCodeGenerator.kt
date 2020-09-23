@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.utils.generator.code
 
-class PhpCodeGenerator: CodeGenerator {
+abstract class PhpCodeGeneratorBase(private val quot: String): CodeGenerator {
 
     override fun ext(): String = "php"
 
@@ -26,5 +26,7 @@ class PhpCodeGenerator: CodeGenerator {
     """
 
     private fun generateLine(key: String): String = """          echo str_replace("\n", '<br>', t($key));"""
-    private fun generateLineNotExtracted(text: String): String = """          echo str_replace("\n", '<br>', '$text');"""
+    private fun generateLineNotExtracted(text: String): String = """          echo str_replace("\n", '<br>', $quot$text$quot);"""
 }
+
+class PhpCodeGenerator: PhpCodeGeneratorBase("'")

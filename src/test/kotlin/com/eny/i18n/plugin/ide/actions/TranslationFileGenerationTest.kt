@@ -2,23 +2,13 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
-import com.eny.i18n.plugin.utils.generator.code.JsCodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
-import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.openapi.ui.Messages
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.provider.ValueSource
-
-private fun config(ext: String) =
-        Config(yamlContentGenerationEnabled = ext == "yml",
-                jsonContentGenerationEnabled = ext == "json",
-                preferYamlFilesGeneration = ext == "yml"
-        )
 
 class TranslationFileGenerationTest: ExtractionTestBase() {
 

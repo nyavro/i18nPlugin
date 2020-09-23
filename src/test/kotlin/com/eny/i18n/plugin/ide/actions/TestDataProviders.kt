@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider
 import java.util.stream.Stream
 
 private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator(), Json5TranslationGenerator())
-private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpCodeGenerator())
+private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
 
 fun translationGenerator(ext: String): TranslationGenerator? = tgs.find {it.ext() == ext}
 
@@ -36,6 +36,11 @@ class JsonYamlCodeGenerators : ArgumentsProvider {
         listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).flatMap {
             tg -> cgs.map {Arguments.of(it, tg)}
         }.stream()
+}
+
+class JsonYamlTranslationGenerators: ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).map {Arguments.of(it)}.stream()
 }
 
 class CodeAndTranslationGenerators : ArgumentsProvider {
