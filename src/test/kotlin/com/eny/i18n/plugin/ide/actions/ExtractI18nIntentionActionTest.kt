@@ -34,7 +34,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 
     @ParameterizedTest
     @ArgumentsSource(JsonYamlCodeGenerators::class)
-    fun testKeyExtractionSorted(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext(), true)) {
+    fun testKeyExtractionSortedFirst(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext(), true)) {
         runTestCase(
             "simple.${cg.ext()}",
             cg.generateNotExtracted("<caret>I want to move it to translation"),
@@ -43,6 +43,20 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
             tg.generate("ref", arrayOf("section", "key", "Reference in json")),
             tg.generate("ref", arrayOf("dvalue3", "I want to move it to translation"), arrayOf("section", "key", "Reference in json")),
             predefinedTextInputDialog("test:ref.dvalue3")
+        )
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(JsonYamlCodeGenerators::class)
+    fun testKeyExtractionSortedMiddle(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext(), true)) {
+        runTestCase(
+            "simple.${cg.ext()}",
+            cg.generateNotExtracted("Mid<caret>dle!!!"),
+            cg.generate("'test:ref.mkey'"),
+            "assets/test.${tg.ext()}",
+            tg.generate("ref", arrayOf("akey", "The first one"), arrayOf("zkey", "The last one")),
+            tg.generate("ref", arrayOf("akey", "The first one"), arrayOf("mkey", "Middle!!!"), arrayOf("zkey", "The last one")),
+            predefinedTextInputDialog("test:ref.mkey")
         )
     }
 

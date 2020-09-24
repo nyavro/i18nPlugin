@@ -10,7 +10,6 @@ import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
 import com.intellij.json.psi.JsonElementGenerator
 import com.intellij.json.psi.JsonObject
-import com.intellij.json.psi.JsonPsiUtil
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.PsiElement
@@ -37,26 +36,26 @@ class JsonContentGenerator: ContentGenerator {
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.json.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = element is JsonObject
     override fun generateTranslationEntry(element: PsiElement, key: String, value: String) {
-        val jsonObject = element as JsonObject
+        val obj = element as JsonObject
         val generator = JsonElementGenerator(element.project)
-        if (Settings.getInstance(element.project).extractSorted) {
-            val props = jsonObject.getPropertyList()
+        val keyValue = generator.createProperty(key, value)
+        val props = obj.getPropertyList()
+        val separator = generator.createComma()
+        val pair = if (Settings.getInstance(element.project).extractSorted) {
             val before = props.takeWhile {it.name < key}
             if (before.isEmpty()) {
-                jsonObject.addAfter(
-                    generator.createComma(),
-                    jsonObject.addBefore(generator.createProperty(key, value), props.first())
-                )
+                Pair(separator, obj.addBefore(keyValue, props.first()))
+            } else {
+                Pair(keyValue, obj.addAfter(separator, before.last()))
             }
         }
         else {
-            JsonPsiUtil
-                .addProperty(
-                    jsonObject,
-                    generator.createProperty(key, value),
-                    false
-                )
+            Pair(keyValue, obj.addAfter(separator, props.last()))
         }
+        obj.addAfter(
+            pair.first,
+            pair.second
+        )
     }
     override fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?) =
         generateTranslationEntry(

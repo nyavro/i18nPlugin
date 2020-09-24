@@ -37,20 +37,24 @@ class YamlContentGenerator: ContentGenerator {
     override fun isSuitable(element: PsiElement): Boolean = element is YAMLMapping
     override fun generateTranslationEntry(element: PsiElement, key: String, value: String) {
         val generator = YAMLElementGenerator.getInstance(element.project)
-        if (Settings.getInstance(element.project).extractSorted) {
-            val yamlObject = (element as YAMLMapping)
-            val props = yamlObject.keyValues
+        val keyValue = generator.createYamlKeyValue(key, value)
+        val obj = (element as YAMLMapping)
+        val props = obj.keyValues
+        val separator = generator.createEol()
+        val pair = if (Settings.getInstance(element.project).extractSorted) {
             val before = props.takeWhile {it.name ?: "" < key}
             if (before.isEmpty()) {
-                yamlObject.addAfter(
-                    generator.createEol(),
-                    yamlObject.addBefore(generator.createYamlKeyValue(key, value), props.first())
-                )
+                Pair(separator, obj.addBefore(keyValue, props.first()))
+            } else {
+                Pair(keyValue, obj.addAfter(separator, before.last()))
             }
         } else {
-            element.add(generator.createEol())
-            element.add(generator.createYamlKeyValue(key, value))
+            Pair(keyValue, obj.addAfter(separator, props.last()))
         }
+        obj.addAfter(
+            pair.first,
+            pair.second
+        )
     }
     override fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?) =
         generateTranslationEntry(
