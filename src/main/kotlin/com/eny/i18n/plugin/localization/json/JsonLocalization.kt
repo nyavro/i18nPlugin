@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.localization.json
 
 import com.eny.i18n.plugin.factory.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.utils.PluginBundle
@@ -24,6 +25,7 @@ class JsonLocalizationFactory: LocalizationFactory {
  * Generates JSON translation content
  */
 class JsonContentGenerator: ContentGenerator {
+
     override fun generateContent(compositeKey: List<Literal>, value: String): String =
         compositeKey.foldRightIndexed("\"$value\"", { i, key, acc ->
             val tab = tabChar.repeat(i)
@@ -35,17 +37,31 @@ class JsonContentGenerator: ContentGenerator {
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.json.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = element is JsonObject
     override fun generateTranslationEntry(element: PsiElement, key: String, value: String) {
-        JsonPsiUtil
-            .addProperty(
-                element as JsonObject,
-                JsonElementGenerator(element.project).createProperty(key, value),
-                false
-            )
+        val jsonObject = element as JsonObject
+        val generator = JsonElementGenerator(element.project)
+        if (Settings.getInstance(element.project).extractSorted) {
+            val props = jsonObject.getPropertyList()
+            val before = props.takeWhile {it.name < key}
+            if (before.isEmpty()) {
+                jsonObject.addAfter(
+                    generator.createComma(),
+                    jsonObject.addBefore(generator.createProperty(key, value), props.first())
+                )
+            }
+        }
+        else {
+            JsonPsiUtil
+                .addProperty(
+                    jsonObject,
+                    generator.createProperty(key, value),
+                    false
+                )
+        }
     }
     override fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?) =
-            generateTranslationEntry(
-                    element,
-                    unresolved.first().text,
-                    generateContent(unresolved.drop(1), translationValue ?: fullKey.source)
-            )
+        generateTranslationEntry(
+            element,
+            unresolved.first().text,
+            generateContent(unresolved.drop(1), translationValue ?: fullKey.source)
+        )
 }

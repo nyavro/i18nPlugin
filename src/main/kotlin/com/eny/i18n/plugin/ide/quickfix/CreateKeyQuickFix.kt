@@ -64,6 +64,6 @@ class CreateKeyQuickFix(
 
     private fun createPropertiesChain(element: PsiElement, unresolved: List<Literal>) =
         generators
-            .filter { generator -> generator.isSuitable(element) }
-            .forEach { generator -> generator.generate(element, fullKey, unresolved, translationValue) }
+            .filter { it.isSuitable(element) }
+            .forEach { it.generate(element, fullKey, unresolved, translationValue) }
 }

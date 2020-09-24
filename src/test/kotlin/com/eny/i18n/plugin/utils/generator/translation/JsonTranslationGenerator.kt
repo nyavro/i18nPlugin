@@ -77,8 +77,8 @@ class JsonTranslationGenerator: TranslationGenerator {
             .dropLast(2)
             .foldRight(Pair("${"   ".repeat(list.size-1)}  \"${keyValue[0]}\": \"${keyValue[1]}\"", 0)) {
                 item, acc ->
-                val tabs = "   ".repeat(list.size-acc.second-1)
-                Pair("$tabs\"${item}\": {\n${acc.first}${tabs}\n$tabs}", acc.second+1)
+                val tabs = "   ".repeat(list.size-acc.second-2)
+                Pair("$tabs  \"${item}\": {\n${acc.first}${tabs}\n$tabs   }", acc.second+1)
             }.first
     }
 
