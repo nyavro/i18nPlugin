@@ -46,6 +46,9 @@ Intellij idea i18next support plugin
 
     ![Navigation from partially resolved](docs/img/p7.png)
     
+    ### Key extraction
+-   extract i18n translation from plain text     
+    
    ### Hints
  
 -   In the case of a single translation matching to given key the translation displayed as a hint (Ctrl + hover):
@@ -64,3 +67,6 @@ Intellij idea i18next support plugin
         
     will resolve translations in files first.json, second.json, third.json, fourth.json
      
+-   Extract translation sorted by key
+    
+    When set, key extracted in json or yaml file is inserted in sorted (by key) position
