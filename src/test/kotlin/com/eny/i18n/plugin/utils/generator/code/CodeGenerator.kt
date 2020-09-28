@@ -8,4 +8,5 @@ interface CodeGenerator {
     fun generate(key: String, index: Int = 0): String
     fun multiGenerate(vararg keys: String): String = keys.mapIndexed(::generate.flip()).joinToString()
     fun generateInvalid(key: String): String
+    fun generateNotExtracted(text: String, index: Int = 0): String
 }

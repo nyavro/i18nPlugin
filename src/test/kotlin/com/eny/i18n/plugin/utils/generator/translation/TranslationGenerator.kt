@@ -9,4 +9,5 @@ interface TranslationGenerator {
     fun generatePlural(root: String, first: String, key: String, value1: String, value2: String, value5: String): String
     fun generateInvalid(): String
     fun generateInvalidRoot(): String
+    fun generate(root: String, vararg branches: Array<String>): String
 }

@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.localization.yaml
 
 import com.eny.i18n.plugin.factory.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
+import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.utils.PluginBundle
@@ -36,8 +37,24 @@ class YamlContentGenerator: ContentGenerator {
     override fun isSuitable(element: PsiElement): Boolean = element is YAMLMapping
     override fun generateTranslationEntry(element: PsiElement, key: String, value: String) {
         val generator = YAMLElementGenerator.getInstance(element.project)
-        element.add(generator.createEol())
-        element.add(generator.createYamlKeyValue(key, value))
+        val keyValue = generator.createYamlKeyValue(key, value)
+        val obj = (element as YAMLMapping)
+        val props = obj.keyValues
+        val separator = generator.createEol()
+        val pair = if (Settings.getInstance(element.project).extractSorted) {
+            val before = props.takeWhile {it.name ?: "" < key}
+            if (before.isEmpty()) {
+                Pair(separator, obj.addBefore(keyValue, props.first()))
+            } else {
+                Pair(keyValue, obj.addAfter(separator, before.last()))
+            }
+        } else {
+            Pair(keyValue, obj.addAfter(separator, props.last()))
+        }
+        obj.addAfter(
+            pair.first,
+            pair.second
+        )
     }
     override fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?) =
         generateTranslationEntry(
