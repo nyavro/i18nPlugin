@@ -23,6 +23,9 @@ abstract class PsiElementTree: Tree<PsiElement> {
          */
         fun create(file: PsiElement): PsiElementTree? =
             if (file is JsonFile) JsonElementTree.create(file)
+            else if (file is JsonObject) {
+                JsonElementTree(file)
+            }
 //            else if (file is JSObjectLiteralExpression) JsElementTree.create(file)
             else YamlElementTree.create(file)
     }

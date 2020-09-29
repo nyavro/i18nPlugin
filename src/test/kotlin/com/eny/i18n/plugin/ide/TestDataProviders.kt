@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide.actions
+package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.Json5TranslationGenerator
@@ -45,7 +45,7 @@ class JsonYamlTranslationGenerators: ArgumentsProvider {
 
 class CodeAndTranslationGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        cgs.flatMap {cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+        cgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
 }
 
 class TranslationGenerators: ArgumentsProvider {

@@ -1,16 +1,24 @@
 package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.intellij.json.JsonFileType
+import com.intellij.json.*
 import com.intellij.json.json5.Json5FileType
+import com.intellij.json.psi.JsonObject
+import com.intellij.lang.PsiBuilder
+import com.intellij.lang.PsiParser
+import com.intellij.lang.impl.PsiBuilderFactoryImpl
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
+import com.intellij.psi.html.HtmlTag
+import com.intellij.psi.impl.source.resolve.FileContextUtil.INJECTED_IN_ELEMENT
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.FilenameIndex
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlText
 import org.jetbrains.yaml.YAMLFileType
 import java.io.File
 
@@ -18,7 +26,10 @@ import java.io.File
  * Describes localization source.
  * May be root of json, yaml file, js object
  */
-data class LocalizationSource(val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: FileType)
+data class LocalizationSource(
+    val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: FileType,
+    val host: PsiElement? = null
+)
 /**
  * Provides search of localization files (json, yaml)
  */
@@ -30,12 +41,33 @@ class LocalizationSourceSearch(private val project: Project) {
     /**
      * Finds json roots by json file name
      */
-    fun findFilesByNames(fileNames: List<String>): List<LocalizationSource> =
-        findVirtualFilesByName(fileNames.whenMatches {it.isNotEmpty()} ?: config.defaultNamespaces()).flatMap {vf -> listOfNotNull(findPsiRoot(vf)).map (::localizationSource)} +
+    fun findFilesByNames(fileNames: List<String>, element: PsiElement? = null): List<LocalizationSource> =
+        findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces()).flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map(::localizationSource)} +
             if (config.vue) {
-                findVirtualFilesUnder(config.vueDirectory)
-                    .filter {file -> translationFileTypes.any {file.fileType==it}}
-                    .map (::localizationSource)
+                val res = findVirtualFilesUnder(config.vueDirectory)
+                    .filter { file -> translationFileTypes.any {file.fileType==it}}
+                    .map(::localizationSource)
+
+                val sfcSourceTag = PsiTreeUtil.findChildrenOfType(element?.containingFile?.getUserData(INJECTED_IN_ELEMENT)?.containingFile, HtmlTag::class.java).toList().find {it.name=="i18n"}
+                val sfcSourceText = PsiTreeUtil.findChildOfType(sfcSourceTag, XmlText::class.java)
+//        PsiBuilderFactory instance = PsiBuilderFactory.getInstance();
+                val all = if (sfcSourceTag!=null) {
+                    val parserDefinition = JsonParserDefinition()
+                    val builder: PsiBuilder = PsiBuilderFactoryImpl().createBuilder(parserDefinition, JsonLexer(), sfcSourceText?.text ?: "{}")
+                    val parser: PsiParser = JsonParser()
+                    res + (parser.parse(JsonElementTypes.OBJECT, builder).psi as JsonObject).propertyList.map {
+                        LocalizationSource(
+                            it.value!!.navigationElement,
+                            it.name,
+                            sfcSourceTag.containingFile.name,
+                            "SFC: ${sfcSourceTag.containingFile.name}/${it.name} ", JsonFileType.INSTANCE,
+                            sfcSourceText
+                        )
+                    }
+                } else {
+                    res
+                }
+                all
 //                val index = vueTranslationFiles.find {it.name.matches("index\\.(js|ts)".toRegex())}
 //                if (index == null) {
 //                    if (settings.jsConfiguration.isNotBlank()) {
@@ -51,18 +83,19 @@ class LocalizationSourceSearch(private val project: Project) {
 
     private fun localizationSource(file: PsiFile): LocalizationSource =
         LocalizationSource(
-            file,
-            file.name,
-            file.containingDirectory.name,
-            pathToRoot(
-            file.project.basePath ?: "",
-            file
-                .containingDirectory
-                .virtualFile
-                .path
-            ).trim(File.separatorChar) + File.separator + file.name,
-            file.fileType
+                file,
+                file.name,
+                file.containingDirectory.name,
+                pathToRoot(
+                        file.project.basePath ?: "",
+                        file
+                                .containingDirectory
+                                .virtualFile
+                                .path
+                ).trim(File.separatorChar) + File.separator + file.name,
+                file.fileType
         )
+
 
 //    private fun resolveJsRootsFromI18nObject(file: PsiFile?): List<LocalizationSource> {
 //        if (file == null) {
@@ -96,7 +129,7 @@ class LocalizationSourceSearch(private val project: Project) {
 
     private fun findVirtualFilesUnder(directory: String): List<PsiFile> =
         FilenameIndex.getFilesByName(project, directory, config.searchScope(project), true).toList().flatMap {
-            it.children.toList().map {root -> root.containingFile}
+            it.children.toList().map { root -> root.containingFile}
         }
 
 
@@ -109,8 +142,8 @@ class LocalizationSourceSearch(private val project: Project) {
         val ext = fileType.defaultExtension
         return FileTypeIndex
             .getFiles(
-                fileType,
-                config.searchScope(project)
+                    fileType,
+                    config.searchScope(project)
             )
             .filter { file -> fileNames.find {"$it.$ext" == file.name}.toBoolean()}
     }

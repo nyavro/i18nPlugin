@@ -83,4 +83,44 @@ class VueCodeGenerator: CodeGenerator {
     private fun generateDiv(key: String): String = "    <div>{{ \$t($key) }}</div>\n"
 
     private fun generateDivNotExtracted(text: String): String = "    <div>{{ \"$text\" }}</div>\n"
+
+    fun generateSfc(key: String, translationMap: Map<String, String>): String {
+        val f = "\$t"
+        val ns = "\$i18n"
+        return """
+           <template>
+              <div id="app">
+                <label for="locale">locale</label>
+                <select v-model="locale">
+                  <option>en</option>
+                  <option>ja</option>
+                </select>
+                <p>message: {{ $f($key) }}</p>
+              </div>
+            </template>
+            
+            <i18n>
+            {
+              ${translationContent(translationMap)}
+            }
+            </i18n>
+            
+            <script>
+            export default {
+              name: 'App',
+              data () { return { locale: 'en' } },
+              watch: {
+                locale (val) {
+                  this.$ns.locale = val
+                }
+              }
+            }
+            </script>
+        """
+    }
+
+    private fun translationContent(translationMap: Map<String, String>) =
+        translationMap.map {
+            "\"${it.key}\": ${it.value}"
+        }.joinToString(",")
 }

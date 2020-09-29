@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.PlatformBaseTest
+import com.eny.i18n.plugin.ide.CodeGeneratorsWithNs
 import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.intellij.codeInsight.intention.IntentionAction

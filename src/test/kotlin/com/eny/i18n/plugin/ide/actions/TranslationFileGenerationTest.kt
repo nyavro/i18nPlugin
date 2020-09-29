@@ -1,7 +1,9 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
+import com.eny.i18n.plugin.ide.translationGenerator
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
