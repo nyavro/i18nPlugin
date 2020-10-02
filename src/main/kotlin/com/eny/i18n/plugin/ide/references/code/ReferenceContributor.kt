@@ -12,7 +12,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 
-data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val host: PsiElement?)
+data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val host: Pair<PsiElement, String>?)
 
 /**
  * I18nReference to json/yaml translation
@@ -26,13 +26,12 @@ class I18nReference(element: PsiElement, textRange: TextRange, val references: L
 
     private fun findProperties(): List<PsiElement> =
         filterMostResolved()
-            .mapNotNull {
-                item -> item.reference.element?.let {
-                    item.host ?:
-                    if (it.isTree()) {
+            .mapNotNull { item -> item.reference.element?.let {
+                    val res = if (it.isTree()) {
                         val parent = it.value().parent
                         (parent as? PsiFile) ?: parent.firstChild
                     } else it.value()
+                    item.host?.first ?: res
                 }
             }
 
@@ -60,12 +59,11 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                             .map {
                                 ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)), it.host)
                             }
-                            .filter {it.reference.path.isNotEmpty()}
-                            .whenNotEmpty {listOf(I18nReference(element, TextRange(1 + element.text.unQuote().indexOf(fullKey.source), element.textLength-1), it)) }
+                            .filter { it.reference.path.isNotEmpty() }
+                            .whenNotEmpty { listOf(I18nReference(element, TextRange(1 + element.text.unQuote().indexOf(fullKey.source), element.textLength - 1), it)) }
                     } ?: emptyList()
                 }
             }
         )
     }
 }
-

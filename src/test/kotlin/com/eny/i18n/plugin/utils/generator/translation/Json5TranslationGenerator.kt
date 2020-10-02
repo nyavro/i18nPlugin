@@ -90,5 +90,8 @@ class Json5TranslationGenerator: TranslationGenerator {
     }
 
     override fun generate(root: String, vararg branches: Array<String>): String =
-            "{\n\t\"$root\": {\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n\t}\n}"
+        "{\n   \"$root\": ${generate(*branches)}}"
+
+    override fun generate(vararg branches: Array<String>): String =
+        "{\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n   }"
 }

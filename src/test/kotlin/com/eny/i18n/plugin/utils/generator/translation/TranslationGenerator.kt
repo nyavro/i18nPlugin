@@ -10,4 +10,5 @@ interface TranslationGenerator {
     fun generateInvalid(): String
     fun generateInvalidRoot(): String
     fun generate(root: String, vararg branches: Array<String>): String
+    fun generate(vararg branches: Array<String>): String
 }

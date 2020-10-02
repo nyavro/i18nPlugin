@@ -49,3 +49,20 @@ fun <C> List<C>.headTail(): Pair<C?, List<C>?> = Pair(this.firstOrNull(), this.d
  * flips function arguments
  */
 fun <C, D, E> ((c: C, d: D) -> E).flip(): ((d: D, c: C) -> E) = {d: D, c: C -> this(c, d)}
+
+/**
+ * map with accumulator
+ */
+fun <T, A, R: Any> List<T>.mapAccum(accum: A, block: (T, A) -> Pair<R?, A>): List<R> {
+    var acc = accum
+    return this.mapNotNull {
+        val (first, second) = block(it, acc)
+        acc = second
+        first
+    }
+}
+
+fun <T, A> Collection<T>.takeWhileAccum(accum: A, predicate: (T, A) -> A?): List<T> {
+    var acc: A = accum
+    return this.takeWhile {item -> predicate(item, acc)?.also {acc = it}.toBoolean()}
+}

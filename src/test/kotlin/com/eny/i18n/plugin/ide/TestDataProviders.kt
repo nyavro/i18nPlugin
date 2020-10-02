@@ -12,6 +12,7 @@ import java.util.stream.Stream
 
 private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator(), Json5TranslationGenerator())
 private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
+private val jsCgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator())
 
 fun translationGenerator(ext: String): TranslationGenerator? = tgs.find {it.ext() == ext}
 
@@ -43,9 +44,14 @@ class JsonYamlTranslationGenerators: ArgumentsProvider {
         listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).map {Arguments.of(it)}.stream()
 }
 
-class CodeAndTranslationGenerators : ArgumentsProvider {
+class JsCodeAndTranslationGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        cgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+        jsCgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+}
+
+class PhpCodeAndTranslationGenerators : ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        listOf(PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator()).flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
 }
 
 class TranslationGenerators: ArgumentsProvider {

@@ -62,6 +62,10 @@ class YamlTranslationGenerator: TranslationGenerator {
     }
 
     override fun generate(root: String, vararg branches: Array<String>): String {
-        return "$root:\n${branches.map{generateBranchByList(it.toList())}.joinToString("\n")}"
+        return "$root:\n${generate(*branches)}"
+    }
+
+    override fun generate(vararg branches: Array<String>): String {
+        return branches.map{generateBranchByList(it.toList())}.joinToString("\n")
     }
 }

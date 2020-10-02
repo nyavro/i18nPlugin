@@ -28,7 +28,7 @@ import java.io.File
  */
 data class LocalizationSource(
     val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: FileType,
-    val host: PsiElement? = null
+    val host: Pair<PsiElement, String>? = null
 )
 /**
  * Provides search of localization files (json, yaml)
@@ -47,21 +47,20 @@ class LocalizationSourceSearch(private val project: Project) {
                 val res = findVirtualFilesUnder(config.vueDirectory)
                     .filter { file -> translationFileTypes.any {file.fileType==it}}
                     .map(::localizationSource)
-
                 val sfcSourceTag = PsiTreeUtil.findChildrenOfType(element?.containingFile?.getUserData(INJECTED_IN_ELEMENT)?.containingFile, HtmlTag::class.java).toList().find {it.name=="i18n"}
                 val sfcSourceText = PsiTreeUtil.findChildOfType(sfcSourceTag, XmlText::class.java)
-//        PsiBuilderFactory instance = PsiBuilderFactory.getInstance();
                 val all = if (sfcSourceTag!=null) {
                     val parserDefinition = JsonParserDefinition()
                     val builder: PsiBuilder = PsiBuilderFactoryImpl().createBuilder(parserDefinition, JsonLexer(), sfcSourceText?.text ?: "{}")
                     val parser: PsiParser = JsonParser()
-                    res + (parser.parse(JsonElementTypes.OBJECT, builder).psi as JsonObject).propertyList.map {
+                    val jsonObject = parser.parse(JsonElementTypes.OBJECT, builder).psi as JsonObject
+                    res + jsonObject.propertyList.map {
                         LocalizationSource(
-                            it.value!!.navigationElement,
+                            it.value!!,
                             it.name,
                             sfcSourceTag.containingFile.name,
                             "SFC: ${sfcSourceTag.containingFile.name}/${it.name} ", JsonFileType.INSTANCE,
-                            sfcSourceText
+                            Pair(sfcSourceText!!, it.name)
                         )
                     }
                 } else {
