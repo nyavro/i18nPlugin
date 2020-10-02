@@ -8,6 +8,7 @@ import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
@@ -140,6 +141,7 @@ class ReferencesTestJs : PlatformBaseTest() {
 
     @ParameterizedTest
     @ArgumentsSource(JsCodeAndTranslationGenerators::class)
+    @Disabled
     fun testExpressionMultiKeysReferences(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.addFileToProject(
             "assets/test.${tg.ext()}",
