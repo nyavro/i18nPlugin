@@ -84,8 +84,12 @@ class VueCodeGenerator: CodeGenerator {
 
     private fun generateDivNotExtracted(text: String): String = "    <div>{{ \"$text\" }}</div>\n"
 
-    fun generateSfc(key: String, translationMap: Map<String, String>): String {
-        val f = "\$t"
+    private fun message(key: String): String {
+        val f = "t"
+        return "<p>message: {{ $f($key) }}</p>"
+    }
+
+    fun generateSfc(translationMap: Map<String, String>, vararg key: String): String {
         val ns = "\$i18n"
         return """
            <template>
@@ -95,7 +99,41 @@ class VueCodeGenerator: CodeGenerator {
                   <option>en</option>
                   <option>ja</option>
                 </select>
-                <p>message: {{ $f($key) }}</p>
+                ${key.map {message(it)}.joinToString("\n")}         
+              </div>
+            </template>
+            
+            <i18n>
+            {
+              ${translationContent(translationMap)}
+            }
+            </i18n>
+            
+            <script>
+            export default {
+              name: 'App',
+              data () { return { locale: 'en' } },
+              watch: {
+                locale (val) {
+                  this.$ns.locale = val
+                }
+              }
+            }
+            </script>
+        """
+    }
+
+    fun generateSfcBlock(translationMap: Map<String, String>, block: String): String {
+        val ns = "\$i18n"
+        return """
+           <template>
+              <div id="app">
+                <label for="locale">locale</label>
+                <select v-model="locale">
+                  <option>en</option>
+                  <option>ja</option>
+                </select>
+                ${block}         
               </div>
             </template>
             

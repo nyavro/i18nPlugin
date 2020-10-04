@@ -58,7 +58,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
 
     private fun resolve(element: PsiElement, search: LocalizationSourceSearch, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
         return search
-            .findFilesByNames(fullKey.allNamespaces())
+            .findFilesByNames(fullKey.allNamespaces(), element)
             .filter {
                 if (config.vue) it.name.contains(config.foldingPreferredLanguage)
                 else it.parent == config.foldingPreferredLanguage

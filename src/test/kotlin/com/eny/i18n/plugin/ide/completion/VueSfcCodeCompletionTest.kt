@@ -26,8 +26,8 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
             myFixture.configureByText(
                 "none.vue",
                 cg.generateSfc(
-                    "\"<caret>\"",
-                    mapOf(Pair("en", tg.generateContent("tstw", "fstt", "leu", "value")))
+                        mapOf(Pair("en", tg.generateContent("tstw", "fstt", "leu", "value"))),
+                        "\"<caret>\""
                 )
             )
             assertTrue(myFixture.completeBasic().find {it.lookupString == "tstw"} != null)
@@ -40,8 +40,8 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
             myFixture.configureByText(
                 "none.vue",
                 cg.generateSfc(
-                    "\"tst<caret>\"",
-                    mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                        mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                        "\"tst<caret>\""
                 )
             )
             assertTrue(myFixture.completeBasic().find {it.lookupString == "tst1"} != null)
@@ -54,12 +54,12 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
         check(
             "none.vue",
             cg.generateSfc(
-                "\"none.base.<caret>\"",
-                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                    mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                    "\"none.base.<caret>\""
             ),
             cg.generateSfc(
-                "\"none.base.\"",
-                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                    mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                    "\"none.base.\""
             )
         )
     }
@@ -70,12 +70,12 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
         check(
             "single.vue",
             cg.generateSfc(
-                "\"tst1.base.<caret>\"",
-                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                    mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                    "\"tst1.base.<caret>\""
             ),
             cg.generateSfc(
-                "\"tst1.base.single\"",
-                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                    mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                    "\"tst1.base.single\""
             )
         )
     }
@@ -86,12 +86,12 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
         check(
             "plural.vue",
             cg.generateSfc(
-                "\"tst2.plurals.<caret>\"",
-                mapOf(Pair("en", tg.generatePlural("tst2", "plurals", "value", "tt", "qq", "vv")))
+                    mapOf(Pair("en", tg.generatePlural("tst2", "plurals", "value", "tt", "qq", "vv"))),
+                    "\"tst2.plurals.<caret>\""
             ),
             cg.generateSfc(
-                "\"tst2.plurals.value\"",
-                mapOf(Pair("en", tg.generatePlural("tst2", "plurals", "value", "tt", "qq", "vv")))
+                    mapOf(Pair("en", tg.generatePlural("tst2", "plurals", "value", "tt", "qq", "vv"))),
+                    "\"tst2.plurals.value\""
             )
         )
     }
@@ -102,12 +102,12 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
         check(
             "partial.vue",
             cg.generateSfc(
-                "\"tst1.base.si<caret>\"",
-                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                    mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                    "\"tst1.base.si<caret>\""
             ),
             cg.generateSfc(
-                "\"tst1.base.single\"",
-                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                    mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                    "\"tst1.base.single\""
             )
         )
     }
@@ -116,12 +116,12 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
     fun testInvalidCompletion() = check(
         "invalid.vue",
         cg.generateSfc(
-            "\"tst1.base.si<caret>ng\"",
-            mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                "\"tst1.base.si<caret>ng\""
         ),
         cg.generateSfc(
-            "\"tst1.base.sing\"",
-            mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))
+                mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
+                "\"tst1.base.sing\""
         )
     )
 }

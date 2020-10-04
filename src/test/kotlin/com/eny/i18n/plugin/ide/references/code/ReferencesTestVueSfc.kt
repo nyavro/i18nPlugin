@@ -85,53 +85,53 @@ class SfcTestArgumentsProvider : ArgumentsProvider {
         return listOf(
             Pair(
                 cg.generateSfc(
-                    "\"<caret>key2\"",
-                    mapOf(
-                        Pair("en", tg.generateContent("key1", "value")),
-                        Pair("ja", tg.generateContent("key", "こんにちは、世界！")),
-                        Pair("de", tg.generateContent("key2", "Guten Tag!"))
-                    )
+                        mapOf(
+                            Pair("en", tg.generateContent("key1", "value")),
+                            Pair("ja", tg.generateContent("key", "こんにちは、世界！")),
+                            Pair("de", tg.generateContent("key2", "Guten Tag!"))
+                        ),
+                        "\"<caret>key2\""
                 ),
                 "Guten Tag!"
             ),
             Pair(
                 cg.generateSfc(
-                    "\"<caret>key2\"",
-                    mapOf(
-                        Pair("en", tg.generateContent("key1", "value")),
-                        Pair("ja", tg.generateContent("key", "こんにちは、世界！")),
-                        Pair("de", tg.generateContent("key2", "Guten Tag! Wilkommen zu unsere Platform!"))
-                    )
+                        mapOf(
+                            Pair("en", tg.generateContent("key1", "value")),
+                            Pair("ja", tg.generateContent("key", "こんにちは、世界！")),
+                            Pair("de", tg.generateContent("key2", "Guten Tag! Wilkommen zu unsere Platform!"))
+                        ),
+                        "\"<caret>key2\""
                 ),
                 "Guten Tag! Wilkommen zu unsere Platform!"
             ),
             Pair(
                 cg.generateSfc(
-                    "\"tst3.<caret>key\"",
-                    mapOf(
-                        Pair("en", tg.generate("tst3", arrayOf("key1", "value"))),
-                        Pair("ja", tg.generate("tst3", arrayOf("key", "こんにちは、世界！")))
-                    )
+                        mapOf(
+                            Pair("en", tg.generate("tst3", arrayOf("key1", "value"))),
+                            Pair("ja", tg.generate("tst3", arrayOf("key", "こんにちは、世界！")))
+                        ),
+                        "\"tst3.<caret>key\""
                 ),
                 "こんにちは、世界！"
             ),
             Pair(
                 cg.generateSfc(
-                    "\"tst3.sfc.<caret>key\"",
-                    mapOf(
-                        Pair("en", tg.generate("tst3", arrayOf("sfc", "key1", "value"))),
-                        Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！"), arrayOf("branch", "key", "こ")))
-                    )
+                        mapOf(
+                            Pair("en", tg.generate("tst3", arrayOf("sfc", "key1", "value"))),
+                            Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！"), arrayOf("branch", "key", "こ")))
+                        ),
+                        "\"tst3.sfc.<caret>key\""
                 ),
                 "こんにちは、世界！"
             ),
             Pair(
                 cg.generateSfc(
-                    "\"tst3.sfc.<caret>key.sub\"",
-                    mapOf(
-                        Pair("en", tg.generate("tst3", arrayOf("sfc", "key1", "sub", "value"))),
-                        Pair("ja", tg.generate("tst3", arrayOf("sfc", "key",  "sub", "こんにちは、世界！")))
-                    )
+                        mapOf(
+                            Pair("en", tg.generate("tst3", arrayOf("sfc", "key1", "sub", "value"))),
+                            Pair("ja", tg.generate("tst3", arrayOf("sfc", "key",  "sub", "こんにちは、世界！")))
+                        ),
+                        "\"tst3.sfc.<caret>key.sub\""
                 ),
                 "こんにちは、世界！"
             )

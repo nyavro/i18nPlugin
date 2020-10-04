@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import org.junit.jupiter.api.Test
@@ -72,55 +71,3 @@ internal class FoldingTestPhpYaml : FoldingTestBase("php", "yml")
 internal class FoldingTestVueJson : FoldingTestBase("vue", "json")
 internal class FoldingTestVueYaml : FoldingTestBase("vue", "yml")
 
-internal abstract class FoldingTestI18nVueBase(private val translationLang:String): PlatformBaseTest() {
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/folding"
-    }
-
-    private val testConfig = Config(foldingEnabled = true)
-
-    @Test
-    fun testFolding() = myFixture.runVueConfig(testConfig) {
-        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
-        myFixture.testFolding("$testDataPath/vue/simpleTestVue.vue")
-    }
-
-    @Test
-    fun testPreferredLanguage() = myFixture.runVueConfig(
-            Config(foldingPreferredLanguage = "ru-RU", foldingMaxLength = 26, foldingEnabled = true)
-    ) {
-        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
-        myFixture.testFolding("$testDataPath/vue/preferredLanguageTestVue.vue")
-    }
-
-    @Test
-    fun testPreferredLanguageInvalidConfiguration() = myFixture.runVueConfig(
-        Config(foldingPreferredLanguage = "fr", foldingEnabled = true)
-    ) {
-        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
-        myFixture.testFolding("$testDataPath/vue/noFoldingVue.vue")
-    }
-
-    @Test
-    fun testIncompleteKey() = myFixture.runVueConfig(testConfig) {
-        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
-        myFixture.testFolding("$testDataPath/vue/incompleteKeysVue.vue")
-    }
-
-    @Test
-    fun testFoldingDisabled() = myFixture.runVueConfig(testConfig) {
-        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
-        myFixture.testFolding("$testDataPath/vue/noFoldingVue.vue")
-    }
-
-    @Test
-    fun testFoldingParametrizedTranslation() = myFixture.runVueConfig(testConfig) {
-        myFixture.configureByFiles("locales/ru-RU.$translationLang", "locales/en-US.$translationLang")
-        myFixture.testFolding("$testDataPath/vue/parametersTestVue.vue")
-    }
-}
-
-
-internal class FoldingTestI18nVueJson : FoldingTestI18nVueBase("json")
-internal class FoldingTestI18nVueYaml : FoldingTestI18nVueBase("yml")

@@ -1,15 +1,11 @@
 package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.TranslationGenerators
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
 
 class VueSfcHighlightingTest : PlatformBaseTest() {
 
@@ -33,11 +29,11 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(
-                    "\"<info descr=\"null\">tst3.sfc.key</info>\"",
-                    mapOf(
-                        Pair("en", tg.generate("tst3", arrayOf("sfc", "key", "value"))),
-                        Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
-                    )
+                        mapOf(
+                            Pair("en", tg.generate("tst3", arrayOf("sfc", "key", "value"))),
+                            Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
+                        ),
+                        "\"<info descr=\"null\">tst3.sfc.key</info>\""
                 )
             )
             myFixture.checkHighlighting(true, true, true, true)
@@ -49,11 +45,11 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(
-                    "\"<warning descr=\"Reference to object\">tst3.sfc</warning>\"",
-                    mapOf(
-                        Pair("en", tg.generate("tst3", arrayOf("sfc", "key", "value"))),
-                        Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
-                    )
+                        mapOf(
+                            Pair("en", tg.generate("tst3", arrayOf("sfc", "key", "value"))),
+                            Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
+                        ),
+                        "\"<warning descr=\"Reference to object\">tst3.sfc</warning>\""
                 )
             )
             myFixture.checkHighlighting(true, true, true, true)
@@ -65,11 +61,11 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(
-                    "\"tst3.sfc.<warning descr=\"Unresolved key\">km</warning>\"",
-                    mapOf(
-                        Pair("en", tg.generate("tst3", arrayOf("sfc", "key", "value"))),
-                        Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
-                    )
+                        mapOf(
+                            Pair("en", tg.generate("tst3", arrayOf("sfc", "key", "value"))),
+                            Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
+                        ),
+                        "\"tst3.sfc.<warning descr=\"Unresolved key\">km</warning>\""
                 )
             )
             myFixture.checkHighlighting(true, true, true, true)
@@ -81,11 +77,11 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(
-                    "isSelected ? \"<warning descr=\"Reference to object\">tst2.plurals</warning>\" : isAbsent ? \"<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\" : \"<info descr=\"null\">tst3.sfc.key</info>\"",
-                    mapOf(
-                        Pair("en", tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")),
-                        Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
-                    )
+                        mapOf(
+                            Pair("en", tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")),
+                            Pair("ja", tg.generate("tst3", arrayOf("sfc", "key", "こんにちは、世界！")))
+                        ),
+                        "isSelected ? \"<warning descr=\"Reference to object\">tst2.plurals</warning>\" : isAbsent ? \"<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\" : \"<info descr=\"null\">tst3.sfc.key</info>\""
                 )
             )
             myFixture.checkHighlighting(true, true, true, true)
