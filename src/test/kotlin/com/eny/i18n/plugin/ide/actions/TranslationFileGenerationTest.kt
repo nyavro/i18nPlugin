@@ -17,7 +17,7 @@ class TranslationFileGenerationTest: ExtractionTestBase() {
     @ParameterizedTest
     @ArgumentsSource(JsonYamlCodeGenerators::class)
     fun testTranslationFileGeneration(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
-        myFixture.configureByText("simple.${cg.ext()}", cg.generateNotExtracted("<caret>I want to move it to translation"))
+        myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("<caret>I want to move it to translation"))
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
         Messages.setTestInputDialog(predefinedTextInputDialog("main:component.header.title"))

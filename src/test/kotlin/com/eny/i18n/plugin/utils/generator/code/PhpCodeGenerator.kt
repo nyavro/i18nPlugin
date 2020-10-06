@@ -20,7 +20,7 @@ abstract class PhpCodeGeneratorBase(private val quot: String): CodeGenerator {
         echo str_replace("\n", '<br>', ts($key));
     """
 
-    override fun generateNotExtracted(text: String, index: Int): String = """
+    override fun generateBlock(text: String, index: Int): String = """
         <?php
             ${generateLineNotExtracted(text)} 
     """

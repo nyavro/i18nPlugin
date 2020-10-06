@@ -14,7 +14,7 @@ class TsxCodeGenerator: CodeGenerator {
         const key = () => (<div>{"$key"}</div>);
     """
 
-    override fun generateNotExtracted(text: String, index: Int): String = """
+    override fun generateBlock(text: String, index: Int): String = """
         export const test$index = (i18n: {t: Function}) => {
             return (<div>$text</div>);
         };

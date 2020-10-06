@@ -74,7 +74,7 @@ class VueCodeGenerator: CodeGenerator {
         """
     }
 
-    override fun generateNotExtracted(text: String, index: Int): String = """
+    override fun generateBlock(text: String, index: Int): String = """
         <template>
             ${generateDivNotExtracted(text)}
         </template>

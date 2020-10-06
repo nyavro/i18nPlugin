@@ -95,7 +95,7 @@ class Json5TranslationGenerator: TranslationGenerator {
     override fun generate(vararg branches: Array<String>): String =
         "{\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n   }"
 
-    override fun generateNamedBlock(key: String, block: String): String =
+    override fun generateNamedBlock(key: String, block: String, level: Int): String =
         """{
             "$key": $block
         }

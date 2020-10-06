@@ -88,11 +88,12 @@ class JsonTranslationGenerator: TranslationGenerator {
     override fun generate(vararg branches: Array<String>): String =
         "{\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n   }"
 
-    override fun generateNamedBlock(key: String, block: String): String =
-        """{
-            "$key": $block
-        }
-        """
+    override fun generateNamedBlock(key: String, block: String, level: Int): String {
+        val tab = "  ".repeat(level) + " "
+        return """{
+  $tab"$key": $block
+$tab}"""
+    }
 
     override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String =
         """{
@@ -100,4 +101,5 @@ class JsonTranslationGenerator: TranslationGenerator {
         }"""
 
     private fun formatBlock(name: String, block: String): String = """"$name": $block"""
+
 }

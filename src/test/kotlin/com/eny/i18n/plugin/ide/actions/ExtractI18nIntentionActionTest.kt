@@ -23,7 +23,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
     fun testKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
         runTestCase(
             "simple.${cg.ext()}",
-            cg.generateNotExtracted("<caret>I want to move it to translation"),
+            cg.generateBlock("<caret>I want to move it to translation"),
             cg.generate("'test:ref.avalue3'"),
             "assets/test.${tg.ext()}",
             tg.generate("ref", arrayOf("section", "key", "Reference in json")),
@@ -37,7 +37,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
     fun testKeyExtractionSortedFirst(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext(), true)) {
         runTestCase(
             "simple.${cg.ext()}",
-            cg.generateNotExtracted("<caret>I want to move it to translation"),
+            cg.generateBlock("<caret>I want to move it to translation"),
             cg.generate("'test:ref.dvalue3'"),
             "assets/test.${tg.ext()}",
             tg.generate("ref", arrayOf("section", "key", "Reference in json")),
@@ -51,7 +51,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
     fun testKeyExtractionSortedMiddle(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext(), true)) {
         runTestCase(
             "simple.${cg.ext()}",
-            cg.generateNotExtracted("Mid<caret>dle!!!"),
+            cg.generateBlock("Mid<caret>dle!!!"),
             cg.generate("'test:ref.mkey'"),
             "assets/test.${tg.ext()}",
             tg.generate("ref", arrayOf("akey", "The first one"), arrayOf("zkey", "The last one")),
@@ -65,7 +65,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
     fun testDefNsKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
         runTestCase(
             "simple.${cg.ext()}",
-                cg.generateNotExtracted("<caret>I want to move it to translation"),
+                cg.generateBlock("<caret>I want to move it to translation"),
             cg.generate("'ref.value3'"),
             "assets/translation.${tg.ext()}",
             tg.generate("ref", arrayOf("section", "key", "Reference in json")),
@@ -79,7 +79,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
     fun testRightBorderKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
         runTestCase(
             "simple.${cg.ext()}",
-            cg.generateNotExtracted("I want to move it to translation<caret>"),
+            cg.generateBlock("I want to move it to translation<caret>"),
             cg.generate("'test:ref.value3'"),
             "assets/test.${tg.ext()}",
             tg.generate("ref", arrayOf("section", "key", "Reference in json")),
@@ -129,7 +129,7 @@ class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
             myFixture.runVueConfig(config(tg.ext())) {
                 runTestCase(
                     "simple.${cg.ext()}",
-                    cg.generateNotExtracted(text),
+                    cg.generateBlock(text),
                     cg.generate("'ref.value3'"),
                     "locales/en-US.${tg.ext()}",
                     tg.generate("ref", arrayOf("section", "key", "Reference in json")),
