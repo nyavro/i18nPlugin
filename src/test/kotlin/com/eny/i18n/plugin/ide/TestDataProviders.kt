@@ -58,3 +58,8 @@ class TranslationGenerators: ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
         tgs.map {Arguments.of(it)}.stream()
 }
+
+class CodeTranslationGenerators: ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        cgs.flatMap {cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+}
