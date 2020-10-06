@@ -38,16 +38,25 @@ class LocalizationSourceSearch(private val project: Project) {
     private val translationFileTypes = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE, YAMLFileType.YML)
     private val config = Settings.getInstance(project).config()
 
+    fun findFilesByHost(fileNames: List<String>, host: PsiElement): List<LocalizationSource> =
+        findFilesByNamesInner(fileNames, host, true)
+
     /**
      * Finds json roots by json file name
      */
     fun findFilesByNames(fileNames: List<String>, element: PsiElement? = null): List<LocalizationSource> =
+        findFilesByNamesInner(fileNames, element, false)
+
+    /**
+     * Finds json roots by json file name
+     */
+    private fun findFilesByNamesInner(fileNames: List<String>, element: PsiElement? = null, isHost: Boolean): List<LocalizationSource> =
         findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces()).flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map(::localizationSource)} +
             if (config.vue) {
                 val res = findVirtualFilesUnder(config.vueDirectory)
                     .filter { file -> translationFileTypes.any {file.fileType==it}}
                     .map(::localizationSource)
-                val sfcSourceTag = PsiTreeUtil.findChildrenOfType(element?.containingFile?.getUserData(INJECTED_IN_ELEMENT)?.containingFile, HtmlTag::class.java).toList().find {it.name=="i18n"}
+                val sfcSourceTag = PsiTreeUtil.findChildrenOfType(if (isHost) element?.containingFile else element?.containingFile?.getUserData(INJECTED_IN_ELEMENT)?.containingFile, HtmlTag::class.java).toList().find {it.name=="i18n"}
                 val sfcSourceText = PsiTreeUtil.findChildOfType(sfcSourceTag, XmlText::class.java)
                 val all = if (sfcSourceTag!=null) {
                     val parserDefinition = JsonParserDefinition()

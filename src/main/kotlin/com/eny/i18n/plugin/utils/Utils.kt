@@ -62,6 +62,14 @@ fun <T, A, R: Any> List<T>.mapAccum(accum: A, block: (T, A) -> Pair<R?, A>): Lis
     }
 }
 
+/**
+ * map with accumulator
+ */
+fun <T, A> List<T>.filterAccum(accum: A, predicate: (T, A) -> A?): List<T> {
+    var acc = accum
+    return this.filter { predicate(it, acc)?.also {acc = it}.toBoolean() }
+}
+
 fun <T, A> Collection<T>.takeWhileAccum(accum: A, predicate: (T, A) -> A?): List<T> {
     var acc: A = accum
     return this.takeWhile {item -> predicate(item, acc)?.also {acc = it}.toBoolean()}

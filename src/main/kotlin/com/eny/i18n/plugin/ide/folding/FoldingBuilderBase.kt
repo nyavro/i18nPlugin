@@ -43,7 +43,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
                 literals.mapNotNull { literal ->
                     parser
                         .parse(literal.text.unQuote(), config.nsSeparator, config.keySeparator, config.vue)
-                        ?.let { key -> resolve(literal, search, config, key) }
+                        ?.let { key -> resolve(container, literal, search, config, key) }
                         ?.let { resolved ->
                             FoldingDescriptor(
                                 container.node,
@@ -56,9 +56,9 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             }.toTypedArray()
     }
 
-    private fun resolve(element: PsiElement, search: LocalizationSourceSearch, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
+    private fun resolve(container: PsiElement, element: PsiElement, search: LocalizationSourceSearch, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
         return search
-            .findFilesByNames(fullKey.allNamespaces(), element)
+            .findFilesByHost(fullKey.allNamespaces(), container)
             .filter {
                 if (config.vue) it.name.contains(config.foldingPreferredLanguage)
                 else it.parent == config.foldingPreferredLanguage
