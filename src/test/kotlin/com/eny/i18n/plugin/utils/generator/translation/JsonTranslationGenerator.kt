@@ -82,17 +82,37 @@ class JsonTranslationGenerator: TranslationGenerator {
             }.first
     }
 
+    private fun generateBranchByList2(list: List<String>): String {
+        val keyValue = list.takeLast(2)
+        return list
+            .dropLast(2)
+            .foldRight(Pair("${"   ".repeat(list.size-1)}    \"${keyValue[0]}\": \"${keyValue[1]}\"", 0)) {
+                item, acc ->
+                val tabs = "   ".repeat(list.size-acc.second-2)
+                Pair("$tabs  \"${item}\": {\n${acc.first}${tabs}\n$tabs   }", acc.second+1)
+            }.first
+    }
+
     override fun generate(root: String, vararg branches: Array<String>): String =
         "{\n   \"$root\": ${generate(*branches)}}"
 
     override fun generate(vararg branches: Array<String>): String =
         "{\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n   }"
 
+    override fun generate2(vararg branches: Array<String>): String =
+        "{\n${branches.map{generateBranchByList2(it.toList())}.joinToString(",\n")}\n     }"
+
     override fun generateNamedBlock(key: String, block: String, level: Int): String {
         val tab = "  ".repeat(level) + " "
         return """{
   $tab"$key": $block
 $tab}"""
+    }
+
+    override fun generateNamedBlock2(key: String, block: String, level: Int): String {
+        val tab = "  ".repeat(level) + " "
+        return """{$tab"$key": $block
+            |$tab}""".trimMargin()
     }
 
     override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String =

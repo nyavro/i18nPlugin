@@ -34,7 +34,9 @@ class CodeGenerators : ArgumentsProvider {
 
 class JsonYamlCodeGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).flatMap {
+        listOf(
+            JsonTranslationGenerator(),
+            YamlTranslationGenerator()).flatMap {
             tg -> cgs.map {Arguments.of(it, tg)}
         }.stream()
 }
@@ -47,6 +49,11 @@ class JsonYamlTranslationGenerators: ArgumentsProvider {
 class JsCodeAndTranslationGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
         jsCgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+}
+
+class JsCodeAndTranslationGeneratorsNs : ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        jsCgs.flatMap { cg -> tgs.flatMap {listOf(Arguments.of(cg, it, true), Arguments.of(cg, it, false))}}.stream()
 }
 
 class PhpCodeAndTranslationGenerators : ArgumentsProvider {
