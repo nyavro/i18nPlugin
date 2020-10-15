@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import java.util.stream.Stream
 
-private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator(), Json5TranslationGenerator())
+private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator())
 private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
 private val jsCgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator())
 
@@ -23,7 +23,7 @@ class CodeGeneratorsWithNs : ArgumentsProvider {
         (cgs
             .flatMap {
                 listOf(Arguments.of(it, true), Arguments.of(it, false))
-            } + Arguments.of(VueCodeGenerator(), false)
+            }
         ).stream()
 }
 
@@ -53,7 +53,7 @@ class JsCodeAndTranslationGenerators : ArgumentsProvider {
 
 class JsCodeAndTranslationGeneratorsNs : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        jsCgs.flatMap { cg -> tgs.flatMap {listOf(Arguments.of(cg, it, true), Arguments.of(cg, it, false))}}.stream()
+        jsCgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
 }
 
 class PhpCodeAndTranslationGenerators : ArgumentsProvider {

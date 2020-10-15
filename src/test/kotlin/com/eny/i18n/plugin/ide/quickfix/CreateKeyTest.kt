@@ -12,7 +12,8 @@ class CreateKeyTest: PlatformBaseTest() {
 
     @ParameterizedTest
     @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
-    fun testCreateKey(cg: CodeGenerator, tg: TranslationGenerator, defaultNs: Boolean) {
+    fun testCreateKey(cg: CodeGenerator, tg: TranslationGenerator) {
+        val defaultNs = false;
         val hint = "Create i18n key"
         val translationFileName = (if (defaultNs) "translation" else "test") + "." + tg.ext()
         val ns = if (defaultNs) "" else "test:"
@@ -33,7 +34,8 @@ class CreateKeyTest: PlatformBaseTest() {
 
     @ParameterizedTest
     @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
-    fun createKeyMultipleTranslations(cg: CodeGenerator, tg: TranslationGenerator, defaultNs: Boolean) {
+    fun createKeyMultipleTranslations(cg: CodeGenerator, tg: TranslationGenerator) {
+        val defaultNs = true
         val translationFileName = (if (defaultNs) "translation" else "test") + "." + tg.ext()
         val ns = if (defaultNs) "" else "test:"
         myFixture.addFileToProject(
