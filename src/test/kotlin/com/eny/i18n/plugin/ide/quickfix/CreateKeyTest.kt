@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.*
@@ -32,6 +33,7 @@ class CreateKeyTest: PlatformBaseTest() {
         )
     }
 
+    @Disabled
     @ParameterizedTest
     @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
     fun createKeyMultipleTranslations(cg: CodeGenerator, tg: TranslationGenerator) {
