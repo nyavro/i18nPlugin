@@ -20,6 +20,13 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>2.4.0</h3>
+            <ul>
+                <li>Vue Single file components support</li>
+                <li>Extract translation sorted by key configuration setting</li>
+            </ul>
+        </div>
+        <div>
             <h3>2.3.0</h3>
             <ul>
                 <li>Basic support of react-i18next useTranslation React hook: key annotation, navigation from code to translation</li>
