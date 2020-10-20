@@ -28,7 +28,7 @@ import java.io.File
  */
 data class LocalizationSource(
     val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: FileType,
-    val host: Pair<PsiElement, String>? = null
+    val host: PsiElement? = null
 )
 /**
  * Provides search of localization files (json, yaml)
@@ -38,6 +38,9 @@ class LocalizationSourceSearch(private val project: Project) {
     private val translationFileTypes = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE, YAMLFileType.YML)
     private val config = Settings.getInstance(project).config()
 
+    /**
+     * Finds localization sources
+     */
     fun findFilesByHost(fileNames: List<String>, host: PsiElement): List<LocalizationSource> =
         findFilesByNamesInner(fileNames, host, true)
 
@@ -51,31 +54,42 @@ class LocalizationSourceSearch(private val project: Project) {
      * Finds json roots by json file name
      */
     private fun findFilesByNamesInner(fileNames: List<String>, element: PsiElement? = null, isHost: Boolean): List<LocalizationSource> =
-        findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces()).flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map(::localizationSource)} +
+        findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces())
+            .flatMap {
+                vf -> listOfNotNull(findPsiRoot(vf)).map(::localizationSource)} +
             if (config.vue) {
-                val res = findVirtualFilesUnder(config.vueDirectory)
+                findVirtualFilesUnder(config.vueDirectory)
                     .filter { file -> translationFileTypes.any {file.fileType==it}}
-                    .map(::localizationSource)
-                val sfcSourceTag = PsiTreeUtil.findChildrenOfType(if (isHost) element?.containingFile else element?.containingFile?.getUserData(INJECTED_IN_ELEMENT)?.containingFile, HtmlTag::class.java).toList().find {it.name=="i18n"}
-                val sfcSourceText = PsiTreeUtil.findChildOfType(sfcSourceTag, XmlText::class.java)
-                val all = if (sfcSourceTag!=null) {
-                    val parserDefinition = JsonParserDefinition()
-                    val builder: PsiBuilder = PsiBuilderFactoryImpl().createBuilder(parserDefinition, JsonLexer(), sfcSourceText?.text ?: "{}")
-                    val parser: PsiParser = JsonParser()
-                    val jsonObject = parser.parse(JsonElementTypes.OBJECT, builder).psi as JsonObject
-                    res + jsonObject.propertyList.map {
-                        LocalizationSource(
-                            it.value!!,
-                            it.name,
-                            sfcSourceTag.containingFile.name,
-                            "SFC: ${sfcSourceTag.containingFile.name}/${it.name} ", JsonFileType.INSTANCE,
-                            Pair(sfcSourceText!!, it.name)
-                        )
-                    }
-                } else {
-                    res
+                    .map(::localizationSource) +
+                    findSfcSources(isHost, element)
+            }
+            else listOf()
+
+    private fun findSfcSources(isHost: Boolean, element: PsiElement?): Iterable<LocalizationSource> {
+        return PsiTreeUtil
+            .findChildrenOfType(if (isHost) element?.containingFile else element?.containingFile?.getUserData(INJECTED_IN_ELEMENT)?.containingFile, HtmlTag::class.java)
+            .toList()
+            .find { it.name == "i18n" }
+            ?.let { sfcSrcTag ->
+                PsiTreeUtil.findChildOfType(sfcSrcTag, XmlText::class.java)?.let { sfcSourceText ->
+                    val fileName = sfcSourceText.containingFile.name
+                    JsonParser()
+                        .parse(
+                            JsonElementTypes.OBJECT,
+                            PsiBuilderFactoryImpl().createBuilder(JsonParserDefinition(), JsonLexer(), sfcSourceText.text)
+                        ).psi?.maybe<PsiElement, JsonObject>()
+                        ?.propertyList
+                        ?.map {
+                            LocalizationSource(
+                                it.value!!,
+                                it.name,
+                                fileName,
+                                "SFC: ${fileName}/${it.name} ", JsonFileType.INSTANCE,
+                                sfcSourceText
+                            )
+                        }
                 }
-                all
+            }.fromNullable()
 //                val index = vueTranslationFiles.find {it.name.matches("index\\.(js|ts)".toRegex())}
 //                if (index == null) {
 //                    if (settings.jsConfiguration.isNotBlank()) {
@@ -86,16 +100,15 @@ class LocalizationSourceSearch(private val project: Project) {
 //                } else {
 //                    resolveJsRoots(index)
 //                }
-            }
-            else listOf()
+    }
 
     private fun localizationSource(file: PsiFile): LocalizationSource =
         LocalizationSource(
-                file,
-                file.name,
-                file.containingDirectory.name,
-                pathToRoot(
-                        file.project.basePath ?: "",
+            file,
+            file.name,
+            file.containingDirectory.name,
+            pathToRoot(
+                file.project.basePath ?: "",
                         file
                                 .containingDirectory
                                 .virtualFile

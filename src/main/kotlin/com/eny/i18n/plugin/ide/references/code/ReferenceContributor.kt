@@ -12,7 +12,10 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 
-data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val host: Pair<PsiElement, String>?)
+/**
+ * Data class
+ */
+data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val host: PsiElement?)
 
 /**
  * I18nReference to json/yaml translation
@@ -31,7 +34,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val references: L
                         val parent = it.value().parent
                         (parent as? PsiFile) ?: parent.firstChild
                     } else it.value()
-                    item.host?.first ?: res
+                    item.host ?: res
                 }
             }
 

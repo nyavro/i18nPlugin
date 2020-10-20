@@ -44,10 +44,9 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             rangesCalculator.unresolvedNs(fullKey),
             PluginBundle.getMessage("annotator.unresolved.ns")
         )
-        val fileName = ns.text
         val folderSelector = I18NextTranslationFolderSelector(project)
         Settings.getInstance(project).mainFactory().contentGenerators().forEach {
-            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, it, folderSelector, fileName))
+            annotation.registerFix(CreateTranslationFileQuickFix(fullKey, it, folderSelector, ns.text))
         }
     }
 

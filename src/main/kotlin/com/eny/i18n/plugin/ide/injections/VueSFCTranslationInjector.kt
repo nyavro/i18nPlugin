@@ -7,6 +7,9 @@ import com.intellij.psi.InjectedLanguagePlaces
 import com.intellij.psi.LanguageInjector
 import com.intellij.psi.PsiLanguageInjectionHost
 
+/**
+ * Json language injector for i18n xml element in Vue SFC.
+ */
 class VueSFCTranslationInjector : LanguageInjector {
 
     override fun getLanguagesToInject(host: PsiLanguageInjectionHost, places: InjectedLanguagePlaces) {

@@ -41,6 +41,13 @@ fun <C> C?.nullableToList(): List<C> {
 }
 
 /**
+ * Converts nullable collection to collection
+ */
+fun <T> List<T>?.fromNullable(): List<T> {
+    return if (this == null) emptyList() else this
+}
+
+/**
  * Splits list to head and tail
  */
 fun <C> List<C>.headTail(): Pair<C?, List<C>?> = Pair(this.firstOrNull(), this.drop(1).whenMatches {it.isNotEmpty()})
@@ -74,3 +81,8 @@ fun <T, A> Collection<T>.takeWhileAccum(accum: A, predicate: (T, A) -> A?): List
     var acc: A = accum
     return this.takeWhile {item -> predicate(item, acc)?.also {acc = it}.toBoolean()}
 }
+
+inline fun <I, reified O : I> I.maybe(): O? {
+    return this as? O;
+}
+
