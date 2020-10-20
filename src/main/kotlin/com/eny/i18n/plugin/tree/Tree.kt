@@ -27,7 +27,7 @@ interface Tree<T> {
     /**
      * Finds children by name matching regex
      */
-    fun findChildren(prefix: String): List<Tree<T>>
+    fun findChildren(regex: String): List<Tree<T>>
 }
 
 /**

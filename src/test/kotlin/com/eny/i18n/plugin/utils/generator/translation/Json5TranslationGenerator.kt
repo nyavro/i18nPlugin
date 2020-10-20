@@ -89,6 +89,42 @@ class Json5TranslationGenerator: TranslationGenerator {
                 }.first
     }
 
+    private fun generateBranchByList2(list: List<String>): String {
+        val keyValue = list.takeLast(2)
+        return list
+            .dropLast(2)
+            .foldRight(Pair("${"\t".repeat(list.size)}\"${keyValue[0]}\": \"${keyValue[1]}\"\n", 0)) {
+                item, acc ->
+                val tabs = "\t".repeat(list.size-acc.second-1)
+                Pair("$tabs\"${item}\": {\n${acc.first}${tabs}\n$tabs}", acc.second+1)
+            }.first
+    }
+
     override fun generate(root: String, vararg branches: Array<String>): String =
-            "{\n\t\"$root\": {\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n\t}\n}"
+        "{\n   \"$root\": ${generate(*branches)}}"
+
+    override fun generate(vararg branches: Array<String>): String =
+        "{\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n   }"
+
+    override fun generate2(vararg branches: Array<String>): String =
+        "{\n${branches.map{generateBranchByList(it.toList())}.joinToString(",\n")}\n   }"
+
+    override fun generateNamedBlock(key: String, block: String, level: Int): String =
+        """{
+            "$key": $block
+        }
+        """
+
+    override fun generateNamedBlock2(key: String, block: String, level: Int): String =
+        """{
+            "$key": $block
+        }
+        """
+
+    override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String =
+        """{
+            ${blocks.map{(name, block) -> formatBlock(name, block)}.joinToString(",\n")}
+        }"""
+
+    private fun formatBlock(name: String, block: String): String = """"$name": $block"""
 }

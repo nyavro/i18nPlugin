@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide.actions
+package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.Json5TranslationGenerator
@@ -10,8 +10,9 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import java.util.stream.Stream
 
-private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator(), Json5TranslationGenerator())
+private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator())
 private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
+private val jsCgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator())
 
 fun translationGenerator(ext: String): TranslationGenerator? = tgs.find {it.ext() == ext}
 
@@ -22,7 +23,7 @@ class CodeGeneratorsWithNs : ArgumentsProvider {
         (cgs
             .flatMap {
                 listOf(Arguments.of(it, true), Arguments.of(it, false))
-            } + Arguments.of(VueCodeGenerator(), false)
+            }
         ).stream()
 }
 
@@ -33,7 +34,9 @@ class CodeGenerators : ArgumentsProvider {
 
 class JsonYamlCodeGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).flatMap {
+        listOf(
+            JsonTranslationGenerator(),
+            YamlTranslationGenerator()).flatMap {
             tg -> cgs.map {Arguments.of(it, tg)}
         }.stream()
 }
@@ -43,12 +46,27 @@ class JsonYamlTranslationGenerators: ArgumentsProvider {
         listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).map {Arguments.of(it)}.stream()
 }
 
-class CodeAndTranslationGenerators : ArgumentsProvider {
+class JsCodeAndTranslationGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        cgs.flatMap {cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+        jsCgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+}
+
+class JsCodeAndTranslationGeneratorsNs : ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        jsCgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+}
+
+class PhpCodeAndTranslationGenerators : ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        listOf(PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator()).flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
 }
 
 class TranslationGenerators: ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
         tgs.map {Arguments.of(it)}.stream()
+}
+
+class CodeTranslationGenerators: ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        cgs.flatMap {cg -> tgs.map {Arguments.of(cg, it)}}.stream()
 }

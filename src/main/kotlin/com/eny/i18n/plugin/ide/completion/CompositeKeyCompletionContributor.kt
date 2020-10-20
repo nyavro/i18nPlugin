@@ -35,19 +35,19 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
         if (fullKey == null) {
             if (isInTranslationContext) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()
-                val emptyKeyCompletions = emptyKeyCompletions(parameters.position.project, prefix)
+                val emptyKeyCompletions = emptyKeyCompletions(parameters.position.project, prefix, parameters.position)
                 result.addAllElements(emptyKeyCompletions)
                 result.stopHere()
             }
         } else {
-            val processKey = processKey(fullKey, parameters)
+            val processKey = processKey(fullKey, parameters, parameters.position)
             result.addAllElements(processKey)
             result.stopHere()
         }
     }
 
-    private fun emptyKeyCompletions(project: Project, prefix: String): List<LookupElementBuilder> = findCompletions(
-        project, prefix, "", null, emptyList()
+    private fun emptyKeyCompletions(project: Project, prefix: String, element: PsiElement): List<LookupElementBuilder> = findCompletions(
+        project, prefix, "", null, emptyList(), element
     )
 
     private fun groupPlurals(completions: List<String>, pluralSeparator: String):List<String> =
@@ -57,16 +57,16 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
                 listOf(entry.key)} else entry.value
             }
 
-    private fun processKey(fullKey: FullKey, parameters: CompletionParameters): List<LookupElementBuilder> =
+    private fun processKey(fullKey: FullKey, parameters: CompletionParameters, element: PsiElement): List<LookupElementBuilder> =
         fullKey.compositeKey.lastOrNull().nullableToList().flatMap { last ->
             val source = fullKey.source.replace(last.text, "")
             val prefix = last.text.replace(DUMMY_KEY, "")
-            findCompletions(parameters.position.project, prefix, source, fullKey.ns?.text, fullKey.compositeKey.dropLast(1))
+            findCompletions(parameters.position.project, prefix, source, fullKey.ns?.text, fullKey.compositeKey.dropLast(1), element)
         }
 
-    private fun findCompletions(project: Project, prefix: String, source: String, ns: String?, compositeKey: List<Literal>): List<LookupElementBuilder> {
+    private fun findCompletions(project: Project, prefix: String, source: String, ns: String?, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
         return groupPlurals(
-            LocalizationSourceSearch(project).findFilesByNames(ns.nullableToList()).flatMap {
+            LocalizationSourceSearch(project).findFilesByNames(ns.nullableToList(), element).flatMap {
                 listCompositeKeyVariants(
                     compositeKey,
                     PsiElementTree.create(it.element),

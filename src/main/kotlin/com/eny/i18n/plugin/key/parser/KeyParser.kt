@@ -27,10 +27,7 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
         keySeparator: String = ".",
         emptyNamespace: Boolean = false
     ): FullKey? {
-        val elements = pair.first
-        val namespaces = pair.second
-        val normalized = normalizer.normalize(elements)
-        val source = normalized.fold(""){ acc, item -> acc + item.text }
+        val normalized = normalizer.normalize(pair.first)
         val startState = if (emptyNamespace) {
             WaitingLiteral(file = null, key = emptyList())
         } else {
@@ -42,7 +39,7 @@ class KeyParser(private val normalizer: KeyNormalizer = KeyNormalizerImpl()) {
             .fold(startState) { state, token ->
                 state.next(token)
             }
-            .fullKey(isTemplate, source, namespaces)
+            .fullKey(isTemplate, normalized.fold(""){ acc, item -> acc + item.text }, pair.second)
     }
 }
 
@@ -102,12 +99,8 @@ private class WaitingLiteral(private val file: Literal?, val key: List<Literal>)
 private class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Literal>) : State {
     override fun next(token: Token): State =
         when (token) {
+            is Literal -> WaitingLiteralOrSeparator(file, key.dropLast(1) + key.last().merge(token))
             is KeySeparator -> WaitingLiteral(file, key)
-            is Literal -> {
-                val last = key.last().merge(token)
-                val init = key.dropLast(1)
-                WaitingLiteralOrSeparator(file, init + last)
-            }
             else -> Error("Invalid token $token")
         }
     override fun fullKey(isTemplate: Boolean, source: String, namespaces: List<String>?): FullKey? =

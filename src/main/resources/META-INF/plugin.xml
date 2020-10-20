@@ -138,5 +138,6 @@
         <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.documentationProvider language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
+        <languageInjector implementation="com.eny.i18n.plugin.ide.injections.VueSFCTranslationInjector"/>
     </extensions>
 </idea-plugin>

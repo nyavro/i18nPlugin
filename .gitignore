@@ -10,3 +10,5 @@
 /examples/vue-i18n-files-simple/node_modules/**
 /examples/react-i18n-using-hooks/node_modules/**
 /examples/react-i18n-using-hooks/.idea/**
+/examples/vue-sfc/.idea/**
+/examples/vue-sfc/node_modules/**

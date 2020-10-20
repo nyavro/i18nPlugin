@@ -61,7 +61,42 @@ class YamlTranslationGenerator: TranslationGenerator {
             }.first
     }
 
-    override fun generate(root: String, vararg branches: Array<String>): String {
-        return "$root:\n${branches.map{generateBranchByList(it.toList())}.joinToString("\n")}"
+    private fun generateBranchByList2(list: List<String>): String {
+        val (key, value) = list.takeLast(2)
+        return list
+            .dropLast(2)
+            .foldRight(Pair("${key}: ${value}", 0)) {
+                item, (first, second) ->
+                val tabs = "   ".repeat(list.size-second-3)
+                Pair("$tabs  ${item}: \n${first}${tabs}#$tabs", second+1)
+            }.first
     }
+
+    override fun generate(root: String, vararg branches: Array<String>): String {
+        return "$root:\n${generate(*branches)}"
+    }
+
+    override fun generate(vararg branches: Array<String>): String {
+        return branches.map{generateBranchByList(it.toList())}.joinToString("\n")
+    }
+
+    override fun generate2(vararg branches: Array<String>): String {
+        return branches.map{generateBranchByList2(it.toList())}.joinToString("\n  ")
+    }
+
+    override fun generateNamedBlock(key: String, block: String, level: Int): String = """ 
+    ${"\t".repeat(level)}$key: $block 
+    """
+
+    override fun generateNamedBlock2(key: String, block: String, level: Int): String {
+        val tab = "  ".repeat(Math.max(level-1, 0))
+        return """$tab$key: 
+            |  $tab$block
+            |  """.trimMargin()
+    }
+
+    override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String =
+        blocks.map{(name, block) -> formatBlock(name, block)}.joinToString("\n")
+
+    private fun formatBlock(name: String, block: String): String = "\t$name: $block"
 }

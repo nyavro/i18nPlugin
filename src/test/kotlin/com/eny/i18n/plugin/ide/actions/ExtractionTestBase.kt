@@ -2,6 +2,8 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.settings.Config
+import com.intellij.codeInsight.intention.IntentionAction
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
@@ -31,6 +33,7 @@ abstract class ExtractionTestBase: PlatformBaseTest() {
             message: TestDialog? = null) {
         myFixture.configureByText(srcName, src)
         myFixture.addFileToProject(translationName, origTranslation)
+        if (!ApplicationManager.getApplication().isReadAccessAllowed()) return
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
         Messages.setTestInputDialog(inputDialog)

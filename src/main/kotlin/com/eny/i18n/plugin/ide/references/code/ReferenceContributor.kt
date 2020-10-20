@@ -4,42 +4,44 @@ import com.eny.i18n.plugin.factory.ReferenceAssistant
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
-import com.eny.i18n.plugin.utils.whenNonEmpty
+import com.eny.i18n.plugin.utils.whenNotEmpty
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 
 /**
+ * Data class
+ */
+data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val host: PsiElement?)
+
+/**
  * I18nReference to json/yaml translation
  */
-class I18nReference(element: PsiElement, textRange: TextRange, val references: List<PropertyReference<PsiElement>>) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
+class I18nReference(element: PsiElement, textRange: TextRange, val references: List<ReferenceDescriptor>) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
 
-    private fun filterMostResolved(list: List<PropertyReference<PsiElement>>): List<PropertyReference<PsiElement>> {
-        val mostResolved = list.maxBy {ref -> ref.path.size}?.path?.size
-        return list.filter { ref -> ref.path.size == mostResolved}
+    private fun filterMostResolved(): List<ReferenceDescriptor> {
+        val mostResolved = references.maxBy {it.reference.path.size}?.reference?.path?.size
+        return references.filter {it.reference.path.size == mostResolved}
     }
 
-    private fun findProperties(): List<Tree<PsiElement>> = filterMostResolved(references).mapNotNull {item -> item.element}
+    private fun findProperties(): List<PsiElement> =
+        filterMostResolved()
+            .mapNotNull { item -> item.reference.element?.let {
+                    val res = if (it.isTree()) {
+                        val parent = it.value().parent
+                        (parent as? PsiFile) ?: parent.firstChild
+                    } else it.value()
+                    item.host ?: res
+                }
+            }
 
     override fun resolve(): PsiElement? = multiResolve(false).whenMatches {it.size==1}?.first()?.element
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> =
-        findProperties()
-            .map {property ->
-                PsiElementResolveResult(
-                    if (property.isTree()) {
-                        val parent = property.value().parent
-                        if (parent is PsiFile) parent
-                        else parent.firstChild
-                    }
-                    else property.value()
-                )
-            }
-            .toTypedArray()
+        findProperties().map(::PsiElementResolveResult).toTypedArray()
 }
 
 /**
@@ -56,14 +58,15 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                 private fun getReferencesList(element: PsiElement): List<PsiReference> {
                     return referenceContributor.extractKey(element)?.let { fullKey ->
                         LocalizationSourceSearch(element.project)
-                            .findFilesByNames(fullKey.allNamespaces())
-                            .map {resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element))}
-                            .filter {it.path.isNotEmpty()}
-                            .whenNonEmpty {listOf(I18nReference(element, TextRange(1 + element.text.unQuote().indexOf(fullKey.source), element.textLength-1), it)) }
+                            .findFilesByNames(fullKey.allNamespaces(), element)
+                            .map {
+                                ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)), it.host)
+                            }
+                            .filter { it.reference.path.isNotEmpty() }
+                            .whenNotEmpty { listOf(I18nReference(element, TextRange(1 + element.text.unQuote().indexOf(fullKey.source), element.textLength - 1), it)) }
                     } ?: emptyList()
                 }
             }
         )
     }
 }
-

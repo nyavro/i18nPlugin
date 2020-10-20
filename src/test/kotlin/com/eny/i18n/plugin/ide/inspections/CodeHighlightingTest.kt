@@ -1,17 +1,14 @@
 package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.jupiter.api.Test
 import utils.randomOf
-import kotlin.concurrent.thread
 
 abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerator, protected val translationGenerator: TranslationGenerator): PlatformBaseTest() {
     private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
@@ -153,88 +150,6 @@ abstract class PhpHighlightingTest(translationGenerator: TranslationGenerator): 
 
 }
 
-abstract class VueHighlightingTest(private val translationGenerator: TranslationGenerator) : BasePlatformTestCase() {
-
-    private val codeGenerator = VueCodeGenerator()
-
-    override fun getTestDataPath(): String {
-        return "src/test/resources/codeHighlighting"
-    }
-
-    private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
-
-    private fun check(fileName: String, code: String, translationName: String, translation: String) = myFixture.runVueConfig(testConfig) {
-        myFixture.addFileToProject(translationName, translation)
-        myFixture.configureByText(fileName, code)
-        myFixture.checkHighlighting(true, true, true, true)
-    }
-
-    @Test
-    fun testReferenceToObjectVue() {
-        thread {
-            check(
-                "refToObject.${codeGenerator.ext()}",
-                codeGenerator.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
-                "assets/en-US.${translationGenerator.ext()}",
-                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-            )
-        }
-    }
-
-    @Test
-    fun testResolvedVue() {
-        thread {
-            check(
-                "resolved.${codeGenerator.ext()}",
-                codeGenerator.generate("\"test:tst1.base.single\""),
-                "assets/en-US.${translationGenerator.ext()}",
-                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-            )
-        }
-    }
-
-    @Test
-    fun testDefaultNsUnresolvedVue() {
-        thread {
-            check(
-                "defNsUnresolved.${codeGenerator.ext()}",
-                codeGenerator.multiGenerate(
-                        "\"<warning descr=\"Unresolved key\">missing.default.translation</warning>\"",
-                        "`<warning descr=\"Unresolved key\">missing.default.in.\${template}</warning>`"
-                ),
-                "assets/none.${translationGenerator.ext()}",
-                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-            )
-        }
-    }
-
-    @Test
-    fun testNotArg() {
-        thread {
-            check(
-                "defNsUnresolved.${codeGenerator.ext()}",
-                codeGenerator.generateInvalid(
-                        "\"test:tst1.base5.single\""
-                ),
-                "assets/en-US.${translationGenerator.ext()}",
-                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-            )
-        }
-    }
-
-    @Test
-    fun testExpressionInsideTranslation() {
-        thread {
-            check(
-                "expressionInTranslation.${codeGenerator.ext()}",
-                codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
-                "assets/en-US.${translationGenerator.ext()}",
-                translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-            )
-        }
-    }
-}
-
 class JsDialectCodeHighlightingRandomTest: JsDialectCodeHighlightingTestBase(
         randomOf(
                 ::JsCodeGenerator,
@@ -247,12 +162,6 @@ class JsDialectCodeHighlightingRandomTest: JsDialectCodeHighlightingTestBase(
 )
 
 class PhpCodeHighlightingRandomTest: PhpHighlightingTest(
-        randomOf(
-                ::JsonTranslationGenerator,
-                ::YamlTranslationGenerator)()
-)
-
-class VueCodeHighlightingRandomTest: VueHighlightingTest(
         randomOf(
                 ::JsonTranslationGenerator,
                 ::YamlTranslationGenerator)()

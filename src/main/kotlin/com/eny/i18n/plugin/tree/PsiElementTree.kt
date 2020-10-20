@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.tree
 
-import com.eny.i18n.plugin.utils.unQuote
+import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.utils.*
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
@@ -9,6 +10,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlText
 import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
@@ -23,6 +25,7 @@ abstract class PsiElementTree: Tree<PsiElement> {
          */
         fun create(file: PsiElement): PsiElementTree? =
             if (file is JsonFile) JsonElementTree.create(file)
+            else if (file is JsonObject) JsonElementTree(file)
 //            else if (file is JSObjectLiteralExpression) JsElementTree.create(file)
             else YamlElementTree.create(file)
     }
@@ -44,6 +47,7 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
             .map {item -> item.firstChildNode.psi}
             .filter {it.text.unQuote().startsWith(prefix)}
             .map {JsonElementTree(it)}
+
     companion object {
         /**
          * Creates instance of JsonElementTree
@@ -135,7 +139,7 @@ abstract class PsiProperty: FlippedTree<PsiElement> {
          * Creates FlippedTree instance
          */
         fun create(element: PsiElement): PsiProperty =
-            if (element.containingFile is JsonFile) JsonProperty(element)
+            if (element.containingFile is JsonFile) JsonPropertyWrapper(element)
             else YamlProperty(element)
     }
 }
@@ -152,14 +156,15 @@ class JsonRoot(val element: PsiFile): PsiProperty() {
 /**
  * Wrapper around Json tree item
  */
-class JsonProperty(val element: PsiElement): PsiProperty() {
+class JsonPropertyWrapper(val element: PsiElement): PsiProperty() {
     override fun name() = element.firstChild.text.unQuote()
     override fun isRoot() = false
     override fun parents(): List<FlippedTree<PsiElement>> = allAncestors(element)
-    private fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> =
+    private fun allAncestors(item: PsiElement?): List<FlippedTree<PsiElement>> =
         when (item) {
+            null -> listOf()
             is PsiFile -> listOf(JsonRoot(item))
-            is JsonProperty -> allAncestors(item.parent) + JsonProperty(item)
+            is JsonProperty -> allAncestors(item.parent) + JsonPropertyWrapper(item)
             else -> allAncestors(item.parent)
         }
 }

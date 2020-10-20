@@ -6,10 +6,7 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
-import com.eny.i18n.plugin.utils.default
-import com.eny.i18n.plugin.utils.toBoolean
-import com.eny.i18n.plugin.utils.unQuote
-import com.eny.i18n.plugin.utils.whenMatches
+import com.eny.i18n.plugin.utils.*
 import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.lang.javascript.psi.JSCallExpression
@@ -109,6 +106,13 @@ internal class VueFoldingProvider: FoldingProvider {
         }
     }
 
+//    class TemplateText : PatternCondition<XmlText>("vueContext") {
+//        override fun accepts(xmlText: XmlText, context: ProcessingContext?): Boolean {
+//            val res = xmlText.children.dropWhile {it.text != "{{"}.find {it.text == "}}"}.toBoolean()
+//            return res
+//        }
+//    }
+
     /**
      * Unwraps contents of vue template
      */
@@ -124,6 +128,26 @@ internal class VueFoldingProvider: FoldingProvider {
         }
         return copy
     }
+//
+//    fun unwrapTemplate(element: PsiElement): PsiElement {
+//        val copy = element.copy()
+//        copy.children.takeWhile {it.text != "{{"}.forEach{copy.node.removeChild(it.node)}
+//        copy.children.toList().mapAccum(true) {
+//            item, acc ->
+//            if (acc && item.text == "{{") {
+//                Pair(Pair(item, true), false)
+//            }
+//            else if (!acc && item.text == "}}") {
+//                Pair(Pair(item, true), true)
+//            }
+//            else {
+//                Pair(Pair(item, acc), acc)
+//            }
+//        }.forEach {
+//            (item, drop) -> if (drop) copy.node.removeChild(item.node)
+//        }
+//        return copy
+//    }
 
     /**
      * Trims left psi elements

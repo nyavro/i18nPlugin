@@ -49,7 +49,6 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
 
     private fun doInvoke(editor: Editor, project: Project, element: PsiElement) {
         val document = editor.document
-        val primaryCaret = editor.caretModel.primaryCaret
         val extractor = getExtractor(element)
         val text = extractor.text(element)
         val requestResult = request.key(project, text)
@@ -69,7 +68,7 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
                 document.replaceString(range.startOffset, range.endOffset, template("'${i18nKey.source}'"))
             })
         }
-        primaryCaret.removeSelection()
+        editor.caretModel.primaryCaret.removeSelection()
     }
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean =
