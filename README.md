@@ -35,8 +35,7 @@ Intellij idea i18next support plugin
 
     ![Reference to plural value](docs/img/p5.png)
 
-
-    ### Navigation
+   ### Navigation
 
 -   I18nPlugin provides navigation from key to its declaration in Json resource    
 
@@ -46,7 +45,7 @@ Intellij idea i18next support plugin
 
     ![Navigation from partially resolved](docs/img/p7.png)
     
-    ### Key extraction
+   ### Key extraction
 -   extract i18n translation from plain text     
     
    ### Hints
@@ -70,3 +69,12 @@ Intellij idea i18next support plugin
 -   Extract translation sorted by key
     
     When set, key extracted in json or yaml file is inserted in sorted (by key) position
+    
+## Frameworks & Libraries
+
+-   Javascript & Typescript
+-   react-i18next
+-   Vue
+-   Vue Single File Components - supported annotations and code completion. 
+References navigation, hints - not supported because of Intellij IDEA platform limitations.
+-   Php
