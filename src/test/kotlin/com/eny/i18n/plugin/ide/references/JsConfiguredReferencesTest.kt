@@ -20,3 +20,4 @@ abstract class JsConfiguredReferencesTest : PlatformBaseTest() {
         assertEquals("'Form title'", element!!.references[0].resolve()?.text)
     }
 }
+

@@ -19,7 +19,7 @@ class JsonReferenceContributor: PsiReferenceContributor(), KeyComposer<PsiElemen
             PlatformPatterns.psiElement(PsiElement::class.java),
             object : PsiReferenceProvider() {
                 override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-                    return if (element is JsonStringLiteral && element.isPropertyName) {
+                    return if (element is JsonStringLiteral && element.isPropertyName && element.textLength > 1) {
                         provider.getReferences(element, TextRange(1, element.textLength - 1))
                     } else {
                         PsiReference.EMPTY_ARRAY

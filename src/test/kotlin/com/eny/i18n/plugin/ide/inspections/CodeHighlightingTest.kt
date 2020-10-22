@@ -1,84 +1,92 @@
 package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
+import com.eny.i18n.plugin.ide.CodeTranslationGenerators
+import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
+import com.eny.i18n.plugin.ide.PhpCodeAndTranslationGenerators
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
-import com.eny.i18n.plugin.utils.generator.code.*
-import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
+import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
-import org.junit.jupiter.api.Test
-import utils.randomOf
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ArgumentsSource
 
-abstract class CodeHighlightingTestBase(protected val codeGenerator: CodeGenerator, protected val translationGenerator: TranslationGenerator): PlatformBaseTest() {
-    private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
+private fun CodeInsightTestFixture.customCheck(fileName: String, code: String, translationName: String, translation: String) = this.runWithConfig(Config(vueDirectory = "assets", defaultNs = "translation")) {
+    this.addFileToProject(translationName, translation)
+    this.configureByText(fileName, code)
+    this.checkHighlighting(true, true, true, true)
+}
 
-    protected fun check(fileName: String, code: String, translationName: String, translation: String) = myFixture.runWithConfig(testConfig) {
-        myFixture.addFileToProject(translationName, translation)
-        myFixture.configureByText(fileName, code)
-        myFixture.checkHighlighting(true, true, true, true)
-    }
+class CodeHighlightingTestBase: PlatformBaseTest() {
 
-    @Test
-    fun testReferenceToObject() = check(
-        "refToObject.${codeGenerator.ext()}",
-        codeGenerator.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
-        "test.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    @ParameterizedTest
+    @ArgumentsSource(CodeTranslationGenerators::class)
+    fun testReferenceToObject(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "refToObject.${cg.ext()}",
+        cg.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+        "test.${tg.ext()}",
+        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
-    @Test
-    fun testReferenceToObjectDefaultNs() = check(
-        "refToObjectDefNs.${codeGenerator.ext()}",
-        codeGenerator.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
-        "assets/translation.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    @ParameterizedTest
+    @ArgumentsSource(CodeTranslationGenerators::class)
+    fun testReferenceToObjectDefaultNs(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "refToObjectDefNs.${cg.ext()}",
+        cg.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+        "assets/translation.${tg.ext()}",
+        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
-    @Test
-    fun testResolved() = check(
-        "resolved.${codeGenerator.ext()}",
-        codeGenerator.generate("\"test:tst1.base.single\""),
-        "assets/translation.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    @ParameterizedTest
+    @ArgumentsSource(CodeTranslationGenerators::class)
+    fun testResolved(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "resolved.${cg.ext()}",
+        cg.generate("\"test:tst1.base.single\""),
+        "assets/translation.${tg.ext()}",
+        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
-    @Test
-    fun testNotArg() = check(
-        "defNsUnresolved.${codeGenerator.ext()}",
-        codeGenerator.generateInvalid(
+    @ParameterizedTest
+    @ArgumentsSource(CodeTranslationGenerators::class)
+    fun testNotArg(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "defNsUnresolved.${cg.ext()}",
+        cg.generateInvalid(
             "\"test:tst1.base5.single\""
         ),
-        "assets/test.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+        "assets/test.${tg.ext()}",
+        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
-    @Test
-    fun testExpressionInsideTranslation() = check(
-        "expressionInTranslation.${codeGenerator.ext()}",
-        codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
-        "test.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    @ParameterizedTest
+    @ArgumentsSource(CodeTranslationGenerators::class)
+    fun testExpressionInsideTranslation(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "expressionInTranslation.${cg.ext()}",
+        cg.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
+        "test.${tg.ext()}",
+        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 }
 
-abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, translationGenerator: TranslationGenerator): CodeHighlightingTestBase(codeGenerator, translationGenerator) {
+class JsDialectCodeHighlightingTestBase: PlatformBaseTest() {
 
-    @Test
-    fun testDefNsUnresolved() = check(
-        "defNsUnresolved.${codeGenerator.ext()}",
-        codeGenerator.multiGenerate(
+    @ParameterizedTest
+    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
+    fun testDefNsUnresolved(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "defNsUnresolved.${cg.ext()}",
+        cg.multiGenerate(
             "\"<warning descr=\"Missing default translation file\">missing.default.translation</warning>\"",
             "`<warning descr=\"Missing default translation file\">missing.default.in.\${template}</warning>`"
         ),
-        "assets/test.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+        "assets/test.${tg.ext()}",
+        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
-    @Test
-    fun testUnresolvedKey() = check(
-        "unresolvedKey.${codeGenerator.ext()}",
-        codeGenerator.multiGenerate(
+    @ParameterizedTest
+    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
+    fun testUnresolvedKey(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "unresolvedKey.${cg.ext()}",
+        cg.multiGenerate(
             "\"test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.key</warning>\"",
             "\"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\"",
             "`test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.key.\${arg}</warning>`",
@@ -87,82 +95,69 @@ abstract class JsDialectCodeHighlightingTestBase(codeGenerator: CodeGenerator, t
             "`test:<warning descr=\"Unresolved key\">unresolved.whole.\${b ? 'key' : 'key2'}</warning>`",
             "`test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.\${b ? 'key' : 'key2'}</warning>`"
         ),
-        "test.${translationGenerator.ext()}",
-        translationGenerator.generateContent("tst1", "base", "single", "only one value")
+        "test.${tg.ext()}",
+        tg.generateContent("tst1", "base", "single", "only one value")
     )
 
-    @Test
-    fun testUnresolvedNs() = check(
-        "unresolvdNs.${codeGenerator.ext()}",
-        codeGenerator.multiGenerate(
+    @ParameterizedTest
+    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
+    fun testUnresolvedNs(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "unresolvdNs.${cg.ext()}",
+        cg.multiGenerate(
             "\"<warning descr=\"Unresolved namespace\">unresolved</warning>:tst1.base\"",
             "`<warning descr=\"Unresolved namespace\">unresolved</warning>:tst1.base.\${arg}`"
         ),
-        "test.${translationGenerator.ext()}",
-        translationGenerator.generateContent("root", "first", "key", "value")
+        "test.${tg.ext()}",
+        tg.generateContent("root", "first", "key", "value")
     )
 
-    @Test
-    fun testResolvedTemplate() = check(
-        "resolvedTemplate.${codeGenerator.ext()}",
-        codeGenerator.generate("`test:tst1.base.\${arg}`"),
-        "assets/translation.${translationGenerator.ext()}",
-        translationGenerator.generateContent("tst1", "base", "value", "translation")
+    @ParameterizedTest
+    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
+    fun testResolvedTemplate(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "resolvedTemplate.${cg.ext()}",
+        cg.generate("`test:tst1.base.\${arg}`"),
+        "assets/translation.${tg.ext()}",
+        tg.generateContent("tst1", "base", "value", "translation")
     )
 }
 
-abstract class PhpHighlightingTest(translationGenerator: TranslationGenerator): CodeHighlightingTestBase(PhpCodeGenerator(), translationGenerator) {
+class PhpHighlightingTest: PlatformBaseTest() {
 
-    @Test
-    fun testDefNsUnresolved() = check(
-        "defNsUnresolved.${codeGenerator.ext()}",
-        codeGenerator.multiGenerate(
+    @ParameterizedTest
+    @ArgumentsSource(PhpCodeAndTranslationGenerators::class)
+    fun testDefNsUnresolved(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "defNsUnresolved.${cg.ext()}",
+        cg.multiGenerate(
                 "\"<warning descr=\"Missing default translation file\">missing.default.translation</warning>\"",
                 "'<warning descr=\"Missing default translation file\">missing.default.in.translation</warning>'"
         ),
-        "assets/test.${translationGenerator.ext()}",
-        translationGenerator.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+        "assets/test.${tg.ext()}",
+        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
-    @Test
-    fun testUnresolvedKey() = check(
-        "unresolvedKey.${codeGenerator.ext()}",
-        codeGenerator.multiGenerate(
+    @ParameterizedTest
+    @ArgumentsSource(PhpCodeAndTranslationGenerators::class)
+    fun testUnresolvedKey(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "unresolvedKey.${cg.ext()}",
+        cg.multiGenerate(
             "\"test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.key</warning>\"",
             "\"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\"",
             "'test:tst1.<warning descr=\"Unresolved key\">unresolved.part.of.key</warning>'",
             "'test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>'"
         ),
-        "test.${translationGenerator.ext()}",
-        translationGenerator.generateContent("tst1", "base", "single", "only one value")
+        "test.${tg.ext()}",
+        tg.generateContent("tst1", "base", "single", "only one value")
     )
 
-    @Test
-    fun testUnresolvedNs() = check(
-        "unresolvdNs.${codeGenerator.ext()}",
-        codeGenerator.multiGenerate(
+    @ParameterizedTest
+    @ArgumentsSource(PhpCodeAndTranslationGenerators::class)
+    fun testUnresolvedNs(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.customCheck(
+        "unresolvdNs.${cg.ext()}",
+        cg.multiGenerate(
             "\"<warning descr=\"Unresolved namespace\">unresolved</warning>:tst1.base\"",
             "'<warning descr=\"Unresolved namespace\">unresolved</warning>:tst1.base'"
         ),
-        "test.${translationGenerator.ext()}",
-        translationGenerator.generateContent("root", "first", "key", "value")
+        "test.${tg.ext()}",
+        tg.generateContent("root", "first", "key", "value")
     )
-
 }
-
-class JsDialectCodeHighlightingRandomTest: JsDialectCodeHighlightingTestBase(
-        randomOf(
-                ::JsCodeGenerator,
-                ::TsCodeGenerator,
-                ::JsxCodeGenerator,
-                ::TsxCodeGenerator)(),
-        randomOf(
-                ::JsonTranslationGenerator,
-                ::YamlTranslationGenerator)()
-)
-
-class PhpCodeHighlightingRandomTest: PhpHighlightingTest(
-        randomOf(
-                ::JsonTranslationGenerator,
-                ::YamlTranslationGenerator)()
-)
