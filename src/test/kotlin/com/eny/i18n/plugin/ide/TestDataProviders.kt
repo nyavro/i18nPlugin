@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider
 import java.util.stream.Stream
 
 private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator())
+private val vueCgs = listOf(VueCodeGenerator(), VueScriptCodeGenerator())
 private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
 private val jsCgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator())
 
@@ -69,4 +70,9 @@ class TranslationGenerators: ArgumentsProvider {
 class CodeTranslationGenerators: ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
         cgs.flatMap {cg -> tgs.map {Arguments.of(cg, it)}}.stream()
+}
+
+class VueCodeTranslationGenerators: ArgumentsProvider {
+    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+        vueCgs.flatMap {cg -> tgs.map { Arguments.of(cg, it) }}.stream()
 }
