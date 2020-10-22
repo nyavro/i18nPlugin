@@ -1,11 +1,11 @@
 package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.TranslationGenerators
+import com.eny.i18n.plugin.ide.VueCodeTranslationGenerators
 import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.Config
-import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
@@ -13,11 +13,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
 class ReferencesTestVue: PlatformBaseTest() {
-    private val cg = VueCodeGenerator()
 
     @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testMultiReferenceDefNs(tg: TranslationGenerator) {
+    @ArgumentsSource(VueCodeTranslationGenerators::class)
+    fun testMultiReferenceDefNs(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.runVue {
             myFixture.addFileToProject(
                 "assets/en/translation.${tg.ext()}",
@@ -37,8 +36,8 @@ class ReferencesTestVue: PlatformBaseTest() {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testReferenceMultiDefaultNs(tg: TranslationGenerator) {
+    @ArgumentsSource(VueCodeTranslationGenerators::class)
+    fun testReferenceMultiDefaultNs(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.runVueConfig(Config(defaultNs = "third,second;first ")) {
             //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
             myFixture.addFileToProject("assets/en/first.${tg.ext()}", tg.generateContent("main", "fruit", "apple"))
@@ -57,8 +56,8 @@ class ReferencesTestVue: PlatformBaseTest() {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testDefaultNsReference(tg: TranslationGenerator) {
+    @ArgumentsSource(VueCodeTranslationGenerators::class)
+    fun testDefaultNsReference(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.runVue {
             myFixture.addFileToProject(
                 "assets/translation.${tg.ext()}",
@@ -74,8 +73,8 @@ class ReferencesTestVue: PlatformBaseTest() {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testRootKey(tg: TranslationGenerator) {
+    @ArgumentsSource(VueCodeTranslationGenerators::class)
+    fun testRootKey(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.runVue {
             myFixture.addFileToProject(
                 "locales/en-US.${tg.ext()}",

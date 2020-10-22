@@ -63,9 +63,8 @@ internal class JsReferenceAssistant: ReferenceAssistant {
 
     private val parser: KeyParser = KeyParser()
 
-    override fun pattern(): ElementPattern<out PsiElement> {
-        return JSPatterns.jsLiteralExpression().and(JSPatterns.jsArgument("t", 0))
-    }
+    override fun pattern(): ElementPattern<out PsiElement> =
+        JSPatterns.jsLiteralExpression().andOr(JSPatterns.jsArgument("t", 0), JSPatterns.jsArgument("\$t", 0))
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
