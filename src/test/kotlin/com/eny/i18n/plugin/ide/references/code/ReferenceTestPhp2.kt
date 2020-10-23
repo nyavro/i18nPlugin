@@ -4,17 +4,22 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
+import org.junit.Test
 
 class ReferenceTestPhp2 : PlatformBaseTest() {
 
     private val cg = PhpGetTextCodeGenerator("gettext")
     private val tg = PoTranslationGenerator()
 
-    fun chReference() {
+    @Test
+    fun testReference() {
         myFixture.addFileToProject(
-            "assets/test.${tg.ext()}",
+            "de-DE/LC_MESSAGES/test.${tg.ext()}",
             tg.generateContent("ref", "section", "key", "Reference in json"))
-        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("'test:ref.section.key<caret>'"))
+        myFixture.addFileToProject(
+            "en-US/LC_MESSAGES/test.${tg.ext()}",
+            tg.generateContent("ref", "section", "key", "Reference in json"))
+        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("'ref.section.key<caret>'"))
 //        read {
             val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
             assertNotNull(element)

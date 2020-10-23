@@ -29,7 +29,7 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             KeyRangesCalculator(element.textRange.shiftRight(element.text.unQuote().indexOf(fullKey.source)), element.text.isQuoted()),
             element.project
         )
-        val files = LocalizationSourceSearch(element.project).findFilesByNames(fullKey.allNamespaces(), element)
+        val files = LocalizationSourceSearch(element.project).findSources(fullKey.allNamespaces(), element)
         if (files.isEmpty()) {
             if (fullKey.ns == null) {
                 annotationHelper.unresolvedDefaultNs(fullKey)

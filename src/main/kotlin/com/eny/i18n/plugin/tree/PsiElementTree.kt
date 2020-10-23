@@ -8,6 +8,7 @@ import com.intellij.json.psi.JsonObject
 import com.intellij.json.psi.JsonProperty
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiPlainTextFile
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlText
@@ -24,10 +25,41 @@ abstract class PsiElementTree: Tree<PsiElement> {
          * Creates instance of PsiElementTree
          */
         fun create(file: PsiElement): PsiElementTree? =
-            if (file is JsonFile) JsonElementTree.create(file)
+            if (file is PsiPlainTextFile) PlainTextTree.create(file)
+            else if (file is JsonFile) JsonElementTree.create(file)
             else if (file is JsonObject) JsonElementTree(file)
 //            else if (file is JSObjectLiteralExpression) JsElementTree.create(file)
             else YamlElementTree.create(file)
+    }
+}
+
+/**
+ * Plain text file wrapper
+ */
+class PlainTextTree(val element: PsiElement): PsiElementTree() {
+
+    override fun findChild(name: String): Tree<PsiElement>? {
+        TODO("Not yet implemented")
+    }
+
+    override fun isTree(): Boolean {
+        return element is PsiPlainTextFile
+    }
+
+    override fun value(): PsiElement {
+        TODO("Not yet implemented")
+    }
+
+    override fun findChildren(regex: String): List<Tree<PsiElement>> {
+        TODO("Not yet implemented")
+    }
+
+    companion object {
+        /**
+         * Creates instance of PlainTextTree
+         */
+        fun create(file: PsiElement): PsiElementTree? =
+            PlainTextTree(file)
     }
 }
 

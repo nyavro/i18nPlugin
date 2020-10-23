@@ -11,8 +11,11 @@ import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
+import com.intellij.patterns.ElementPatternCondition
+import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.util.ProcessingContext
 import com.jetbrains.php.lang.psi.elements.FunctionReference
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 
@@ -63,14 +66,44 @@ internal class PhpReferenceAssistant: ReferenceAssistant {
 
     private val parser: KeyParser = KeyParser()
 
+    private val gettextAliases = listOf("gettext", "_", "__")
+
+    private val gettextPattern = PlatformPatterns.or(*gettextAliases.map { PhpPatternsExt.phpArgument(it, 0) }.toTypedArray())
+
     override fun pattern(): ElementPattern<out PsiElement> {
-        return PhpPatternsExt.phpArgument("t", 0)
+
+        return object: ElementPattern<PsiElement> {
+            private val inner = PlatformPatterns.or(
+                PhpPatternsExt.phpArgument("t", 0),
+                gettextPattern
+            )
+
+            override fun accepts(p0: Any?): Boolean {
+                return inner.accepts(p0)
+            }
+
+            override fun accepts(p0: Any?, p1: ProcessingContext?): Boolean {
+                return inner.accepts(p0, p1)
+            }
+
+            override fun getCondition(): ElementPatternCondition<PsiElement> {
+                return inner.condition as ElementPatternCondition<PsiElement>
+            }
+        }
     }
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
+        val isGettext = gettextPattern.accepts(element)
+        val dummySeparator = "#$@^%!&^@&"
         return listOf(StringLiteralKeyExtractor())
             .find {it.canExtract(element)}
-            ?.let{parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
+            ?.let {
+                parser.parse(
+                    it.extract(element),
+                    if (isGettext) dummySeparator else config.nsSeparator,
+                    if (isGettext) dummySeparator else config.keySeparator
+                )
+            }
     }
 }
