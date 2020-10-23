@@ -14,9 +14,6 @@ class ReferenceTestPhp2 : PlatformBaseTest() {
     @Test
     fun testReference() {
         myFixture.addFileToProject(
-            "de-DE/LC_MESSAGES/test.${tg.ext()}",
-            tg.generateContent("ref", "section", "key", "Reference in json"))
-        myFixture.addFileToProject(
             "en-US/LC_MESSAGES/test.${tg.ext()}",
             tg.generateContent("ref", "section", "key", "Reference in json"))
         myFixture.configureByText("resolved.${cg.ext()}", cg.generate("'ref.section.key<caret>'"))

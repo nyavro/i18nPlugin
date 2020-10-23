@@ -28,7 +28,14 @@ test {
         version 'IU-2019.3'
         type "IC"
         pluginName 'i18n'
-        plugins = ['yaml', 'JavaScriptLanguage', 'CSS', "org.jetbrains.plugins.vue:193.5233.118", "com.jetbrains.php:193.5233.102"]
+        plugins = [
+            'yaml',
+            'JavaScriptLanguage',
+            'CSS',
+            "org.jetbrains.plugins.vue:193.5233.118",
+            "com.jetbrains.php:193.5233.102",
+            "org.jetbrains.plugins.localization:193.5233.70"
+        ]
     }
     dependencies {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'

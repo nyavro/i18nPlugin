@@ -55,14 +55,14 @@ class LocalizationSourceSearch(private val project: Project) {
      */
     private fun findSourcesInner(fileNames: List<String>, element: PsiElement? = null, isHost: Boolean): List<LocalizationSource> =
         findPlainObjectFiles() +
-            findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces())
-                .flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map {localizationSource(it, directParent)}} +
-            if (config.vue) {
-                findVirtualFilesUnder(config.vueDirectory)
-                    .filter { file -> translationFileTypes.any { file.fileType == it } }
-                    .map {localizationSource(it, directParent)} +
-                    findSfcSources(isHost, element)
-            } else listOf()
+        findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces())
+            .flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map {localizationSource(it, directParent)}} +
+        if (config.vue) {
+            findVirtualFilesUnder(config.vueDirectory)
+                .filter { file -> translationFileTypes.any { file.fileType == it } }
+                .map {localizationSource(it, directParent)} +
+                findSfcSources(isHost, element)
+        } else listOf()
 
     private fun findSfcSources(isHost: Boolean, element: PsiElement?): Iterable<LocalizationSource> {
         return PsiTreeUtil
@@ -152,9 +152,15 @@ class LocalizationSourceSearch(private val project: Project) {
             it.children.toList().map { root -> root.containingFile}
         }
 
-    private fun findPlainObjectFiles(): List<LocalizationSource> = findVirtualFilesUnder("LC_MESSAGES")
-        .filter {it.fileType == PlainTextFileType.INSTANCE}
-        .map { localizationSource(it, {file:PsiFile -> file.containingDirectory.parentDirectory ?: file.containingDirectory}) }
+    private fun findPlainObjectFiles(): List<LocalizationSource> {
+        return findVirtualFilesUnder("LC_MESSAGES")
+            .filter { it.virtualFile.extension == "po" }
+            .map {
+                localizationSource(it, { file: PsiFile ->
+                    file.containingDirectory.parentDirectory ?: file.containingDirectory
+                })
+            }
+    }
 
     private fun findVirtualFilesByName(fileNames: List<String>) =
         translationFileTypes.flatMap {findVirtualFilesByName(fileNames, it)}

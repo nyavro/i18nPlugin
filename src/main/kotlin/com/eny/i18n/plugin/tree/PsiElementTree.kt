@@ -25,7 +25,7 @@ abstract class PsiElementTree: Tree<PsiElement> {
          * Creates instance of PsiElementTree
          */
         fun create(file: PsiElement): PsiElementTree? =
-            if (file is PsiPlainTextFile) PlainTextTree.create(file)
+            if (file.containingFile.virtualFile.extension == "po") PlainTextTree.create(file)
             else if (file is JsonFile) JsonElementTree.create(file)
             else if (file is JsonObject) JsonElementTree(file)
 //            else if (file is JSObjectLiteralExpression) JsElementTree.create(file)
@@ -39,15 +39,15 @@ abstract class PsiElementTree: Tree<PsiElement> {
 class PlainTextTree(val element: PsiElement): PsiElementTree() {
 
     override fun findChild(name: String): Tree<PsiElement>? {
-        TODO("Not yet implemented")
+        return element.children.find {it.type() == "ID_LINE" && it.toString() == name}?.let {PlainTextTree(it)}
     }
 
     override fun isTree(): Boolean {
-        return element is PsiPlainTextFile
+        return element.parent == element.containingFile
     }
 
     override fun value(): PsiElement {
-        TODO("Not yet implemented")
+        return element.nextSibling.nextSibling.children[0]
     }
 
     override fun findChildren(regex: String): List<Tree<PsiElement>> {
@@ -59,7 +59,7 @@ class PlainTextTree(val element: PsiElement): PsiElementTree() {
          * Creates instance of PlainTextTree
          */
         fun create(file: PsiElement): PsiElementTree? =
-            PlainTextTree(file)
+            PlainTextTree(file.children[0])
     }
 }
 
