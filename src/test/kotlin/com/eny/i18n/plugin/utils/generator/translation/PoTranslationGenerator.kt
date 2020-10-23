@@ -39,6 +39,17 @@ class PoTranslationGenerator: TranslationGenerator {
         msgstr moreinv
     """.trimIndent()
 
+    fun generateInvalidKey(key: String, value: String): String = """
+        msgid "$key"
+        msgid "$key"
+        msgstr "$value"
+    """.trimIndent()
+
+    fun generateInvalidValue(key: String): String = """
+        msgid "$key"
+        msgid "another"
+    """.trimIndent()
+
     override fun generateInvalidRoot(): String = ""
 
     override fun generate(root: String, vararg branches: Array<String>): String {

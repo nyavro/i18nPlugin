@@ -46,9 +46,7 @@ class PlainTextTree(val element: PsiElement): PsiElementTree() {
         return element.parent == element.containingFile
     }
 
-    override fun value(): PsiElement {
-        return element.nextSibling.nextSibling.children[0]
-    }
+    override fun value(): PsiElement = element.nextSibling.nextSibling.let{it.children.at(0) ?: it}
 
     override fun findChildren(regex: String): List<Tree<PsiElement>> {
         TODO("Not yet implemented")
@@ -58,8 +56,7 @@ class PlainTextTree(val element: PsiElement): PsiElementTree() {
         /**
          * Creates instance of PlainTextTree
          */
-        fun create(file: PsiElement): PsiElementTree? =
-            PlainTextTree(file.children[0])
+        fun create(file: PsiElement): PsiElementTree? = file.children.at(0)?.let{ PlainTextTree(it) }
     }
 }
 

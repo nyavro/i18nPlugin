@@ -86,3 +86,5 @@ inline fun <I, reified O : I> I.maybe(): O? {
     return this as? O;
 }
 
+fun <T> Array<T>.at(index: Int): T? =
+    if (this.size > index) this[index] else null
