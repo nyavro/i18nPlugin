@@ -1,17 +1,16 @@
 package com.eny.i18n.plugin.tree
 
 import com.eny.i18n.plugin.parser.type
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.at
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
 import com.intellij.json.psi.JsonProperty
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiPlainTextFile
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.xml.XmlText
 import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
@@ -25,7 +24,7 @@ abstract class PsiElementTree: Tree<PsiElement> {
          * Creates instance of PsiElementTree
          */
         fun create(file: PsiElement): PsiElementTree? =
-            if (file.containingFile.virtualFile.extension == "po") PlainTextTree.create(file)
+            if (file.containingFile?.virtualFile?.extension == "po") PlainTextTree.create(file)
             else if (file is JsonFile) JsonElementTree.create(file)
             else if (file is JsonObject) JsonElementTree(file)
 //            else if (file is JSObjectLiteralExpression) JsElementTree.create(file)
