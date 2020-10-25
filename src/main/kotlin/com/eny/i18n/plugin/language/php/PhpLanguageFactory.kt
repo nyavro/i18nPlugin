@@ -53,10 +53,17 @@ internal class PhpFoldingProvider: FoldingProvider {
         PsiTreeUtil.getParentOfType(psiElement, FunctionReference::class.java).default(psiElement).textRange
 }
 
+private val gettextAliases = listOf("gettext", "_", "__")
+
+private val gettextPattern = PlatformPatterns.or(*gettextAliases.map { PhpPatternsExt.phpArgument(it, 0) }.toTypedArray())
+
 internal class PhpCallContext: CallContext {
     override fun accepts(element: PsiElement): Boolean =
         listOf("String").contains(element.type()) &&
-            PhpPatternsExt.phpArgument("t", 0).let { pattern ->
+            PlatformPatterns.or(
+                PhpPatternsExt.phpArgument("t", 0),
+                gettextPattern
+            ).let { pattern ->
                 pattern.accepts(element) ||
                 pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list"}))
             }
@@ -65,10 +72,6 @@ internal class PhpCallContext: CallContext {
 internal class PhpReferenceAssistant: ReferenceAssistant {
 
     private val parser: KeyParser = KeyParser()
-
-    private val gettextAliases = listOf("gettext", "_", "__")
-
-    private val gettextPattern = PlatformPatterns.or(*gettextAliases.map { PhpPatternsExt.phpArgument(it, 0) }.toTypedArray())
 
     override fun pattern(): ElementPattern<out PsiElement> {
 

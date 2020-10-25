@@ -38,11 +38,16 @@ abstract class PsiElementTree: Tree<PsiElement> {
 class PlainTextTree(val element: PsiElement): PsiElementTree() {
 
     override fun findChild(name: String): Tree<PsiElement>? {
-        return element.children.find {it.type() == "ID_LINE" && it.toString() == name}?.let {PlainTextTree(it)}
+        return element.children.find {
+            it.type()=="SECTION" &&
+            it.children.at(0)?.let {
+                it.type()=="ID_LINE" && it.toString()==name
+            } == true
+        }?.children?.at(0)?.let {PlainTextTree(it)}
     }
 
     override fun isTree(): Boolean {
-        return element.parent == element.containingFile
+        return element == element.containingFile
     }
 
     override fun value(): PsiElement = element.nextSibling.nextSibling.let{it.children.at(0) ?: it}
@@ -55,7 +60,7 @@ class PlainTextTree(val element: PsiElement): PsiElementTree() {
         /**
          * Creates instance of PlainTextTree
          */
-        fun create(file: PsiElement): PsiElementTree? = file.children.at(0)?.let{ PlainTextTree(it) }
+        fun create(file: PsiElement): PsiElementTree? = PlainTextTree(file)
     }
 }
 

@@ -5,6 +5,17 @@ class PoTranslationGenerator: TranslationGenerator {
     override fun ext(): String = "po"
 
     override fun generateContent(key: String, value: String): String = """
+        msgid "Project-Id-Version"
+        msgstr "Project-Id-Version: 'Ame Corp.'"
+        "Report-Msgid-Bugs-To: 'support@test.com'"
+        "POT-Creation-Date: 2020-10-20 12:43:52+0200\n"
+        "PO-Revision-Date: 2020-10-20 12:43:52+0200\n"
+        "Language: de_DE\n"
+        "MIME-Version: 1.0"
+        "Content-Type: text/plain; charset=UTF-8"
+        "Content-Transfer-Encoding: 8bit"
+        "Plural-Forms: nplurals=2; plural=(n != 1)"
+        
         msgid "$key"
         msgstr "$value"
     """.trimIndent()

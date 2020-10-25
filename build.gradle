@@ -19,22 +19,35 @@ intellij {
     pluginName 'i18n'
     downloadSources false
     updateSinceUntilBuild false
-    plugins = ['yaml', 'php']
+    plugins = ['yaml', 'php', 'localization']
     //alternativeIdePath = "C:\\opt\\PhpStorm"
 }
 
 test {
+//    intellij {
+//        version 'IU-2020.1'
+//        type "IC"
+//        pluginName 'i18n'
+//        plugins = [
+//            'yaml',
+//            'JavaScriptLanguage',
+//            'CSS',
+//            "org.jetbrains.plugins.vue:201.6668.30",
+//            "com.jetbrains.php:201.6668.30",
+//            "org.jetbrains.plugins.localization:201.6668.9"
+//        ]
+//    }
     intellij {
         version 'IU-2019.3'
         type "IC"
         pluginName 'i18n'
         plugins = [
-            'yaml',
-            'JavaScriptLanguage',
-            'CSS',
-            "org.jetbrains.plugins.vue:193.5233.118",
-            "com.jetbrains.php:193.5233.102",
-            "org.jetbrains.plugins.localization:193.5233.70"
+                'yaml',
+                'JavaScriptLanguage',
+                'CSS',
+                "org.jetbrains.plugins.vue:193.5233.118",
+                "com.jetbrains.php:193.5233.102",
+                "org.jetbrains.plugins.localization:193.5233.70"
         ]
     }
     dependencies {

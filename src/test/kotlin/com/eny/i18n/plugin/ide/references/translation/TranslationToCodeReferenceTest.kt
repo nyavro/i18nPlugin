@@ -1,7 +1,6 @@
-package com.eny.i18n.plugin.ide.references
+package com.eny.i18n.plugin.ide.references.translation
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
@@ -36,7 +35,7 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
 
     @Test
     fun testInvalidTranslation() {
-        tgs.forEach {tg ->
+        tgs.forEach { tg ->
             myFixture.configureByText("invalid.${tg.ext()}", "item<caret> text")
             val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
             assertNotNull(element)
