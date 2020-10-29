@@ -29,7 +29,7 @@ object KeySeparator: Separator
 /**
  * Represents key literal
  */
-data class Literal(val text: String, val length: Int = text.length, val isTemp: Boolean = false): Token {
+data class Literal(val text: String, val length: Int = text.length): Token {
     /**
      * Merges two tokens
      */
@@ -80,11 +80,7 @@ class NsKeyTokenizer(private val nsSeparator: String, private val keySeparator: 
         when {
             element.type == KeyElementType.LITERAL -> tokenizeLiteral(element.text)
             else -> listOf(
-                Literal(
-                    "*",
-                    element.text.length,
-                    false
-                )
+                Literal("*", element.text.length)
             )
         }
 
