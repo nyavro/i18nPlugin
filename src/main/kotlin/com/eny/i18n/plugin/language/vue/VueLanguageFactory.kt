@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.*
@@ -196,14 +197,16 @@ internal class VueCallContext: CallContext {
 
 internal class VueReferenceAssistant: ReferenceAssistant {
 
-    private val parser: KeyParser = KeyParser()
-
     override fun pattern(): ElementPattern<out PsiElement> = JSPatterns.jsLiteralExpression()
 
     override fun extractKey(element: PsiElement): FullKey? {
         val settings = Settings.getInstance(element.project)
+        val parser = KeyParserBuilder
+            .withSeparators(settings.nsSeparator, settings.keySeparator)
+            .withTemplateNormalizer()
+            .build()
         return listOf(LiteralKeyExtractor())
                 .find {it.canExtract(element)}
-                ?.let{parser.parse(it.extract(element), settings.nsSeparator, settings.keySeparator)}
+                ?.let{parser.parse2(it.extract(element))}
     }
 }

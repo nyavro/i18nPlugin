@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.StringLiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
@@ -71,8 +72,6 @@ internal class PhpCallContext: CallContext {
 
 internal class PhpReferenceAssistant: ReferenceAssistant {
 
-    private val parser: KeyParser = KeyParser()
-
     override fun pattern(): ElementPattern<out PsiElement> {
 
         return object: ElementPattern<PsiElement> {
@@ -97,16 +96,11 @@ internal class PhpReferenceAssistant: ReferenceAssistant {
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
-        val isGettext = gettextPattern.accepts(element)
-        val dummySeparator = "#$@^%!&^@&"
+        val parser = (if(config.gettext)
+            KeyParserBuilder.withoutTokenizer() else
+            KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
         return listOf(StringLiteralKeyExtractor())
-            .find {it.canExtract(element)}
-            ?.let {
-                parser.parse(
-                    it.extract(element),
-                    if (isGettext) dummySeparator else config.nsSeparator,
-                    if (isGettext) dummySeparator else config.keySeparator
-                )
-            }
+            .find { it.canExtract(element) }
+            ?.let { parser.parse2(it.extract(element)) }
     }
 }

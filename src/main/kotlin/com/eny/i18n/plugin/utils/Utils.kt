@@ -15,10 +15,14 @@ inline fun <C> C.whenMatches(predicate: (arg: C) -> Boolean): C? {
 }
 
 /**
- * Modifies source with block when predicate matches
+ * Applies transformation when predicate matches
  */
 inline fun <C> C.whenMatchesDo(predicate: (arg: C) -> Boolean, block: (C) -> C): C = this.whenMatches(predicate)?.let(block) ?: this
 
+/**
+ * Executes transformation when condition is true
+ */
+inline fun <C> C.whenTrueDo(condition: Boolean, block: (C) -> C): C = if (condition) block(this) else this
 /**
  * Converts nullable to Boolean
  */
@@ -70,7 +74,7 @@ fun <T, A, R: Any> List<T>.mapAccum(accum: A, block: (T, A) -> Pair<R?, A>): Lis
 }
 
 /**
- * map with accumulator
+ * filter with accumulator
  */
 fun <T, A> List<T>.filterAccum(accum: A, predicate: (T, A) -> A?): List<T> {
     var acc = accum
@@ -88,3 +92,12 @@ inline fun <I, reified O : I> I.maybe(): O? {
 
 fun <T> Array<T>.at(index: Int): T? =
     if (this.size > index) this[index] else null
+
+fun <T, A> Collection<T>.foldWhileAccum(accum: A, block: (A, T) -> A?): A? {
+    var acc: A? = accum
+    for (item in this) {
+        acc = block(acc!!, item)
+        if(acc == null) break
+    }
+    return acc
+}

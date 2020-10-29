@@ -30,10 +30,9 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
 //        super.fillCompletionVariants(parameters, result)
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
-        val isInTranslationContext = callContext.accepts(parameters.position.parent)
         val fullKey = keyExtractor.extractFullKey(parameters.position)
         if (fullKey == null) {
-            if (isInTranslationContext) {
+            if (callContext.accepts(parameters.position.parent)) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()
                 val emptyKeyCompletions = emptyKeyCompletions(parameters.position.project, prefix, parameters.position)
                 result.addAllElements(emptyKeyCompletions)

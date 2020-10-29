@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.intellij.psi.PsiElement
 
 /**
@@ -24,12 +25,20 @@ class DummyContext: CallContext {
  */
 class KeyExtractorImpl: Extractor {
 
-    private val parser: KeyParser = KeyParser()
     /**
-     * Converts element to it's literal value, if possible
+     * Extracts fullkey from element, if possible
      */
     override fun extractFullKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
+        val parser = (
+            if (config.gettext)
+                KeyParserBuilder.withoutTokenizer()
+            else
+                KeyParserBuilder
+                    .withSeparators(config.nsSeparator, config.keySeparator)
+                    .withDummyNormalizer()
+                    .withTemplateNormalizer()
+        ).build()
         return listOf(
             ReactUseTranslationHookExtractor(),
             TemplateKeyExtractor(),
@@ -38,6 +47,6 @@ class KeyExtractorImpl: Extractor {
             XmlAttributeKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let{parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
+            ?.let{parser.parse2(it.extract(element))}
     }
 }

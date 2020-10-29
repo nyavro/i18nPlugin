@@ -45,7 +45,6 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             when {
                 mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
                 mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToObject(fullKey)
-                mostResolvedReference.isTemplateUnresolved() -> annotationHelper.annotateResolved(fullKey)
                 else -> annotationHelper.unresolvedKey(fullKey, mostResolvedReference)
             }
         }

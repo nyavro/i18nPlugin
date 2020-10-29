@@ -120,6 +120,16 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         return panel
     }
 
+    private fun gettext(): JPanel {
+        val panel = JPanel()
+        panel.layout = BorderLayout()
+        panel.preferredSize = Dimension(350, 30)
+        val gettextMode = JCheckBox(PluginBundle.getMessage("settings.gettext.enabled"), settings.gettext)
+        gettextMode.addItemListener { _ -> settings.gettext = gettextMode.isSelected}
+        panel.add(gettextMode, BorderLayout.WEST)
+        return panel
+    }
+
     private fun settingsPanel(): JPanel {
         val root = JPanel()
         val panel = JPanel()
@@ -136,6 +146,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(vue())
         panel.add(textInput("Vue locales directory", settings::vueDirectory))
+        panel.add(gettext())
         root.add(panel, BorderLayout.PAGE_START)
         return root
     }

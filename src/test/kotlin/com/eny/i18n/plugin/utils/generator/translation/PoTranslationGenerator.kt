@@ -4,7 +4,7 @@ class PoTranslationGenerator: TranslationGenerator {
 
     override fun ext(): String = "po"
 
-    override fun generateContent(key: String, value: String): String = """
+    private val header = """
         msgid "Project-Id-Version"
         msgstr "Project-Id-Version: 'Ame Corp.'"
         "Report-Msgid-Bugs-To: 'support@test.com'"
@@ -15,10 +15,19 @@ class PoTranslationGenerator: TranslationGenerator {
         "Content-Type: text/plain; charset=UTF-8"
         "Content-Transfer-Encoding: 8bit"
         "Plural-Forms: nplurals=2; plural=(n != 1)"
-        
+    """.trimIndent()
+
+    override fun generateContent(key: String, value: String): String = """
+        $header
+
+    """.trimIndent() + generateEntry(key, value)
+
+    private fun generateEntry(key: String, value: String): String = """
         msgid "$key"
         msgstr "$value"
     """.trimIndent()
+
+    private fun generateEntry(items: Array<String>): String = generateEntry(merge(*items.dropLast(1).toTypedArray()), items.last())
 
     private fun merge(vararg arg: String):String = arg.toList().filterNot {it.isBlank()}.joinToString(".")
 
@@ -67,9 +76,10 @@ class PoTranslationGenerator: TranslationGenerator {
         TODO("Not yet implemented")
     }
 
-    override fun generate(vararg branches: Array<String>): String {
-        TODO("Not yet implemented")
-    }
+    override fun generate(vararg branches: Array<String>): String = """
+        $header
+        ${branches.map{generateEntry(it)}}
+    """.trimIndent()
 
     override fun generateNamedBlock(key: String, block: String, level: Int): String {
         TODO("Not yet implemented")

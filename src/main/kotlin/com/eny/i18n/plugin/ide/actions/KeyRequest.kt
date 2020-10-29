@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
@@ -18,8 +18,6 @@ class KeyRequestResult(val key: FullKey?, val isCancelled: Boolean)
  * Requests i18n key from user
  */
 class KeyRequest {
-
-    private val parser = KeyParser()
 
     /**
      * Requests key
@@ -37,12 +35,11 @@ class KeyRequest {
             KeyRequestResult(null, true)
         } else {
             KeyRequestResult(
-                parser.parse(
-                    Pair(listOf(KeyElement.literal(keyStr)), null),
-                    nsSeparator = config.nsSeparator,
-                    keySeparator = config.keySeparator,
-                    emptyNamespace = config.vue
-                ),
+                (if(config.gettext) KeyParserBuilder.withoutTokenizer() else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
+                    .parse2(
+                        Pair(listOf(KeyElement.literal(keyStr)), null),
+                        emptyNamespace = config.vue || config.gettext
+                    ),
                 false
             )
         }

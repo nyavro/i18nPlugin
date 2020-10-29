@@ -10,14 +10,11 @@ internal class KeyNormalizerTest {
 //valid:ROOT.Key1.---idea-placeholder-here---
     @Test
     fun normalizeDummy() {
-        val elements = listOf(
-            KeyElement.literal("valid:ROOT.Key1.${CompletionInitializationContext.DUMMY_IDENTIFIER}")
-        )
-        val normalized = KeyNormalizerImpl().normalize(elements)
-        assertEquals(1, normalized.size)
+        val element = KeyElement.literal("valid:ROOT.Key1.${CompletionInitializationContext.DUMMY_IDENTIFIER}")
+        val normalized = DummyTextNormalizer().normalize(element)
         assertEquals(
             "valid:ROOT.Key1.${CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED}",
-            normalized.get(0).text
+            normalized?.text
         )
     }
 }
