@@ -50,7 +50,7 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
     private fun doInvoke(editor: Editor, project: Project, element: PsiElement) {
         val document = editor.document
         val extractor = getExtractor(element)
-        val text = extractor.text(element)
+        val text = extractor.text(element).trim()
         val requestResult = request.key(project, text)
         if (requestResult.isCancelled) return
         if (requestResult.key == null) {
