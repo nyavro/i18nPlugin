@@ -13,7 +13,7 @@ import com.intellij.psi.PsiLanguageInjectionHost
 class VueSFCTranslationInjector : LanguageInjector {
 
     override fun getLanguagesToInject(host: PsiLanguageInjectionHost, places: InjectedLanguagePlaces) {
-        if (host.isValidHost && XmlPatterns.xmlText().withParent(XmlPatterns.xmlTag().withName("i18n")).accepts(host)) {
+        if (host.isValidHost && XmlPatterns.xmlText().withParent(XmlPatterns.xmlTag().withName("i18n").withParent(XmlPatterns.psiFile())).accepts(host)) {
             places.addPlace(JsonLanguage.INSTANCE, TextRange(0, host.textRange.length), null, null)
         }
     }
