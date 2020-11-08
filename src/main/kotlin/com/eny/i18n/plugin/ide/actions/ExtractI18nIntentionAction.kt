@@ -13,7 +13,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiElement
 
-internal class DefaultExtractor: TranslationExtractor {
+internal class DefaultExtractor : TranslationExtractor {
     override fun canExtract(element: PsiElement): Boolean = false
     override fun text(element: PsiElement): String = ""
     override fun isExtracted(element: PsiElement): Boolean = false
@@ -42,8 +42,8 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
             .getInstance(element.project)
             .mainFactory()
             .translationExtractors()
-            .filter {it.canExtract(element)}
-            .whenMatches {extractors -> !extractors.any {it.isExtracted(element)}}
+            .filter { it.canExtract(element) }
+            .whenMatches { extractors -> !extractors.any { it.isExtracted(element) } }
             ?.firstOrNull()
             ?: DefaultExtractor()
 
@@ -64,9 +64,10 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
         val template = extractor.template(element)
         val range = extractor.textRange(element)
         WriteCommandAction.runWriteCommandAction(project) {
-            keyExtractor.tryToResolveTranslationFile(project, i18nKey, text, editor, {
+            keyExtractor.tryToResolveTranslationFile(project, i18nKey, text, editor) {
                 document.replaceString(range.startOffset, range.endOffset, template("'${i18nKey.source}'"))
-            })
+                extractor.postProcess(editor, range.startOffset)
+            }
         }
         editor.caretModel.primaryCaret.removeSelection()
     }
