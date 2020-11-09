@@ -3,7 +3,11 @@ package com.eny.i18n.plugin.ide.quickfix
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.JsCodeGenerator
+import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
+import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import org.junit.Test
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
@@ -30,6 +34,59 @@ class CreateKeyTest: PlatformBaseTest() {
             translationFileName,
             expectedEn(tg, "${ns}ref.section.missing"),
             false
+        )
+    }
+
+    @Test
+    fun testCreateKeyEmptyJson() {
+        val cg = JsCodeGenerator()
+        val tg = JsonTranslationGenerator()
+        val hint = "Create i18n key"
+        val translationFileName = "test" + "." + tg.ext()
+        myFixture.addFileToProject(
+                translationFileName,
+                "{}"
+        )
+        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"test:ref.section.mi<caret>ssing\""))
+        val action = myFixture.filterAvailableIntentions(hint).find {it.text == hint}!!
+        assertNotNull(action)
+        myFixture.launchAction(action)
+        myFixture.checkResult(
+                translationFileName,
+                """
+                    {
+                      "ref": {
+                        "section": {
+                          "missing": "test:ref.section.missing"
+                        }
+                      }
+                    }
+                """.trimIndent(),
+                false
+        )
+    }
+
+    @Test
+    fun testCreateKeyEmptyYaml() {
+        val cg = JsCodeGenerator()
+        val tg = YamlTranslationGenerator()
+        val hint = "Create i18n key"
+        val translationFileName = "test" + "." + tg.ext()
+        myFixture.addFileToProject(
+                translationFileName,
+                ""
+        )
+        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"test:ref.section.mi<caret>ssing\""))
+        val action = myFixture.filterAvailableIntentions(hint).find {it.text == hint}!!
+        assertNotNull(action)
+        myFixture.launchAction(action)
+        myFixture.checkResult(
+                translationFileName,
+                """
+                |  ref:
+                |    section:
+                |      missing: test:ref.section.missing""".trimMargin(),
+                false
         )
     }
 

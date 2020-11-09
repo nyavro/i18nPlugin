@@ -35,13 +35,17 @@ class JsonContentGenerator: ContentGenerator {
     override fun getLanguage(): Language = JsonLanguage.INSTANCE
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.json.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = element is JsonObject
-    override fun generateTranslationEntry(element: PsiElement, key: String, value: String) {
-        val obj = element as JsonObject
-        val generator = JsonElementGenerator(element.project)
+    override fun generateTranslationEntry(item: PsiElement, key: String, value: String) {
+        val obj = item as JsonObject
+        val generator = JsonElementGenerator(item.project)
         val keyValue = generator.createProperty(key, value)
         val props = obj.getPropertyList()
+        if (props.isEmpty()) {
+            obj.addAfter(keyValue, obj.findElementAt(0))
+            return
+        }
         val separator = generator.createComma()
-        val pair = if (Settings.getInstance(element.project).extractSorted) {
+        val (element, anchor) = if (Settings.getInstance(item.project).extractSorted) {
             val before = props.takeWhile {it.name < key}
             if (before.isEmpty()) {
                 Pair(separator, obj.addBefore(keyValue, props.first()))
@@ -52,11 +56,9 @@ class JsonContentGenerator: ContentGenerator {
         else {
             Pair(keyValue, obj.addAfter(separator, props.last()))
         }
-        obj.addAfter(
-            pair.first,
-            pair.second
-        )
+        obj.addAfter(element, anchor)
     }
+
     override fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?) =
         generateTranslationEntry(
             element,
