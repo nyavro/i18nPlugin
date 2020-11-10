@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.language.php
 
 import com.eny.i18n.plugin.factory.*
+import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
@@ -53,51 +54,39 @@ internal class PhpFoldingProvider: FoldingProvider {
         PsiTreeUtil.getParentOfType(psiElement, FunctionReference::class.java).default(psiElement).textRange
 }
 
-private val gettextAliases = listOf("gettext", "_", "__")
-
-private val gettextPattern = PlatformPatterns.or(*gettextAliases.map { PhpPatternsExt.phpArgument(it, 0) }.toTypedArray())
+private fun gettextPattern(config: Config) =
+    PlatformPatterns.or(*config.gettextAliases.split(",").map { PhpPatternsExt.phpArgument(it.trim(), 0) }.toTypedArray())
 
 internal class PhpCallContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean =
-        listOf("String").contains(element.type()) &&
+    override fun accepts(element: PsiElement): Boolean {
+        return listOf("String").contains(element.type()) &&
             PlatformPatterns.or(
                 PhpPatternsExt.phpArgument("t", 0),
-                gettextPattern
+                gettextPattern(Settings.getInstance(element.project).config())
             ).let { pattern ->
                 pattern.accepts(element) ||
-                pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list"}))
+                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list" }))
             }
+    }
 }
 
 internal class PhpReferenceAssistant: ReferenceAssistant {
 
     override fun pattern(): ElementPattern<out PsiElement> {
-
-        return object: ElementPattern<PsiElement> {
-            private val inner = PlatformPatterns.or(
-                PhpPatternsExt.phpArgument("t", 0),
-                gettextPattern
-            )
-
-            override fun accepts(p0: Any?): Boolean {
-                return inner.accepts(p0)
-            }
-
-            override fun accepts(p0: Any?, p1: ProcessingContext?): Boolean {
-                return inner.accepts(p0, p1)
-            }
-
-            override fun getCondition(): ElementPatternCondition<PsiElement> {
-                return inner.condition as ElementPatternCondition<PsiElement>
-            }
-        }
+        return PhpPatternsExt.phpArgument()
     }
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
-        val parser = (if(config.gettext)
-            KeyParserBuilder.withoutTokenizer() else
-            KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
+        if (config.gettext) {
+            if (!gettextPattern(Settings.getInstance(element.project).config()).accepts(element)) return null
+        }
+        val parser = (
+            if (config.gettext) {
+                KeyParserBuilder.withoutTokenizer()
+            } else
+                KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)
+        ).build()
         return listOf(StringLiteralKeyExtractor())
             .find { it.canExtract(element) }
             ?.let { parser.parse(it.extract(element)) }

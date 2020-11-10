@@ -44,6 +44,11 @@ class SettingsPanelTest {
     }
 
     @Test
+    fun testGettext() {
+        checkBooleanProperty(PluginBundle.getMessage("settings.gettext.enabled"), Settings::gettext)
+    }
+
+    @Test
     fun testExtractSorted() {
         checkBooleanProperty(PluginBundle.getMessage("settings.extraction.sorted"), Settings::extractSorted)
     }
@@ -54,6 +59,19 @@ class SettingsPanelTest {
     }
 
     @Test
+    fun testInvalidSeparator() = runWithSettings(Settings()) {
+        settings ->
+            val message = PluginBundle.getMessage("settings.key.separator")
+            val cb = driver.findElementByName(message)
+            assertNotNull(cb)
+            val value = cb.text
+            assertEquals(value, settings.keySeparator)
+            cb.clear()
+            cb.sendKeys(" {}\$")
+            assertEquals("", settings.keySeparator)
+    }
+
+    @Test
     fun testKeySeparator() {
         checkStringProperty("@", PluginBundle.getMessage("settings.key.separator"), Settings::keySeparator)
     }
@@ -61,6 +79,11 @@ class SettingsPanelTest {
     @Test
     fun testPluralSeparator() {
         checkStringProperty("%", PluginBundle.getMessage("settings.plural.separator"), Settings::pluralSeparator)
+    }
+
+    @Test
+    fun testGettextAliases() {
+        checkStringProperty("alias1,alias2", PluginBundle.getMessage("settings.gettext.aliases"), Settings::gettextAliases)
     }
 
     @Test

@@ -77,7 +77,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(JLabel(label), BorderLayout.WEST)
         val control = JTextField(property.get())
         control.name = label
-        addLimitationsAndHandlers(control, 100, property::set, {!" {}$`".contains(it)})
+        addLimitationsAndHandlers(control, 100, property::set)
         control.preferredSize = Dimension(100, 30)
         panel.add(control, BorderLayout.EAST)
         return panel
@@ -154,7 +154,8 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(vue())
         panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), settings::vueDirectory))
-        panel.add(gettext())
+        panel.add(checkbox(PluginBundle.getMessage("settings.gettext.enabled"), settings::gettext))
+        panel.add(textInput(PluginBundle.getMessage("settings.gettext.aliases"), settings::gettextAliases))
         root.add(panel, BorderLayout.PAGE_START)
         return root
     }

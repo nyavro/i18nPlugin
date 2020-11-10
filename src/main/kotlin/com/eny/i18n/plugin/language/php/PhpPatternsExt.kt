@@ -30,5 +30,22 @@ class PhpPatternsExt {
                             } ?: false
                 }
             )
+
+        /**
+         * Captures argument of php function call
+         */
+        fun phpArgument(): PhpElementPattern.Capture<PhpExpression> =
+            PhpElementPattern.Capture<PhpExpression>(
+                object : InitialPatternCondition<PhpExpression>(PhpExpression::class.java) {
+                    override fun accepts(o: Any?, context: ProcessingContext): Boolean =
+                        (o as? PhpExpression)
+                            ?.let { it.parent as? ParameterList }
+                            ?.let {
+                                val function = it.parent
+                                (0 < it.parameters.size) && (it.parameters[0] == o) &&
+                                    (function is FunctionReference)
+                            } ?: false
+                }
+            )
     }
 }
