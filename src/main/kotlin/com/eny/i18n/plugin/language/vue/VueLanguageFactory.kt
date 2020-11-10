@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.language.vue
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
@@ -230,6 +229,6 @@ internal class VueReferenceAssistant: ReferenceAssistant {
             .build()
         return listOf(LiteralKeyExtractor())
                 .find {it.canExtract(element)}
-                ?.let{parser.parse2(it.extract(element))}
+                ?.let{parser.parse(it.extract(element))}
     }
 }

@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.parser
 import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.intellij.psi.PsiElement
 
@@ -47,6 +46,6 @@ class KeyExtractorImpl: Extractor {
             XmlAttributeKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let{parser.parse2(it.extract(element))}
+            ?.let{parser.parse(it.extract(element))}
     }
 }

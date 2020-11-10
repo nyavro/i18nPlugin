@@ -12,15 +12,9 @@ import com.eny.i18n.plugin.utils.foldWhileAccum
 class KeyParser(private val tokenizer: Tokenizer) {
 
     /**
-     * Parses text to i18n key
-     */
-    fun parse1(text: String, emptyNamespace: Boolean) =
-        parse2(Pair(listOf(KeyElement.literal(text)), null), emptyNamespace)
-
-    /**
      * Parses list of key elements into i18n key
      */
-    fun parse2(
+    fun parse(
         pair: Pair<List<KeyElement>, List<String>?>,
         emptyNamespace: Boolean = false
     ): FullKey? {

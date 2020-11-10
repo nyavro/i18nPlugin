@@ -4,13 +4,7 @@ import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.lexer.NoTokenizer
-import com.eny.i18n.plugin.key.lexer.NsKeyTokenizer
-import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.parser.DummyTextNormalizer
-import com.eny.i18n.plugin.parser.ExpressionNormalizer
-import com.eny.i18n.plugin.parser.KeyNormalizer
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
@@ -47,7 +41,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
-                    parser.parse1(literal.text.unQuote(), config.vue || config.gettext)
+                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , config.vue || config.gettext)
                         ?.let { key -> resolve(container, literal, search, config, key) }
                         ?.let { resolved ->
                             FoldingDescriptor(

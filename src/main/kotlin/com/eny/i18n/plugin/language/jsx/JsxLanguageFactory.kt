@@ -53,7 +53,7 @@ class JsxReferenceAssistant: ReferenceAssistant {
             XmlAttributeKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let {parser.parse2(it.extract(element))}
+            ?.let {parser.parse(it.extract(element))}
     }
 }
 

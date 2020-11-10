@@ -2,7 +2,6 @@ package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.utils.KeyElement
 
@@ -26,5 +25,5 @@ interface ParserTestBase {
      */
     fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".",
               stopCharacters: String = "", emptyNamespace: Boolean = false): FullKey? =
-        KeyParserBuilder.withSeparators(nsSeparator, keySeparator).build().parse2(Pair(elements, null), emptyNamespace)
+        KeyParserBuilder.withSeparators(nsSeparator, keySeparator).build().parse(Pair(elements, null), emptyNamespace)
 }

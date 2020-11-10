@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.language.php
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.StringLiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
@@ -101,6 +100,6 @@ internal class PhpReferenceAssistant: ReferenceAssistant {
             KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
         return listOf(StringLiteralKeyExtractor())
             .find { it.canExtract(element) }
-            ?.let { parser.parse2(it.extract(element)) }
+            ?.let { parser.parse(it.extract(element)) }
     }
 }
