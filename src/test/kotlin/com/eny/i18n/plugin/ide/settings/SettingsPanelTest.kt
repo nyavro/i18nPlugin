@@ -14,7 +14,6 @@ import kotlin.reflect.KMutableProperty1
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-
 class SettingsPanelTest {
 
     private lateinit var driver: JavaDriver
