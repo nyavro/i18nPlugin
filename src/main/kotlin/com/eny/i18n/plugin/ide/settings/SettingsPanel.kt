@@ -51,6 +51,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.preferredSize = Dimension(350, 30)
         panel.layout = BorderLayout()
         val checkbox = JCheckBox(label, property.get())
+        checkbox.name = label
         checkbox.addItemListener { _ -> property.set(checkbox.isSelected) }
         panel.add(checkbox, BorderLayout.WEST)
         return panel
@@ -62,6 +63,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.preferredSize = Dimension(350, 30)
         panel.add(JLabel(label), BorderLayout.WEST)
         val control = JTextField(property.get())
+        control.name = label
         addLimitationsAndHandlers(control, 1, property::set, {!" {}$`".contains(it)})
         control.preferredSize = Dimension(30, 30)
         panel.add(control, BorderLayout.EAST)
@@ -74,6 +76,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.preferredSize = Dimension(350, 30)
         panel.add(JLabel(label), BorderLayout.WEST)
         val control = JTextField(property.get())
+        control.name = label
         addLimitationsAndHandlers(control, 100, property::set, {!" {}$`".contains(it)})
         control.preferredSize = Dimension(100, 30)
         panel.add(control, BorderLayout.EAST)
@@ -88,6 +91,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         labelPanel.add(JLabel(label), BorderLayout.PAGE_START)
         panel.add(labelPanel, BorderLayout.WEST)
         val control = JTextArea(property.get())
+        control.name = label
         addLimitationsAndHandlers(control, 1000, property::set)
         control.lineWrap = true
         control.wrapStyleWord = true
@@ -104,6 +108,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.preferredSize = Dimension(350, 30)
         panel.add(JLabel(label), BorderLayout.WEST)
         val control = JTextField(property.get().toString())
+        control.name = label
         addLimitationsAndHandlers(control, 2, {property.set(it.toInt())}, {('0'..'9').contains(it)})
         panel.add(control, BorderLayout.EAST)
         control.preferredSize = Dimension(100, 30)
@@ -114,7 +119,9 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         val panel = JPanel()
         panel.layout = BorderLayout()
         panel.preferredSize = Dimension(350, 30)
-        val vueMode = JCheckBox("Vue-i18n", settings.vue)
+        val label = PluginBundle.getMessage("settings.vue")
+        val vueMode = JCheckBox(label, settings.vue)
+        vueMode.name = label
         vueMode.addItemListener { _ -> settings.vue = vueMode.isSelected}
         panel.add(vueMode, BorderLayout.WEST)
         return panel
@@ -135,17 +142,18 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         val panel = JPanel()
         root.layout = BorderLayout()
         panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
-        panel.add(checkbox("Search in project files only", settings::searchInProjectOnly))
-        panel.add(separator("Namespace separator", settings::nsSeparator))
-        panel.add(separator("Key separator", settings::keySeparator))
+        panel.add(checkbox(PluginBundle.getMessage("settings.search.in.project.files.only"), settings::searchInProjectOnly))
+        panel.add(separator(PluginBundle.getMessage("settings.namespace.separator"), settings::nsSeparator))
+        panel.add(separator(PluginBundle.getMessage("settings.key.separator"), settings::keySeparator))
         panel.add(separator(PluginBundle.getMessage("settings.plural.separator"), settings::pluralSeparator))
         panel.add(textArea(PluginBundle.getMessage("settings.default.namespace"), settings::defaultNs))
-        panel.add(checkbox(PluginBundle.getMessage("settings.folding.isEnabled"), settings::foldingEnabled))
+        panel.add(checkbox(PluginBundle.getMessage("settings.prefer.yaml.files.generation"), settings::preferYamlFilesGeneration))
+        panel.add(checkbox(PluginBundle.getMessage("settings.folding.enabled"), settings::foldingEnabled))
         panel.add(textInput(PluginBundle.getMessage("settings.folding.preferredLanguage"), settings::foldingPreferredLanguage))
         panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(vue())
-        panel.add(textInput("Vue locales directory", settings::vueDirectory))
+        panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), settings::vueDirectory))
         panel.add(gettext())
         root.add(panel, BorderLayout.PAGE_START)
         return root

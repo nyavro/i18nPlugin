@@ -67,7 +67,7 @@ class ReferencesTestVue: PlatformBaseTest() {
                 val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
                 assertNotNull(element)
                 assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)
-                assertEquals("Failed ${tg.ext()}, ${cg.ext()}", "Default ns reference", element!!.references[0].resolve()?.text?.unQuote())
+                assertEquals("Failed ${tg.ext()}, ${cg.ext()}", "Default ns reference", element.references[0].resolve()?.text?.unQuote())
             }
         }
     }
@@ -84,7 +84,7 @@ class ReferencesTestVue: PlatformBaseTest() {
                 val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
                 assertNotNull(element)
                 assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)
-                assertEquals("Failed ${tg.ext()}, ${cg.ext()}", "Reference in json", element!!.references[0].resolve()?.text?.unQuote())
+                assertEquals("Failed ${tg.ext()}, ${cg.ext()}", "Reference in json", element.references[0].resolve()?.text?.unQuote())
             }
         }
     }

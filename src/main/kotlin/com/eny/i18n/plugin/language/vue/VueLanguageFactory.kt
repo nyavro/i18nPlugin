@@ -7,20 +7,27 @@ import com.eny.i18n.plugin.key.parser.KeyParser
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.default
+import com.eny.i18n.plugin.utils.toBoolean
+import com.eny.i18n.plugin.utils.unQuote
+import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.lang.javascript.psi.JSCallExpression
 import com.intellij.lang.javascript.psi.JSLiteralExpression
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
-import com.intellij.patterns.ElementPatternCondition
 import com.intellij.patterns.PatternCondition
 import com.intellij.patterns.PlatformPatterns
+import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parentOfType
+import com.intellij.psi.xml.XmlAttribute
+import com.intellij.psi.xml.XmlAttributeValue
 import com.intellij.psi.xml.XmlText
 import com.intellij.psi.xml.XmlToken
 import com.intellij.util.ProcessingContext
@@ -57,10 +64,24 @@ internal class VueTranslationExtractor: TranslationExtractor {
 
     override fun template(element: PsiElement): (argument: String) -> String =
         when {
-            element.isVueTemplate() -> ({"this.\$t($it)"})
-            element.isVue() -> ({"{{ \$t($it) }}"})
-            else -> ({"\$t($it)"})
+            element.isVueScript() -> ({ "this.\$t($it)" })
+            element.isVueTemplateAttribute() -> ({ "\"\$t($it)\"" })
+            element.isVue() -> ({ "{{ \$t($it) }}" })
+            else -> ({ "\$t($it)" })
         }
+
+    override fun postProcess(editor: Editor, offset: Int) {
+        val file = PsiDocumentManager.getInstance(editor.project!!).getPsiFile(editor.document)!!
+        val attribute = file.findElementAt(offset)?.parentOfType<XmlAttribute>()
+
+        if (attribute != null) {
+            val nameElement = attribute.firstChild
+
+            if (!nameElement.text.startsWith(":")) {
+                editor.document.insertString(nameElement.textOffset, ":")
+            }
+        }
+    }
 
     private fun getTextElement(element: PsiElement): PsiElement =
         if (element.isBorderToken()) {
@@ -68,10 +89,12 @@ internal class VueTranslationExtractor: TranslationExtractor {
         } else {
             element.whenMatches { it.isVueText() }?.parent.default(element)
         }
+
     private fun PsiElement.isJs(): Boolean = this.language == JavascriptLanguage.INSTANCE
     private fun PsiElement.isVueJs(): Boolean = this.language == VueJSLanguage.INSTANCE
-    private fun PsiElement.isVue():Boolean = this.containingFile.fileType == VueFileType.INSTANCE
-    private fun PsiElement.isVueTemplate():Boolean = this.isVue() && PsiTreeUtil.findFirstParent(this, {it is HtmlTag && it.name == "script"}).toBoolean()
+    private fun PsiElement.isVue(): Boolean = this.containingFile.fileType == VueFileType.INSTANCE
+    private fun PsiElement.isVueTemplateAttribute(): Boolean = this.isVue() && this.parent is XmlAttributeValue
+    private fun PsiElement.isVueScript(): Boolean = this.isVue() && PsiTreeUtil.findFirstParent(this, { it is HtmlTag && it.name == "script" }).toBoolean()
     private fun PsiElement.isVueText(): Boolean = (this is PsiWhiteSpace) || (this is XmlToken)
     private fun PsiElement.isBorderToken(): Boolean = this.text == "</"
 }

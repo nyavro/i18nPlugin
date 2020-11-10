@@ -2,7 +2,6 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.settings.Config
-import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
@@ -41,47 +40,6 @@ abstract class ExtractionTestBase: PlatformBaseTest() {
         myFixture.launchAction(action)
         myFixture.checkResult(patched)
         myFixture.checkResult(translationName, patchedTranslation, false)
-    }
-
-    protected fun doRun(
-            src: String,
-            patched: String,
-            origTranslation: String,
-            patchedTranslation: String,
-            inputDialog: TestInputDialog,
-            message: TestDialog? = null) {
-        myFixture.configureByFiles(src, origTranslation)
-        val action = myFixture.findSingleIntention(hint)
-        assertNotNull(action)
-        Messages.setTestInputDialog(inputDialog)
-        if (message != null) Messages.setTestDialog(message)
-        myFixture.launchAction(action)
-        myFixture.checkResultByFile(patched)
-        myFixture.checkResultByFile(origTranslation, patchedTranslation, false)
-    }
-
-    protected fun doRun(src: String, patched: String, translation: String, patchedTranslation: String, newKey: String) {
-        doRun(src, patched, translation, patchedTranslation, predefinedTextInputDialog(newKey))
-    }
-
-    protected fun doRunUnknownNs(
-            src: String,
-            patched: String,
-            translationCreated: String,
-            translationExpected: String,
-            newKey: String,
-            extraFile: String? = null) {
-        if (extraFile != null) {
-            myFixture.configureByFiles(src, extraFile)
-        } else {
-            myFixture.configureByFiles(src)
-        }
-        val action = myFixture.findSingleIntention(hint)
-        assertNotNull(action)
-        Messages.setTestInputDialog(predefinedTextInputDialog(newKey))
-        myFixture.launchAction(action)
-        myFixture.checkResultByFile(patched)
-        myFixture.checkResultByFile(translationCreated, translationExpected, false)
     }
 
     protected fun predefinedTextInputDialog(newKey: String): TestInputDialog {

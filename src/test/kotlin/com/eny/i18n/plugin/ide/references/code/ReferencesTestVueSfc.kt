@@ -72,7 +72,7 @@ class ReferencesTestVueSfc: PlatformBaseTest() {
                 val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
                 assertNotNull(element)
                 assertTrue(element!!.references.size > 0)
-                assertEquals(expectedReferenceText, element!!.references[0].resolve()?.text?.unQuote())
+                assertEquals(expectedReferenceText, element.references[0].resolve()?.text?.unQuote())
             }
         }
     }

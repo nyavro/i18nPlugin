@@ -14,9 +14,9 @@ class JsxCodeGenerator: CodeGenerator {
         const key = (t) => t(0, "$key");
     """
 
-    override fun generateBlock(block: String, index: Int): String = """
+    override fun generateBlock(text: String, index: Int): String = """
         export const test$index = (i18n) => {
-            return (<div>$block</div>);
+            return (<div>$text</div>);
         };
     """
 }

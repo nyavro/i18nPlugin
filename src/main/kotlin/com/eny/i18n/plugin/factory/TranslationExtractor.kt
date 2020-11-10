@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.factory
 
 import com.eny.i18n.plugin.key.FullKey
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
@@ -34,6 +35,9 @@ interface TranslationExtractor {
      * Get template to substitute translation with
      */
     fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
+
+    fun postProcess(editor: Editor, offset: Int) {
+    }
 }
 
 /**

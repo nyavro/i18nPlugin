@@ -51,7 +51,7 @@ interface ContentGenerator {
      * @param {String} key Translation key
      * @param {String} value Translation value
      */
-    fun generateTranslationEntry(element: PsiElement, key: String, value: String)
+    fun generateTranslationEntry(item: PsiElement, key: String, value: String)
 
     /**
      * Generates content and psi element

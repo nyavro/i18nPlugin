@@ -12,6 +12,7 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.yaml.YAMLElementGenerator
 import org.jetbrains.yaml.YAMLFileType
 import org.jetbrains.yaml.YAMLLanguage
+import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLMapping
 
 private val tabChar = "  "
@@ -34,14 +35,18 @@ class YamlContentGenerator: ContentGenerator {
     override fun getFileType(): FileType = YAMLFileType.YML
     override fun getLanguage(): Language = YAMLLanguage.INSTANCE
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.yaml.translation.files")
-    override fun isSuitable(element: PsiElement): Boolean = element is YAMLMapping
-    override fun generateTranslationEntry(element: PsiElement, key: String, value: String) {
-        val generator = YAMLElementGenerator.getInstance(element.project)
+    override fun isSuitable(element: PsiElement): Boolean = (element is YAMLMapping) || (element is YAMLDocument)
+    override fun generateTranslationEntry(item: PsiElement, key: String, value: String) {
+        val generator = YAMLElementGenerator.getInstance(item.project)
         val keyValue = generator.createYamlKeyValue(key, value)
-        val obj = (element as YAMLMapping)
+        if (item is YAMLDocument) {
+            item.add(keyValue)
+            return
+        }
+        val obj = (item as YAMLMapping)
         val props = obj.keyValues
         val separator = generator.createEol()
-        val pair = if (Settings.getInstance(element.project).extractSorted) {
+        val (element, anchor) = if (Settings.getInstance(item.project).extractSorted) {
             val before = props.takeWhile {it.name ?: "" < key}
             if (before.isEmpty()) {
                 Pair(separator, obj.addBefore(keyValue, props.first()))
@@ -51,10 +56,7 @@ class YamlContentGenerator: ContentGenerator {
         } else {
             Pair(keyValue, obj.addAfter(separator, props.last()))
         }
-        obj.addAfter(
-            pair.first,
-            pair.second
-        )
+        obj.addAfter(element, anchor)
     }
     override fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?) =
         generateTranslationEntry(
