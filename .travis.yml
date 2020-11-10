@@ -1,5 +1,9 @@
 language: java
 
+dist: xenial
+services:
+  - xvfb
+
 before_install:
   - chmod +x gradlew
 

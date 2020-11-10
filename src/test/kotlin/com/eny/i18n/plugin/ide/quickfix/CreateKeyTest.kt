@@ -235,11 +235,6 @@ class CreateKeyTest: PlatformBaseTest() {
     }
 
     private fun expectedEn(tg: TranslationGenerator, generatedKey: String): String {
-        val content2 = Obj().with("ref",
-            Obj().with("section",
-                Obj().with("key", "Перевод").with("missing", generatedKey)
-            )
-        ).buildRoot(Descr("", "", "", "", false))
         val content = Obj().with("ref",
             Obj().with("section",
                 Obj().with("key", "Translation").with("missing", generatedKey)
