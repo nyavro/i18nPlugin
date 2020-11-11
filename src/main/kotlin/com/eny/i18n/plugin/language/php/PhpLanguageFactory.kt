@@ -1,9 +1,10 @@
 package com.eny.i18n.plugin.language.php
 
 import com.eny.i18n.plugin.factory.*
+import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.StringLiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
@@ -11,8 +12,11 @@ import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
+import com.intellij.patterns.ElementPatternCondition
+import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.util.ProcessingContext
 import com.jetbrains.php.lang.psi.elements.FunctionReference
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 
@@ -50,27 +54,41 @@ internal class PhpFoldingProvider: FoldingProvider {
         PsiTreeUtil.getParentOfType(psiElement, FunctionReference::class.java).default(psiElement).textRange
 }
 
+private fun gettextPattern(config: Config) =
+    PlatformPatterns.or(*config.gettextAliases.split(",").map { PhpPatternsExt.phpArgument(it.trim(), 0) }.toTypedArray())
+
 internal class PhpCallContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean =
-        listOf("String").contains(element.type()) &&
-            PhpPatternsExt.phpArgument("t", 0).let { pattern ->
+    override fun accepts(element: PsiElement): Boolean {
+        return listOf("String").contains(element.type()) &&
+            PlatformPatterns.or(
+                PhpPatternsExt.phpArgument("t", 0),
+                gettextPattern(Settings.getInstance(element.project).config())
+            ).let { pattern ->
                 pattern.accepts(element) ||
-                pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list"}))
+                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list" }))
             }
+    }
 }
 
 internal class PhpReferenceAssistant: ReferenceAssistant {
 
-    private val parser: KeyParser = KeyParser()
-
     override fun pattern(): ElementPattern<out PsiElement> {
-        return PhpPatternsExt.phpArgument("t", 0)
+        return PhpPatternsExt.phpArgument()
     }
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
+        if (config.gettext) {
+            if (!gettextPattern(Settings.getInstance(element.project).config()).accepts(element)) return null
+        }
+        val parser = (
+            if (config.gettext) {
+                KeyParserBuilder.withoutTokenizer()
+            } else
+                KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)
+        ).build()
         return listOf(StringLiteralKeyExtractor())
-            .find {it.canExtract(element)}
-            ?.let{parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
+            .find { it.canExtract(element) }
+            ?.let { parser.parse(it.extract(element)) }
     }
 }

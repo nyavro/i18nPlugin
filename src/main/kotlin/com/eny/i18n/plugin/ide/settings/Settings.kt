@@ -53,6 +53,10 @@ class Settings : PersistentStateComponent<Settings> {
 
     internal var extractSorted = default.extractSorted
 
+    internal var gettext = default.gettext
+
+    internal var gettextAliases = default.gettextAliases
+
     /**
      * Returns plugin configuration
      */
@@ -81,7 +85,9 @@ class Settings : PersistentStateComponent<Settings> {
         foldingMaxLength = foldingMaxLength,
         jsonContentGenerationEnabled = jsonContentGenerationEnabled,
         yamlContentGenerationEnabled = yamlContentGenerationEnabled,
-        extractSorted = extractSorted
+        extractSorted = extractSorted,
+        gettext = gettext,
+        gettextAliases = gettextAliases
     )
 
     fun setConfig(config: Config) {
@@ -111,6 +117,8 @@ class Settings : PersistentStateComponent<Settings> {
         jsonContentGenerationEnabled = config.jsonContentGenerationEnabled
         yamlContentGenerationEnabled = config.yamlContentGenerationEnabled
         extractSorted = config.extractSorted
+        gettext = config.gettext
+        gettextAliases = config.gettextAliases
     }
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)

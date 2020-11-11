@@ -10,7 +10,6 @@ data class FullKey(
     val source: String,
     val ns: Literal?,
     val compositeKey:List<Literal>,
-    val isTemplate: Boolean = false,
     val namespaces: List<String>? = null
 ) {
     fun allNamespaces(): List<String> {

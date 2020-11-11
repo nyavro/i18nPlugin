@@ -80,20 +80,9 @@ class YamlTranslationGenerator: TranslationGenerator {
         return branches.map{generateBranchByList(it.toList())}.joinToString("\n")
     }
 
-    override fun generate2(vararg branches: Array<String>): String {
-        return branches.map{generateBranchByList2(it.toList())}.joinToString("\n  ")
-    }
-
     override fun generateNamedBlock(key: String, block: String, level: Int): String = """ 
     ${"\t".repeat(level)}$key: $block 
     """
-
-    override fun generateNamedBlock2(key: String, block: String, level: Int): String {
-        val tab = "  ".repeat(Math.max(level-1, 0))
-        return """$tab$key: 
-            |  $tab$block
-            |  """.trimMargin()
-    }
 
     override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String =
         blocks.map{(name, block) -> formatBlock(name, block)}.joinToString("\n")

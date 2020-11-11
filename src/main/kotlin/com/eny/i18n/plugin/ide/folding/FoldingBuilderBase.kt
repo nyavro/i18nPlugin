@@ -4,13 +4,11 @@ import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
-import com.eny.i18n.plugin.utils.ellipsis
-import com.eny.i18n.plugin.utils.unQuote
+import com.eny.i18n.plugin.utils.*
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
@@ -28,12 +26,14 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
 
     private val group = FoldingGroup.newGroup("i18n")
 
-    private val parser: KeyParser = KeyParser()
-
     override fun getPlaceholderText(node: ASTNode): String? = ""
 
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
         val config = Settings.getInstance(root.project).config()
+        val parser = (
+            if (config.gettext) KeyParserBuilder.withoutTokenizer()
+            else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator).withTemplateNormalizer()
+        ).build()
         if (!config.foldingEnabled) return arrayOf()
         val search = LocalizationSourceSearch(root.project)
         val foldingProvider = languageFactory.foldingProvider()
@@ -41,8 +41,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
-                    parser
-                        .parse(literal.text.unQuote(), config.nsSeparator, config.keySeparator, config.vue)
+                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , config.vue || config.gettext)
                         ?.let { key -> resolve(container, literal, search, config, key) }
                         ?.let { resolved ->
                             FoldingDescriptor(

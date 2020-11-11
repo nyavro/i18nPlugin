@@ -5,12 +5,7 @@ import com.eny.i18n.plugin.key.lexer.Literal
 /**
  * Property reference represents PsiElement and it's path from Json file root
  */
-data class PropertyReference<T>(val path: List<Literal>, val element: Tree<T>?, val unresolved: List<Literal>, val isPlural: Boolean = false) {
-    /**
-     * Checks if unresolved part of reference starts with template
-     */
-    fun isTemplateUnresolved(): Boolean = unresolved.firstOrNull()?.isTemplate ?: false
-}
+data class PropertyReference<T>(val path: List<Literal>, val element: Tree<T>?, val unresolved: List<Literal>, val isPlural: Boolean = false)
 
 /**
  * Key resolving utils

@@ -30,10 +30,9 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
 //        super.fillCompletionVariants(parameters, result)
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
-        val isInTranslationContext = callContext.accepts(parameters.position.parent)
         val fullKey = keyExtractor.extractFullKey(parameters.position)
         if (fullKey == null) {
-            if (isInTranslationContext) {
+            if (callContext.accepts(parameters.position.parent)) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()
                 val emptyKeyCompletions = emptyKeyCompletions(parameters.position.project, prefix, parameters.position)
                 result.addAllElements(emptyKeyCompletions)
@@ -66,7 +65,7 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
 
     private fun findCompletions(project: Project, prefix: String, source: String, ns: String?, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
         return groupPlurals(
-            LocalizationSourceSearch(project).findFilesByNames(ns.nullableToList(), element).flatMap {
+            LocalizationSourceSearch(project).findSources(ns.nullableToList(), element).flatMap {
                 listCompositeKeyVariants(
                     compositeKey,
                     PsiElementTree.create(it.element),

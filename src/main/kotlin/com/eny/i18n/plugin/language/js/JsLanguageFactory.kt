@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.language.js
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.ReactUseTranslationHookExtractor
 import com.eny.i18n.plugin.parser.TemplateKeyExtractor
@@ -56,24 +56,31 @@ internal class JsCallContext: CallContext {
                 pattern.accepts(element) ||
                 pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
             } ||
+            //TODO: what about vue $t function?
+//            JSPatterns.jsArgument("\$t", 0).let { pattern ->
+//                pattern.accepts(element) ||
+//                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
+//            } ||
             XmlPatterns.xmlAttributeValue("i18nKey").accepts(element)
 }
 
 internal class JsReferenceAssistant: ReferenceAssistant {
-
-    private val parser: KeyParser = KeyParser()
 
     override fun pattern(): ElementPattern<out PsiElement> =
         JSPatterns.jsLiteralExpression().andOr(JSPatterns.jsArgument("t", 0), JSPatterns.jsArgument("\$t", 0))
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
+        val parser = KeyParserBuilder
+            .withSeparators(config.nsSeparator, config.keySeparator)
+            .withTemplateNormalizer()
+            .build()
         return listOf(
             ReactUseTranslationHookExtractor(),
             TemplateKeyExtractor(),
             LiteralKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let {parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
+            ?.let {parser.parse(it.extract(element))}
     }
 }

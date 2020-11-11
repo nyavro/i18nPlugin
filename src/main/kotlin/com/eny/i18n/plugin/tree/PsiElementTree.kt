@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.tree
 
 import com.eny.i18n.plugin.parser.type
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.at
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
@@ -10,7 +11,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.xml.XmlText
 import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
@@ -24,10 +24,43 @@ abstract class PsiElementTree: Tree<PsiElement> {
          * Creates instance of PsiElementTree
          */
         fun create(file: PsiElement): PsiElementTree? =
-            if (file is JsonFile) JsonElementTree.create(file)
+            if (file.containingFile?.virtualFile?.extension == "po") PlainTextTree.create(file)
+            else if (file is JsonFile) JsonElementTree.create(file)
             else if (file is JsonObject) JsonElementTree(file)
 //            else if (file is JSObjectLiteralExpression) JsElementTree.create(file)
             else YamlElementTree.create(file)
+    }
+}
+
+/**
+ * Plain text file wrapper
+ */
+class PlainTextTree(val element: PsiElement): PsiElementTree() {
+
+    override fun findChild(name: String): Tree<PsiElement>? {
+        return element.children.find {
+            it.type()=="SECTION" &&
+            it.children.at(0)?.let {
+                it.type()=="ID_LINE" && it.toString()==name
+            } == true
+        }?.children?.at(0)?.let {PlainTextTree(it)}
+    }
+
+    override fun isTree(): Boolean {
+        return element == element.containingFile
+    }
+
+    override fun value(): PsiElement = element.nextSibling.nextSibling.let{it.children.at(0) ?: it}
+
+    override fun findChildren(regex: String): List<Tree<PsiElement>> {
+        TODO("Not yet implemented")
+    }
+
+    companion object {
+        /**
+         * Creates instance of PlainTextTree
+         */
+        fun create(file: PsiElement): PsiElementTree? = PlainTextTree(file)
     }
 }
 

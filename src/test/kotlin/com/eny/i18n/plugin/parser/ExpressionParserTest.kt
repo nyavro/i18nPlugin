@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.KeysNormalizer
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 //TODO rename class
@@ -19,11 +18,11 @@ internal class ExpressionParserTest {
             KeyElement.literal(text),
             KeyElement.literal("`")
         )
-        val parser = KeysNormalizer()
+        val parser = ExpressionNormalizer()
         val expected = listOf(
             KeyElement.template("\${fileExpr}"),
             KeyElement.literal(text)
         )
-        assertEquals(parser.normalize(elements), expected)
+        assertEquals(elements.mapNotNull { parser.normalize(it) }, expected)
     }
 }

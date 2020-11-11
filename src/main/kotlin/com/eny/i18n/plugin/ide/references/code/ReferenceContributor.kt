@@ -58,7 +58,7 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                 private fun getReferencesList(element: PsiElement): List<PsiReference> {
                     return referenceContributor.extractKey(element)?.let { fullKey ->
                         LocalizationSourceSearch(element.project)
-                            .findFilesByNames(fullKey.allNamespaces(), element)
+                            .findSources(fullKey.allNamespaces(), element)
                             .map {
                                 ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)), it.host)
                             }

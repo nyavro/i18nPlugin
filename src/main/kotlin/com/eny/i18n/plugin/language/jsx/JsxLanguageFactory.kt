@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.language.jsx
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParser
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.XmlAttributeKeyExtractor
 import com.eny.i18n.plugin.utils.toBoolean
 import com.intellij.lang.ecmascript6.JSXHarmonyFileType
@@ -39,18 +39,21 @@ class JsxLanguageFactory: LanguageFactory {
 }
 
 class JsxReferenceAssistant: ReferenceAssistant {
-    private val parser: KeyParser = KeyParser()
 
     override fun pattern(): ElementPattern<out PsiElement> {
         return XmlPatterns.xmlAttributeValue("i18nKey")
     }
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()
+        val parser = KeyParserBuilder
+            .withSeparators(config.nsSeparator, config.keySeparator)
+            .withTemplateNormalizer()
+            .build()
         return listOf(
             XmlAttributeKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let {parser.parse(it.extract(element), config.nsSeparator, config.keySeparator)}
+            ?.let {parser.parse(it.extract(element))}
     }
 }
 

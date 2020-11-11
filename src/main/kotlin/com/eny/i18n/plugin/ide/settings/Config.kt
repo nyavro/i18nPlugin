@@ -23,7 +23,9 @@ data class Config (
     val foldingMaxLength: Int = 20,
     val jsonContentGenerationEnabled: Boolean = true,
     val yamlContentGenerationEnabled: Boolean = true,
-    val extractSorted: Boolean = false
+    val extractSorted: Boolean = false,
+    val gettext: Boolean = false,
+    val gettextAliases: String = "gettext,_,__"
 ) {
 
     private val MAX_DEFAULT_NAMESPACES = 100
