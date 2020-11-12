@@ -18,12 +18,12 @@ interface KeyComposer<T> {
     /**
      * Composes string representation of key by given path
      */
-    fun composeKey(tree: FlippedTree<T>,
+    fun composeKey(parents: List<String>,
            nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: List<String> = listOf("translation"), dropRoot: Boolean = false): String {
-        val pair = tree.parents().map {it.name()}.headTail()
+        val (head, tail) = parents.headTail()
         return listOf(
-            pair.first.whenMatches {!(defaultNs.contains(it) || dropRoot)},
-            pair.second?.joinToString(keySeparator)?.let {fixPlural(it, pluralSeparator)}
+            head.whenMatches {!(defaultNs.contains(it) || dropRoot)},
+            tail?.joinToString(keySeparator)?.let {fixPlural(it, pluralSeparator)}
         )
             .mapNotNull {it}
             .joinToString(nsSeparator)

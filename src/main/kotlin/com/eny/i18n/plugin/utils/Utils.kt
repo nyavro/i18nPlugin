@@ -72,3 +72,49 @@ fun <T, A> Collection<T>.foldWhileAccum(accum: A, block: (A, T) -> A?): A? {
     }
     return acc
 }
+
+/**
+ * A sequence that returns the values from the underlying [sequence] that successfully (not null result) evaluates the specified [transform].
+ */
+internal class CollectingSequence<T, R>(
+    private val sequence: Sequence<T>,
+    private val transform: (T) -> R?
+) : Sequence<R> {
+
+    override fun iterator(): Iterator<R> = object : Iterator<R> {
+        val iterator = sequence.iterator()
+        var nextState: Int = -1 // -1 for unknown, 0 for done, 1 for continue
+        var nextItem: R? = null
+
+        private fun calcNext() {
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                val transformed = transform(item)
+                if (transformed != null) {
+                    nextItem = transformed
+                    nextState = 1
+                    return
+                }
+            }
+            nextState = 0
+        }
+
+        override fun next(): R {
+            if (nextState == -1)
+                calcNext()
+            if (nextState == 0)
+                throw NoSuchElementException()
+            val result = nextItem
+            nextItem = null
+            nextState = -1
+            @Suppress("UNCHECKED_CAST")
+            return result as R
+        }
+
+        override fun hasNext(): Boolean {
+            if (nextState == -1)
+                calcNext()
+            return nextState == 1
+        }
+    }
+}

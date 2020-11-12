@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
 
 /**
  * Defines translation text extraction
@@ -81,4 +82,16 @@ interface ReferenceAssistant {
      * Extract i18n key from element
      */
     fun extractKey(element: PsiElement): FullKey?
+}
+
+interface TranslationReferenceAssistant<T: PsiElement>{
+    /**
+     * Defines translation reference pattern
+     */
+    fun pattern(): ElementPattern<out T>
+
+    /**
+     * Calculates element's references
+     */
+    fun references(element: T): List<PsiReference>
 }

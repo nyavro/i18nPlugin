@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.factory
 
+import com.intellij.psi.PsiElement
+
 /**
  * Language components factory
  */
@@ -31,6 +33,11 @@ interface LocalizationFactory {
      * Content generator
      */
     fun contentGenerator(): ContentGenerator
+
+    /**
+     * Localization format-specific reference assistant
+     */
+    fun referenceAssistant(): TranslationReferenceAssistant<out PsiElement>
 }
 
 /**

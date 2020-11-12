@@ -2,7 +2,6 @@ package com.eny.i18n.plugin.ide.references.translation
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
-import com.eny.i18n.plugin.tree.PsiProperty
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
@@ -15,22 +14,22 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
      * @param element PsiElement to get references of.
      * @param textRange TextRange to highlight
      */
-    fun getReferences(element: PsiElement, textRange: TextRange): Array<PsiReference> {
+    fun getReferences(element: PsiElement, textRange: TextRange, parents: List<String>): List<PsiReference> {
         val project = element.project
         val config = Settings.getInstance(project).config()
         val key = composeKey(
-                PsiProperty.create(element),
-                config.nsSeparator,
-                config.keySeparator,
-                config.pluralSeparator,
-                config.defaultNamespaces(),
-                config.vue && element.containingFile.parent?.name == config.vueDirectory
+            parents,
+            config.nsSeparator,
+            config.keySeparator,
+            config.pluralSeparator,
+            config.defaultNamespaces(),
+            config.vue && element.containingFile.parent?.name == config.vueDirectory
         )
         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES ==
                 PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, config.searchScope(project), null, null)) {
-            return arrayOf(TranslationToCodeReference(element, textRange, key))
+            return listOf(TranslationToCodeReference(element, textRange, key))
         }
-        return PsiReference.EMPTY_ARRAY
+        return emptyList()
     }
 }
 

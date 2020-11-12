@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.tree
 
 import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.at
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.json.JsonElementTypes
@@ -11,7 +12,10 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parents
+import com.intellij.psi.util.parentsOfType
 import org.jetbrains.yaml.psi.YAMLDocument
+import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
 
@@ -52,7 +56,7 @@ class PlainTextTree(val element: PsiElement): PsiElementTree() {
 
     override fun value(): PsiElement = element.nextSibling.nextSibling.let{it.children.at(0) ?: it}
 
-    override fun findChildren(regex: String): List<Tree<PsiElement>> {
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> {
         TODO("Not yet implemented")
     }
 
@@ -147,10 +151,10 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
     override fun isTree(): Boolean = element is YAMLMapping
     override fun findChild(name: String): Tree<PsiElement>? =
         (element as YAMLMapping).getKeyValueByKey(name)?.value?.let(::YamlElementTree)
-    override fun findChildren(regex: String): List<Tree<PsiElement>> =
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> =
         (element as YAMLMapping)
             .keyValues
-            .filter {it.key?.text?.startsWith(regex) ?: false}
+            .filter {it.key?.text?.startsWith(prefix) ?: false}
             .mapNotNull {it.key?.let (::YamlElementTree)}
     companion object {
         /**
@@ -161,66 +165,4 @@ class YamlElementTree(val element: PsiElement): PsiElementTree() {
             return (PsiTreeUtil.getChildOfType(fileRoot, YAMLMapping::class.java) ?: fileRoot)?.let {YamlElementTree(it)}
         }
     }
-}
-
-/**
- * Leaf to root wrapper around psi tree
- */
-abstract class PsiProperty: FlippedTree<PsiElement> {
-    companion object {
-        /**
-         * Creates FlippedTree instance
-         */
-        fun create(element: PsiElement): PsiProperty =
-            if (element.containingFile is JsonFile) JsonPropertyWrapper(element)
-            else YamlProperty(element)
-    }
-}
-
-/**
- * Wrapper around Json root psi node
- */
-class JsonRoot(val element: PsiFile): PsiProperty() {
-    override fun name() = element.containingFile.name.substringBeforeLast(".")
-    override fun isRoot() = true
-    override fun parents(): List<FlippedTree<PsiElement>> = listOf()
-}
-
-/**
- * Wrapper around Json tree item
- */
-class JsonPropertyWrapper(val element: PsiElement): PsiProperty() {
-    override fun name() = element.firstChild.text.unQuote()
-    override fun isRoot() = false
-    override fun parents(): List<FlippedTree<PsiElement>> = allAncestors(element)
-    private fun allAncestors(item: PsiElement?): List<FlippedTree<PsiElement>> =
-        when (item) {
-            null -> listOf()
-            is PsiFile -> listOf(JsonRoot(item))
-            is JsonProperty -> allAncestors(item.parent) + JsonPropertyWrapper(item)
-            else -> allAncestors(item.parent)
-        }
-}
-
-/**
- * Wrapper around Yaml tree root
- */
-class YamlRoot(val element: PsiFile): PsiProperty() {
-    override fun name() = element.containingFile.name.substringBeforeLast(".")
-    override fun isRoot() = true
-    override fun parents(): List<FlippedTree<PsiElement>> = listOf()
-}
-
-/**
- * Wrapper around Yaml element
- */
-class YamlProperty(val element: PsiElement): PsiProperty() {
-    override fun name() = (element as YAMLKeyValue).key?.text?.unQuote() ?: ""
-    override fun isRoot() = false
-    override fun parents(): List<FlippedTree<PsiElement>> = allAncestors(element)
-    private fun allAncestors(item: PsiElement): List<FlippedTree<PsiElement>> =
-        (PsiTreeUtil
-            .collectParents(item, YAMLKeyValue::class.java, true) { c -> c is YAMLDocument}
-                .map {kv -> YamlProperty(kv)} +
-            YamlRoot(item.containingFile)).reversed()
 }
