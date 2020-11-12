@@ -2,28 +2,61 @@ package com.eny.i18n.plugin.localization.json
 
 import com.eny.i18n.plugin.factory.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
+import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
+import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
-import com.intellij.json.psi.JsonElementGenerator
-import com.intellij.json.psi.JsonObject
+import com.intellij.json.psi.*
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
+import com.intellij.openapi.util.TextRange
+import com.intellij.patterns.ElementPattern
+import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
+import com.intellij.psi.util.parents
 
 private val tabChar = "  "
 
 class JsonLocalizationFactory: LocalizationFactory {
     override fun contentGenerator(): ContentGenerator = JsonContentGenerator()
+    override fun referenceAssistant(): TranslationReferenceAssistant<JsonStringLiteral> = JsonReferenceAssistant()
+}
+
+private class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringLiteral> {
+
+    private val provider = TranslationToCodeReferenceProvider()
+
+    override fun pattern(): ElementPattern<out JsonStringLiteral> = PlatformPatterns.psiElement(JsonStringLiteral::class.java)
+
+    override fun references(element: JsonStringLiteral): List<PsiReference> =
+        if (element.isPropertyName && element.textLength > 1) {
+            provider.getReferences(element, textRange(element), parents(element))
+        } else {
+            emptyList()
+        }
+
+    private fun parents(element: JsonStringLiteral): List<String> =
+        CollectingSequence(element.parents()) {
+            when {
+                it is JsonProperty -> it.name
+                it is JsonFile -> it.name.substringBeforeLast(".")
+                else -> null
+            }
+        }.toList().reversed()
+
+    private fun textRange(element: JsonStringLiteral): TextRange = TextRange(1, element.textLength - 1)
 }
 
 /**
  * Generates JSON translation content
  */
-class JsonContentGenerator: ContentGenerator {
+private class JsonContentGenerator: ContentGenerator {
 
     override fun generateContent(compositeKey: List<Literal>, value: String): String =
         compositeKey.foldRightIndexed("\"$value\"", { i, key, acc ->

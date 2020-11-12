@@ -25,28 +25,7 @@ interface Tree<T> {
     fun value(): T
 
     /**
-     * Finds children by name matching regex
+     * Finds children by name starting with prefix
      */
-    fun findChildren(regex: String): List<Tree<T>>
+    fun findChildren(prefix: String): List<Tree<T>>
 }
-
-/**
- * Reversed tree wrapper
- */
-interface FlippedTree<T> {
-    /**
-     * Gets name of current node
-     */
-    fun name(): String
-
-    /**
-     * Checks if current node is root
-     */
-    fun isRoot(): Boolean
-
-    /**
-     * Gets current node parents
-     */
-    fun parents(): List<FlippedTree<T>>
-}
-

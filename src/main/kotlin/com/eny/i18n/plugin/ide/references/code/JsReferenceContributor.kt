@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.references.code
 
-import com.eny.i18n.plugin.language.js.JsReferenceAssistant
+import com.eny.i18n.plugin.language.js.JsLanguageFactory
 
 /**
  * JS dialect reference contributor
  */
-class JsReferenceContributor: ReferenceContributorBase(JsReferenceAssistant())
+class JsReferenceContributor: ReferenceContributorBase(JsLanguageFactory().referenceAssistant())
