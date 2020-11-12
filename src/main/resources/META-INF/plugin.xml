@@ -20,6 +20,12 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>2.4.1</h3>
+            <ul>
+                <li>Bug fixes</li>
+            </ul>
+        </div>
+        <div>
             <h3>2.4.0</h3>
             <ul>
                 <li>Vue Single file components support</li>
