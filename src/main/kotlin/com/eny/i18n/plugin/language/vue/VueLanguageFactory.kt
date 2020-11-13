@@ -63,7 +63,7 @@ internal class VueTranslationExtractor: TranslationExtractor {
 
     override fun template(element: PsiElement): (argument: String) -> String =
         when {
-            element.isVueScript() -> ({ "this.\$t($it)" })
+            element.isVueScript() -> ({ "this.\$t($it).toString()" })
             element.isVueTemplateAttribute() -> ({ "\"\$t($it)\"" })
             element.isVue() -> ({ "{{ \$t($it) }}" })
             else -> ({ "\$t($it)" })
