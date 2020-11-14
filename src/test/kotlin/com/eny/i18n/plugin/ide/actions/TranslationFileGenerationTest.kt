@@ -4,9 +4,7 @@ import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.translationGenerator
-import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
-import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
-import com.eny.i18n.plugin.utils.generator.code.VueScriptAttributeCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.openapi.ui.Messages
 import org.junit.Test
@@ -38,15 +36,33 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
     @ParameterizedTest
     @ValueSource(strings = ["yml", "json"])
     fun testTranslationFileGenerationVue(ext: String) = myFixture.runVueConfig(config(ext)) {
-        val cg = VueCodeGenerator()
+        val cg = VueScriptCodeGenerator()
         val tg = translationGenerator(ext)!!
         myFixture.tempDirFixture.findOrCreateDir("locales")
-        myFixture.configureByText("simple.${cg.ext()}", cg.generateScript("\"I want<caret> to move it to translation\""))
+        myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("\"I want<caret> to move it to translation\""))
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
         Messages.setTestInputDialog(predefinedTextInputDialog("component.header.title"))
         myFixture.launchAction(action)
-        myFixture.checkResult(cg.generateScript("this.\$t('component.header.title')"))
+        myFixture.checkResult(cg.generateBlock("this.\$t('component.header.title')"))
+        myFixture.checkResult(
+            "locales/en.${tg.ext()}",
+            tg.generateContent("component", "header", "title", "I want to move it to translation"),
+            false
+        )
+    }
+
+    @Test
+    fun testTranslationFileGenerationVueTs() = myFixture.runVueConfig(config("json")) {
+        val cg = VueTsCodeGenerator()
+        val tg = translationGenerator("json")!!
+        myFixture.tempDirFixture.findOrCreateDir("locales")
+        myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("\"I want<caret> to move it to translation\""))
+        val action = myFixture.findSingleIntention(hint)
+        assertNotNull(action)
+        Messages.setTestInputDialog(predefinedTextInputDialog("component.header.title"))
+        myFixture.launchAction(action)
+        myFixture.checkResult(cg.generateBlock("this.\$t('component.header.title').toString()"))
         myFixture.checkResult(
             "locales/en.${tg.ext()}",
             tg.generateContent("component", "header", "title", "I want to move it to translation"),

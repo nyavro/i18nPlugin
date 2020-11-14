@@ -63,6 +63,7 @@ internal class VueTranslationExtractor: TranslationExtractor {
 
     override fun template(element: PsiElement): (argument: String) -> String =
         when {
+            element.isVueScript() && element.parent.isTypeScript() -> ({ "this.\$t($it).toString()" })
             element.isVueScript() -> ({ "this.\$t($it)" })
             element.isVueTemplateAttribute() -> ({ "\"\$t($it)\"" })
             element.isVue() -> ({ "{{ \$t($it) }}" })
@@ -96,6 +97,7 @@ internal class VueTranslationExtractor: TranslationExtractor {
     private fun PsiElement.isVueScript(): Boolean = this.isVue() && PsiTreeUtil.findFirstParent(this, { it is HtmlTag && it.name == "script" }).toBoolean()
     private fun PsiElement.isVueText(): Boolean = (this is PsiWhiteSpace) || (this is XmlToken)
     private fun PsiElement.isBorderToken(): Boolean = this.text == "</"
+    private fun PsiElement.isTypeScript(): Boolean = this.language.isKindOf("TypeScript")
 }
 
 internal class VueFoldingProvider: FoldingProvider {
