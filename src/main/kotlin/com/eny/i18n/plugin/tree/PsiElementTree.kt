@@ -149,13 +149,23 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
 class YamlElementTree(val element: PsiElement): PsiElementTree() {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is YAMLMapping
-    override fun findChild(name: String): Tree<PsiElement>? =
-        (element as YAMLMapping).getKeyValueByKey(name)?.value?.let(::YamlElementTree)
-    override fun findChildren(prefix: String): List<Tree<PsiElement>> =
-        (element as YAMLMapping)
+    override fun findChild(name: String): Tree<PsiElement>? {
+        val keyValueByKey = (element as YAMLMapping).getKeyValueByKey(name)
+        if (keyValueByKey == null) {
+            return null
+        }
+        val value = keyValueByKey?.value
+        if (value == null) {
+            return null
+        }
+        return value?.let(::YamlElementTree)
+    }
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> {
+        return (element as YAMLMapping)
             .keyValues
-            .filter {it.key?.text?.startsWith(prefix) ?: false}
-            .mapNotNull {it.key?.let (::YamlElementTree)}
+            .filter { it.key!!.text.startsWith(prefix) }
+            .map { YamlElementTree(it.key!!) }
+    }
     companion object {
         /**
          * Creates YamlElementTree instance
