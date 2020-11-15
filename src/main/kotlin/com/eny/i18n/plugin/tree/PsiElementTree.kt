@@ -1,22 +1,15 @@
 package com.eny.i18n.plugin.tree
 
 import com.eny.i18n.plugin.parser.type
-import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.at
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
-import com.intellij.json.psi.JsonProperty
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.parents
-import com.intellij.psi.util.parentsOfType
 import org.jetbrains.yaml.psi.YAMLDocument
-import org.jetbrains.yaml.psi.YAMLFile
-import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
 
 /**
@@ -149,17 +142,13 @@ class JsonElementTree(val element: PsiElement): PsiElementTree() {
 class YamlElementTree(val element: PsiElement): PsiElementTree() {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is YAMLMapping
-    override fun findChild(name: String): Tree<PsiElement>? {
-        val keyValueByKey = (element as YAMLMapping).getKeyValueByKey(name)
-        if (keyValueByKey == null) {
-            return null
-        }
-        val value = keyValueByKey?.value
-        if (value == null) {
-            return null
-        }
-        return value?.let(::YamlElementTree)
-    }
+
+    override fun findChild(name: String): Tree<PsiElement>? =
+        (element as YAMLMapping)
+            .getKeyValueByKey(name)
+            ?.value
+            ?.let(::YamlElementTree)
+
     override fun findChildren(prefix: String): List<Tree<PsiElement>> {
         return (element as YAMLMapping)
             .keyValues
