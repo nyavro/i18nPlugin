@@ -9,6 +9,7 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.fasterxml.jackson.core.io.JsonStringEncoder
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
 import com.intellij.json.psi.*
@@ -58,11 +59,13 @@ private class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringL
  */
 private class JsonContentGenerator: ContentGenerator {
 
-    override fun generateContent(compositeKey: List<Literal>, value: String): String =
-        compositeKey.foldRightIndexed("\"$value\"", { i, key, acc ->
+    override fun generateContent(compositeKey: List<Literal>, value: String): String {
+        val escapedValue = String(JsonStringEncoder.getInstance().quoteAsString(value))
+        return compositeKey.foldRightIndexed("\"$escapedValue\"", { i, key, acc ->
             val tab = tabChar.repeat(i)
             "{\n$tabChar$tab\"${key.text}\": $acc\n$tab}"
         })
+    }
 
     override fun getFileType(): FileType = JsonFileType.INSTANCE
     override fun getLanguage(): Language = JsonLanguage.INSTANCE
