@@ -65,28 +65,24 @@ internal class JsxTranslationExtractor: TranslationExtractor {
     override fun isExtracted(element: PsiElement): Boolean =
         element.isJs() && JSPatterns.jsArgument("t", 0).accepts(element.parent)
 
-    override fun text(element: PsiElement): String {
-        val parentTag = PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
-        return if (parentTag != null) {
-            parentTag.value.textElements.map {it.text}.joinToString(" ")
-        } else {
-            element.parent.text
-        }
-    }
+    override fun text(element: PsiElement): String =
+        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)!!
+            .value
+            .textElements
+            .map {it.text}
+            .joinToString(" ")
+
     override fun textRange(element: PsiElement): TextRange =
-        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)
-            ?.value
-            ?.textElements
-            ?.let {
+        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)!!
+            .value
+            .textElements
+            .let {
                 TextRange(
                     it.first().textRange.startOffset,
                     it.last().textRange.endOffset
                 )
-            } ?:
-        TextRange(
-            element.parent.textRange.startOffset,
-            element.parent.textRange.endOffset
-        )
+            }
+
     override fun template(element: PsiElement): (argument: String) -> String = {"{i18n.t($it)}"}
     private fun PsiElement.isJs(): Boolean = this.language == JavascriptLanguage.INSTANCE
 }
