@@ -86,7 +86,7 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
                 if (ref == null) {
                     fail(msg)
                 } else {
-                    assertEquals(msg, setOf(key.unQuote()), ref.findRefs().mapNotNull {it.text?.unQuote()}.toSet())
+                    assertEquals(msg, setOf(key.unQuote()), ref.findRefs().mapNotNull {it?.text?.unQuote()}.toSet())
                 }
             }
         }
