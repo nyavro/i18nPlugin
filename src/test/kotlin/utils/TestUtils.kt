@@ -8,6 +8,7 @@ import groovy.util.GroovyTestCase.assertEquals
 import org.junit.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class TestUtils {
 
@@ -38,6 +39,17 @@ class CollectingSequenceTest {
             CollectingSequence(sequenceOf(1, 2, 3, 4, 5)) {if(it % 2 == 0) (it.toString()) else null}.toList(),
             listOf("2", "4")
         )
+    }
+
+    @Test
+    fun testCollectingSequenceIteration() {
+        val collectingSequence = CollectingSequence(sequenceOf(1, 2, 3, 4, 5)) { if (it % 2 == 0) (it.toString()) else null }.iterator()
+        assertTrue(collectingSequence.hasNext())
+        assertTrue(collectingSequence.hasNext())
+        assertEquals("2", collectingSequence.next())
+        assertTrue(collectingSequence.hasNext())
+        assertEquals("4", collectingSequence.next())
+        assertFalse(collectingSequence.hasNext())
     }
 
     @Test(expected = NoSuchElementException::class)
