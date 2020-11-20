@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.completion
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueSfcCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.codeInsight.completion.CompletionType
 import org.junit.jupiter.api.Test
@@ -25,9 +26,8 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
         myFixture.runVue {
             myFixture.configureByText(
                 "none.vue",
-                cg.generateSfc(
-                        mapOf(Pair("en", tg.generateContent("tstw", "fstt", "leu", "value"))),
-                        "\"<caret>\""
+                VueSfcCodeGenerator(tg.generateNamedBlocks(Pair("en", tg.generateContent("tstw", "fstt", "leu", "value")))).generateBlock(
+                    "<p>message: {{ \$t(\"<caret>\") }}</p>"
                 )
             )
             assertTrue(myFixture.completeBasic().find {it.lookupString == "tstw"} != null)
@@ -39,9 +39,8 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
         myFixture.runVue {
             myFixture.configureByText(
                 "none.vue",
-                cg.generateSfc(
-                        mapOf(Pair("en", tg.generateContent("tst1", "base", "single", "only one value"))),
-                        "\"tst<caret>\""
+                VueSfcCodeGenerator(tg.generateNamedBlocks(Pair("en", tg.generateContent("tst1", "base", "single", "only one value")))).generateBlock(
+                    "<p>message: {{ \$t(\"tst<caret>\") }}</p>"
                 )
             )
             assertTrue(myFixture.completeBasic().find {it.lookupString == "tst1"} != null)

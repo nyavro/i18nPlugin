@@ -123,38 +123,6 @@ class VueCodeGenerator: CodeGenerator {
         """
     }
 
-    fun generateSfcBlock(codeBlock: String, translationBlock: String, folding: Boolean = false): String {
-        val ns = "\$i18n"
-        val foldStart = if (folding) "<fold text='...'>" else ""
-        val foldStartScript = if (folding) "<fold text='{...}'>" else ""
-        val foldEnd = if (folding) "</fold>" else ""
-        val foldApp = if (folding) "<fold text='{name: 'App'...}'>" else ""
-        return """<template${foldStart}>
-  <div id="app"${foldStart}>
-    <label for="locale">locale</label>
-    <select v-model="locale"${foldStart}>
-      <option>en</option>
-      <option>ja</option>
-    </select${foldEnd}>
-    ${codeBlock}
-  </div${foldEnd}>
-</template${foldEnd}>
-<i18n${foldStart}>
-${translationBlock}
-</i18n${foldEnd}>
-<script${foldStart}>
-export default ${foldApp}{
-  name: 'App',
-  data () { return { locale: 'en' } },
-  watch: ${foldStartScript}{
-    locale (val) ${foldStartScript}{
-      this.$ns.locale = val
-    }${foldEnd}
-  }${foldEnd}
-}${foldEnd}
-</script${foldEnd}>"""
-    }
-
     private fun translationContent(translationMap: Map<String, String>) =
         translationMap.map {
             "\"${it.key}\": ${it.value}"
