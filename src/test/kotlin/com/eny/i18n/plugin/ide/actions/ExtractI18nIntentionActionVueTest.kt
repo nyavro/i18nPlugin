@@ -2,6 +2,8 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueScriptCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueTemplateCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
@@ -47,11 +49,12 @@ class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
     @ParameterizedTest
     @ArgumentsSource(Provider::class)
     fun testKeyExtractionTemplate(text: String, tg: TranslationGenerator) {
+        val cg = VueTemplateCodeGenerator()
         myFixture.runVueConfig(config(tg.ext())) {
             runTestCase(
                 "App.${cg.ext()}",
-                cg.generateTemplate(text),
-                cg.generateTemplate("{{ \$t('ref.value3') }}"),
+                cg.generateBlock(text),
+                cg.generateBlock("{{ \$t('ref.value3') }}"),
                 "locales/en-US.${tg.ext()}",
                 tg.generate("ref", arrayOf("section", "key", "Reference in json")),
                 tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
@@ -63,11 +66,12 @@ class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
     @ParameterizedTest
     @ArgumentsSource(Provider::class)
     fun testScriptExtraction(text: String, tg: TranslationGenerator) {
+        val cg = VueScriptCodeGenerator()
         myFixture.runVueConfig(config(tg.ext())) {
             runTestCase(
                 "App.${cg.ext()}",
-                cg.generateScript("\"$text\""),
-                cg.generateScript("this.\$t('ref.value3')"),
+                cg.generateBlock("\"$text\""),
+                cg.generateBlock("this.\$t('ref.value3')"),
                 "locales/en-US.${tg.ext()}",
                 tg.generate("ref", arrayOf("section", "key", "Reference in json")),
                 tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),

@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.ide.CodeGeneratorsWithNs
 import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueScriptCodeGenerator
 import com.intellij.codeInsight.intention.IntentionAction
 import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -31,8 +32,9 @@ class KeyContextVueTest: PlatformBaseTest() {
 
     @Test
     fun testKeyContextScript() {
+        val cg = VueScriptCodeGenerator()
         myFixture.runVue {
-            myFixture.configureByText("keyContextScript.${codeGenerator.ext()}", codeGenerator.generateScript("this.\$t('ref.<caret>value3')"))
+            myFixture.configureByText("keyContextScript.${cg.ext()}", cg.generateBlock("this.\$t('ref.<caret>value3')"))
             assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
         }
     }
