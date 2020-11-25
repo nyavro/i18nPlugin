@@ -21,16 +21,15 @@ interface SourcesSelector {
     /**
      * Selects source from given range
      */
-    fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, onComplete: () -> Unit, editor: Editor)
+    fun select(sources: List<LocalizationSource>, onSelect: (sources: List<LocalizationSource>) -> Unit, editor: Editor)
 }
 
 /**
  * Selects and processes all files
  */
 class AllSourcesSelector : SourcesSelector {
-    override fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, onComplete: () -> Unit, editor: Editor) {
-        sources.forEach { onSelect(it) }
-        onComplete()
+    override fun select(sources: List<LocalizationSource>, onSelect: (sources: List<LocalizationSource>) -> Unit, editor: Editor) {
+        onSelect(sources)
     }
 }
 
@@ -45,7 +44,7 @@ class UserChoice: SourcesSelector {
             else -> AllIcons.FileTypes.Json
         }
 
-    override fun select(sources: List<LocalizationSource>, onSelect: (source: LocalizationSource) -> Unit, onComplete: () -> Unit, editor: Editor) {
+    override fun select(sources: List<LocalizationSource>, onSelect: (sources: List<LocalizationSource>) -> Unit, editor: Editor) {
         val menu = JBPopupMenu()
         val currentFile = pathToRoot(editor.project?.basePath ?: "", FileDocumentManager.getInstance().getFile(editor.document)?.path ?: "").trim(File.separatorChar)
         sources
@@ -56,8 +55,7 @@ class UserChoice: SourcesSelector {
             .forEach {
                 val menuItem = JBMenuItem(it.displayPath, icon(it.type))
                 menuItem.addActionListener { _ ->
-                    onSelect(it)
-                    onComplete()
+                    onSelect(listOf(it))
                 }
                 menu.add(menuItem)
             }
