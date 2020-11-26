@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.factory.ContentGenerator
+import com.eny.i18n.plugin.factory.TranslationFolderSelector
 import com.eny.i18n.plugin.key.FullKey
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
@@ -12,12 +13,12 @@ import com.intellij.psi.PsiFileFactory
  * Quick fix for translation file creation
  */
 class CreateTranslationFileQuickFix(
-        private val fullKey: FullKey,
-        private val contentGenerator: ContentGenerator,
-        private val folderSelector: TranslationFolderSelector,
-        private val fileName: String,
-        private val translationValue: String? = null,
-        private val onComplete: () -> Unit = {}): QuickFix() {
+    private val fullKey: FullKey,
+    private val contentGenerator: ContentGenerator,
+    private val folderSelector: TranslationFolderSelector,
+    private val fileName: String,
+    private val translationValue: String? = null,
+    private val onComplete: () -> Unit = {}): QuickFix() {
 
     override fun getText(): String = contentGenerator.getDescription()
 
@@ -29,12 +30,11 @@ class CreateTranslationFileQuickFix(
     private fun doInvoke(project: Project) {
         val name: String = fileName + "." + contentGenerator.getFileType().defaultExtension
         val content: String = contentGenerator.generateContent(fullKey, translationValue)
-        folderSelector.select { folders ->
+        folderSelector.select(project) { folders ->
             WriteCommandAction.runWriteCommandAction(project) {
                 folders.forEach {
                     it.add(PsiFileFactory.getInstance(project).createFileFromText(name, contentGenerator.getLanguage(), content))
                 }
-                //TODO: onComplete here is in double "transaction". This should be fixed
                 onComplete()
             }
         }

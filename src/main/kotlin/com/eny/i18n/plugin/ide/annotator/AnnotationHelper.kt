@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.annotator
 
+import com.eny.i18n.plugin.factory.TranslationFolderSelector
 import com.eny.i18n.plugin.ide.quickfix.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.PropertyReference
@@ -16,7 +17,7 @@ import com.intellij.psi.PsiElement
 /**
  * Annotation helper methods
  */
-class AnnotationHelper(private val holder: AnnotationHolder, private val rangesCalculator: RangesCalculator, private val project: Project) {
+class AnnotationHelper(private val holder: AnnotationHolder, private val rangesCalculator: RangesCalculator, private val project: Project, private val folderSelector: TranslationFolderSelector) {
     private val RESOLVED_COLOR = DefaultLanguageHighlighterColors.LINE_COMMENT
     private val errorSeverity = HighlightSeverity.WARNING
     private val infoSeverity = HighlightSeverity.INFORMATION
@@ -44,7 +45,6 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             rangesCalculator.unresolvedNs(fullKey),
             PluginBundle.getMessage("annotator.unresolved.ns")
         )
-        val folderSelector = I18NextTranslationFolderSelector(project)
         Settings.getInstance(project).mainFactory().contentGenerators().forEach {
             annotation.registerFix(CreateTranslationFileQuickFix(fullKey, it, folderSelector, ns.text))
         }

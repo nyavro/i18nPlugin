@@ -15,14 +15,17 @@ import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.lang.javascript.psi.JSCallExpression
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PatternCondition
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFileSystemItem
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.html.HtmlTag
+import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlAttribute
@@ -82,6 +85,8 @@ internal class VueTranslationExtractor: TranslationExtractor {
             }
         }
     }
+
+    override fun folderSelector(): TranslationFolderSelector = VueTranslationFolderSelector()
 
     private fun getTextElement(element: PsiElement): PsiElement =
         if (element.isBorderToken()) {
@@ -232,5 +237,20 @@ internal class VueReferenceAssistant: ReferenceAssistant {
         return listOf(LiteralKeyExtractor())
                 .find {it.canExtract(element)}
                 ?.let{parser.parse(it.extract(element))}
+    }
+}
+
+
+/**
+ * Vue translation folder selector
+ */
+class VueTranslationFolderSelector : TranslationFolderSelector {
+    override fun select(project: Project, callback: (List<PsiFileSystemItem>) -> Unit) {
+        val config = Settings.getInstance(project).config()
+        callback(
+            FilenameIndex
+                .getFilesByName(project, config.vueDirectory, config.searchScope(project), true)
+                .asList()
+        )
     }
 }
