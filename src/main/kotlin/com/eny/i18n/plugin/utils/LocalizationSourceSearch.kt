@@ -156,7 +156,7 @@ class LocalizationSourceSearch(private val project: Project) {
 
     private fun findVirtualFilesUnder(directory: String): List<PsiFile> =
         FilenameIndex.getFilesByName(project, directory, config.searchScope(project), true).toList().flatMap {
-            it.children.toList().map { root -> root.containingFile}
+            it.children.toList().mapNotNull { root -> root.containingFile}
         }
 
     private fun findPlainObjectFiles(): List<LocalizationSource> {

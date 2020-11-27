@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.ide.annotator
 
 import com.eny.i18n.plugin.language.vue.VueCallContext
 import com.eny.i18n.plugin.key.FullKeyExtractor
+import com.eny.i18n.plugin.language.vue.VueLanguageFactory
 import com.eny.i18n.plugin.parser.KeyExtractorImpl
 
 /**
@@ -11,5 +12,6 @@ class VueCompositeKeyAnnotator : CompositeKeyAnnotatorBase(
     FullKeyExtractor(
         VueCallContext(),
         KeyExtractorImpl()
-    )
+    ),
+    VueLanguageFactory().translationExtractor().folderSelector()
 )

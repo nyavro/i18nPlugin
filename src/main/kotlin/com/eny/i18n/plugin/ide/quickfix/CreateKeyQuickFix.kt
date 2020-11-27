@@ -39,7 +39,7 @@ class CreateKeyQuickFix(
         }
 
     private fun createPropertyInFiles(project: Project, editor: Editor, sources: List<LocalizationSource>) =
-        selector.select(sources, { source: LocalizationSource -> createPropertyInFile(project, source)}, onComplete, editor)
+        selector.select(sources, {it.forEach {createPropertyInFile(project, it)}}, editor)
 
     private fun createPropertyInFile(project: Project, target: LocalizationSource) {
         val ref = resolveCompositeKey(
@@ -52,7 +52,6 @@ class CreateKeyQuickFix(
                 {
                     ApplicationManager.getApplication().runWriteAction {
                         createPropertiesChain(ref.element.value(), ref.unresolved)
-                        //TODO: onComplete here is in double "transaction". This should be fixed
                         onComplete()
                     }
                 },

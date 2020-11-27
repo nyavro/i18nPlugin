@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.ide.quickfix.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
@@ -13,12 +14,12 @@ import com.intellij.openapi.project.Project
 /**
  * Extracts translation key
  */
-class KeyExtractor {
+class KeyCreator {
 
     /**
      * Tries to resolve translation file
      */
-    fun tryToResolveTranslationFile(project:Project, i18nKey: FullKey, source: String, editor:Editor, onComplete: () -> Unit) {
+    fun createKey(project:Project, i18nKey: FullKey, source: String, editor:Editor, extractor: TranslationExtractor, onComplete: () -> Unit) {
         val search = LocalizationSourceSearch(project)
         val settings = Settings.getInstance(project)
         val config = settings.config()
@@ -28,10 +29,9 @@ class KeyExtractor {
             val contentGenerator = if (config.preferYamlFilesGeneration)
                 YamlLocalizationFactory().contentGenerator() else
                 JsonLocalizationFactory().contentGenerator()
-            val folderSelector = if (config.vue) Vue18nTranslationFolderSelector(project) else I18NextTranslationFolderSelector(project)
             //TODO - get rid of hardcoded 'en' value
             val fileName = if (config.vue) "en" else (i18nKey.ns?.text ?: config.defaultNamespaces().first())
-            CreateTranslationFileQuickFix(i18nKey, contentGenerator, folderSelector, fileName, source, onComplete)
+            CreateTranslationFileQuickFix(i18nKey, contentGenerator, extractor.folderSelector(), fileName, source, onComplete)
         } else {
             CreateKeyQuickFix(i18nKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators, source, onComplete)
         }

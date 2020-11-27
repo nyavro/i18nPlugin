@@ -7,7 +7,6 @@ import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
@@ -26,7 +25,7 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
 
     private val request = KeyRequest()
 
-    private val keyExtractor = KeyExtractor()
+    private val keyCreator = KeyCreator()
 
     override fun getText() = PluginBundle.getMessage("action.intention.extract.key")
 
@@ -63,11 +62,9 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
         val i18nKey = requestResult.key
         val template = extractor.template(element)
         val range = extractor.textRange(element)
-        WriteCommandAction.runWriteCommandAction(project) {
-            keyExtractor.tryToResolveTranslationFile(project, i18nKey, text, editor) {
-                document.replaceString(range.startOffset, range.endOffset, template("'${i18nKey.source}'"))
-                extractor.postProcess(editor, range.startOffset)
-            }
+        keyCreator.createKey(project, i18nKey, text, editor, extractor) {
+            document.replaceString(range.startOffset, range.endOffset, template("'${i18nKey.source}'"))
+            extractor.postProcess(editor, range.startOffset)
         }
         editor.caretModel.primaryCaret.removeSelection()
     }
