@@ -26,4 +26,16 @@ class LocalizationSourceSearchTest: PlatformBaseTest() {
             myFixture.checkHighlighting(true, true, true, true)
         }
     }
+
+    @Test
+    fun testNonTranslationFilesInTranslationFolder() {
+        val cg = VueCodeGenerator()
+        val tg = JsonTranslationGenerator()
+        myFixture.runVueConfig(testConfig) {
+            myFixture.addFileToProject("assets/en-US.${tg.ext()}", tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5"))
+            myFixture.addFileToProject("assets/file.txt", "not a translation file")
+            myFixture.configureByText("refToObject.${cg.ext()}", cg.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""))
+            myFixture.checkHighlighting(true, true, true, true)
+        }
+    }
 }
