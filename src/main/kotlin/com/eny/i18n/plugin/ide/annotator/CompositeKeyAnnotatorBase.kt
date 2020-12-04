@@ -40,14 +40,23 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             }
         }
         else {
-            val pluralSeparator = Settings.getInstance(element.project).config().pluralSeparator
-            val mostResolvedReference = files
-                .flatMap { resolve(fullKey.compositeKey, PsiElementTree.create(it.element), pluralSeparator) }
-                .maxBy { v -> v.path.size }!!
-            when {
-                mostResolvedReference.unresolved.isEmpty() && mostResolvedReference.element?.isLeaf() ?: false -> annotationHelper.annotateResolved(fullKey)
-                mostResolvedReference.unresolved.isEmpty() -> annotationHelper.annotateReferenceToObject(fullKey)
-                else -> annotationHelper.unresolvedKey(fullKey, mostResolvedReference)
+            val config = Settings.getInstance(element.project).config()
+            val pluralSeparator = config.pluralSeparator
+            val references = files.flatMap {resolve(fullKey.compositeKey, PsiElementTree.create(it.element), pluralSeparator, it.type)}
+            val allEqual = references.zipWithNext().all { it.first.path == it.second.path }
+            val mostResolvedReference = if (allEqual) references.first() else references.maxBy { v -> v.path.size }!!
+            if (mostResolvedReference.unresolved.isEmpty()) {
+                if (!allEqual && config.partialTranslationInspectionEnabled) {
+                    annotationHelper.annotatePartiallyTranslated(fullKey, references)
+                } else {
+                    if (mostResolvedReference.element?.isLeaf() ?: false) {
+                        annotationHelper.annotateResolved(fullKey)
+                    } else {
+                        annotationHelper.annotateReferenceToObject(fullKey)
+                    }
+                }
+            } else {
+                annotationHelper.unresolvedKey(fullKey, mostResolvedReference)
             }
         }
     }

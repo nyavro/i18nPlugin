@@ -3,9 +3,9 @@ package com.eny.i18n.plugin.ide.annotator
 import com.eny.i18n.plugin.factory.TranslationFolderSelector
 import com.eny.i18n.plugin.ide.quickfix.*
 import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.RangesCalculator
 import com.intellij.lang.annotation.AnnotationHolder
@@ -18,6 +18,7 @@ import com.intellij.psi.PsiElement
  * Annotation helper methods
  */
 class AnnotationHelper(private val holder: AnnotationHolder, private val rangesCalculator: RangesCalculator, private val project: Project, private val folderSelector: TranslationFolderSelector) {
+
     private val RESOLVED_COLOR = DefaultLanguageHighlighterColors.LINE_COMMENT
     private val errorSeverity = HighlightSeverity.WARNING
     private val infoSeverity = HighlightSeverity.INFORMATION
@@ -65,14 +66,25 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
      * Annotates unresolved composite key
      */
     fun unresolvedKey(fullKey: FullKey, mostResolvedReference: PropertyReference<PsiElement>) {
-        val unresolvedPropertyAnnotation = holder.createAnnotation(
+        val annotation = holder.createAnnotation(
             errorSeverity,
             rangesCalculator.unresolvedKey(fullKey, mostResolvedReference.path),
             PluginBundle.getMessage("annotator.unresolved.key"))
         val generators = Settings.getInstance(project).mainFactory().contentGenerators()
-        unresolvedPropertyAnnotation.registerFix(
-            CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
-        unresolvedPropertyAnnotation.registerFix(
-            CreateKeyQuickFix(fullKey, AllSourcesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files"), generators))
+        annotation.registerFix(CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
+        annotation.registerFix(CreateKeyQuickFix(fullKey, AllSourcesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files"), generators))
+    }
+
+    /**
+     * Annotates partially translated key and creates quick fix for it.
+     */
+    fun annotatePartiallyTranslated(fullKey: FullKey, references: List<PropertyReference<PsiElement>>) {
+        val minimalResolvedReference = references.minBy { it.path.size }!!
+        val annotation = holder.createAnnotation(
+            errorSeverity,
+            rangesCalculator.unresolvedKey(fullKey, minimalResolvedReference.path),
+            PluginBundle.getMessage("annotator.partially.translated")
+        )
+        annotation.registerFix(CreateMissingKeysQuickFix(fullKey, Settings.getInstance(project).mainFactory(), references, PluginBundle.getMessage("quickfix.create.missing.keys")))
     }
 }

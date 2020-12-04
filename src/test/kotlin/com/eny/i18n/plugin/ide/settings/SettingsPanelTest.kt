@@ -54,6 +54,11 @@ class SettingsPanelTest {
     }
 
     @Test
+    fun testPartiallyTraslated() {
+        checkBooleanProperty(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), Settings::partialTranslationInspectionEnabled)
+    }
+
+    @Test
     fun testNsSeparator() {
         checkStringProperty("#", PluginBundle.getMessage("settings.namespace.separator"), Settings::nsSeparator)
     }

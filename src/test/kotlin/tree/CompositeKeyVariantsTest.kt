@@ -1,7 +1,9 @@
 package tree
 
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.intellij.json.JsonFileType
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -23,7 +25,8 @@ internal class CompositeKeyVariantsTest {
         val variants = resolver.listCompositeKeyVariants(
             fixed.map{Literal(it)},
             testTree(),
-            request
+            request,
+            LocalizationType(JsonFileType.INSTANCE, "test")
         )
         assertEquals(expected, variants.map {it.value()}.toSet())
     }

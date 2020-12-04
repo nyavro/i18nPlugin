@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.factory
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.lang.Language
-import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.PsiElement
 
 /**
@@ -23,9 +22,9 @@ interface ContentGenerator {
     fun generateContent(compositeKey: List<Literal>, value: String): String
 
     /**
-     * Returns file type
+     * Returns localization type
      */
-    fun getFileType(): FileType
+    fun getType(): LocalizationType
 
     /**
      * Returns language

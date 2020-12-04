@@ -8,7 +8,10 @@ import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.utils.ellipsis
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
@@ -62,7 +65,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
                 if (config.vue) it.name.contains(config.foldingPreferredLanguage)
                 else it.parent == config.foldingPreferredLanguage
             }
-            .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)) }
+            .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element), it.type)}
             .firstOrNull { it.unresolved.isEmpty() && it.element?.isLeaf() == true }
             ?.let { ElementToReferenceBinding(element, it) }
     }

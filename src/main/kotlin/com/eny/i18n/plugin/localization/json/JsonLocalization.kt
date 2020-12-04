@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.localization.json
 
 import com.eny.i18n.plugin.factory.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
+import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.Settings
@@ -14,7 +15,6 @@ import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
 import com.intellij.json.psi.*
 import com.intellij.lang.Language
-import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
@@ -67,7 +67,7 @@ private class JsonContentGenerator: ContentGenerator {
         })
     }
 
-    override fun getFileType(): FileType = JsonFileType.INSTANCE
+    override fun getType(): LocalizationType = LocalizationType(JsonFileType.INSTANCE, "general")
     override fun getLanguage(): Language = JsonLanguage.INSTANCE
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.json.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = element is JsonObject

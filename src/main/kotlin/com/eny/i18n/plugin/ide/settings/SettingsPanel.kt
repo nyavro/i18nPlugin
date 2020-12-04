@@ -3,7 +3,9 @@ package com.eny.i18n.plugin.ide.settings
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
 import com.jgoodies.forms.factories.DefaultComponentFactory
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Dimension
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import javax.swing.*
@@ -152,6 +154,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(textInput(PluginBundle.getMessage("settings.folding.preferredLanguage"), settings::foldingPreferredLanguage))
         panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
+        panel.add(checkbox(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), settings::partialTranslationInspectionEnabled))
         panel.add(vue())
         panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), settings::vueDirectory))
         panel.add(checkbox(PluginBundle.getMessage("settings.gettext.enabled"), settings::gettext))

@@ -57,10 +57,16 @@ fun <C> List<C>.headTail(): Pair<C?, List<C>?> = Pair(this.firstOrNull(), this.d
  */
 fun <C, D, E> ((c: C, d: D) -> E).flip(): ((d: D, c: C) -> E) = {d: D, c: C -> this(c, d)}
 
+/**
+ * Chained 'as?' operator
+ */
 inline fun <I, reified O : I> I.maybe(): O? {
     return this as? O;
 }
 
+/**
+ * Safe get element by index or null
+ */
 fun <T> Array<T>.at(index: Int): T? =
     if (this.size > index) this[index] else null
 

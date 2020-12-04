@@ -69,7 +69,8 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
                 listCompositeKeyVariants(
                     compositeKey,
                     PsiElementTree.create(it.element),
-                    prefix
+                    prefix,
+                    it.type
                 ).map { it.value().text.unQuote() }
             },
             Settings.getInstance(project).config().pluralSeparator
