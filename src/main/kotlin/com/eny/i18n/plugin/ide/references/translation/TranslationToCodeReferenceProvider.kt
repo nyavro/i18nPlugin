@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.ide.references.translation
 
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
+import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
@@ -19,9 +20,7 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
         val config = Settings.getInstance(project).config()
         val key = composeKey(
             parents,
-            config.nsSeparator,
-            config.keySeparator,
-            config.pluralSeparator,
+            Separators(config.nsSeparator, config.keySeparator, config.pluralSeparator),
             config.defaultNamespaces(),
             config.vue && element.containingFile.parent?.name == config.vueDirectory
         )

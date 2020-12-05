@@ -1,6 +1,7 @@
 package tree
 
 import com.eny.i18n.plugin.tree.KeyComposer
+import com.eny.i18n.plugin.tree.Separators
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -40,41 +41,41 @@ internal class KeyComposerTest {
     fun alternativeKeySeparator() {
         val composer = object : KeyComposer<String>{}
         val tree = listOf("key313", "key7", "ROOW", "altew").reversed()
-        assertEquals("altew:ROOW#key7#key313", composer.composeKey(tree, ":", "#"))
+        assertEquals("altew:ROOW#key7#key313", composer.composeKey(tree, Separators(":", "#", "-")))
     }
 
     @Test
     fun alternativeKeySeparator2() {
         val composer = object : KeyComposer<String>{}
         val tree = listOf("altex").reversed()
-        assertEquals("altex", composer.composeKey(tree, ":", "$"))
+        assertEquals("altex", composer.composeKey(tree, Separators(":", "$", "-")))
     }
 
     @Test
     fun alternativeKeySeparator3() {
         val composer = object : KeyComposer<String>{}
         val tree = listOf("key314", "key1", "ROOT", "altez").reversed()
-        assertEquals("altez\$ROOT#key1#key314", composer.composeKey(tree, "\$", "#"))
+        assertEquals("altez\$ROOT#key1#key314", composer.composeKey(tree, Separators("\$", "#", "-")))
     }
 
     @Test
     fun substituteDefaultNs() {
         val composer = object : KeyComposer<String>{}
         val tree = listOf("second31", "first1", "BASE", "Common").reversed()
-        assertEquals("BASE.first1.second31", composer.composeKey(tree, "\$", ".", "-", listOf("Common")))
+        assertEquals("BASE.first1.second31", composer.composeKey(tree, Separators("\$", ".", "-"), listOf("Common")))
     }
 
     @Test
     fun substituteDefaultNsMulti() {
         val composer = object : KeyComposer<String>{}
         val tree = listOf("second31", "first1", "BASE", "First").reversed()
-        assertEquals("BASE.first1.second31", composer.composeKey(tree, "\$", ".", "-", listOf("First", "Second")))
+        assertEquals("BASE.first1.second31", composer.composeKey(tree, Separators("\$", ".", "-"), listOf("First", "Second")))
     }
 
     @Test
     fun dropRoot() {
         val composer = object : KeyComposer<String>{}
         val tree = listOf("second31k", "first1k", "BASEk", "Firstk").reversed()
-        assertEquals("BASEk.first1k.second31k", composer.composeKey(tree, "\$", ".", "-", listOf(), true))
+        assertEquals("BASEk.first1k.second31k", composer.composeKey(tree, Separators("\$", ".", "-"), listOf(), true))
     }
 }

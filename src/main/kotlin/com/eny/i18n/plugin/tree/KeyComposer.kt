@@ -5,6 +5,11 @@ import com.eny.i18n.plugin.utils.whenMatches
 import com.eny.i18n.plugin.utils.whenMatchesDo
 
 /**
+ * Separators configuration
+ */
+data class Separators(val ns: String, val key: String, val plural: String)
+
+/**
  * Composes key from element's location in tree
  */
 interface KeyComposer<T> {
@@ -18,14 +23,13 @@ interface KeyComposer<T> {
     /**
      * Composes string representation of key by given path
      */
-    fun composeKey(parents: List<String>,
-           nsSeparator: String=":", keySeparator: String=".", pluralSeparator: String="-", defaultNs: List<String> = listOf("translation"), dropRoot: Boolean = false): String {
+    fun composeKey(parents: List<String>, separators: Separators = Separators(":", ".", "-"), defaultNs: List<String> = listOf("translation"), dropRoot: Boolean = false): String {
         val (head, tail) = parents.headTail()
         return listOf(
             head.whenMatches {!(defaultNs.contains(it) || dropRoot)},
-            tail?.joinToString(keySeparator)?.let {fixPlural(it, pluralSeparator)}
+            tail?.joinToString(separators.key)?.let {fixPlural(it, separators.plural)}
         )
             .mapNotNull {it}
-            .joinToString(nsSeparator)
+            .joinToString(separators.ns)
     }
 }
