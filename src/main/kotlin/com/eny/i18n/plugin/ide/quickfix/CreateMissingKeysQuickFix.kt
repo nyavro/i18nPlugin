@@ -24,12 +24,7 @@ class CreateMissingKeysQuickFix(
 
     override fun invoke(project: Project, editor: Editor) =
         ApplicationManager.getApplication().invokeLater {
-            createPropertyInFiles(project)
-        }
-
-    private fun createPropertyInFiles(project: Project) =
-        references.map {
-            createPropertyInFile(project, it)
+            references.map { createPropertyInFile(project, it) }
         }
 
     private fun createPropertyInFile(project: Project, ref: PropertyReference<PsiElement>) {
