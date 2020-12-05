@@ -7,8 +7,11 @@ import com.eny.i18n.plugin.ide.PhpCodeAndTranslationGenerators
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.TsxCodeGenerator
+import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
@@ -66,6 +69,32 @@ class CodeHighlightingTestBase: PlatformBaseTest() {
         "test.${tg.ext()}",
         tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
+
+    @Test
+    fun testPartiallyTranslatedInspection() = myFixture.runWithConfig(Config(partialTranslationInspectionEnabled = true)) {
+        val cg = TsxCodeGenerator()
+        val tg = JsonTranslationGenerator()
+        myFixture.addFileToProject("en/test.json",
+            tg.generateNamedBlock(
+                "root",
+                tg.generateNamedBlock(
+                    "sub",
+                    tg.generateNamedBlock("base", "\"Partially defined translation\""),
+                    1
+                )
+            )
+        )
+        myFixture.addFileToProject("ru/test.json",
+            tg.generateNamedBlock(
+                "root",
+                    tg.generateNamedBlock(
+                    "another", "\"value\""
+                )
+            )
+        )
+        myFixture.configureByText("sample.tsx", cg.generate("'test:root.<warning descr=\"Partially translated key\">sub.base</warning>'"))
+        myFixture.checkHighlighting(true, true, true, true)
+    }
 }
 
 class JsDialectCodeHighlightingTestBase: PlatformBaseTest() {

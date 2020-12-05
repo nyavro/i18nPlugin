@@ -1,12 +1,12 @@
 package com.eny.i18n.plugin.utils
 
+import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.json.*
 import com.intellij.json.json5.Json5FileType
 import com.intellij.json.psi.JsonObject
 import com.intellij.lang.impl.PsiBuilderFactoryImpl
 import com.intellij.openapi.fileTypes.FileType
-import com.intellij.openapi.fileTypes.PlainTextFileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDirectory
@@ -26,7 +26,7 @@ import org.jetbrains.yaml.YAMLFileType
  * May be root of json, yaml file, js object
  */
 data class LocalizationSource(
-    val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: FileType,
+    val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: LocalizationType,
     val host: PsiElement? = null
 )
 /**
@@ -83,7 +83,8 @@ class LocalizationSourceSearch(private val project: Project) {
                                 it.value!!,
                                 it.name,
                                 fileName,
-                                "SFC: ${fileName}/${it.name} ", JsonFileType.INSTANCE,
+                                "SFC: ${fileName}/${it.name} ",
+                                LocalizationType(JsonFileType.INSTANCE, "vue-sfc"),
                                 sfcSourceText
                             )
                         }
@@ -113,7 +114,7 @@ class LocalizationSourceSearch(private val project: Project) {
                     .virtualFile
                     .path
             ).trim('/') + '/' + file.name,
-            file.fileType
+            LocalizationType(file.fileType, "general")
         )
     }
 

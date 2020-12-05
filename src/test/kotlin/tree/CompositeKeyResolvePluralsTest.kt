@@ -1,7 +1,9 @@
 package tree
 
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.intellij.json.JsonFileType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.Test
@@ -10,6 +12,8 @@ import org.junit.jupiter.api.Test
  * CompositeKeyResolver tests
  */
 internal class CompositeKeyResolvePluralsTest {
+
+    private val localizationType: LocalizationType = LocalizationType(JsonFileType.INSTANCE, "test")
 
     @Test
     fun resolvePluralElementByKey() {
@@ -34,8 +38,8 @@ internal class CompositeKeyResolvePluralsTest {
                             TestTree("sub2")
                         )
                     )
-                )
-            )
+                ), localizationType
+            ), "-", localizationType
         )
         assertEquals(3, properties.size)
         properties.zip(listOf(1,2,5)).forEach {
@@ -70,9 +74,9 @@ internal class CompositeKeyResolvePluralsTest {
                             TestTree("sub2")
                         )
                     )
-                )
+                ), localizationType
             ),
-            "%"
+            "%", localizationType
         )
         assertEquals(3, properties.size)
         properties.zip(listOf(1,2,5)).forEach {
@@ -108,8 +112,8 @@ internal class CompositeKeyResolvePluralsTest {
                             TestTree("sub4")
                         )
                     )
-                )
-            )
+                ), localizationType
+            ), "-", localizationType
         )
         assertEquals(1, properties.size)
         val property = properties.first()
@@ -142,8 +146,8 @@ internal class CompositeKeyResolvePluralsTest {
                             TestTree("sub6")
                         )
                     )
-                )
-            )
+                ), localizationType
+            ), "-", localizationType
         )
         assertEquals(1, properties.size)
         val property = properties.first()

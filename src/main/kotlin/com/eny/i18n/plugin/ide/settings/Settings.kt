@@ -57,6 +57,8 @@ class Settings : PersistentStateComponent<Settings> {
 
     internal var gettextAliases = default.gettextAliases
 
+    internal var partialTranslationInspectionEnabled = default.partialTranslationInspectionEnabled
+
     /**
      * Returns plugin configuration
      */
@@ -87,7 +89,8 @@ class Settings : PersistentStateComponent<Settings> {
         yamlContentGenerationEnabled = yamlContentGenerationEnabled,
         extractSorted = extractSorted,
         gettext = gettext,
-        gettextAliases = gettextAliases
+        gettextAliases = gettextAliases,
+        partialTranslationInspectionEnabled = partialTranslationInspectionEnabled
     )
 
     fun setConfig(config: Config) {
@@ -119,11 +122,12 @@ class Settings : PersistentStateComponent<Settings> {
         extractSorted = config.extractSorted
         gettext = config.gettext
         gettextAliases = config.gettextAliases
+        partialTranslationInspectionEnabled = config.partialTranslationInspectionEnabled
     }
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
 
-    override fun getState(): Settings? = this
+    override fun getState(): Settings = this
 
     /**
      * Service class for persisting settings

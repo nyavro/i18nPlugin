@@ -28,7 +28,7 @@ class CreateTranslationFileQuickFix(
         }
 
     private fun doInvoke(project: Project) {
-        val name: String = fileName + "." + contentGenerator.getFileType().defaultExtension
+        val name: String = fileName + "." + contentGenerator.getType().fileType.defaultExtension
         val content: String = contentGenerator.generateContent(fullKey, translationValue)
         folderSelector.select(project) { folders ->
             WriteCommandAction.runWriteCommandAction(project) {

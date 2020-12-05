@@ -53,7 +53,7 @@ class UserChoice: SourcesSelector {
                 distance(it.displayPath.trim(File.separatorChar), currentFile)
             }
             .forEach {
-                val menuItem = JBMenuItem(it.displayPath, icon(it.type))
+                val menuItem = JBMenuItem(it.displayPath, icon(it.type.fileType))
                 menuItem.addActionListener { _ ->
                     onSelect(listOf(it))
                 }

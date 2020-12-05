@@ -17,7 +17,6 @@ import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 
 /**
@@ -34,19 +33,19 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
         if (fullKey == null) {
             if (callContext.accepts(parameters.position.parent)) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()
-                val emptyKeyCompletions = emptyKeyCompletions(parameters.position.project, prefix, parameters.position)
+                val emptyKeyCompletions = emptyKeyCompletions(prefix, parameters.position)
                 result.addAllElements(emptyKeyCompletions)
                 result.stopHere()
             }
         } else {
-            val processKey = processKey(fullKey, parameters, parameters.position)
+            val processKey = processKey(fullKey, parameters.position)
             result.addAllElements(processKey)
             result.stopHere()
         }
     }
 
-    private fun emptyKeyCompletions(project: Project, prefix: String, element: PsiElement): List<LookupElementBuilder> = findCompletions(
-        project, prefix, "", null, emptyList(), element
+    private fun emptyKeyCompletions(prefix: String, element: PsiElement): List<LookupElementBuilder> = findCompletions(
+        prefix, "", null, emptyList(), element
     )
 
     private fun groupPlurals(completions: List<String>, pluralSeparator: String):List<String> =
@@ -56,23 +55,24 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
                 listOf(entry.key)} else entry.value
             }
 
-    private fun processKey(fullKey: FullKey, parameters: CompletionParameters, element: PsiElement): List<LookupElementBuilder> =
+    private fun processKey(fullKey: FullKey, element: PsiElement): List<LookupElementBuilder> =
         fullKey.compositeKey.lastOrNull().nullableToList().flatMap { last ->
             val source = fullKey.source.replace(last.text, "")
             val prefix = last.text.replace(DUMMY_KEY, "")
-            findCompletions(parameters.position.project, prefix, source, fullKey.ns?.text, fullKey.compositeKey.dropLast(1), element)
+            findCompletions(prefix, source, fullKey.ns?.text, fullKey.compositeKey.dropLast(1), element)
         }
 
-    private fun findCompletions(project: Project, prefix: String, source: String, ns: String?, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
+    private fun findCompletions(prefix: String, source: String, ns: String?, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
         return groupPlurals(
-            LocalizationSourceSearch(project).findSources(ns.nullableToList(), element).flatMap {
+            LocalizationSourceSearch(element.project).findSources(ns.nullableToList(), element).flatMap {
                 listCompositeKeyVariants(
                     compositeKey,
                     PsiElementTree.create(it.element),
-                    prefix
+                    prefix,
+                    it.type
                 ).map { it.value().text.unQuote() }
             },
-            Settings.getInstance(project).config().pluralSeparator
+            Settings.getInstance(element.project).config().pluralSeparator
         ).map { LookupElementBuilder.create(source + it) }
     }
 }

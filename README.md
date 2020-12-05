@@ -34,6 +34,10 @@ Intellij idea i18next support plugin
 -   References to plural values:
 
     ![Reference to plural value](docs/img/p5.png)
+    
+-   Missing translations
+ 
+    Gets turned on by 'Enable partially translated keys inspection' configuration option     
 
    ### Navigation
 
@@ -69,6 +73,10 @@ Intellij idea i18next support plugin
 -   Extract translation sorted by key
     
     When set, key extracted in json or yaml file is inserted in sorted (by key) position
+    
+-   Enable partially translated keys inspection
+    
+    When set, warns when key exists in some translation files and is missing in another; suggests 'Create missing translations' quick fix 
     
 ## Frameworks & Libraries
 

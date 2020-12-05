@@ -60,7 +60,7 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                         LocalizationSourceSearch(element.project)
                             .findSources(fullKey.allNamespaces(), element)
                             .map {
-                                ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element)), it.host)
+                                ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element), it.type), it.host)
                             }
                             .filter { it.reference.path.isNotEmpty() }
                             .whenNotEmpty { listOf(I18nReference(element, TextRange(1 + element.text.unQuote().indexOf(fullKey.source), element.textLength - 1), it)) }

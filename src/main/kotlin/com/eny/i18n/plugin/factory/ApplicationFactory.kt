@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.factory
 
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.PsiElement
 
 /**
@@ -23,6 +24,12 @@ interface LanguageFactory {
      */
     fun referenceAssistant(): ReferenceAssistant
 }
+
+/**
+ * Represents localization type.
+ * subSystem defines usage cases.
+ */
+data class LocalizationType(val fileType: FileType, val subSystem: String)
 
 /**
  * Localization components factory
@@ -56,4 +63,10 @@ class MainFactory(private val languageFactories: List<LanguageFactory>, private 
      */
     fun contentGenerators(): List<ContentGenerator> =
         localizationFactories.map {it.contentGenerator()}
+
+    /**
+     * Pick content generator by file type
+     */
+    fun contentGenerator(type: LocalizationType): ContentGenerator? =
+        localizationFactories.find {it.contentGenerator().getType() == type}?.contentGenerator()
 }

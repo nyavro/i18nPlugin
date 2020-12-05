@@ -1,8 +1,10 @@
 package tree
 
+import com.eny.i18n.plugin.factory.LocalizationType
+import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.Tree
-import com.eny.i18n.plugin.key.lexer.Literal
+import com.intellij.json.JsonFileType
 import org.junit.Assert.*
 import org.junit.jupiter.api.Test
 
@@ -13,7 +15,7 @@ internal class TestTree(private val value: String, private val children: List<Te
     override fun findChild(name: String) = children.find {item -> item.value==name}
     override fun isTree() = children.isNotEmpty()
     override fun value() = value
-    override fun findChildren(regex: String): List<Tree<String>> = children.filter { item -> item.value.startsWith(regex)}
+    override fun findChildren(prefix: String): List<Tree<String>> = children.filter { item -> item.value.startsWith(prefix)}
 }
 
 internal fun root(tree: TestTree) = TestTree("", listOf(tree))
@@ -22,6 +24,8 @@ internal fun root(tree: TestTree) = TestTree("", listOf(tree))
  * CompositeKeyResolver tests
  */
 internal class CompositeKeyResolverTest {
+
+    private val type = LocalizationType(JsonFileType.INSTANCE, "test")
 
     @Test
     fun resolveElementByKey() {
@@ -37,7 +41,7 @@ internal class CompositeKeyResolverTest {
                         TestTree("key2")
                     )
                 )
-            )
+            ), type
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isLeaf() ?: false)
@@ -61,7 +65,8 @@ internal class CompositeKeyResolverTest {
                         TestTree(value)
                     )
                 )
-            )
+            ),
+            type
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
@@ -86,7 +91,8 @@ internal class CompositeKeyResolverTest {
                         TestTree(key, listOf(TestTree("subkey4")))
                     )
                 )
-            )
+            ),
+            type
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
@@ -111,7 +117,8 @@ internal class CompositeKeyResolverTest {
                         TestTree("key10", listOf(TestTree("subkey6")))
                     )
                 )
-            )
+            ),
+            type
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
@@ -140,7 +147,8 @@ internal class CompositeKeyResolverTest {
                         )
                     )
                 )
-            )
+            ),
+            type
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
@@ -165,7 +173,8 @@ internal class CompositeKeyResolverTest {
                         TestTree("submain2", listOf(TestTree("subsub3")))
                     )
                 )
-            )
+            ),
+            type
         )
         assertTrue(property?.isLeaf() ?: false)
         assertEquals(text, property?.value())
@@ -173,6 +182,8 @@ internal class CompositeKeyResolverTest {
 }
 
 internal class CompositeKeyResolverUnresolvedTest {
+
+    private val type = LocalizationType(JsonFileType.INSTANCE, "test")
 
     @Test
     fun unresolvedPathIsNull() {
@@ -189,7 +200,8 @@ internal class CompositeKeyResolverUnresolvedTest {
                         TestTree("submain5", listOf(TestTree("subsub7")))
                     )
                 )
-            )
+            ),
+            type
         )
         assertNull(property)
     }
@@ -207,7 +219,8 @@ internal class CompositeKeyResolverUnresolvedTest {
                         TestTree("submain8", listOf(TestTree("subsub11")))
                     )
                 )
-            )
+            ),
+            type
         )
         assertNull(property)
     }
@@ -228,7 +241,8 @@ internal class CompositeKeyResolverUnresolvedTest {
                         TestTree("key14")
                     )
                 )
-            )
+            ),
+            type
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
@@ -252,7 +266,8 @@ internal class CompositeKeyResolverUnresolvedTest {
                         TestTree("key17", listOf(TestTree("subkey6")))
                     )
                 )
-            )
+            ),
+            type
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
@@ -266,7 +281,8 @@ internal class CompositeKeyResolverUnresolvedTest {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val property = resolver.resolveCompositeKey(
             listOf(Literal("root9"), Literal("key18"), Literal("subkey10")),
-            null
+            null,
+            type
         )
         assertNull(property.element)
         assertEquals(listOf(Literal("root9"), Literal("key18"), Literal("subkey10")), property.unresolved)
