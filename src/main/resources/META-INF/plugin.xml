@@ -20,6 +20,14 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>2.5.0</h3>
+            <ul>
+                <li>Missing translation inspection introduced</li>
+                <li>Vue translation extraction improved</li>
+                <li>Minor fixes</li>
+            </ul>
+        </div>
+        <div>
             <h3>2.4.1</h3>
             <ul>
                 <li>Bug fixes</li>
