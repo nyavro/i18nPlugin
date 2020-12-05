@@ -5,8 +5,6 @@ import com.eny.i18n.plugin.language.js.JsLanguageFactory
 import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
 import com.eny.i18n.plugin.language.php.PhpLanguageFactory
 import com.eny.i18n.plugin.language.vue.VueLanguageFactory
-import com.eny.i18n.plugin.localization.json.JsonLocalizationFactory
-import com.eny.i18n.plugin.localization.yaml.YamlLocalizationFactory
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
@@ -144,10 +142,6 @@ class Settings : PersistentStateComponent<Settings> {
             listOf(
                 listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
                 if (this.vue) listOf(VueLanguageFactory()) else emptyList()
-            ).flatten(),
-            listOf(
-                if (this.jsonContentGenerationEnabled) listOf(JsonLocalizationFactory()) else emptyList(),
-                if (this.yamlContentGenerationEnabled) listOf(YamlLocalizationFactory()) else emptyList()
             ).flatten()
         )
 }

@@ -1,0 +1,8 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.eny.i18n">
+        <contentGenerator implementation="com.eny.i18n.plugin.localization.yaml.YamlContentGenerator"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.translation.YamlReferenceContributor"/>
+    </extensions>
+</idea-plugin>
