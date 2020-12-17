@@ -6,10 +6,13 @@ import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.psi.JsonFile
 import com.intellij.json.psi.JsonObject
+import com.intellij.lang.ecmascript6.psi.ES6ExportDefaultAssignment
+import com.intellij.lang.javascript.psi.JSObjectLiteralExpression
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.yaml.psi.YAMLDocument
+import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLMapping
 
 /**
@@ -25,7 +28,10 @@ abstract class PsiElementTree: Tree<PsiElement> {
             else if (file is JsonFile) JsonElementTree.create(file)
             else if (file is JsonObject) JsonElementTree(file)
 //            else if (file is JSObjectLiteralExpression) JsElementTree.create(file)
-            else YamlElementTree.create(file)
+            else if (file is YAMLFile) YamlElementTree.create(file)
+            else {
+                JsElementTree.create(file)
+            }
     }
 }
 
@@ -58,6 +64,37 @@ class PlainTextTree(val element: PsiElement): PsiElementTree() {
          * Creates instance of PlainTextTree
          */
         fun create(file: PsiElement): PsiElementTree? = PlainTextTree(file)
+    }
+}
+
+class JsElementLeaf(val element: PsiElement): PsiElementTree() {
+    override fun findChild(name: String): Tree<PsiElement>? = null
+    override fun isTree(): Boolean = false
+    override fun value(): PsiElement = element
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> = emptyList()
+}
+
+class JsElementTree(val element: JSObjectLiteralExpression): PsiElementTree() {
+    override fun value(): PsiElement = element
+    override fun isTree(): Boolean = true
+    override fun findChild(name: String): Tree<PsiElement>? {
+        return element.findProperty(name)?.value?.let { JsElementLeaf(it) }
+    }
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> {
+        return element.properties.toList().filter {it.name!!.startsWith(prefix)}.map (::JsElementLeaf)
+    }
+
+    companion object {
+        /**
+         * Creates instance of JsonElementTree
+         */
+        fun create(file: PsiElement): JsElementTree? {
+            return PsiTreeUtil.findChildOfType(file, ES6ExportDefaultAssignment::class.java)?.let {
+                PsiTreeUtil.findChildOfType(it, JSObjectLiteralExpression::class.java)
+            }?.let {
+                JsElementTree(it)
+            }
+        }
     }
 }
 
