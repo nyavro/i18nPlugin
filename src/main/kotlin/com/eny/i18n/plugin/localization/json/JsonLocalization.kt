@@ -13,6 +13,7 @@ import com.eny.i18n.plugin.utils.PluginBundle
 import com.fasterxml.jackson.core.io.JsonStringEncoder
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
+import com.intellij.json.json5.Json5FileType
 import com.intellij.json.psi.*
 import com.intellij.lang.Language
 import com.intellij.openapi.util.TextRange
@@ -67,7 +68,7 @@ private class JsonContentGenerator: ContentGenerator {
         })
     }
 
-    override fun getType(): LocalizationType = LocalizationType(JsonFileType.INSTANCE, "general")
+    override fun getType(): LocalizationType = LocalizationType(listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE), "general")
     override fun getLanguage(): Language = JsonLanguage.INSTANCE
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.json.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = element is JsonObject

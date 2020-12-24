@@ -65,7 +65,7 @@ private class YamlContentGenerator: ContentGenerator {
             "$caret$tab${key.text}: $acc"
         })
 
-    override fun getType(): LocalizationType = LocalizationType(YAMLFileType.YML, "general")
+    override fun getType(): LocalizationType = LocalizationType(listOf(YAMLFileType.YML), "general")
     override fun getLanguage(): Language = YAMLLanguage.INSTANCE
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.yaml.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = (element is YAMLMapping) || (element is YAMLDocument)

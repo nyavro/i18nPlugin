@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
+import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.JsCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
@@ -18,8 +19,8 @@ class CreateKeyTest: PlatformBaseTest() {
     @ParameterizedTest
     @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
     fun testCreateKey(cg: CodeGenerator, tg: TranslationGenerator) {
-        val defaultNs = false;
-        val hint = "Create i18n key"
+        val defaultNs = false
+        val hint = PluginBundle.getMessage("quickfix.create.key")
         val translationFileName = (if (defaultNs) "translation" else "test") + "." + tg.ext()
         val ns = if (defaultNs) "" else "test:"
         myFixture.addFileToProject(

@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.annotator
 
 import com.eny.i18n.plugin.factory.TranslationFolderSelector
 import com.eny.i18n.plugin.ide.quickfix.*
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.mainFactory
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.PropertyReference
@@ -46,7 +46,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             rangesCalculator.unresolvedNs(fullKey),
             PluginBundle.getMessage("annotator.unresolved.ns")
         )
-        Settings.getInstance(project).mainFactory().contentGenerators().forEach {
+        project.mainFactory().contentGenerators().forEach {
             annotation.registerFix(CreateTranslationFileQuickFix(fullKey, it, folderSelector, ns.text))
         }
     }
@@ -70,7 +70,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             errorSeverity,
             rangesCalculator.unresolvedKey(fullKey, mostResolvedReference.path),
             PluginBundle.getMessage("annotator.unresolved.key"))
-        val generators = Settings.getInstance(project).mainFactory().contentGenerators()
+        val generators = project.mainFactory().contentGenerators()
         annotation.registerFix(CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
         annotation.registerFix(CreateKeyQuickFix(fullKey, AllSourcesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files"), generators))
     }
@@ -85,6 +85,6 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             rangesCalculator.unresolvedKey(fullKey, minimalResolvedReference.path),
             PluginBundle.getMessage("annotator.partially.translated")
         )
-        annotation.registerFix(CreateMissingKeysQuickFix(fullKey, Settings.getInstance(project).mainFactory(), references, PluginBundle.getMessage("quickfix.create.missing.keys")))
+        annotation.registerFix(CreateMissingKeysQuickFix(fullKey, project.mainFactory(), references, PluginBundle.getMessage("quickfix.create.missing.keys")))
     }
 }

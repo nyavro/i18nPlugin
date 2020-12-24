@@ -136,12 +136,17 @@ class Settings : PersistentStateComponent<Settings> {
          */
         fun getInstance(project: Project): Settings = ServiceManager.getService(project, Settings::class.java)
     }
+}
 
-    fun mainFactory(): MainFactory =
-        MainFactory(
-            listOf(
-                listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
-                if (this.vue) listOf(VueLanguageFactory()) else emptyList()
-            ).flatten()
-        )
+fun Project.config(): Config {
+    return Settings.getInstance(this).config()
+}
+
+fun Project.mainFactory(): MainFactory {
+    return MainFactory(
+        listOf(
+            listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
+            if (config().vue) listOf(VueLanguageFactory()) else emptyList()
+        ).flatten()
+    )
 }

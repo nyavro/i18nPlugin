@@ -30,7 +30,7 @@ interface LanguageFactory {
  * Represents localization type.
  * subSystem defines usage cases.
  */
-data class LocalizationType(val fileType: FileType, val subSystem: String)
+data class LocalizationType(val fileTypes: List<FileType>, val subSystem: String)
 
 /**
  * Localization components factory
