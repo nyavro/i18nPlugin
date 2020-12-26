@@ -143,8 +143,8 @@
     <depends optional="true" config-file="vueConfig.xml">org.jetbrains.plugins.vue</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensionPoints>
-        <extensionPoint interface="com.eny.i18n.plugin.factory.ContentGenerator" name="contentGenerator"/>
-        <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationSourcesProvider" name="localizationSourceProvider"/>
+        <extensionPoint interface="com.eny.i18n.plugin.factory.ContentGenerator" name="contentGenerator" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationSourcesProvider" name="localizationSourceProvider" dynamic="true"/>
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
