@@ -2,6 +2,8 @@ package com.eny.i18n.plugin.language.vue
 
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.config
+import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
@@ -246,10 +248,11 @@ internal class VueReferenceAssistant: ReferenceAssistant {
  */
 class VueTranslationFolderSelector : TranslationFolderSelector {
     override fun select(project: Project, callback: (List<PsiFileSystemItem>) -> Unit) {
-        val config = Settings.getInstance(project).config()
+        val config = project.config()
+        val vueSettings = project.vueSettings()
         callback(
             FilenameIndex
-                .getFilesByName(project, config.vueDirectory, config.searchScope(project), true)
+                .getFilesByName(project, vueSettings.vueDirectory, config.searchScope(project), true)
                 .asList()
         )
     }

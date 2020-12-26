@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.utils
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.ide.settings.config
 import com.eny.i18n.plugin.ide.settings.mainFactory
+import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
@@ -46,6 +47,7 @@ fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirec
 class LocalizationSourceSearch(private val project: Project) {
 
     private val config = project.config()
+    private val vueSettings = project.vueSettings()
 
     /**
      * Finds localization sources
@@ -66,8 +68,8 @@ class LocalizationSourceSearch(private val project: Project) {
         project.mainFactory().localizationSourcesProviders()
             .filter {
                 //Temporary compatibility fix
-                (config.vue && it.javaClass.name.contains("Vue")) ||
-                (!config.vue && !it.javaClass.name.contains("Vue"))
+                (vueSettings.vue && it.javaClass.name.contains("Vue")) ||
+                (!vueSettings.vue && !it.javaClass.name.contains("Vue"))
             }
             .flatMap {
                 it.find(fileNames, element, isHost, project)

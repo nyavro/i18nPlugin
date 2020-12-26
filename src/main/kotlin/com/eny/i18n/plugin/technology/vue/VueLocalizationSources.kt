@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.technology.vue
 
 import com.eny.i18n.plugin.factory.LocalizationSourcesProvider
-import com.eny.i18n.plugin.ide.settings.config
 import com.eny.i18n.plugin.ide.settings.mainFactory
+import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.utils.LocalizationSource
 import com.eny.i18n.plugin.utils.SearchUtility
 import com.eny.i18n.plugin.utils.directParent
@@ -20,7 +20,7 @@ class VueLocalizationSources : LocalizationSourcesProvider {
             .flatMap {cg -> cg.getType().fileTypes.map{Pair(it, cg.getType())}}
             .toMap()
         return searchUtil
-            .findVirtualFilesUnder(project.config().vueDirectory)
+            .findVirtualFilesUnder(project.vueSettings().vueDirectory)
             .mapNotNull {
                 psiFile -> mp.get(psiFile.fileType)?.let { localizationSource(psiFile, directParent, it) }
             }

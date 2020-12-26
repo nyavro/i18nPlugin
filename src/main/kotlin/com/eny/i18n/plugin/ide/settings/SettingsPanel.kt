@@ -35,7 +35,7 @@ private fun addLimitationsAndHandlers(component: JTextComponent, maxLength: Int,
 /**
  * Settings configuration panel
  */
-class SettingsPanel(val settings: Settings, val project: Project) {
+class SettingsPanel(val settings: Settings, val project: Project, val vueSettings: VueSettings) {
 
     /**
      * Returns Settings main panel
@@ -122,9 +122,11 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.layout = BorderLayout()
         panel.preferredSize = Dimension(350, 30)
         val label = PluginBundle.getMessage("settings.vue")
-        val vueMode = JCheckBox(label, settings.vue)
+        val vueMode = JCheckBox(label, vueSettings.vue)
         vueMode.name = label
-        vueMode.addItemListener { _ -> settings.vue = vueMode.isSelected}
+        vueMode.addItemListener { _ ->
+            vueSettings.vue = vueMode.isSelected
+        }
         panel.add(vueMode, BorderLayout.WEST)
         return panel
     }
@@ -156,7 +158,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(checkbox(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), settings::partialTranslationInspectionEnabled))
         panel.add(vue())
-        panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), settings::vueDirectory))
+        panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), vueSettings::vueDirectory))
         panel.add(checkbox(PluginBundle.getMessage("settings.gettext.enabled"), settings::gettext))
         panel.add(textInput(PluginBundle.getMessage("settings.gettext.aliases"), settings::gettextAliases))
         root.add(panel, BorderLayout.PAGE_START)

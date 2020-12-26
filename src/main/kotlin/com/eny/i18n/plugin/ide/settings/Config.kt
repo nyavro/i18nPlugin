@@ -9,24 +9,27 @@ import com.intellij.psi.search.GlobalSearchScope
  * Configuration holder
  */
 data class Config (
-    val searchInProjectOnly: Boolean = true,
+    //i18next
     val nsSeparator: String = ":",
     val keySeparator: String = ".",
     val pluralSeparator: String = "-",
     val defaultNs: String = "translation",
-    val vue: Boolean = false,
-    val vueDirectory: String = "locales",
-    val jsConfiguration: String = "",
-    val preferYamlFilesGeneration: Boolean = false,
+    //common
+    val searchInProjectOnly: Boolean = true,
     val foldingEnabled: Boolean = false,
     val foldingPreferredLanguage: String = "en",
     val foldingMaxLength: Int = 20,
-    val jsonContentGenerationEnabled: Boolean = true,
-    val yamlContentGenerationEnabled: Boolean = true,
     val extractSorted: Boolean = false,
+    val partialTranslationInspectionEnabled: Boolean = false,
+    //Yaml
+    val preferYamlFilesGeneration: Boolean = false,
+    val yamlContentGenerationEnabled: Boolean = true,
+    //Po
+    val jsonContentGenerationEnabled: Boolean = true,
     val gettext: Boolean = false,
     val gettextAliases: String = "gettext,_,__",
-    val partialTranslationInspectionEnabled: Boolean = false
+    //Other
+    val jsConfiguration: String = ""
 ) {
 
     private val MAX_DEFAULT_NAMESPACES = 100

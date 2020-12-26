@@ -5,13 +5,36 @@ import com.eny.i18n.plugin.language.js.JsLanguageFactory
 import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
 import com.eny.i18n.plugin.language.php.PhpLanguageFactory
 import com.eny.i18n.plugin.language.vue.VueLanguageFactory
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.XmlSerializerUtil
+
+@State(name = "vue-i18n-settings", storages = [Storage("i18nSettings.xml")])
+class VueSettings : PersistentStateComponent<VueSettings> {
+
+    var vue: Boolean = false
+
+    var vueDirectory: String = "locales"
+
+    override fun getState(): VueSettings = this
+
+    override fun loadState(state: VueSettings) = XmlSerializerUtil.copyBean(state, this)
+
+    /**
+     * Service class for persisting settings
+     */
+    companion object Persistence {
+        /**
+         * Loads project's Settings instance
+         */
+        fun getInstance(project: Project): VueSettings = ServiceManager.getService(project, VueSettings::class.java)
+    }
+}
+
+fun Project.vueSettings() = VueSettings.getInstance(this)
 
 /**
  * Plugin settings
@@ -20,6 +43,8 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 class Settings : PersistentStateComponent<Settings> {
 
     private val default: Config = Config()
+
+    val map: Map<String, String> = mutableMapOf()
 
     internal var searchInProjectOnly = default.searchInProjectOnly
 
@@ -30,10 +55,6 @@ class Settings : PersistentStateComponent<Settings> {
     internal var pluralSeparator = default.pluralSeparator
 
     internal var defaultNs = default.defaultNs
-
-    internal var vue = default.vue
-
-    internal var vueDirectory = default.vueDirectory
 
     internal var jsConfiguration = default.jsConfiguration
 
@@ -61,13 +82,13 @@ class Settings : PersistentStateComponent<Settings> {
      * Returns plugin configuration
      */
     fun config(): Config {
-        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
-            synchronized(this) {
-                return doGetConfig()
-            }
-        } else {
+//        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
+//            synchronized(this) {
+//                return doGetConfig()
+//            }
+//        } else {
             return doGetConfig()
-        }
+//        }
     }
 
     private fun doGetConfig() = Config(
@@ -76,8 +97,6 @@ class Settings : PersistentStateComponent<Settings> {
         keySeparator = keySeparator,
         pluralSeparator = pluralSeparator,
         defaultNs = defaultNs,
-        vue = vue,
-        vueDirectory = vueDirectory,
         jsConfiguration = jsConfiguration,
         preferYamlFilesGeneration = preferYamlFilesGeneration,
         foldingEnabled = foldingEnabled,
@@ -92,14 +111,14 @@ class Settings : PersistentStateComponent<Settings> {
     )
 
     fun setConfig(config: Config) {
-        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
-            // Only in Test mode
-            synchronized(this) {
-                doSetConfig(config)
-            }
-        } else {
+//        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
+//            // Only in Test mode
+//            synchronized(this) {
+//                doSetConfig(config)
+//            }
+//        } else {
             doSetConfig(config)
-        }
+//        }
     }
 
     private fun doSetConfig(config: Config) {
@@ -108,8 +127,6 @@ class Settings : PersistentStateComponent<Settings> {
         keySeparator = config.keySeparator
         pluralSeparator = config.pluralSeparator
         defaultNs = config.defaultNs
-        vue = config.vue
-        vueDirectory = config.vueDirectory
         jsConfiguration = config.jsConfiguration
         preferYamlFilesGeneration = config.preferYamlFilesGeneration
         foldingEnabled = config.foldingEnabled
@@ -146,7 +163,7 @@ fun Project.mainFactory(): MainFactory {
     return MainFactory(
         listOf(
             listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
-            if (config().vue) listOf(VueLanguageFactory()) else emptyList()
+            if (this.vueSettings().vue) listOf(VueLanguageFactory()) else emptyList()
         ).flatten()
     )
 }

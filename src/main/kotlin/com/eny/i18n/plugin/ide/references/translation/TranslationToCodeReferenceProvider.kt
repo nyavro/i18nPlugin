@@ -1,6 +1,8 @@
 package com.eny.i18n.plugin.ide.references.translation
 
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.config
+import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote
@@ -17,12 +19,13 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
      */
     fun getReferences(element: PsiElement, textRange: TextRange, parents: List<String>): List<PsiReference> {
         val project = element.project
-        val config = Settings.getInstance(project).config()
+        val config = project.config()
+        val vueSettings = project.vueSettings()
         val key = composeKey(
             parents,
             Separators(config.nsSeparator, config.keySeparator, config.pluralSeparator),
             config.defaultNamespaces(),
-            config.vue && element.containingFile.parent?.name == config.vueDirectory
+            vueSettings.vue && element.containingFile.parent?.name == vueSettings.vueDirectory
         )
         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES ==
                 PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, config.searchScope(project), null, null)) {
