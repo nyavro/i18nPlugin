@@ -144,6 +144,7 @@
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensionPoints>
         <extensionPoint interface="com.eny.i18n.plugin.factory.ContentGenerator" name="contentGenerator"/>
+        <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationSourcesProvider" name="localizationSourceProvider"/>
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
@@ -164,5 +165,6 @@
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
         <contentGenerator implementation="com.eny.i18n.plugin.localization.json.JsonContentGenerator"/>
+        <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.i18n.I18nLocalizationSources"/>
     </extensions>
 </idea-plugin>

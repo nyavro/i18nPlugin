@@ -3,7 +3,30 @@ package com.eny.i18n.plugin.factory
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.lang.Language
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.PsiElement
+
+/**
+ * Localization components factory
+ */
+interface LocalizationFactory {
+
+    /**
+     * Content generator
+     */
+    fun contentGenerator(): ContentGenerator
+
+    /**
+     * Localization format-specific reference assistant
+     */
+    fun referenceAssistant(): TranslationReferenceAssistant<out PsiElement>
+}
+
+/**
+ * Represents localization type.
+ * subSystem defines usage cases.
+ */
+data class LocalizationType(val fileTypes: List<FileType>, val subSystem: String)
 
 /**
  * Localization file content generator

@@ -19,11 +19,11 @@ class ReferencesTestVue: PlatformBaseTest() {
     fun testMultiReferenceDefNs(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.runVue {
             myFixture.addFileToProject(
-                "assets/en/translation.${tg.ext()}",
+                "locales/en-translation.${tg.ext()}",
                 tg.generateContent("main", "header", "title", "Welcome")
             )
             myFixture.addFileToProject(
-                "assets/de/translation.${tg.ext()}",
+                "locales/de-translation.${tg.ext()}",
                 tg.generateContent("main", "header", "title", "Willkommen")
             )
             myFixture.configureByText("multiReference.${cg.ext()}", cg.generate("'main.header.title<caret>'"))
@@ -40,12 +40,12 @@ class ReferencesTestVue: PlatformBaseTest() {
     fun testReferenceMultiDefaultNs(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.runVueConfig(Config(defaultNs = "third,second;first ")) {
             //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
-            myFixture.addFileToProject("assets/en/first.${tg.ext()}", tg.generateContent("main", "fruit", "apple"))
-            myFixture.addFileToProject("assets/en/second.${tg.ext()}", tg.generateContent("main", "fruit", "orange"))
-            myFixture.addFileToProject("assets/en/third.${tg.ext()}", tg.generateContent("main", "fruit", "pear"))
-            myFixture.addFileToProject("assets/de/first.${tg.ext()}", tg.generateContent("main", "fruit", "apfel"))
-            myFixture.addFileToProject("assets/de/second.${tg.ext()}", tg.generateContent("main", "fruit", "apfelsine"))
-            myFixture.addFileToProject("assets/de/third.${tg.ext()}", tg.generateContent("main", "fruit", "birne"))
+            myFixture.addFileToProject("locales/en-first.${tg.ext()}", tg.generateContent("main", "fruit", "apple"))
+            myFixture.addFileToProject("locales/en-second.${tg.ext()}", tg.generateContent("main", "fruit", "orange"))
+            myFixture.addFileToProject("locales/en-third.${tg.ext()}", tg.generateContent("main", "fruit", "pear"))
+            myFixture.addFileToProject("locales/de-first.${tg.ext()}", tg.generateContent("main", "fruit", "apfel"))
+            myFixture.addFileToProject("locales/de-second.${tg.ext()}", tg.generateContent("main", "fruit", "apfelsine"))
+            myFixture.addFileToProject("locales/de-third.${tg.ext()}", tg.generateContent("main", "fruit", "birne"))
             myFixture.configureByText("multiDefNs.${cg.ext()}", cg.generate("'main.fruit<caret>'"))
             read {
                 val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
@@ -60,7 +60,7 @@ class ReferencesTestVue: PlatformBaseTest() {
     fun testDefaultNsReference(cg: CodeGenerator, tg: TranslationGenerator) {
         myFixture.runVue {
             myFixture.addFileToProject(
-                "assets/translation.${tg.ext()}",
+                "locales/en-US.${tg.ext()}",
                 tg.generateContent("ref", "section", "key", "Default ns reference"))
             myFixture.configureByText("resolved.${cg.ext()}", cg.generate("'ref.section.key<caret>'"))
             read {
