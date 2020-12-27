@@ -17,7 +17,7 @@ import javax.swing.event.DocumentListener
 import javax.swing.text.JTextComponent
 import kotlin.reflect.KMutableProperty0
 
-private fun addLimitationsAndHandlers(component: JTextComponent, maxLength: Int, onChange: (newText: String) -> Unit = {}, isValid: (e: Char) -> Boolean = { true }) {
+fun addLimitationsAndHandlers(component: JTextComponent, maxLength: Int, onChange: (newText: String) -> Unit = {}, isValid: (e: Char) -> Boolean = { true }) {
     component.addKeyListener(object: KeyAdapter() {
         override fun keyTyped(e: KeyEvent) {
             if (component.text.length - (if (component.selectedText==null) 0 else component.selectedText.length) >= maxLength || !isValid(e.keyChar)) {
@@ -117,20 +117,6 @@ class SettingsPanel(val settings: Settings, val project: Project, val vueSetting
         return panel
     }
 
-    private fun vue(): JPanel {
-        val panel = JPanel()
-        panel.layout = BorderLayout()
-        panel.preferredSize = Dimension(350, 30)
-        val label = PluginBundle.getMessage("settings.vue")
-        val vueMode = JCheckBox(label, vueSettings.vue)
-        vueMode.name = label
-        vueMode.addItemListener { _ ->
-            vueSettings.vue = vueMode.isSelected
-        }
-        panel.add(vueMode, BorderLayout.WEST)
-        return panel
-    }
-
     private fun gettext(): JPanel {
         val panel = JPanel()
         panel.layout = BorderLayout()
@@ -142,9 +128,7 @@ class SettingsPanel(val settings: Settings, val project: Project, val vueSetting
     }
 
     private fun settingsPanel(): JPanel {
-        val root = JPanel()
         val panel = JPanel()
-        root.layout = BorderLayout()
         panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
         panel.add(checkbox(PluginBundle.getMessage("settings.search.in.project.files.only"), settings::searchInProjectOnly))
         panel.add(separator(PluginBundle.getMessage("settings.namespace.separator"), settings::nsSeparator))
@@ -157,11 +141,8 @@ class SettingsPanel(val settings: Settings, val project: Project, val vueSetting
         panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(checkbox(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), settings::partialTranslationInspectionEnabled))
-        panel.add(vue())
-        panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), vueSettings::vueDirectory))
         panel.add(checkbox(PluginBundle.getMessage("settings.gettext.enabled"), settings::gettext))
         panel.add(textInput(PluginBundle.getMessage("settings.gettext.aliases"), settings::gettextAliases))
-        root.add(panel, BorderLayout.PAGE_START)
-        return root
+        return panel
     }
 }

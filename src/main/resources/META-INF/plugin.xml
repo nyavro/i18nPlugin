@@ -145,6 +145,7 @@
     <extensionPoints>
         <extensionPoint interface="com.eny.i18n.plugin.factory.ContentGenerator" name="contentGenerator" dynamic="true"/>
         <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationSourcesProvider" name="localizationSourceProvider" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.factory.CustomSettings" name="customSettings" area="IDEA_PROJECT" dynamic="true"/>
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
