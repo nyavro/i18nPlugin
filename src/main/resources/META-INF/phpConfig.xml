@@ -5,8 +5,10 @@
         <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.completion.PhpCompletionContributor"/>
         <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.plugin.ide.folding.PhpFoldingBuilder"/>
         <lang.documentationProvider language="PHP" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.PoSettings"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.po.PlainObjectLocalizationSources"/>
+        <customSettings implementation="com.eny.i18n.plugin.ide.settings.PoConfigurable"/>
     </extensions>
 </idea-plugin>

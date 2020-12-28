@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.settings.config
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
+import com.eny.i18n.plugin.ide.settings.poSettings
 import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
@@ -24,7 +25,8 @@ class KeyRequest {
      * Requests key
      */
     fun key(project: Project, text: String): KeyRequestResult {
-        val config = project.config()
+        val config = project.i18NextSettings()
+        val gettext = project.poSettings().gettext
         val keyStr = Messages.showInputDialog(
             project,
             String.format(PluginBundle.getMessage("action.intention.extract.key.hint"), text),
@@ -36,10 +38,10 @@ class KeyRequest {
             KeyRequestResult(null, true)
         } else {
             KeyRequestResult(
-                (if(config.gettext) KeyParserBuilder.withoutTokenizer() else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
+                (if(gettext) KeyParserBuilder.withoutTokenizer() else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
                     .parse(
                         Pair(listOf(KeyElement.literal(keyStr)), null),
-                        emptyNamespace = project.vueSettings().vue || config.gettext
+                        emptyNamespace = project.vueSettings().vue || gettext
                     ),
                 false
             )

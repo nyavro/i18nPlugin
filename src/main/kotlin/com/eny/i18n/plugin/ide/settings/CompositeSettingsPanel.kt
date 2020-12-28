@@ -1,16 +1,15 @@
 package com.eny.i18n.plugin.ide.settings
 
-import java.awt.BorderLayout
+import javax.swing.BoxLayout
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class CompositeSettingsPanel(val panel: JComponent, val panels: List<JComponent>) {
+class CompositeSettingsPanel(val panels: List<JComponent>) {
     fun compose(): JPanel {
         val root = JPanel()
-        root.layout = BorderLayout()
-        root.add(panel, BorderLayout.PAGE_START)
+        root.layout = BoxLayout(root, BoxLayout.Y_AXIS)// BorderLayout()
         panels.forEach {
-            root.add(it, BorderLayout.PAGE_END)
+            root.add(it)
         }
         return root
     }

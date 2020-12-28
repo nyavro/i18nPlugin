@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide.completion
 
 import com.eny.i18n.plugin.factory.CallContext
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.key.lexer.Literal
@@ -72,7 +72,7 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
                     it.type
                 ).map { it.value().text.unQuote() }
             },
-            Settings.getInstance(element.project).config().pluralSeparator
+            element.project.i18NextSettings().pluralSeparator
         ).map { LookupElementBuilder.create(source + it) }
     }
 }

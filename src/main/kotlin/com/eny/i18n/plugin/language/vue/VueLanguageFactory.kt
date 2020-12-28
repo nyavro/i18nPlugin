@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.language.vue
 
 import com.eny.i18n.plugin.factory.*
-import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.ide.settings.config
+import com.eny.i18n.plugin.ide.settings.commonSettings
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
@@ -231,7 +231,7 @@ internal class VueReferenceAssistant: ReferenceAssistant {
     override fun pattern(): ElementPattern<out PsiElement> = JSPatterns.jsLiteralExpression()
 
     override fun extractKey(element: PsiElement): FullKey? {
-        val settings = Settings.getInstance(element.project)
+        val settings = element.project.i18NextSettings()
         val parser = KeyParserBuilder
             .withSeparators(settings.nsSeparator, settings.keySeparator)
             .withTemplateNormalizer()
@@ -248,7 +248,7 @@ internal class VueReferenceAssistant: ReferenceAssistant {
  */
 class VueTranslationFolderSelector : TranslationFolderSelector {
     override fun select(project: Project, callback: (List<PsiFileSystemItem>) -> Unit) {
-        val config = project.config()
+        val config = project.commonSettings()
         val vueSettings = project.vueSettings()
         callback(
             FilenameIndex

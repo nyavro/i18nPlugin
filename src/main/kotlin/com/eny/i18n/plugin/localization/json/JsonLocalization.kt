@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.factory.LocalizationFactory
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.utils.CollectingSequence
@@ -82,7 +82,7 @@ private class JsonContentGenerator: ContentGenerator {
             return
         }
         val separator = generator.createComma()
-        val (element, anchor) = if (Settings.getInstance(item.project).extractSorted) {
+        val (element, anchor) = if (item.project.commonSettings().extractSorted) {
             val before = props.takeWhile {it.name < key}
             if (before.isEmpty()) {
                 Pair(separator, obj.addBefore(keyValue, props.first()))

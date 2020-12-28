@@ -1,10 +1,7 @@
 package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.factory.LanguageFactory
-import com.eny.i18n.plugin.ide.settings.Config
-import com.eny.i18n.plugin.ide.settings.VueSettings
-import com.eny.i18n.plugin.ide.settings.config
-import com.eny.i18n.plugin.ide.settings.vueSettings
+import com.eny.i18n.plugin.ide.settings.*
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
@@ -34,34 +31,36 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
     override fun getPlaceholderText(node: ASTNode): String? = ""
 
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
-        val config = root.project.config()
         val vueSettings = root.project.vueSettings()
+        val poSettings = root.project.poSettings()
+        val i18NextSettings = root.project.i18NextSettings()
+        val commonSettings = root.project.commonSettings()
         val parser = (
-            if (config.gettext) KeyParserBuilder.withoutTokenizer()
-            else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator).withTemplateNormalizer()
+            if (poSettings.gettext) KeyParserBuilder.withoutTokenizer()
+            else KeyParserBuilder.withSeparators(i18NextSettings.nsSeparator, i18NextSettings.keySeparator).withTemplateNormalizer()
         ).build()
-        if (!config.foldingEnabled) return arrayOf()
+        if (!commonSettings.foldingEnabled) return arrayOf()
         val search = LocalizationSourceSearch(root.project)
         val foldingProvider = languageFactory.foldingProvider()
         return foldingProvider.collectContainers(root)
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
-                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , vueSettings.vue || config.gettext)
-                        ?.let { key -> resolve(container, literal, search, config, key, vueSettings) }
+                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , vueSettings.vue || poSettings.gettext)
+                        ?.let { key -> resolve(container, literal, search, commonSettings, key, vueSettings) }
                         ?.let { resolved ->
                             FoldingDescriptor(
                                 container.node,
                                 foldingProvider.getFoldingRange(container, offset, resolved.psiElement),
                                 group,
-                                resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(config.foldingMaxLength) ?: ""
+                                resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(commonSettings.foldingMaxLength) ?: ""
                             )
                         }
                 }
             }.toTypedArray()
     }
 
-    private fun resolve(container: PsiElement, element: PsiElement, search: LocalizationSourceSearch, config: Config, fullKey: FullKey, vueSettings: VueSettings): ElementToReferenceBinding? {
+    private fun resolve(container: PsiElement, element: PsiElement, search: LocalizationSourceSearch, config: CommonSettings, fullKey: FullKey, vueSettings: VueSettings): ElementToReferenceBinding? {
         return search
             .findFilesByHost(fullKey.allNamespaces(), container)
             .filter {

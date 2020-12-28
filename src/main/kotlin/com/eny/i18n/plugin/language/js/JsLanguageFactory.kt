@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.language.js
 
 import com.eny.i18n.plugin.factory.*
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
@@ -70,7 +70,7 @@ internal class JsReferenceAssistant: ReferenceAssistant {
         JSPatterns.jsLiteralExpression().andOr(JSPatterns.jsArgument("t", 0), JSPatterns.jsArgument("\$t", 0))
 
     override fun extractKey(element: PsiElement): FullKey? {
-        val config = Settings.getInstance(element.project).config()
+        val config = element.project.i18NextSettings()
         val parser = KeyParserBuilder
             .withSeparators(config.nsSeparator, config.keySeparator)
             .withTemplateNormalizer()

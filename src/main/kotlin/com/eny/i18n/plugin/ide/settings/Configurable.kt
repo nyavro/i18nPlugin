@@ -20,14 +20,7 @@ class Configurable(val project: Project) : CompositeConfigurable<CustomSettings>
     private var gui: JPanel? = null
 
     override fun createComponent(): JComponent {
-        val panel:JComponent = SettingsPanel(
-            Settings.getInstance(project),
-            project,
-            VueSettings.getInstance(project)
-        ).getRootPanel()
-        gui = CompositeSettingsPanel(
-            panel, configurables.mapNotNull {it.createComponent()}
-        ).compose()
+        gui = CompositeSettingsPanel(configurables.mapNotNull {it.createComponent()}).compose()
         return gui!!
     }
 

@@ -153,7 +153,8 @@
         <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.plugin.ide.references.code.JsxReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.translation.JsonReferenceContributor"/>
         <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.completion.JsCompletionContributor"/>
-        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.CommonSettings"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.I18NextSettings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
         <intentionAction>
             <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
@@ -167,5 +168,7 @@
     <extensions defaultExtensionNs="com.eny.i18n">
         <contentGenerator implementation="com.eny.i18n.plugin.localization.json.JsonContentGenerator"/>
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.i18n.I18nLocalizationSources"/>
+        <customSettings implementation="com.eny.i18n.plugin.ide.settings.CommonConfigurable"/>
+        <customSettings implementation="com.eny.i18n.plugin.ide.settings.I18NextConfigurable"/>
     </extensions>
 </idea-plugin>

@@ -5,13 +5,58 @@ import com.eny.i18n.plugin.language.js.JsLanguageFactory
 import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
 import com.eny.i18n.plugin.language.php.PhpLanguageFactory
 import com.eny.i18n.plugin.language.vue.VueLanguageFactory
+import com.eny.i18n.plugin.utils.default
+import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.xmlb.XmlSerializerUtil
 
+/**
+ * I18Next settings
+ */
+@State(name = "i18NextSettings", storages = [Storage("i18nSettings.xml")])
+class I18NextSettings : PersistentStateComponent<I18NextSettings> {
+
+    var nsSeparator = ":"
+    var keySeparator = "."
+    var pluralSeparator = "-"
+    var defaultNs = "translation"
+
+    override fun loadState(state: I18NextSettings) = XmlSerializerUtil.copyBean(state, this)
+
+    override fun getState(): I18NextSettings = this
+
+    private val MAX_DEFAULT_NAMESPACES = 100
+
+    /**
+     * Gets list of default namespaces
+     */
+    fun defaultNamespaces(): List<String> =
+        defaultNs
+            .whenMatches {it.isNotBlank()}
+            .default("translation")
+            .split("[;|,\\s]".toRegex())
+            .filter{it.isNotBlank()}
+            .take(MAX_DEFAULT_NAMESPACES)
+
+    /**
+     * Service class for persisting settings
+     */
+    companion object Persistence {
+        /**
+         * Loads project's Settings instance
+         */
+        fun getInstance(project: Project): I18NextSettings = ServiceManager.getService(project, I18NextSettings::class.java)
+    }
+}
+
+/**
+ * Vue-i18n settings
+ */
 @State(name = "vue-i18n-settings", storages = [Storage("i18nSettings.xml")])
 class VueSettings : PersistentStateComponent<VueSettings> {
 
@@ -35,114 +80,24 @@ class VueSettings : PersistentStateComponent<VueSettings> {
 }
 
 fun Project.vueSettings() = VueSettings.getInstance(this)
+fun Project.i18NextSettings() = I18NextSettings.getInstance(this)
+fun Project.yamlSettings() = YamlSettings.getInstance(this)
+fun Project.poSettings() = PoSettings.getInstance(this)
+fun Project.commonSettings() = CommonSettings.getInstance(this)
 
 /**
- * Plugin settings
+ * Yaml settings
  */
-@State(name = "i18nSettings", storages = [Storage("i18nSettings.xml")])
-class Settings : PersistentStateComponent<Settings> {
+@State(name = "yamlSettings", storages = [Storage("i18nSettings.xml")])
+class YamlSettings : PersistentStateComponent<YamlSettings> {
 
-    private val default: Config = Config()
+    var preferYamlFilesGeneration: Boolean = false
 
-    val map: Map<String, String> = mutableMapOf()
+    var yamlContentGenerationEnabled: Boolean = true
 
-    internal var searchInProjectOnly = default.searchInProjectOnly
+    override fun loadState(state: YamlSettings) = XmlSerializerUtil.copyBean(state, this)
 
-    internal var nsSeparator = default.nsSeparator
-
-    internal var keySeparator = default.keySeparator
-
-    internal var pluralSeparator = default.pluralSeparator
-
-    internal var defaultNs = default.defaultNs
-
-    internal var jsConfiguration = default.jsConfiguration
-
-    internal var preferYamlFilesGeneration = default.preferYamlFilesGeneration
-
-    internal var foldingEnabled = default.foldingEnabled
-
-    internal var foldingPreferredLanguage = default.foldingPreferredLanguage
-
-    internal var foldingMaxLength = default.foldingMaxLength
-
-    internal var jsonContentGenerationEnabled = default.jsonContentGenerationEnabled
-
-    internal var yamlContentGenerationEnabled = default.yamlContentGenerationEnabled
-
-    internal var extractSorted = default.extractSorted
-
-    internal var gettext = default.gettext
-
-    internal var gettextAliases = default.gettextAliases
-
-    internal var partialTranslationInspectionEnabled = default.partialTranslationInspectionEnabled
-
-    /**
-     * Returns plugin configuration
-     */
-    fun config(): Config {
-//        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
-//            synchronized(this) {
-//                return doGetConfig()
-//            }
-//        } else {
-            return doGetConfig()
-//        }
-    }
-
-    private fun doGetConfig() = Config(
-        searchInProjectOnly = searchInProjectOnly,
-        nsSeparator = nsSeparator,
-        keySeparator = keySeparator,
-        pluralSeparator = pluralSeparator,
-        defaultNs = defaultNs,
-        jsConfiguration = jsConfiguration,
-        preferYamlFilesGeneration = preferYamlFilesGeneration,
-        foldingEnabled = foldingEnabled,
-        foldingPreferredLanguage = foldingPreferredLanguage,
-        foldingMaxLength = foldingMaxLength,
-        jsonContentGenerationEnabled = jsonContentGenerationEnabled,
-        yamlContentGenerationEnabled = yamlContentGenerationEnabled,
-        extractSorted = extractSorted,
-        gettext = gettext,
-        gettextAliases = gettextAliases,
-        partialTranslationInspectionEnabled = partialTranslationInspectionEnabled
-    )
-
-    fun setConfig(config: Config) {
-//        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
-//            // Only in Test mode
-//            synchronized(this) {
-//                doSetConfig(config)
-//            }
-//        } else {
-            doSetConfig(config)
-//        }
-    }
-
-    private fun doSetConfig(config: Config) {
-        searchInProjectOnly = config.searchInProjectOnly
-        nsSeparator = config.nsSeparator
-        keySeparator = config.keySeparator
-        pluralSeparator = config.pluralSeparator
-        defaultNs = config.defaultNs
-        jsConfiguration = config.jsConfiguration
-        preferYamlFilesGeneration = config.preferYamlFilesGeneration
-        foldingEnabled = config.foldingEnabled
-        foldingPreferredLanguage = config.foldingPreferredLanguage
-        foldingMaxLength = config.foldingMaxLength
-        jsonContentGenerationEnabled = config.jsonContentGenerationEnabled
-        yamlContentGenerationEnabled = config.yamlContentGenerationEnabled
-        extractSorted = config.extractSorted
-        gettext = config.gettext
-        gettextAliases = config.gettextAliases
-        partialTranslationInspectionEnabled = config.partialTranslationInspectionEnabled
-    }
-
-    override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)
-
-    override fun getState(): Settings = this
+    override fun getState(): YamlSettings = this
 
     /**
      * Service class for persisting settings
@@ -151,12 +106,78 @@ class Settings : PersistentStateComponent<Settings> {
         /**
          * Loads project's Settings instance
          */
-        fun getInstance(project: Project): Settings = ServiceManager.getService(project, Settings::class.java)
+        fun getInstance(project: Project): YamlSettings = ServiceManager.getService(project, YamlSettings::class.java)
     }
 }
 
-fun Project.config(): Config {
-    return Settings.getInstance(this).config()
+/**
+ * Common i18n settings
+ */
+@State(name = "commonSettings", storages = [Storage("i18nSettings.xml")])
+class CommonSettings : PersistentStateComponent<CommonSettings> {
+
+    var searchInProjectOnly: Boolean = true
+
+    var foldingEnabled: Boolean = false
+
+    var foldingPreferredLanguage: String = "en"
+
+    var foldingMaxLength: Int = 20
+
+    var extractSorted: Boolean = false
+
+    var partialTranslationInspectionEnabled: Boolean = false
+
+    //Other
+    var jsonContentGenerationEnabled: Boolean = true
+
+    var jsConfiguration: String = ""
+
+    override fun loadState(state: CommonSettings) = XmlSerializerUtil.copyBean(state, this)
+
+    override fun getState(): CommonSettings = this
+
+    /**
+     * Gets project's search scope
+     */
+    fun searchScope(project: Project): GlobalSearchScope =
+        if (this.searchInProjectOnly) GlobalSearchScope.projectScope(project)
+        else GlobalSearchScope.allScope(project)
+
+    /**
+     * Service class for persisting settings
+     */
+    companion object Persistence {
+        /**
+         * Loads project's Settings instance
+         */
+        fun getInstance(project: Project): CommonSettings = ServiceManager.getService(project, CommonSettings::class.java)
+    }
+}
+
+/**
+ * Plain Object settings
+ */
+@State(name = "poSettings", storages = [Storage("i18nSettings.xml")])
+class PoSettings : PersistentStateComponent<PoSettings> {
+
+    var gettext: Boolean = false
+
+    var gettextAliases: String = "gettext,_,__"
+
+    override fun loadState(state: PoSettings) = XmlSerializerUtil.copyBean(state, this)
+
+    override fun getState(): PoSettings = this
+
+    /**
+     * Service class for persisting settings
+     */
+    companion object Persistence {
+        /**
+         * Loads project's Settings instance
+         */
+        fun getInstance(project: Project): PoSettings = ServiceManager.getService(project, PoSettings::class.java)
+    }
 }
 
 fun Project.mainFactory(): MainFactory {

@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.plugin.factory.LocalizationType
-import com.eny.i18n.plugin.ide.settings.config
+import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.ide.settings.mainFactory
 import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.intellij.openapi.fileTypes.FileType
@@ -46,7 +46,6 @@ fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirec
  */
 class LocalizationSourceSearch(private val project: Project) {
 
-    private val config = project.config()
     private val vueSettings = project.vueSettings()
 
     /**
@@ -107,7 +106,7 @@ class LocalizationSourceSearch(private val project: Project) {
 }
 
 class SearchUtility(private val project: Project) {
-    private val config = project.config()
+    private val config = project.commonSettings()
     val translationFileTypes = project.mainFactory().contentGenerators().flatMap {it.getType().fileTypes}
 
     private fun findPsiRoot(virtualFile: VirtualFile, project: Project):PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
