@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.ide.completion
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVue
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.codeInsight.completion.CompletionType
@@ -13,7 +14,7 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
     val tg = JsonTranslationGenerator()
 
     private fun check(sourceName: String, sourceCode: String, expectedCode: String) {
-        myFixture.runVue {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             myFixture.configureByText(sourceName, sourceCode)
             myFixture.complete(CompletionType.BASIC, 1)
             myFixture.checkResult(expectedCode)
@@ -22,7 +23,7 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
 
     @Test
     fun testEmptyKeyCompletion() {
-        myFixture.runVue {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             myFixture.configureByText(
                 "none.vue",
                 cg.generateSfc(
@@ -36,7 +37,7 @@ class VueSfcCodeCompletionTest: PlatformBaseTest() {
 
     @Test
     fun testRootKeyCompletion() {
-        myFixture.runVue {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             myFixture.configureByText(
                 "none.vue",
                 cg.generateSfc(
