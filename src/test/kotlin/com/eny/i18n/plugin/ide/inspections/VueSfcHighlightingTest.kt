@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import org.junit.jupiter.api.Test
@@ -13,10 +13,10 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
 
     private val tg = JsonTranslationGenerator()
 
-    private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
+    private val testConfig = arrayOf(Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true))
 
     private fun check(fileName: String, code: String, translationName: String, translation: String) {
-        myFixture.runVueConfig(testConfig) {
+        myFixture.runVueConfig(*testConfig) {
             myFixture.addFileToProject(translationName, translation)
             myFixture.configureByText(fileName, code)
             myFixture.checkHighlighting(true, true, true, true)
@@ -25,7 +25,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
 
     @Test
     fun sfcReferenceResolved() =
-        myFixture.runVueConfig(testConfig) {
+        myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(
@@ -41,7 +41,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
 
     @Test
     fun sfcReferenceToObject() =
-        myFixture.runVueConfig(testConfig) {
+        myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(
@@ -57,7 +57,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
 
     @Test
     fun sfcUnresolvedKey() =
-        myFixture.runVueConfig(testConfig) {
+        myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(
@@ -73,7 +73,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
 
     @Test
     fun sfcExpressionInsideTranslation() {
-        myFixture.runVueConfig(testConfig) {
+        myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
                 codeGenerator.generateSfc(

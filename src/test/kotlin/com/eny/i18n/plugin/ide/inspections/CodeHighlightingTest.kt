@@ -1,11 +1,8 @@
 package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.CodeTranslationGenerators
-import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
-import com.eny.i18n.plugin.ide.PhpCodeAndTranslationGenerators
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.*
+import com.eny.i18n.plugin.ide.settings.CommonSettings
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.TsxCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
@@ -15,7 +12,7 @@ import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
-private fun CodeInsightTestFixture.customCheck(fileName: String, code: String, translationName: String, translation: String) = this.runWithConfig(Config(vueDirectory = "assets", defaultNs = "translation")) {
+private fun CodeInsightTestFixture.customCheck(fileName: String, code: String, translationName: String, translation: String) = {
     this.addFileToProject(translationName, translation)
     this.configureByText(fileName, code)
     this.checkHighlighting(true, true, true, true)
@@ -71,7 +68,7 @@ class CodeHighlightingTestBase: PlatformBaseTest() {
     )
 
     @Test
-    fun testPartiallyTranslatedInspection() = myFixture.runWithConfig(Config(partialTranslationInspectionEnabled = true)) {
+    fun testPartiallyTranslatedInspection() = myFixture.runCommonConfig(Pair(CommonSettings::partialTranslationInspectionEnabled, true)) {
         val cg = TsxCodeGenerator()
         val tg = JsonTranslationGenerator()
         myFixture.addFileToProject("en/test.json",
