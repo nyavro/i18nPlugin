@@ -223,7 +223,7 @@ class I18NextSettingsFormFragment(val settings: I18NextSettings): SettingsFormFr
 /**
  * Settings configuration panel
  */
-class PlainObjectSettingsFormFragment(val settings: PoSettings): SettingsFormFragment<I18NextSettings> {
+class PlainObjectSettingsFormFragment(val settings: PoSettings): SettingsFormFragment<PoSettings> {
 
     private val formUtils = FormUtils()
 
