@@ -25,11 +25,11 @@ private fun <T> runWithSettings(props: Map<KMutableProperty1<T, *>, *>, actual: 
 internal fun CodeInsightTestFixture.runCommonConfig (vararg props: Pair<KMutableProperty1<CommonSettings, *>, *>, block: () -> Unit) =
         runWithSettings(mapOf(*props), CommonSettings.getInstance(this.project), block)
 
-internal fun <S: Any> CodeInsightTestFixture.runI18nConfig (vararg props: Pair<KMutableProperty1<I18NextSettings, S>, S>, block: () -> Unit) =
+internal fun CodeInsightTestFixture.runI18nConfig (vararg props: Pair<KMutableProperty1<I18NextSettings, *>, *>, block: () -> Unit) =
         runWithSettings(mapOf(*props), I18NextSettings.getInstance(this.project), block)
 
-internal fun <S: Any> CodeInsightTestFixture.runVueConfig (vararg props: Pair<KMutableProperty1<VueSettings, S>, S>, block: () -> Unit) =
+internal fun CodeInsightTestFixture.runVueConfig (vararg props: Pair<KMutableProperty1<VueSettings, *>, *>, block: () -> Unit) =
         runWithSettings(mapOf(*props), VueSettings.getInstance(this.project), block)
 
-internal fun <S: Any> CodeInsightTestFixture.runPoConfig (vararg props: Pair<KMutableProperty1<PoSettings, S>, S>, block: () -> Unit) =
+internal fun CodeInsightTestFixture.runPoConfig (vararg props: Pair<KMutableProperty1<PoSettings, *>, *>, block: () -> Unit) =
         runWithSettings(mapOf(*props), PoSettings.getInstance(this.project), block)

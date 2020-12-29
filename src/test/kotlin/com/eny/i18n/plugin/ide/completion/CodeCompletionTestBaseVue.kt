@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.ide.completion
 
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
@@ -10,7 +12,7 @@ import org.junit.jupiter.api.Test
 internal class VueChecker(private val fixture: CodeInsightTestFixture): Checker {
     private val checker = BasicChecker(fixture)
     override fun doCheck(sourceName: String, sourceCode: String, expectedCode: String, ext: String, translationContent: String) = fixture.runVueConfig(
-        Config(vueDirectory = "assets")
+        Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true)
     ) {
         checker.doCheck(
             sourceName, sourceCode, expectedCode, "assets/en-US.$ext", translationContent
@@ -23,7 +25,7 @@ internal abstract class CodeCompletionTestBaseVue(translationGenerator: Translat
 
     @Test
     fun testEmptyKeyCompletion() = myFixture.runVueConfig(
-        Config(vueDirectory = "assets")
+        Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true)
     ) {
         myFixture.addFileToProject("assets/en-US.${translationGenerator.ext()}", translationGenerator.generateContent("tstw", "fstt", "leu", "value"))
         myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate( "\"<caret>\""))
@@ -33,7 +35,7 @@ internal abstract class CodeCompletionTestBaseVue(translationGenerator: Translat
 
     @Test
     fun testRootKeyCompletion() = myFixture.runVueConfig(
-        Config(vueDirectory = "assets")
+        Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true)
     ) {
         myFixture.addFileToProject("assets/en-US.${translationGenerator.ext()}", translationGenerator.generateContent("tst1", "base", "single", "only one value"))
         myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate("\"tst<caret>\""))
