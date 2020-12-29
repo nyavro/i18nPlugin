@@ -2,8 +2,8 @@ package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.JsCodeAndTranslationGenerators
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.runI18nConfig
+import com.eny.i18n.plugin.ide.settings.I18NextSettings
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.ReactTransJsxContentGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
@@ -76,7 +76,7 @@ class ReferencesTestJs : PlatformBaseTest() {
     @ParameterizedTest
     @ArgumentsSource(JsCodeAndTranslationGenerators::class)
     fun testReferenceMultiDefaultNs(cg: CodeGenerator, tg: TranslationGenerator) {
-        myFixture.runWithConfig(Config(defaultNs = genMultiNs(listOf("second","third","first")))) {
+        myFixture.runI18nConfig(Pair(I18NextSettings::defaultNs, genMultiNs(listOf("second","third","first")))) {
             //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
             myFixture.addFileToProject("assets/en/first.${tg.ext()}", tg.generateContent("main","fruit", "apple"))
             myFixture.addFileToProject("assets/en/second.${tg.ext()}", tg.generateContent("main", "fruit", "orange"))

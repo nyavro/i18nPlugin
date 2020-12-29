@@ -2,9 +2,8 @@ package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.VueCodeTranslationGenerators
-import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
@@ -17,7 +16,7 @@ class ReferencesTestVue: PlatformBaseTest() {
     @ParameterizedTest
     @ArgumentsSource(VueCodeTranslationGenerators::class)
     fun testMultiReferenceDefNs(cg: CodeGenerator, tg: TranslationGenerator) {
-        myFixture.runVue {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             myFixture.addFileToProject(
                 "locales/en-translation.${tg.ext()}",
                 tg.generateContent("main", "header", "title", "Welcome")
@@ -38,7 +37,7 @@ class ReferencesTestVue: PlatformBaseTest() {
     @ParameterizedTest
     @ArgumentsSource(VueCodeTranslationGenerators::class)
     fun testReferenceMultiDefaultNs(cg: CodeGenerator, tg: TranslationGenerator) {
-        myFixture.runVueConfig(Config(defaultNs = "third,second;first ")) {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             //Resolves reference from key 'main.fruit' to three possible default ns (first,second,third):
             myFixture.addFileToProject("locales/en-first.${tg.ext()}", tg.generateContent("main", "fruit", "apple"))
             myFixture.addFileToProject("locales/en-second.${tg.ext()}", tg.generateContent("main", "fruit", "orange"))
@@ -58,7 +57,7 @@ class ReferencesTestVue: PlatformBaseTest() {
     @ParameterizedTest
     @ArgumentsSource(VueCodeTranslationGenerators::class)
     fun testDefaultNsReference(cg: CodeGenerator, tg: TranslationGenerator) {
-        myFixture.runVue {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             myFixture.addFileToProject(
                 "locales/en-US.${tg.ext()}",
                 tg.generateContent("ref", "section", "key", "Default ns reference"))
@@ -75,7 +74,7 @@ class ReferencesTestVue: PlatformBaseTest() {
     @ParameterizedTest
     @ArgumentsSource(VueCodeTranslationGenerators::class)
     fun testRootKey(cg: CodeGenerator, tg: TranslationGenerator) {
-        myFixture.runVue {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             myFixture.addFileToProject(
                 "locales/en-US.${tg.ext()}",
                 tg.generateContent("ref", "Reference in json"))

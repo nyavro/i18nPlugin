@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVue
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
@@ -66,7 +67,7 @@ class ReferencesTestVueSfc: PlatformBaseTest() {
     @ParameterizedTest
     @ArgumentsSource(SfcTestArgumentsProvider::class)
     fun testSfcReferenceResolved(vueSfcContent: String, expectedReferenceText: String) {
-        myFixture.runVue() {
+        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
             myFixture.configureByText("Sfc.vue", vueSfcContent)
             read {
                 val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
