@@ -64,6 +64,8 @@ class VueSettings : PersistentStateComponent<VueSettings> {
 
     var vueDirectory: String = "locales"
 
+    var jsConfiguration: String = ""
+
     override fun getState(): VueSettings = this
 
     override fun loadState(state: VueSettings) = XmlSerializerUtil.copyBean(state, this)
@@ -130,8 +132,6 @@ class CommonSettings : PersistentStateComponent<CommonSettings> {
 
     //Other
     var jsonContentGenerationEnabled: Boolean = true
-
-    var jsConfiguration: String = ""
 
     override fun loadState(state: CommonSettings) = XmlSerializerUtil.copyBean(state, this)
 
