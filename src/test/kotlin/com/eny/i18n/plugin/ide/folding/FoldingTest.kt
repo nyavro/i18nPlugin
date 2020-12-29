@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.runCommonConfig
+import com.eny.i18n.plugin.ide.settings.CommonSettings
 import org.junit.jupiter.api.Test
 
 internal abstract class FoldingTestBase(private val lang:String, private val translationLang:String): PlatformBaseTest() {
@@ -11,48 +11,56 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
         return "src/test/resources/folding"
     }
 
-    private val testConfig = Config(foldingPreferredLanguage = "en", foldingMaxLength = 20, foldingEnabled = true)
+    private val testConfig = arrayOf(
+            Pair(CommonSettings::foldingPreferredLanguage, "en"),
+            Pair(CommonSettings::foldingMaxLength, 20),
+            Pair(CommonSettings::foldingEnabled, true)
+    )
 
     @Test
-    fun testFolding() = myFixture.runWithConfig(testConfig) {
+    fun testFolding() = myFixture.runCommonConfig(*testConfig) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/simpleTest.$lang")
     }
 
     @Test
-    fun testPreferredLanguage() = myFixture.runWithConfig(Config(foldingPreferredLanguage = "ru" ,foldingMaxLength = 26, foldingEnabled = true)) {
+    fun testPreferredLanguage() = myFixture.runCommonConfig(
+            Pair(CommonSettings::foldingPreferredLanguage, "ru"),
+            Pair(CommonSettings::foldingMaxLength, 26),
+            Pair(CommonSettings::foldingEnabled, true)) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/preferredLanguageTest.$lang")
     }
 
     @Test
-    fun testIncompleteKey() = myFixture.runWithConfig(testConfig) {
+    fun testIncompleteKey() = myFixture.runCommonConfig(*testConfig) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/incompleteKeys.$lang")
     }
 
     @Test
-    fun testPreferredLanguageInvalidConfiguration() = myFixture.runWithConfig(Config(foldingPreferredLanguage = "fr")) {
+    fun testPreferredLanguageInvalidConfiguration() = myFixture.runCommonConfig(Pair(CommonSettings::foldingPreferredLanguage, "fr")) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/noFolding.$lang")
     }
 
     @Test
-    fun testFoldingDisabled() = myFixture.runWithConfig(Config(foldingEnabled = false)) {
+    fun testFoldingDisabled() = myFixture.runCommonConfig(Pair(CommonSettings::foldingEnabled, false)) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/noFolding.$lang")
     }
 
     @Test
-    fun testDefaultNs() = myFixture.runWithConfig(testConfig) {
+    fun testDefaultNs() = myFixture.runCommonConfig(*testConfig) {
         myFixture.configureByFiles("assets/ru/translation.$translationLang", "assets/en/translation.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/defaultTest.$lang")
     }
 
     @Test
-    fun testPreferredLanguageDefaultNs() = myFixture.runWithConfig(
-            Config(foldingPreferredLanguage = "ru", foldingMaxLength = 28, foldingEnabled = true)
-    ) {
+    fun testPreferredLanguageDefaultNs() = myFixture.runCommonConfig(
+            Pair(CommonSettings::foldingPreferredLanguage, "ru"),
+            Pair(CommonSettings::foldingMaxLength, 28),
+            Pair(CommonSettings::foldingEnabled, true)) {
         myFixture.configureByFiles("assets/ru/translation.$translationLang", "assets/en/translation.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/prefferedLangDefTest.$lang")
     }
