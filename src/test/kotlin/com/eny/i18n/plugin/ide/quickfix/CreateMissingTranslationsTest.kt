@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.runCommonConfig
+import com.eny.i18n.plugin.ide.settings.CommonSettings
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.generator.code.TsxCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
@@ -11,7 +11,7 @@ import org.junit.Test
 class CreateMissingTranslationsTest: PlatformBaseTest() {
 
     @Test
-    fun testUnavailableFix() = myFixture.runWithConfig(Config(partialTranslationInspectionEnabled = true)){
+    fun testUnavailableFix() = myFixture.runCommonConfig(Pair(CommonSettings::partialTranslationInspectionEnabled, true)){
         val hint = PluginBundle.getMessage("quickfix.create.missing.keys")
         val cg = TsxCodeGenerator()
         val tg = JsonTranslationGenerator()
@@ -31,7 +31,7 @@ class CreateMissingTranslationsTest: PlatformBaseTest() {
     }
 
     @Test
-    fun testCreateMissingTranslations() = myFixture.runWithConfig(Config(partialTranslationInspectionEnabled = true)){
+    fun testCreateMissingTranslations() = myFixture.runCommonConfig(Pair(CommonSettings::partialTranslationInspectionEnabled, true)){
         val hint = PluginBundle.getMessage("quickfix.create.missing.keys")
         val cg = TsxCodeGenerator()
         val tg = JsonTranslationGenerator()
