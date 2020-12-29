@@ -1,6 +1,5 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 import org.junit.jupiter.api.Disabled

@@ -28,51 +28,51 @@ class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
         }
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(Provider::class)
-    fun testKeyExtraction(text: String, tg: TranslationGenerator) {
-        myFixture.runVueConfig(config(tg.ext())) {
-            runTestCase(
-                "simple.${cg.ext()}",
-                cg.generateBlock(text),
-                cg.generate("'ref.value3'"),
-                "locales/en-US.${tg.ext()}",
-                tg.generate("ref", arrayOf("section", "key", "Reference in json")),
-                tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
-                predefinedTextInputDialog("ref.value3")
-            )
-        }
-    }
+//    @ParameterizedTest
+//    @ArgumentsSource(Provider::class)
+//    fun testKeyExtraction(text: String, tg: TranslationGenerator) {
+//        myFixture.runVueConfig(config(tg.ext())) {
+//            runTestCase(
+//                "simple.${cg.ext()}",
+//                cg.generateBlock(text),
+//                cg.generate("'ref.value3'"),
+//                "locales/en-US.${tg.ext()}",
+//                tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+//                tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+//                predefinedTextInputDialog("ref.value3")
+//            )
+//        }
+//    }
 
-    @ParameterizedTest
-    @ArgumentsSource(Provider::class)
-    fun testKeyExtractionTemplate(text: String, tg: TranslationGenerator) {
-        myFixture.runVueConfig(config(tg.ext())) {
-            runTestCase(
-                "App.${cg.ext()}",
-                cg.generateTemplate(text),
-                cg.generateTemplate("{{ \$t('ref.value3') }}"),
-                "locales/en-US.${tg.ext()}",
-                tg.generate("ref", arrayOf("section", "key", "Reference in json")),
-                tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
-                predefinedTextInputDialog("ref.value3")
-            )
-        }
-    }
-
-    @ParameterizedTest
-    @ArgumentsSource(Provider::class)
-    fun testScriptExtraction(text: String, tg: TranslationGenerator) {
-        myFixture.runVueConfig(config(tg.ext())) {
-            runTestCase(
-                "App.${cg.ext()}",
-                cg.generateScript("\"$text\""),
-                cg.generateScript("this.\$t('ref.value3')"),
-                "locales/en-US.${tg.ext()}",
-                tg.generate("ref", arrayOf("section", "key", "Reference in json")),
-                tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
-                predefinedTextInputDialog("ref.value3")
-            )
-        }
-    }
+//    @ParameterizedTest
+//    @ArgumentsSource(Provider::class)
+//    fun testKeyExtractionTemplate(text: String, tg: TranslationGenerator) {
+//        myFixture.runVueConfig(config(tg.ext())) {
+//            runTestCase(
+//                "App.${cg.ext()}",
+//                cg.generateTemplate(text),
+//                cg.generateTemplate("{{ \$t('ref.value3') }}"),
+//                "locales/en-US.${tg.ext()}",
+//                tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+//                tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+//                predefinedTextInputDialog("ref.value3")
+//            )
+//        }
+//    }
+//
+//    @ParameterizedTest
+//    @ArgumentsSource(Provider::class)
+//    fun testScriptExtraction(text: String, tg: TranslationGenerator) {
+//        myFixture.runVueConfig(config(tg.ext())) {
+//            runTestCase(
+//                "App.${cg.ext()}",
+//                cg.generateScript("\"$text\""),
+//                cg.generateScript("this.\$t('ref.value3')"),
+//                "locales/en-US.${tg.ext()}",
+//                tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+//                tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+//                predefinedTextInputDialog("ref.value3")
+//            )
+//        }
+//    }
 }
