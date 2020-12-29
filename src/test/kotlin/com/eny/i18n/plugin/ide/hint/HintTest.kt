@@ -2,7 +2,8 @@ package com.eny.i18n.plugin.ide.hint
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.CodeTranslationGenerators
-import com.eny.i18n.plugin.ide.runVue
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
@@ -30,7 +31,7 @@ class HintTest: PlatformBaseTest() {
     }
 
     @Test
-    fun vueSfcHint() = myFixture.runVue {
+    fun vueSfcHint() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
         val cg = VueCodeGenerator()
         val tg = JsonTranslationGenerator()
         myFixture.configureByText(

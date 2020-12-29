@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.ide.hint
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVue
+import com.eny.i18n.plugin.ide.runVueConfig
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.codeInsight.documentation.DocumentationManager
@@ -50,7 +51,7 @@ class HintTestVueSfc: PlatformBaseTest() {
     )
 
     @Test
-    fun testSingleHint() = myFixture.runVue {
+    fun testSingleHint() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
         myFixture.configureByText(
             "App.vue",
             cg.generateSfcBlock(
