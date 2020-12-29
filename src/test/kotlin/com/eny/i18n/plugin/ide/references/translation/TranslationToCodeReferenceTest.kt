@@ -1,9 +1,10 @@
 package com.eny.i18n.plugin.ide.references.translation
 
 import com.eny.i18n.plugin.PlatformBaseTest
+import com.eny.i18n.plugin.ide.runI18nConfig
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.settings.I18NextSettings
+import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
@@ -152,7 +153,7 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
     @Test
     fun testDefaultNs() {
         jsCgs.forEachIndexed { index, cg ->
-            myFixture.runWithConfig(Config(defaultNs = "Common")) {
+            myFixture.runI18nConfig(Pair(I18NextSettings::defaultNs, "Common")) {
                 myFixture.configureByText(
                     "testDefaultNs.${cg.ext()}",
                     cg.multiGenerate(
@@ -225,7 +226,7 @@ class VueReferencesTestBase: PlatformBaseTest() {
 
     @Test
     fun testVue() {
-        myFixture.runVueConfig(Config(vueDirectory = "assets")) {
+        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true)) {
             tgs.forEachIndexed { index, tg ->
                 val translation = tg.generateContent("ref${index}", "section<caret>", "key1", "val 1")
                 myFixture.configureByText("test${index}.vue",
@@ -253,7 +254,7 @@ class VueReferencesTestBase: PlatformBaseTest() {
 
     @Test
     fun testVueIncorrectConfiguration() {
-        myFixture.runVueConfig(Config(vueDirectory = "translations")) {
+        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "translations"), Pair(VueSettings::vue, true)) {
             tgs.forEachIndexed { index, tg ->
                 val translation = tg.generateContent("ref${index}", "section<caret>", "key1", "val 1")
                 myFixture.configureByText("test.vue",
