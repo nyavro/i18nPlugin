@@ -2,8 +2,9 @@ package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runCommonConfig
+import com.eny.i18n.plugin.ide.runCommonConfigStr
 import com.eny.i18n.plugin.ide.settings.CommonSettings
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 internal abstract class FoldingTestBase(private val lang:String, private val translationLang:String): PlatformBaseTest() {
 
@@ -18,7 +19,10 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
     )
 
     @Test
-    fun testFolding() = myFixture.runCommonConfig(*testConfig) {
+    fun testFolding() = myFixture.runCommonConfig(
+            Pair(CommonSettings::foldingPreferredLanguage, "en"),
+            Pair(CommonSettings::foldingEnabled, true),
+            Pair(CommonSettings::foldingMaxLength, 20)) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/simpleTest.$lang")
     }
@@ -26,20 +30,23 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
     @Test
     fun testPreferredLanguage() = myFixture.runCommonConfig(
             Pair(CommonSettings::foldingPreferredLanguage, "ru"),
-            Pair(CommonSettings::foldingMaxLength, 26),
-            Pair(CommonSettings::foldingEnabled, true)) {
+            Pair(CommonSettings::foldingEnabled, true),
+            Pair(CommonSettings::foldingMaxLength, 26)) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/preferredLanguageTest.$lang")
     }
 
     @Test
-    fun testIncompleteKey() = myFixture.runCommonConfig(*testConfig) {
+    fun testIncompleteKey() = myFixture.runCommonConfig(
+            Pair(CommonSettings::foldingPreferredLanguage, "en"),
+            Pair(CommonSettings::foldingEnabled, true),
+            Pair(CommonSettings::foldingMaxLength, 20)) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/incompleteKeys.$lang")
     }
 
     @Test
-    fun testPreferredLanguageInvalidConfiguration() = myFixture.runCommonConfig(Pair(CommonSettings::foldingPreferredLanguage, "fr")) {
+    fun testPreferredLanguageInvalidConfiguration() = myFixture.runCommonConfigStr(Pair(CommonSettings::foldingPreferredLanguage, "fr")) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/noFolding.$lang")
     }
@@ -51,7 +58,11 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
     }
 
     @Test
-    fun testDefaultNs() = myFixture.runCommonConfig(*testConfig) {
+    fun testDefaultNs() = myFixture.runCommonConfig(
+            Pair(CommonSettings::foldingPreferredLanguage, "en"),
+            Pair(CommonSettings::foldingEnabled, true),
+            Pair(CommonSettings::foldingMaxLength, 20)
+    ) {
         myFixture.configureByFiles("assets/ru/translation.$translationLang", "assets/en/translation.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/defaultTest.$lang")
     }
@@ -59,8 +70,8 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
     @Test
     fun testPreferredLanguageDefaultNs() = myFixture.runCommonConfig(
             Pair(CommonSettings::foldingPreferredLanguage, "ru"),
-            Pair(CommonSettings::foldingMaxLength, 28),
-            Pair(CommonSettings::foldingEnabled, true)) {
+            Pair(CommonSettings::foldingEnabled, true),
+            Pair(CommonSettings::foldingMaxLength, 28)) {
         myFixture.configureByFiles("assets/ru/translation.$translationLang", "assets/en/translation.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/prefferedLangDefTest.$lang")
     }
@@ -77,5 +88,6 @@ internal class FoldingTestJsxYaml : FoldingTestBase("jsx", "yml")
 internal class FoldingTestPhpJson : FoldingTestBase("php", "json")
 internal class FoldingTestPhpYaml : FoldingTestBase("php", "yml")
 internal class FoldingTestVueJson : FoldingTestBase("vue", "json")
-internal class FoldingTestVueYaml : FoldingTestBase("vue", "yml")
+//TODO
+//internal class FoldingTestVueYaml : FoldingTestBase("vue", "yml")
 

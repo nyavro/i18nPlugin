@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -12,7 +12,7 @@ internal class CheckDefaultNs(val elements: List<KeyElement>, val expected: Stri
 internal class DefaultNsParserTest : ParserTestBase {
 
     @Test
-    fun checkParse() {
+    fun testCheckParse() {
         listOf(
             //ROOT.Key2.Key3                            /                   / ROOT{4}.Key2{4}.Key3{4}
             CheckDefaultNs(
@@ -67,7 +67,7 @@ internal class DefaultNsParserTest : ParserTestBase {
     }
 
     @Test
-    fun checkParseSingleton() {
+    fun testCheckParseSingleton() {
         listOf(
             CheckDefaultNs(
                 listOf(
@@ -90,7 +90,7 @@ internal class DefaultNsParserTest : ParserTestBase {
     }
 
     @Test
-    fun rootLevelKey() {
+    fun testRootLevelKey() {
         val literal = listOf(
             KeyElement.literal("root")
         )

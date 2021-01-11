@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.ide.completion
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.intellij.codeInsight.completion.CompletionType
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 abstract class CodeCompletionInvalidTestBase(private val codeGenerator: CodeGenerator): PlatformBaseTest() {
 

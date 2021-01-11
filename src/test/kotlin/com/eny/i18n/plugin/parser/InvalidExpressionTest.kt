@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertNull
 
 //@Ignore
@@ -9,7 +9,7 @@ internal class InvalidExpressionTest : ParserTestBase {
 
 //invalid:file:literal.ROOT.Key1.Key31
     @Test
-    fun parseInvalidFilenameInLiteral() {
+    fun testParseInvalidFilenameInLiteral() {
         val invalidExpression = listOf(
             KeyElement.literal("invalid:file:literal.ROOT.Key1.Key31")
         )     
@@ -18,7 +18,7 @@ internal class InvalidExpressionTest : ParserTestBase {
 
 //invalid:literal..key.ROOT.Key1.Key31
     @Test
-    fun parseInvalidKeySeparatorInLiteral() {
+    fun testParseInvalidKeySeparatorInLiteral() {
         val invalidExpression = listOf(
             KeyElement.literal("invalid:literal..key.ROOT.Key1.Key31")
         )
@@ -27,7 +27,7 @@ internal class InvalidExpressionTest : ParserTestBase {
 
 //invalid.literal..key.ROOT.Key1.Key31
     @Test
-    fun parseInvalidDefaultNsKeySeparatorInLiteral() {
+    fun testParseInvalidDefaultNsKeySeparatorInLiteral() {
         val invalidExpression = listOf(
             KeyElement.literal("invalid.literal..key.ROOT.Key1.Key31")
         )     
@@ -36,7 +36,7 @@ internal class InvalidExpressionTest : ParserTestBase {
 
 //invalid.literal.test:.key.ROOT.Key1.Key31
     @Test
-    fun parseInvalidDefaultNsKeySeparatorInLiteral2() {
+    fun testParseInvalidDefaultNsKeySeparatorInLiteral2() {
         val invalidExpression = listOf(
             KeyElement.literal("invalid.literal.test:.key.ROOT.Key1.Key31")
         )
@@ -45,7 +45,7 @@ internal class InvalidExpressionTest : ParserTestBase {
 
 //.invalid.start.test
     @Test
-    fun parseInvalidStart() {
+    fun testParseInvalidStart() {
         val invalidExpression = listOf(
             KeyElement.literal(".invalid.start.test")
         )     
@@ -54,7 +54,7 @@ internal class InvalidExpressionTest : ParserTestBase {
 
 //:invalid.start.test
     @Test
-    fun parseInvalidStart2() {
+    fun testParseInvalidStart2() {
         val invalidExpression = listOf(
             KeyElement.literal(":invalid.start.test")
         )

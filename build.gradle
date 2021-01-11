@@ -7,7 +7,7 @@ buildscript {
     }
 }
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.16'
+    id 'org.jetbrains.intellij' version '0.6.5'
 }
 
 apply plugin: 'org.jetbrains.intellij'
@@ -15,12 +15,16 @@ apply plugin: 'kotlin'
 apply plugin: 'jacoco'
 
 intellij {
-    version '2020.1'
+    version 'IU-2020.1'
     pluginName 'i18n'
-    downloadSources false
-    updateSinceUntilBuild false
-    plugins = ['yaml', 'php', 'localization']
-    //alternativeIdePath = "C:\\opt\\PhpStorm"
+    plugins = [
+            'yaml',
+            'JavaScriptLanguage',
+            'CSS',
+            "org.jetbrains.plugins.vue:201.6668.153",
+            "com.jetbrains.php:201.6668.153",
+            "org.jetbrains.plugins.localization:201.6668.60"
+    ]
 }
 
 test {
@@ -37,30 +41,31 @@ test {
 //            "org.jetbrains.plugins.localization:201.6668.9"
 //        ]
 //    }
-    intellij {
-        version 'IU-2020.1'
-        type "IC"
-        pluginName 'i18n'
-        plugins = [
-                'yaml',
-                'JavaScriptLanguage',
-                'CSS',
-                "org.jetbrains.plugins.vue:201.6668.153",
-                "com.jetbrains.php:201.6668.153",
-                "org.jetbrains.plugins.localization:201.6668.60"
-        ]
-    }
-    dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-        testCompile 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-        testCompile 'org.junit.jupiter:junit-jupiter-params:5.6.2'
-        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
-        testCompile 'org.junit.vintage:junit-vintage-engine:5.6.2'
-        testImplementation 'io.mockk:mockk:1.10.2'
-        testImplementation 'com.jaliansystems:marathon-java-driver:5.2.5.0'
-    }
+//    intellij {
+//        version 'IU-2020.1'
+//        pluginName 'i18n'
+//        plugins = [
+//                'yaml',
+//                'JavaScriptLanguage',
+//                'CSS',
+//                "org.jetbrains.plugins.vue:201.6668.153",
+//                "com.jetbrains.php:201.6668.153",
+//                "org.jetbrains.plugins.localization:201.6668.60"
+//        ]
+//    }
 
-    useJUnitPlatform()
+}
+
+dependencies {
+//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+//    testCompile 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+//    testCompile 'org.junit.jupiter:junit-jupiter-params:5.6.2'
+//        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+//        testCompile 'org.junit.vintage:junit-vintage-engine:5.6.2'
+    testImplementation 'io.mockk:mockk:1.10.2'
+    testImplementation 'com.jaliansystems:marathon-java-driver:5.2.5.0'
+
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 patchPluginXml {

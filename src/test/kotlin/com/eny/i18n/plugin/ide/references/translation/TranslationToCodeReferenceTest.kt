@@ -226,7 +226,7 @@ class VueReferencesTestBase: PlatformBaseTest() {
 
     @Test
     fun testVue() {
-        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true)) {
+        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "assets")) {
             tgs.forEachIndexed { index, tg ->
                 val translation = tg.generateContent("ref${index}", "section<caret>", "key1", "val 1")
                 myFixture.configureByText("test${index}.vue",
@@ -254,7 +254,7 @@ class VueReferencesTestBase: PlatformBaseTest() {
 
     @Test
     fun testVueIncorrectConfiguration() {
-        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "translations"), Pair(VueSettings::vue, true)) {
+        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "translations")) {
             tgs.forEachIndexed { index, tg ->
                 val translation = tg.generateContent("ref${index}", "section<caret>", "key1", "val 1")
                 myFixture.configureByText("test.vue",

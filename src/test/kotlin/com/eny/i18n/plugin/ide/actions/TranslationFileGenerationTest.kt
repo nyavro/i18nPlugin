@@ -1,17 +1,19 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
+//import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.translationGenerator
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.openapi.ui.Messages
 import org.junit.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
-import org.junit.jupiter.params.provider.ValueSource
+//import org.junit.jupiter.params.ParameterizedTest
+//import org.junit.jupiter.params.provider.ArgumentsSource
+//import org.junit.jupiter.params.provider.ValueSource
 
 class TranslationFileGenerationTest: ExtractionTestBase() {
+
+    // @TODO 16
 
 //    @ParameterizedTest
 //    @ArgumentsSource(JsonYamlCodeGenerators::class)

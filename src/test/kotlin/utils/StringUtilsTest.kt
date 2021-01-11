@@ -3,13 +3,13 @@ package utils
 import com.eny.i18n.plugin.utils.isQuoted
 import com.eny.i18n.plugin.utils.unQuote
 import org.junit.Assert.*
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 //@Ignore
 internal class StringUtilsTest : TestBase {
 
     @Test
-    fun matchPattern() {
+    fun testMatchPattern() {
         val str = "startsWithEndsWithElse"
         val notMatch = "doesNotstartWithEndsWithElse2"
         val regex = Regex("starts.*")
@@ -18,7 +18,7 @@ internal class StringUtilsTest : TestBase {
     }
 
     @Test
-    fun matchPattern2() {
+    fun testMatchPattern2() {
         val str = "startsWith1EndsWithElse"
         val notMatch = "doesNotstartWithEndsWithElse3"
         val regex = Regex(".*Else")
@@ -27,7 +27,7 @@ internal class StringUtilsTest : TestBase {
     }
 
     @Test
-    fun isQuoted() {
+    fun testIsQuoted() {
         listOf("'", "`", "\"").forEach {
             assertFalse("${it}sub".isQuoted())
             assertFalse("sub${it}'".isQuoted())
@@ -37,7 +37,7 @@ internal class StringUtilsTest : TestBase {
     }
 
     @Test
-    fun unQuote() {
+    fun tetUnQuote() {
         listOf("'", "`", "\"").forEach {
             val left = "${it}subs"
             assertEquals(left.unQuote(), left)
@@ -49,7 +49,7 @@ internal class StringUtilsTest : TestBase {
     }
 
     @Test
-    fun doubleUnQuote() {
+    fun testDoubleUnQuote() {
         listOf("'", "`", "\"").forEach {
             val wrapped = "\"${it}'`subs`'${it}\""
             assertEquals(wrapped.unQuote(), "${it}'`subs`'${it}")

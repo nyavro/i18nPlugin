@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide.hint
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.CodeTranslationGenerators
+//import com.eny.i18n.plugin.ide.CodeTranslationGenerators
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
@@ -9,9 +9,9 @@ import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.codeInsight.documentation.DocumentationManager
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
+import org.junit.Test
+//import org.junit.jupiter.params.ParameterizedTest
+//import org.junit.jupiter.params.provider.ArgumentsSource
 
 class HintTest: PlatformBaseTest() {
 
@@ -31,7 +31,7 @@ class HintTest: PlatformBaseTest() {
     }
 
     @Test
-    fun vueSfcHint() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun vueSfcHint() = myFixture.runVueConfig {
         val cg = VueCodeGenerator()
         val tg = JsonTranslationGenerator()
         myFixture.configureByText(
@@ -41,12 +41,10 @@ class HintTest: PlatformBaseTest() {
                 tg.generateNamedBlock("en", tg.generateContent("root", "first", "second", "translation here"))
             )
         )
-        read {
-            val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
-            //Not supported for Vue SFC:
-            assertNull(
-                DocumentationManager.getProviderFromElement(codeElement).getQuickNavigateInfo(myFixture.elementAtCaret, codeElement)
-            )
-        }
+        val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
+        //Not supported for Vue SFC:
+        assertNull(
+            DocumentationManager.getProviderFromElement(codeElement).getQuickNavigateInfo(myFixture.elementAtCaret, codeElement)
+        )
     }
 }

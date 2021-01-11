@@ -1,10 +1,10 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
+//import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
+//import org.junit.jupiter.params.ParameterizedTest
+//import org.junit.jupiter.params.provider.ArgumentsSource
 
 class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 

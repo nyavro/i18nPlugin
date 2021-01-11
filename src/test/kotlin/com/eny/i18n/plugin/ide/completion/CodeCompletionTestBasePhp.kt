@@ -5,8 +5,7 @@ import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import org.junit.jupiter.api.Test
-import kotlin.concurrent.thread
+import org.junit.Test
 
 internal abstract class CodeCompletionTestBasePhp(
     translationGenerator: TranslationGenerator,
@@ -16,15 +15,13 @@ internal abstract class CodeCompletionTestBasePhp(
 
     @Test
     fun testDQuote() {
-        thread {
-            checker.doCheck(
-                    "dQuote.${codeGenerator.ext()}",
-                    codeGenerator.generate(keyGenerator.generate("test", "tst1.base.<caret>", "\"")),
-                    codeGenerator.generate(keyGenerator.generate("test", "tst1.base.single", "\"")),
-                    translationGenerator.ext(),
-                    translationGenerator.generateContent("tst1", "base", "single", "only one value")
-            )
-        }
+        checker.doCheck(
+                "dQuote.${codeGenerator.ext()}",
+                codeGenerator.generate(keyGenerator.generate("test", "tst1.base.<caret>", "\"")),
+                codeGenerator.generate(keyGenerator.generate("test", "tst1.base.single", "\"")),
+                translationGenerator.ext(),
+                translationGenerator.generateContent("tst1", "base", "single", "only one value")
+        )
     }
 }
 

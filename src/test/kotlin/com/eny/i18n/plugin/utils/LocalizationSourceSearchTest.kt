@@ -17,7 +17,7 @@ class LocalizationSourceSearchTest: PlatformBaseTest() {
     fun testFailWhenFolderInsideTranslations() {
         val cg = VueCodeGenerator()
         val tg = JsonTranslationGenerator()
-        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true)) {
+        myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "assets")) {
             myFixture.copyDirectoryToProject("test", "assets/test")
             myFixture.addFileToProject("assets/en-US.${tg.ext()}", tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5"))
             myFixture.configureByText("refToObject.${cg.ext()}", cg.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""))

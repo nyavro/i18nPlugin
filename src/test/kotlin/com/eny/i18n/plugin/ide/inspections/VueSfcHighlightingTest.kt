@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 class VueSfcHighlightingTest : PlatformBaseTest() {
 
@@ -13,7 +13,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
 
     private val tg = JsonTranslationGenerator()
 
-    private val testConfig = arrayOf(Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true))
+    private val testConfig = arrayOf(Pair(VueSettings::vueDirectory, "assets"))
 
     private fun check(fileName: String, code: String, translationName: String, translation: String) {
         myFixture.runVueConfig(*testConfig) {
@@ -24,7 +24,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
     }
 
     @Test
-    fun sfcReferenceResolved() =
+    fun testSfcReferenceResolved() =
         myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
@@ -40,7 +40,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
         }
 
     @Test
-    fun sfcReferenceToObject() =
+    fun testSfcReferenceToObject() =
         myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
@@ -56,7 +56,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
         }
 
     @Test
-    fun sfcUnresolvedKey() =
+    fun testSfcUnresolvedKey() =
         myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",
@@ -72,7 +72,7 @@ class VueSfcHighlightingTest : PlatformBaseTest() {
         }
 
     @Test
-    fun sfcExpressionInsideTranslation() {
+    fun testSfcExpressionInsideTranslation() {
         myFixture.runVueConfig(*testConfig) {
             myFixture.configureByText(
                 "sfc.${codeGenerator.ext()}",

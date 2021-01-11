@@ -6,7 +6,7 @@ import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.codeInsight.documentation.DocumentationManager
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 class HintTestVueSfc: PlatformBaseTest() {
 
@@ -51,7 +51,7 @@ class HintTestVueSfc: PlatformBaseTest() {
     )
 
     @Test
-    fun testSingleHint() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun testSingleHint() = myFixture.runVueConfig {
         myFixture.configureByText(
             "App.vue",
             cg.generateSfcBlock(
@@ -59,17 +59,15 @@ class HintTestVueSfc: PlatformBaseTest() {
                 translation
             )
         )
-        read {
-            val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
-            //Not supported for Vue SFC:
-            assertNull(
-                DocumentationManager
-                    .getProviderFromElement(codeElement)
-                    .getQuickNavigateInfo(
-                        myFixture.elementAtCaret,
-                        codeElement
-                    )
-            )
-        }
+        val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
+        //Not supported for Vue SFC:
+        assertNull(
+            DocumentationManager
+                .getProviderFromElement(codeElement)
+                .getQuickNavigateInfo(
+                    myFixture.elementAtCaret,
+                    codeElement
+                )
+        )
     }
 }

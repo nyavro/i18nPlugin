@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
+//import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.JsCodeGenerator
@@ -9,9 +9,9 @@ import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import org.junit.Test
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
+//import org.junit.jupiter.api.Disabled
+//import org.junit.jupiter.params.ParameterizedTest
+//import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.*
 
 class CreateKeyTest: PlatformBaseTest() {
@@ -91,36 +91,36 @@ class CreateKeyTest: PlatformBaseTest() {
         )
     }
 
-    @Disabled
-    @ParameterizedTest
-    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
-    fun createKeyMultipleTranslations(cg: CodeGenerator, tg: TranslationGenerator) {
-        val defaultNs = true
-        val translationFileName = (if (defaultNs) "translation" else "test") + "." + tg.ext()
-        val ns = if (defaultNs) "" else "test:"
-        myFixture.addFileToProject(
-            "assets/en/${translationFileName}",
-            contentEn(tg)
-        )
-        myFixture.addFileToProject(
-            "assets/ru/${translationFileName}",
-            contentRu(tg)
-        )
-        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"${ns}ref.section.mi<caret>ssing\""))
-        val action = myFixture.findSingleIntention("Create i18n key in all translation files")
-        assertNotNull(action)
-        myFixture.launchAction(action)
-        myFixture.checkResult(
-            "assets/en/${translationFileName}",
-            expectedEn(tg, "${ns}ref.section.missing"),
-            true
-        )
-        myFixture.checkResult(
-            "assets/ru/${translationFileName}",
-            expectedRu(tg, "${ns}ref.section.missing"),
-            true
-        )
-    }
+//    @Disabled
+//    @ParameterizedTest
+//    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
+//    fun createKeyMultipleTranslations(cg: CodeGenerator, tg: TranslationGenerator) {
+//        val defaultNs = true
+//        val translationFileName = (if (defaultNs) "translation" else "test") + "." + tg.ext()
+//        val ns = if (defaultNs) "" else "test:"
+//        myFixture.addFileToProject(
+//            "assets/en/${translationFileName}",
+//            contentEn(tg)
+//        )
+//        myFixture.addFileToProject(
+//            "assets/ru/${translationFileName}",
+//            contentRu(tg)
+//        )
+//        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"${ns}ref.section.mi<caret>ssing\""))
+//        val action = myFixture.findSingleIntention("Create i18n key in all translation files")
+//        assertNotNull(action)
+//        myFixture.launchAction(action)
+//        myFixture.checkResult(
+//            "assets/en/${translationFileName}",
+//            expectedEn(tg, "${ns}ref.section.missing"),
+//            true
+//        )
+//        myFixture.checkResult(
+//            "assets/ru/${translationFileName}",
+//            expectedRu(tg, "${ns}ref.section.missing"),
+//            true
+//        )
+//    }
 //
 //    @ParameterizedTest
 //    @ArgumentsSource(TranslationGenerators::class)

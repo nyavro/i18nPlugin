@@ -8,7 +8,7 @@ import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 class FoldingTestVueSfc: PlatformBaseTest() {
 
@@ -54,7 +54,7 @@ class FoldingTestVueSfc: PlatformBaseTest() {
     )
 
     @Test
-    fun testFolding() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun testFolding() = myFixture.runVueConfig {
         myFixture.runCommonConfig(testConfig) {
             myFixture.configureByText(
                     "App.vue",
@@ -84,10 +84,10 @@ class FoldingTestVueSfc: PlatformBaseTest() {
     }
 
     @Test
-    fun testPreferredLanguage() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun testPreferredLanguage() = myFixture.runVueConfig {
         myFixture.runCommonConfig(
+                Pair(CommonSettings::foldingPreferredLanguage, "ru"),
                 Pair(CommonSettings::foldingEnabled, true),
-                Pair(CommonSettings::foldingPreferredLanguage, "ru-RU"),
                 Pair(CommonSettings::foldingMaxLength, 26)
         ) {
             myFixture.configureByText(
@@ -116,10 +116,10 @@ class FoldingTestVueSfc: PlatformBaseTest() {
     }
 
     @Test
-    fun testPreferredLanguageInvalidConfiguration() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun testPreferredLanguageInvalidConfiguration() = myFixture.runVueConfig {
         myFixture.runCommonConfig(
-                Pair(CommonSettings::foldingEnabled, true),
-                Pair(CommonSettings::foldingPreferredLanguage, "fr")
+                Pair(CommonSettings::foldingPreferredLanguage, "fr"),
+                Pair(CommonSettings::foldingEnabled, true)
         ) {
             myFixture.configureByText(
                     "App.vue",
@@ -147,7 +147,7 @@ class FoldingTestVueSfc: PlatformBaseTest() {
     }
 
     @Test
-    fun testIncompleteKey() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun testIncompleteKey() = myFixture.runVueConfig {
         myFixture.runCommonConfig(testConfig) {
             myFixture.configureByText(
                     "App.vue",
@@ -173,7 +173,7 @@ class FoldingTestVueSfc: PlatformBaseTest() {
     }
 
     @Test
-    fun testFoldingDisabled() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun testFoldingDisabled() = myFixture.runVueConfig {
         myFixture.runCommonConfig(testConfig) {
             myFixture.configureByText(
                     "App.vue",
@@ -201,7 +201,7 @@ class FoldingTestVueSfc: PlatformBaseTest() {
     }
 
     @Test
-    fun testFoldingParametrizedTranslation() = myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+    fun testFoldingParametrizedTranslation() = myFixture.runVueConfig {
         myFixture.runCommonConfig(testConfig) {
             myFixture.configureByText(
                     "App.vue",

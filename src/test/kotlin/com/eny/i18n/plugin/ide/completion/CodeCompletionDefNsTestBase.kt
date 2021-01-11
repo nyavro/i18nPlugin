@@ -4,29 +4,25 @@ import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.concurrent.thread
 
 abstract class CodeCompletionDefNsTestBase(codeGenerator: CodeGenerator, translationGenerator: TranslationGenerator): CodeCompletionTestBase(codeGenerator, translationGenerator, DefaultNsKeyGenerator(), ::DefaultNsChecker) {
 
     @Test
     fun testEmptyKeyCompletion() {
-        thread {
-            myFixture.addFileToProject("assets/translation.${translationGenerator.ext()}", translationGenerator.generateContent("tstw", "fstt", "leu", "value"))
-            myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate("\"<caret>\""))
-            val vars = myFixture.completeBasic()
-            assertTrue(vars.find { it.lookupString == "tstw" } != null)
-        }
+        myFixture.addFileToProject("assets/translation.${translationGenerator.ext()}", translationGenerator.generateContent("tstw", "fstt", "leu", "value"))
+        myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate("\"<caret>\""))
+        val vars = myFixture.completeBasic()
+        assertTrue(vars.find { it.lookupString == "tstw" } != null)
     }
 
     @Test
     fun testRootKeyCompletion() {
-        thread {
-            myFixture.addFileToProject("assets/translation.${translationGenerator.ext()}", translationGenerator.generateContent("tst1", "base", "single", "only one value"))
-            myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate("\"tst<caret>\""))
-            val vars = myFixture.completeBasic()
-            assertTrue(vars.find { it.lookupString == "tst1" } != null)
-        }
+        myFixture.addFileToProject("assets/translation.${translationGenerator.ext()}", translationGenerator.generateContent("tst1", "base", "single", "only one value"))
+        myFixture.configureByText("empty.${codeGenerator.ext()}", codeGenerator.generate("\"tst<caret>\""))
+        val vars = myFixture.completeBasic()
+        assertTrue(vars.find { it.lookupString == "tst1" } != null)
     }
 }
 

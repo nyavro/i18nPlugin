@@ -1,27 +1,27 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.CodeGeneratorsWithNs
+//import com.eny.i18n.plugin.ide.CodeGeneratorsWithNs
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.intellij.codeInsight.intention.IntentionAction
 import org.junit.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
 
 class KeyContextTest: PlatformBaseTest() {
 
+    // @TODO 10
+
     private val hint = "Extract i18n key"
 
-    @ParameterizedTest
-    @ArgumentsSource(CodeGeneratorsWithNs::class)
-    fun testKeyContext(codeGenerator: CodeGenerator, defaultNs: Boolean) {
-        val key = if (defaultNs) "\"ref<caret>.value.sub1\"" else "\"test:ref<caret>.value.sub1\""
-        myFixture.configureByText("keyContext.${codeGenerator.ext()}", codeGenerator.generate(key))
-        assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
-    }
+//    @ParameterizedTest
+//    @ArgumentsSource(CodeGeneratorsWithNs::class)
+//    fun testKeyContext(codeGenerator: CodeGenerator, defaultNs: Boolean) {
+//        val key = if (defaultNs) "\"ref<caret>.value.sub1\"" else "\"test:ref<caret>.value.sub1\""
+//        myFixture.configureByText("keyContext.${codeGenerator.ext()}", codeGenerator.generate(key))
+//        assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
+//    }
 }
 
 class KeyContextVueTest: PlatformBaseTest() {
@@ -32,7 +32,7 @@ class KeyContextVueTest: PlatformBaseTest() {
 
     @Test
     fun testKeyContextScript() {
-        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+        myFixture.runVueConfig {
             myFixture.configureByText("keyContextScript.${codeGenerator.ext()}", codeGenerator.generateScript("this.\$t('ref.<caret>value3')"))
             assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
         }
@@ -40,7 +40,7 @@ class KeyContextVueTest: PlatformBaseTest() {
 
     @Test
     fun testKeyContext() {
-        myFixture.runVueConfig(Pair(VueSettings::vue, true)) {
+        myFixture.runVueConfig {
             myFixture.configureByText("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"ref<caret>.value.sub1\""))
             assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
         }

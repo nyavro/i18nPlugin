@@ -1,14 +1,14 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 
 internal class ExpressionKeyParserTest : ParserTestBase {
 
 //fileName:ROOT.Key2.Key3                   /                       / fileName{8}:ROOT{4}.Key2{4}.Key3{4}
     @Test
-    fun parseSimpleLiteral() {
+    fun testParseSimpleLiteral() {
         val elements = listOf(
             KeyElement.literal("fileName:ROOT.Key2.Key3")
         )
@@ -19,7 +19,7 @@ internal class ExpressionKeyParserTest : ParserTestBase {
 
 //fileName:ROOT.Key2.Key3.                  /                       / fileName{8}:ROOT{4}.Key2{4}.Key3{4}.{0}
     @Test
-    fun parseSimpleLiteral2() {
+    fun testParseSimpleLiteral2() {
         val elements = listOf(
             KeyElement.literal("fileName:ROOT.Key2.Key3.")
         )
@@ -29,7 +29,7 @@ internal class ExpressionKeyParserTest : ParserTestBase {
     }
 
     @Test
-    fun parseSimpleLiteralList() {
+    fun testParseSimpleLiteralList() {
         val elements = listOf(
             KeyElement.literal("file"),
             KeyElement.literal("Name:ROOT.Key3.Key4.")
