@@ -15,28 +15,29 @@ import org.junit.Test
 import java.util.*
 
 class CreateKeyTest: PlatformBaseTest() {
+// @TODO 2
 
-    @ParameterizedTest
-    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
-    fun testCreateKey(cg: CodeGenerator, tg: TranslationGenerator) {
-        val defaultNs = false
-        val hint = PluginBundle.getMessage("quickfix.create.key")
-        val translationFileName = (if (defaultNs) "translation" else "test") + "." + tg.ext()
-        val ns = if (defaultNs) "" else "test:"
-        myFixture.addFileToProject(
-            translationFileName,
-            contentEn(tg)
-        )
-        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"${ns}ref.section.mi<caret>ssing\""))
-        val action = myFixture.filterAvailableIntentions(hint).find {it.text == hint}!!
-        assertNotNull(action)
-        myFixture.launchAction(action)
-        myFixture.checkResult(
-            translationFileName,
-            expectedEn(tg, "${ns}ref.section.missing"),
-            false
-        )
-    }
+//    @ParameterizedTest
+//    @ArgumentsSource(JsCodeAndTranslationGeneratorsNs::class)
+//    fun testCreateKey(cg: CodeGenerator, tg: TranslationGenerator) {
+//        val defaultNs = false
+//        val hint = PluginBundle.getMessage("quickfix.create.key")
+//        val translationFileName = (if (defaultNs) "translation" else "test") + "." + tg.ext()
+//        val ns = if (defaultNs) "" else "test:"
+//        myFixture.addFileToProject(
+//            translationFileName,
+//            contentEn(tg)
+//        )
+//        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"${ns}ref.section.mi<caret>ssing\""))
+//        val action = myFixture.filterAvailableIntentions(hint).find {it.text == hint}!!
+//        assertNotNull(action)
+//        myFixture.launchAction(action)
+//        myFixture.checkResult(
+//            translationFileName,
+//            expectedEn(tg, "${ns}ref.section.missing"),
+//            false
+//        )
+//    }
 
     @Test
     fun testCreateKeyEmptyJson() {

@@ -15,20 +15,23 @@ import org.junit.Test
 
 class HintTest: PlatformBaseTest() {
 
-    @ParameterizedTest
-    @ArgumentsSource(CodeTranslationGenerators::class)
-    fun testSingleHint(cg: CodeGenerator, tg: TranslationGenerator) {
-        val translation = "translation here"
-        myFixture.addFileToProject("test.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
-        myFixture.configureByText("content.${cg.ext()}", cg.generate("\"test:root.first.<caret>second\""))
-        read {
-            val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
-            assertEquals(
-                translation,
-                DocumentationManager.getProviderFromElement(codeElement).getQuickNavigateInfo(myFixture.elementAtCaret, codeElement)
-            )
-        }
-    }
+    // @TODO 8
+
+//
+//    @ParameterizedTest
+//    @ArgumentsSource(CodeTranslationGenerators::class)
+//    fun testSingleHint(cg: CodeGenerator, tg: TranslationGenerator) {
+//        val translation = "translation here"
+//        myFixture.addFileToProject("test.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
+//        myFixture.configureByText("content.${cg.ext()}", cg.generate("\"test:root.first.<caret>second\""))
+//        read {
+//            val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
+//            assertEquals(
+//                translation,
+//                DocumentationManager.getProviderFromElement(codeElement).getQuickNavigateInfo(myFixture.elementAtCaret, codeElement)
+//            )
+//        }
+//    }
 
     @Test
     fun vueSfcHint() = myFixture.runVueConfig {

@@ -15,18 +15,20 @@ import java.util.stream.Stream
 class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
 
     private val cg = VueCodeGenerator()
+// @TODO 4
 
-    class Provider: ArgumentsProvider {
-        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {
-            return listOf(
-                "<caret>I want to move it to translation",
-                "I want to mov<caret>e it to translation",
-                "I want to move it to translation<caret>")
-                .flatMap {
-                    text -> listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).map {Arguments.of(text, it)}
-                }.stream()
-        }
-    }
+
+//    class Provider: ArgumentsProvider {
+//        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {
+//            return listOf(
+//                "<caret>I want to move it to translation",
+//                "I want to mov<caret>e it to translation",
+//                "I want to move it to translation<caret>")
+//                .flatMap {
+//                    text -> listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).map {Arguments.of(text, it)}
+//                }.stream()
+//        }
+//    }
 
 //    @ParameterizedTest
 //    @ArgumentsSource(Provider::class)

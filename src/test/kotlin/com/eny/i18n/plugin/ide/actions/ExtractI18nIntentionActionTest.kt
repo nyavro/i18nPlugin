@@ -8,6 +8,8 @@ import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 
 class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 
+    // @TODO 3
+
 //    @ParameterizedTest
 //    @ArgumentsSource(JsonYamlCodeGenerators::class)
 //    fun testKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {

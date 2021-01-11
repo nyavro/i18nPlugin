@@ -7,6 +7,7 @@ import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 
 //@Disabled
 class ExtractI18nPhpGettextTest: ExtractionTestBase() {
+// @TODO 5
 
     private val tg = PoTranslationGenerator()
     private val cg = PhpGetTextCodeGenerator("gettext")

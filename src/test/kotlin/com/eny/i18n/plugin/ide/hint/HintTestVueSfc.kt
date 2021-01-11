@@ -10,6 +10,8 @@ import org.junit.Test
 
 class HintTestVueSfc: PlatformBaseTest() {
 
+    // @TODO 9
+
     private val cg = VueCodeGenerator()
     private val tg = JsonTranslationGenerator()
     private val f = "\$t"
