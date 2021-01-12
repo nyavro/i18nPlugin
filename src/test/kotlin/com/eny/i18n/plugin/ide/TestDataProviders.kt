@@ -51,11 +51,6 @@ fun codeGenerator(ext: String): CodeGenerator? = cgs.find {it.ext() == ext}
 //        jsCgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
 //}
 
-//class JsCodeAndTranslationGeneratorsNs : ArgumentsProvider {
-//    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-//        jsCgs.flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
-//}
-
 //class PhpCodeAndTranslationGenerators : ArgumentsProvider {
 //    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
 //        listOf(PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator()).flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()

@@ -1,17 +1,18 @@
 package com.eny.i18n.plugin.ide.actions
 
 //import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
-import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
+import org.junit.Test
+
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource
 
 class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 
-    // @TODO 3
+    private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
 
-//    @ParameterizedTest
-//    @ArgumentsSource(JsonYamlCodeGenerators::class)
+//    @Test
 //    fun testKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
 //        runTestCase(
 //            "simple.${cg.ext()}",
@@ -23,7 +24,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 //            predefinedTextInputDialog("test:ref.avalue3")
 //        )
 //    }
-//
+
 //    @ParameterizedTest
 //    @ArgumentsSource(JsonYamlCodeGenerators::class)
 //    fun testKeyExtractionSortedFirst(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext(), true)) {

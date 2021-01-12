@@ -4,6 +4,9 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.Test
 
 abstract class PlatformBaseTest: BasePlatformTestCase() {
+
     @Test
-    fun testVintage() {}
+    fun testStub() {
+        assertTrue(true)
+    }
 }
