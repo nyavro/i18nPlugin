@@ -17,7 +17,7 @@ class ExtractI18nPhpGettextTest: ExtractionTestBase() {
 
     @Test
     fun testStub1() {
-        Assert.assertTrue(true)
+        Assert.assertNotNull(tg.generateInvalidKey("test", "test"))
     }
 
 //

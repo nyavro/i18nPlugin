@@ -19,9 +19,8 @@ class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
     private val cg = VueCodeGenerator()
 // @TODO 4
 
-    @Test
     fun testStub1() {
-        Assert.assertTrue(true)
+        Assert.assertNotNull(cg.generateScript("text"))
     }
 
 //    class Provider: ArgumentsProvider {
