@@ -12,6 +12,11 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 
     private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
 
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
+
 //    @Test
 //    fun testKeyExtraction(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
 //        runTestCase(

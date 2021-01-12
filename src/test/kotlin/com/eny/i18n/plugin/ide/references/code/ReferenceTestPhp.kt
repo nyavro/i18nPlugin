@@ -9,6 +9,8 @@ import com.eny.i18n.plugin.utils.generator.code.PhpCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
+import org.junit.Test
+
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource
 
@@ -17,6 +19,12 @@ import com.intellij.psi.PsiElement
 class ReferenceTestPhp : PlatformBaseTest() {
 
     private val cg = PhpCodeGenerator()
+
+
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
 
 //    @ParameterizedTest
 //    @ArgumentsSource(PhpCodeAndTranslationGenerators::class)

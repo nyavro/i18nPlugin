@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import org.junit.Test
 //import org.junit.jupiter.api.extension.ExtensionContext
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.Arguments
@@ -17,6 +18,10 @@ class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
     private val cg = VueCodeGenerator()
 // @TODO 4
 
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
 
 //    class Provider: ArgumentsProvider {
 //        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {

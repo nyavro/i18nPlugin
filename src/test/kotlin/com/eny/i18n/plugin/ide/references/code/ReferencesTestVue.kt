@@ -8,12 +8,21 @@ import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
+import org.junit.Test
+
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource
 
 // @TODO 12
 
 class ReferencesTestVue: PlatformBaseTest() {
+
+
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
+
 //
 //    @ParameterizedTest
 //    @ArgumentsSource(VueCodeTranslationGenerators::class)

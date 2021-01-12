@@ -3,12 +3,19 @@ package com.eny.i18n.plugin.ide.inspections
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import org.junit.Test
 
 class VueHighlightingTest : PlatformBaseTest() {
 
     private val codeGenerator = VueCodeGenerator()
 
     private val testConfig = arrayOf(Pair(VueSettings::vueDirectory, "assets"), Pair(VueSettings::vue, true))
+
+
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
 
     // @TODO 17
 

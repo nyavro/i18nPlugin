@@ -15,6 +15,12 @@ class TranslationFileGenerationTest: ExtractionTestBase() {
 
     // @TODO 16
 
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
+
+
 //    @ParameterizedTest
 //    @ArgumentsSource(JsonYamlCodeGenerators::class)
 //    fun testTranslationFileGeneration(cg: CodeGenerator, tg: TranslationGenerator) = myFixture.runWithConfig(config(tg.ext())) {
@@ -34,6 +40,10 @@ class TranslationFileGenerationTest: ExtractionTestBase() {
 
 class VueTranslationGenerationTest: ExtractionTestBase() {
 
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
 //    @ParameterizedTest
 //    @ValueSource(strings = ["yml", "json"])
 //    fun testTranslationFileGenerationVue(ext: String) = myFixture.runVueConfig(config(ext)) {

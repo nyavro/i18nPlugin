@@ -15,6 +15,11 @@ class FoldingTestVue: PlatformBaseTest() {
 
     // @TODO 7
 
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/folding"
     }

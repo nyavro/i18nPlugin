@@ -17,6 +17,13 @@ class HintTest: PlatformBaseTest() {
 
     // @TODO 8
 
+
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
+
+
 //
 //    @ParameterizedTest
 //    @ArgumentsSource(CodeTranslationGenerators::class)

@@ -6,6 +6,7 @@ import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
+import org.junit.Test
 //import org.junit.jupiter.api.Disabled
 //import org.junit.jupiter.api.extension.ExtensionContext
 //import org.junit.jupiter.params.ParameterizedTest
@@ -65,6 +66,12 @@ import java.util.stream.Stream
 
 //@Disabled
 class ReferencesTestVueSfc: PlatformBaseTest() {
+
+
+    @Test
+    fun testStub1() {
+        assertTrue(true)
+    }
 
 //    @ParameterizedTest
 //    @ArgumentsSource(SfcTestArgumentsProvider::class)
