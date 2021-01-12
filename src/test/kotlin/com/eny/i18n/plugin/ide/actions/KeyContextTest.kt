@@ -7,6 +7,7 @@ import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.intellij.codeInsight.intention.IntentionAction
+import org.junit.Assert
 import org.junit.Test
 
 class KeyContextTest: PlatformBaseTest() {
@@ -17,7 +18,7 @@ class KeyContextTest: PlatformBaseTest() {
 
     @Test
     fun testStub1() {
-        assertTrue(true)
+        Assert.assertTrue(true)
     }
 
 //    @ParameterizedTest

@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import org.junit.Assert
 import org.junit.Test
 //import org.junit.jupiter.api.extension.ExtensionContext
 //import org.junit.jupiter.params.ParameterizedTest
@@ -20,7 +21,7 @@ class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {
 
     @Test
     fun testStub1() {
-        assertTrue(true)
+        Assert.assertTrue(true)
     }
 
 //    class Provider: ArgumentsProvider {

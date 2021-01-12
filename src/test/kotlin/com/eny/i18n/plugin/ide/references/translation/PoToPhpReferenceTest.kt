@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.utils.at
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 import org.junit.Test
+import org.junit.Assert
 
 class PoToPhpReferenceTest: PlatformBaseTest() {
 
@@ -13,7 +14,7 @@ class PoToPhpReferenceTest: PlatformBaseTest() {
 
     @Test
     fun testStub1() {
-        assertTrue(true)
+        Assert.assertTrue(true)
     }
 
     fun disabledTranslationToCodeReference() {
