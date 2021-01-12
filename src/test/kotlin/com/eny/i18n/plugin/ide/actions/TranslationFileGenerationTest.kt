@@ -6,6 +6,7 @@ import com.eny.i18n.plugin.ide.translationGenerator
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.openapi.ui.Messages
+import org.junit.Assert
 import org.junit.Test
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource
@@ -42,7 +43,7 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
 
     @Test
     fun testStub1() {
-        assertTrue(true)
+        Assert.assertTrue(true)
     }
 //    @ParameterizedTest
 //    @ValueSource(strings = ["yml", "json"])

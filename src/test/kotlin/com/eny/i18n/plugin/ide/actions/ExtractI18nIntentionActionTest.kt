@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.actions
 //import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
+import org.junit.Assert
 import org.junit.Test
 
 //import org.junit.jupiter.params.ParameterizedTest
@@ -14,7 +15,7 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 
     @Test
     fun testStub1() {
-        assertTrue(true)
+        Assert.assertTrue(true)
     }
 
 //    @Test
