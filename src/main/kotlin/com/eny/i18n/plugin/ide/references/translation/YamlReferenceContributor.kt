@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide.references.translation
 
-import com.eny.i18n.plugin.localization.yaml.YamlLocalizationFactory
+import com.eny.i18n.plugin.yaml.YamlLocalizationFactory
 import org.jetbrains.yaml.psi.YAMLKeyValue
 
 /**

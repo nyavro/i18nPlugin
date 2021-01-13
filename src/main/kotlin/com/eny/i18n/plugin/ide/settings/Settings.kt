@@ -83,34 +83,8 @@ class VueSettings : PersistentStateComponent<VueSettings> {
 
 fun Project.vueSettings() = VueSettings.getInstance(this)
 fun Project.i18NextSettings() = I18NextSettings.getInstance(this)
-fun Project.yamlSettings() = YamlSettings.getInstance(this)
 fun Project.poSettings() = PoSettings.getInstance(this)
 fun Project.commonSettings() = CommonSettings.getInstance(this)
-
-/**
- * Yaml settings
- */
-@State(name = "yamlSettings", storages = [Storage("i18nSettings.xml")])
-class YamlSettings : PersistentStateComponent<YamlSettings> {
-
-    var preferYamlFilesGeneration: Boolean = false
-
-    var yamlContentGenerationEnabled: Boolean = true
-
-    override fun loadState(state: YamlSettings) = XmlSerializerUtil.copyBean(state, this)
-
-    override fun getState(): YamlSettings = this
-
-    /**
-     * Service class for persisting settings
-     */
-    companion object Persistence {
-        /**
-         * Loads project's Settings instance
-         */
-        fun getInstance(project: Project): YamlSettings = ServiceManager.getService(project, YamlSettings::class.java)
-    }
-}
 
 /**
  * Common i18n settings

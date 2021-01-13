@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 
 /**
@@ -79,4 +80,9 @@ interface ContentGenerator {
      * Generates content and psi element
      */
     fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?)
+
+    /**
+     * Checks if generator is preferred
+     */
+    fun isPreferred(project: Project): Boolean
 }

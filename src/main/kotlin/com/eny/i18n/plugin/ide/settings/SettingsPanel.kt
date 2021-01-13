@@ -32,7 +32,7 @@ fun addLimitationsAndHandlers(component: JTextComponent, maxLength: Int, onChang
     })
 }
 
-private class FormUtils {
+class FormUtils {
 
     fun checkbox(label:String, property: KMutableProperty0<Boolean>): JPanel {
         val panel = JPanel()
@@ -91,7 +91,7 @@ private class FormUtils {
     }
 }
 
-private class ModificationCheck<T : Any> {
+class ModificationCheck<T : Any> {
     fun hash(settings: T): String {
         return settings
             .javaClass
@@ -137,39 +137,6 @@ class CommonSettingsFormFragment(val settings: CommonSettings): SettingsFormFrag
     }
 
     override fun isModified(): Boolean = initialHash == modificationCheck.hash(settings)
-}
-
-/**
- * Settings configuration panel
- */
-class YamlSettingsFormFragment(val settings: YamlSettings): SettingsFormFragment<YamlSettings> {
-
-    private val formUtils = FormUtils()
-
-    private val modificationCheck = ModificationCheck<YamlSettings>()
-
-    private val initialHash = modificationCheck.hash(settings)
-
-    override fun isModified(): Boolean = initialHash == modificationCheck.hash(settings)
-
-    /**
-     * Returns Settings main panel
-     */
-    override fun getRootPanel(): JPanel {
-        val root = JPanel()
-        root.layout = BorderLayout()
-        //TODO move
-        root.add(DefaultComponentFactory.getInstance().createSeparator("Yaml Settings"), BorderLayout.NORTH)
-        root.add(settingsPanel(), BorderLayout.WEST)
-        return root
-    }
-
-    private fun settingsPanel(): JPanel {
-        val panel = JPanel()
-        panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
-        panel.add(formUtils.checkbox(PluginBundle.getMessage("settings.prefer.yaml.files.generation"), settings::preferYamlFilesGeneration))
-        return panel
-    }
 }
 
 /**

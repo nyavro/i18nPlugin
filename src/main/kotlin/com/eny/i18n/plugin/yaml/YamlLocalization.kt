@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.localization.yaml
+package com.eny.i18n.plugin.yaml
 
 import com.eny.i18n.plugin.factory.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
@@ -12,6 +12,7 @@ import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.Language
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
@@ -97,4 +98,7 @@ private class YamlContentGenerator: ContentGenerator {
             unresolved.first().text,
             generateContent(unresolved.drop(1), translationValue ?: fullKey.source)
         )
+
+    override fun isPreferred(project: Project): Boolean =
+        project.yamlSettings().preferYamlFilesGeneration
 }

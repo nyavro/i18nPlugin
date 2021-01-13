@@ -16,6 +16,7 @@ import com.intellij.json.JsonLanguage
 import com.intellij.json.json5.Json5FileType
 import com.intellij.json.psi.*
 import com.intellij.lang.Language
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
@@ -59,6 +60,8 @@ private class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringL
  * Generates JSON translation content
  */
 private class JsonContentGenerator: ContentGenerator {
+
+    override fun isPreferred(project: Project): Boolean = false
 
     override fun generateContent(compositeKey: List<Literal>, value: String): String {
         val escapedValue = String(JsonStringEncoder.getInstance().quoteAsString(value))
