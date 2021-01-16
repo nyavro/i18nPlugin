@@ -8,9 +8,13 @@ import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.PsiElementTree
+import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.utils.unQuote
 import com.fasterxml.jackson.core.io.JsonStringEncoder
+import com.intellij.json.JsonElementTypes
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
 import com.intellij.json.json5.Json5FileType
@@ -22,13 +26,51 @@ import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
+import com.intellij.psi.tree.TokenSet
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parents
 
 private val tabChar = "  "
 
 class JsonLocalizationFactory: LocalizationFactory {
+
+    override fun elementTreeFactory(): (file: PsiElement) -> PsiElementTree? = {
+        file ->
+            if (file is JsonFile) JsonElementTree.create(file)
+            else if (file is JsonObject) JsonElementTree(file)
+            else null
+    }
+
     override fun contentGenerator(): ContentGenerator = JsonContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<JsonStringLiteral> = JsonReferenceAssistant()
+}
+
+/**
+ * Tree wrapper around json psi tree
+ */
+private class JsonElementTree(val element: PsiElement): PsiElementTree() {
+    override fun value(): PsiElement = element
+    override fun isTree(): Boolean = element is JsonObject
+    override fun findChild(name: String): Tree<PsiElement>? =
+            (element as JsonObject).findProperty(name)?.value?.let{ JsonElementTree(it) }
+    override fun findChildren(prefix: String): List<Tree<PsiElement>> =
+            element
+                    .node
+                    .getChildren(TokenSet.create(JsonElementTypes.PROPERTY))
+                    .asList()
+                    .map {item -> item.firstChildNode.psi}
+                    .filter {it.text.unQuote().startsWith(prefix)}
+                    .map {JsonElementTree(it)}
+
+    companion object {
+        /**
+         * Creates instance of JsonElementTree
+         */
+        fun create(file: PsiElement): JsonElementTree? =
+                PsiTreeUtil
+                        .getChildOfType(file, JsonObject::class.java)
+                        ?.let{ JsonElementTree(it)}
+    }
 }
 
 private class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringLiteral> {

@@ -8,6 +8,7 @@ import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
@@ -30,6 +31,9 @@ import org.jetbrains.yaml.psi.YAMLMapping
 private val tabChar = "  "
 
 class YamlLocalizationFactory: LocalizationFactory {
+    override fun elementTreeFactory(): (file: PsiElement) -> PsiElementTree? = {
+        (it as? YAMLFile)?.let {YamlElementTree.create(it)}
+    }
     override fun contentGenerator(): ContentGenerator = YamlContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<YAMLKeyValue> = YamlReferenceAssistant()
 }

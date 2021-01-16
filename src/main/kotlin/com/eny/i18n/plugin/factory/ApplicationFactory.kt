@@ -16,7 +16,12 @@ class MainFactory(private val languageFactories: List<LanguageFactory>) {
     /**
      * Get available content generators
      */
-    fun contentGenerators(): List<ContentGenerator> = Extensions.CONTENT_GENERATORS.getExtensionList()
+    fun localizationFactories(): List<LocalizationFactory> = Extensions.LOCALIZATION_FACTORIES.getExtensionList()
+
+    /**
+     * Get available content generators
+     */
+    fun contentGenerators(): List<ContentGenerator> = localizationFactories().map {it.contentGenerator()}
 
     /**
      * Pick content generator by file type

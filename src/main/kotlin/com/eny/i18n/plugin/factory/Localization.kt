@@ -2,6 +2,7 @@ package com.eny.i18n.plugin.factory
 
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.PsiElementTree
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
@@ -21,6 +22,11 @@ interface LocalizationFactory {
      * Localization format-specific reference assistant
      */
     fun referenceAssistant(): TranslationReferenceAssistant<out PsiElement>
+
+    /**
+     * Element tree
+     */
+    fun elementTreeFactory(): (file: PsiElement) -> PsiElementTree?
 }
 
 /**

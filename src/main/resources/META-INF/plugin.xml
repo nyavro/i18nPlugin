@@ -143,7 +143,7 @@
     <depends optional="true" config-file="vueConfig.xml">org.jetbrains.plugins.vue</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensionPoints>
-        <extensionPoint interface="com.eny.i18n.plugin.factory.ContentGenerator" name="contentGenerator" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationFactory" name="localizationFactory" dynamic="true"/>
         <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationSourcesProvider" name="localizationSourceProvider" dynamic="true"/>
         <extensionPoint interface="com.eny.i18n.plugin.factory.CustomSettings" name="customSettings" area="IDEA_PROJECT" dynamic="true"/>
     </extensionPoints>
@@ -166,7 +166,7 @@
         <languageInjector implementation="com.eny.i18n.plugin.ide.injections.VueSFCTranslationInjector"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
-        <contentGenerator implementation="com.eny.i18n.plugin.localization.json.JsonContentGenerator"/>
+        <localizationFactory implementation="com.eny.i18n.plugin.localization.json.JsonLocalizationFactory"/>
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.i18n.I18nLocalizationSources"/>
         <customSettings implementation="com.eny.i18n.plugin.ide.settings.CommonConfigurable"/>
         <customSettings implementation="com.eny.i18n.plugin.ide.settings.I18NextConfigurable"/>
