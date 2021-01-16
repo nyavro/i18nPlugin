@@ -4,11 +4,13 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource
 
+@Ignore
 class ExtractI18nIntentionActionTest: ExtractionTestBase() {
 
     private val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())

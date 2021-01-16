@@ -4,11 +4,11 @@
         <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.references.code.VueReferenceContributor"/>
         <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.completion.VueCompletionContributor"/>
         <lang.foldingBuilder language="HTML" implementationClass="com.eny.i18n.plugin.ide.folding.VueJsFoldingBuilder"/>
-        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.VueSettings"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.vue.VueSettings"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.vue.VueLocalizationSources"/>
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.vue.VueSfcLocalizationSources"/>
-        <customSettings implementation="com.eny.i18n.plugin.ide.settings.VueConfigurable"/>
+        <customSettings implementation="com.eny.i18n.plugin.vue.VueConfigurable"/>
     </extensions>
 </idea-plugin>

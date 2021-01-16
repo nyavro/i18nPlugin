@@ -1,11 +1,6 @@
 package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.VueSettings
-import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
-import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.eny.i18n.plugin.utils.unQuote
 import org.junit.Test
 //import org.junit.jupiter.api.Disabled
 //import org.junit.jupiter.api.extension.ExtensionContext
@@ -13,7 +8,6 @@ import org.junit.Test
 //import org.junit.jupiter.params.provider.Arguments
 //import org.junit.jupiter.params.provider.ArgumentsProvider
 //import org.junit.jupiter.params.provider.ArgumentsSource
-import java.util.stream.Stream
 
 // @TODO 13
 

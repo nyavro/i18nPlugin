@@ -3,13 +3,13 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.PlatformBaseTest
 //import com.eny.i18n.plugin.ide.CodeGeneratorsWithNs
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.VueSettings
-import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.intellij.codeInsight.intention.IntentionAction
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 
+@Ignore
 class KeyContextTest: PlatformBaseTest() {
 
     // @TODO 10

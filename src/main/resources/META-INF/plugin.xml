@@ -168,7 +168,7 @@
     <extensions defaultExtensionNs="com.eny.i18n">
         <localizationFactory implementation="com.eny.i18n.plugin.localization.json.JsonLocalizationFactory"/>
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.i18n.I18nLocalizationSources"/>
-        <customSettings implementation="com.eny.i18n.plugin.ide.settings.CommonConfigurable"/>
-        <customSettings implementation="com.eny.i18n.plugin.ide.settings.I18NextConfigurable"/>
+        <customSettings implementation="com.eny.i18n.plugin.vue.CommonConfigurable"/>
+        <customSettings implementation="com.eny.i18n.plugin.vue.I18NextConfigurable"/>
     </extensions>
 </idea-plugin>

@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.language.vue
 import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.ide.settings.i18NextSettings
-import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
@@ -12,6 +11,7 @@ import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.toBoolean
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
+import com.eny.i18n.plugin.vue.vueSettings
 import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.lang.javascript.psi.JSCallExpression

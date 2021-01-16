@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.VueSettings
+import com.eny.i18n.plugin.vue.VueSettings
 import org.junit.Test
 
 abstract class JsConfiguredVueI18nObjTest : PlatformBaseTest() {

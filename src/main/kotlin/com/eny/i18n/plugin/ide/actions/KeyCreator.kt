@@ -6,10 +6,10 @@ import com.eny.i18n.plugin.ide.quickfix.CreateTranslationFileQuickFix
 import com.eny.i18n.plugin.ide.quickfix.UserChoice
 import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.ide.settings.mainFactory
-import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.vue.vueSettings
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 

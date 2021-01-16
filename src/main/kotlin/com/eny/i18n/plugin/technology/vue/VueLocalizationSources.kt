@@ -2,11 +2,11 @@ package com.eny.i18n.plugin.technology.vue
 
 import com.eny.i18n.plugin.factory.LocalizationSourcesProvider
 import com.eny.i18n.plugin.ide.settings.mainFactory
-import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.utils.LocalizationSource
 import com.eny.i18n.plugin.utils.SearchUtility
 import com.eny.i18n.plugin.utils.directParent
 import com.eny.i18n.plugin.utils.localizationSource
+import com.eny.i18n.plugin.vue.vueSettings
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 

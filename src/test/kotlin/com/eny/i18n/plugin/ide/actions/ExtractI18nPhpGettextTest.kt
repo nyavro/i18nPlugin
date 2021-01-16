@@ -3,12 +3,13 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 
 //import org.junit.jupiter.api.Disabled
 //import org.junit.jupiter.api.Test
 
-//@Disabled
+@Ignore
 class ExtractI18nPhpGettextTest: ExtractionTestBase() {
 // @TODO 5
 

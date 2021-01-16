@@ -4,7 +4,6 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runCommonConfig
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.CommonSettings
-import com.eny.i18n.plugin.ide.settings.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl

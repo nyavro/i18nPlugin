@@ -1,6 +1,7 @@
-package com.eny.i18n.plugin.ide.settings
+package com.eny.i18n.plugin.vue
 
 import com.eny.i18n.plugin.factory.CustomSettings
+import com.eny.i18n.plugin.ide.settings.*
 import com.intellij.openapi.project.Project
 import javax.swing.JComponent
 

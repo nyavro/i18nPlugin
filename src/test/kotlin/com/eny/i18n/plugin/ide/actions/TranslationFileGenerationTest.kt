@@ -7,6 +7,7 @@ import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.openapi.ui.Messages
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource
@@ -39,6 +40,7 @@ class TranslationFileGenerationTest: ExtractionTestBase() {
 //    }
 }
 
+@Ignore
 class VueTranslationGenerationTest: ExtractionTestBase() {
 
     @Test

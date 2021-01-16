@@ -2,11 +2,11 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.ide.settings.poSettings
-import com.eny.i18n.plugin.ide.settings.vueSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.vue.vueSettings
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages

@@ -7,6 +7,7 @@ import com.eny.i18n.plugin.language.php.PhpLanguageFactory
 import com.eny.i18n.plugin.language.vue.VueLanguageFactory
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.whenMatches
+import com.eny.i18n.plugin.vue.vueSettings
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
@@ -54,34 +55,6 @@ class I18NextSettings : PersistentStateComponent<I18NextSettings> {
     }
 }
 
-/**
- * Vue-i18n settings
- */
-@State(name = "vue-i18n-settings", storages = [Storage("i18nSettings.xml")])
-class VueSettings : PersistentStateComponent<VueSettings> {
-
-    var vue: Boolean = false
-
-    var vueDirectory: String = "locales"
-
-    var jsConfiguration: String = ""
-
-    override fun getState(): VueSettings = this
-
-    override fun loadState(state: VueSettings) = XmlSerializerUtil.copyBean(state, this)
-
-    /**
-     * Service class for persisting settings
-     */
-    companion object Persistence {
-        /**
-         * Loads project's Settings instance
-         */
-        fun getInstance(project: Project): VueSettings = ServiceManager.getService(project, VueSettings::class.java)
-    }
-}
-
-fun Project.vueSettings() = VueSettings.getInstance(this)
 fun Project.i18NextSettings() = I18NextSettings.getInstance(this)
 fun Project.poSettings() = PoSettings.getInstance(this)
 fun Project.commonSettings() = CommonSettings.getInstance(this)

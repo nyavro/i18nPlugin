@@ -3,9 +3,8 @@ package com.eny.i18n.plugin.ide
 import com.eny.i18n.plugin.ide.settings.CommonSettings
 import com.eny.i18n.plugin.ide.settings.I18NextSettings
 import com.eny.i18n.plugin.ide.settings.PoSettings
-import com.eny.i18n.plugin.ide.settings.VueSettings
+import com.eny.i18n.plugin.vue.VueSettings
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import kotlin.jvm.internal.MutablePropertyReference
 import kotlin.reflect.KMutableProperty1
 
 private fun <T> runWithBooleanSettings(props: Map<KMutableProperty1<T, Boolean>, Boolean>, actual: T, block: (T) -> Unit) {

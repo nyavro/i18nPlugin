@@ -2,10 +2,7 @@ package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.plugin.PlatformBaseTest
 //import com.eny.i18n.plugin.ide.TranslationGenerators
-import com.eny.i18n.plugin.ide.runCommonConfig
-import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.CommonSettings
-import com.eny.i18n.plugin.ide.settings.VueSettings
 import org.junit.Test
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource

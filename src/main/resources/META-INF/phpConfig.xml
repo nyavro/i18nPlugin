@@ -9,6 +9,6 @@
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.po.PlainObjectLocalizationSources"/>
-        <customSettings implementation="com.eny.i18n.plugin.ide.settings.PoConfigurable"/>
+        <customSettings implementation="com.eny.i18n.plugin.vue.PoConfigurable"/>
     </extensions>
 </idea-plugin>

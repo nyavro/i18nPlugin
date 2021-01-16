@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide
 
-import com.eny.i18n.plugin.ide.settings.VueSettings
+import com.eny.i18n.plugin.vue.VueSettings
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.Test
 
