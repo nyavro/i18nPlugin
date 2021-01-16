@@ -1,4 +1,6 @@
-package com.eny.i18n.plugin.utils.generator.translation
+package com.eny.i18n.plugin.yaml
+
+import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 
 class YamlTranslationGenerator: TranslationGenerator {
 

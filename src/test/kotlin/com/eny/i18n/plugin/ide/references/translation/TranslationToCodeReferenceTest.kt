@@ -7,7 +7,7 @@ import com.eny.i18n.plugin.ide.settings.I18NextSettings
 import com.eny.i18n.plugin.vue.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import com.eny.i18n.plugin.yaml.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import org.junit.Test
 

@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.ide.completion
 import com.eny.i18n.plugin.utils.generator.code.PhpCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import com.eny.i18n.plugin.yaml.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.junit.Test
 
@@ -26,6 +26,4 @@ internal abstract class CodeCompletionTestBasePhp(
 }
 
 internal class CodeCompletionPhpJsonTest: CodeCompletionTestBasePhp(JsonTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionPhpYamlTest: CodeCompletionTestBasePhp(YamlTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionPhpYamlDefNsTest: CodeCompletionTestBasePhp(YamlTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)
 internal class CodeCompletionPhpJsonDefNsTest: CodeCompletionTestBasePhp(JsonTranslationGenerator(), DefaultNsKeyGenerator(), ::DefaultNsChecker)

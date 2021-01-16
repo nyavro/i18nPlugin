@@ -1,19 +1,13 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
-import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import org.junit.Assert
 import org.junit.Ignore
-import org.junit.Test
 //import org.junit.jupiter.api.extension.ExtensionContext
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.Arguments
 //import org.junit.jupiter.params.provider.ArgumentsProvider
 //import org.junit.jupiter.params.provider.ArgumentsSource
-import java.util.stream.Stream
 
 @Ignore
 class ExtractI18nIntentionActionVueTest: ExtractionTestBase() {

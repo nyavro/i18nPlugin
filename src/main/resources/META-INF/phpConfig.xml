@@ -10,5 +10,6 @@
     <extensions defaultExtensionNs="com.eny.i18n">
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.po.PlainObjectLocalizationSources"/>
         <customSettings implementation="com.eny.i18n.plugin.vue.PoConfigurable"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.language.php.PhpLanguageFactory"/>
     </extensions>
 </idea-plugin>

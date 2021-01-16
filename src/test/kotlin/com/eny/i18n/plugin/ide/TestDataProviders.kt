@@ -1,11 +1,9 @@
 package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.utils.generator.code.*
-import com.eny.i18n.plugin.utils.generator.translation.Json5TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
-import java.util.stream.Stream
+import com.eny.i18n.plugin.yaml.YamlTranslationGenerator
 
 private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator())
 private val vueCgs = listOf(VueCodeGenerator(), VueScriptCodeGenerator())

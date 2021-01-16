@@ -144,6 +144,7 @@
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensionPoints>
         <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationFactory" name="localizationFactory" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.factory.LanguageFactory" name="technologyFactory" dynamic="true"/>
         <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationSourcesProvider" name="localizationSourceProvider" dynamic="true"/>
         <extensionPoint interface="com.eny.i18n.plugin.factory.CustomSettings" name="customSettings" area="IDEA_PROJECT" dynamic="true"/>
     </extensionPoints>
@@ -170,5 +171,7 @@
         <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.i18n.I18nLocalizationSources"/>
         <customSettings implementation="com.eny.i18n.plugin.vue.CommonConfigurable"/>
         <customSettings implementation="com.eny.i18n.plugin.vue.I18NextConfigurable"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.language.js.JsLanguageFactory"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.language.jsx.JsxLanguageFactory"/>
     </extensions>
 </idea-plugin>

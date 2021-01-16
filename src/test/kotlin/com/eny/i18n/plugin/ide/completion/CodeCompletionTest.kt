@@ -4,11 +4,10 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import com.eny.i18n.plugin.yaml.YamlTranslationGenerator
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.junit.Test
-import kotlin.concurrent.thread
 
 interface Checker {
     fun doCheck(sourceName: String, sourceCode: String, expectedCode: String, ext: String, translationContent: String)
@@ -137,7 +136,3 @@ internal class CodeCompletionTsJsonTest: CodeCompletionTestBase(TsCodeGenerator(
 internal class CodeCompletionJsJsonTest: CodeCompletionTestBase(JsCodeGenerator(), JsonTranslationGenerator(), NsKeyGenerator())
 internal class CodeCompletionTsxJsonTest: CodeCompletionTestBase(TsxCodeGenerator(), JsonTranslationGenerator(), NsKeyGenerator())
 internal class CodeCompletionJsxJsonTest: CodeCompletionTestBase(JsxCodeGenerator(), JsonTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionTsYamlTest: CodeCompletionTestBase(TsCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionJsYamlTest: CodeCompletionTestBase(JsCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionTsxYamlTest: CodeCompletionTestBase(TsxCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())
-internal class CodeCompletionJsxYamlTest: CodeCompletionTestBase(JsxCodeGenerator(), YamlTranslationGenerator(), NsKeyGenerator())

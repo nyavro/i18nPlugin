@@ -6,7 +6,7 @@ import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
+import com.eny.i18n.plugin.yaml.YamlTranslationGenerator
 import org.junit.Test
 //import org.junit.jupiter.api.Disabled
 //import org.junit.jupiter.params.ParameterizedTest

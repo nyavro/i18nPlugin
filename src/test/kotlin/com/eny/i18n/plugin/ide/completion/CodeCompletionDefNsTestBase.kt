@@ -3,9 +3,7 @@ package com.eny.i18n.plugin.ide.completion
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import org.junit.Test
-import kotlin.concurrent.thread
 
 abstract class CodeCompletionDefNsTestBase(codeGenerator: CodeGenerator, translationGenerator: TranslationGenerator): CodeCompletionTestBase(codeGenerator, translationGenerator, DefaultNsKeyGenerator(), ::DefaultNsChecker) {
 
@@ -30,7 +28,3 @@ internal class CodeCompletionTsJsonDefNsTest: CodeCompletionDefNsTestBase(TsCode
 internal class CodeCompletionJsJsonDefNsTest: CodeCompletionDefNsTestBase(JsCodeGenerator(), JsonTranslationGenerator())
 internal class CodeCompletionTsxJsonDefNsTest: CodeCompletionDefNsTestBase(TsxCodeGenerator(), JsonTranslationGenerator())
 internal class CodeCompletionJsxJsonDefNsTest: CodeCompletionDefNsTestBase(JsxCodeGenerator(), JsonTranslationGenerator())
-internal class CodeCompletionTsYamlDefNsTest: CodeCompletionDefNsTestBase(TsCodeGenerator(), YamlTranslationGenerator())
-internal class CodeCompletionJsYamlDefNsTest: CodeCompletionDefNsTestBase(JsCodeGenerator(), YamlTranslationGenerator())
-internal class CodeCompletionTsxYamlDefNsTest: CodeCompletionDefNsTestBase(TsxCodeGenerator(), YamlTranslationGenerator())
-internal class CodeCompletionJsxYamlDefNsTest: CodeCompletionDefNsTestBase(JsxCodeGenerator(), YamlTranslationGenerator())

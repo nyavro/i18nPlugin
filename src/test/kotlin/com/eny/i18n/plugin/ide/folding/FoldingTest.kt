@@ -78,15 +78,10 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
 }
 
 internal class FoldingTestTsJson : FoldingTestBase("ts", "json")
-internal class FoldingTestTsYaml : FoldingTestBase("ts", "yml")
 internal class FoldingTestTsxJson : FoldingTestBase("tsx", "json")
-internal class FoldingTestTsxYaml : FoldingTestBase("tsx", "yml")
 internal class FoldingTestJsJson : FoldingTestBase("js", "json")
-internal class FoldingTestJsYaml : FoldingTestBase("js", "yml")
 internal class FoldingTestJsxJson : FoldingTestBase("jsx", "json")
-internal class FoldingTestJsxYaml : FoldingTestBase("jsx", "yml")
 internal class FoldingTestPhpJson : FoldingTestBase("php", "json")
-internal class FoldingTestPhpYaml : FoldingTestBase("php", "yml")
 internal class FoldingTestVueJson : FoldingTestBase("vue", "json")
 //TODO
 //internal class FoldingTestVueYaml : FoldingTestBase("vue", "yml")

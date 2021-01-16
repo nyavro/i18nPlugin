@@ -7,9 +7,11 @@ import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestInputDialog
+import org.junit.Ignore
 import org.junit.Test
 import kotlin.concurrent.thread
 
+@Ignore
 class ExtractionCancellationTest: PlatformBaseTest() {
 
     private val hint = "Extract i18n key"
