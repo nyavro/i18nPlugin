@@ -1,9 +1,6 @@
 package com.eny.i18n.plugin.yaml
 
-import com.eny.i18n.plugin.factory.ContentGenerator
-import com.eny.i18n.plugin.factory.LocalizationFactory
-import com.eny.i18n.plugin.factory.LocalizationType
-import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
+import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.key.FullKey
@@ -12,6 +9,7 @@ import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
+import com.intellij.icons.AllIcons
 import com.intellij.lang.Language
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
@@ -27,10 +25,14 @@ import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
+import javax.swing.Icon
 
 private val tabChar = "  "
 
 class YamlLocalizationFactory: LocalizationFactory {
+    override fun options(): LocalizationOptions = object: LocalizationOptions {
+        override fun icon(): Icon = AllIcons.FileTypes.Yaml
+    }
     override fun elementTreeFactory(): (file: PsiElement) -> PsiElementTree? = {
         (it as? YAMLFile)?.let {YamlElementTree.create(it)}
     }

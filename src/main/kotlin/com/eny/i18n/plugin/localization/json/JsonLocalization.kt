@@ -1,9 +1,6 @@
 package com.eny.i18n.plugin.localization.json
 
-import com.eny.i18n.plugin.factory.ContentGenerator
-import com.eny.i18n.plugin.factory.LocalizationFactory
-import com.eny.i18n.plugin.factory.LocalizationType
-import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
+import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.key.FullKey
@@ -14,6 +11,7 @@ import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
 import com.fasterxml.jackson.core.io.JsonStringEncoder
+import com.intellij.icons.AllIcons
 import com.intellij.json.JsonElementTypes
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
@@ -29,18 +27,20 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parents
+import javax.swing.Icon
 
 private val tabChar = "  "
 
 class JsonLocalizationFactory: LocalizationFactory {
-
+    override fun options(): LocalizationOptions = object: LocalizationOptions {
+        override fun icon(): Icon = AllIcons.FileTypes.Json
+    }
     override fun elementTreeFactory(): (file: PsiElement) -> PsiElementTree? = {
         file ->
             if (file is JsonFile) JsonElementTree.create(file)
             else if (file is JsonObject) JsonElementTree(file)
             else null
     }
-
     override fun contentGenerator(): ContentGenerator = JsonContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<JsonStringLiteral> = JsonReferenceAssistant()
 }

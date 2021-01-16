@@ -7,6 +7,7 @@ import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import javax.swing.Icon
 
 /**
  * Localization components factory
@@ -27,6 +28,15 @@ interface LocalizationFactory {
      * Element tree
      */
     fun elementTreeFactory(): (file: PsiElement) -> PsiElementTree?
+
+    /**
+     * Options
+     */
+    fun options(): LocalizationOptions
+}
+
+interface LocalizationOptions {
+    fun icon(): Icon
 }
 
 /**
