@@ -13,6 +13,7 @@ import org.junit.Test
 //import org.junit.jupiter.params.provider.ArgumentsSource
 //import org.junit.jupiter.params.provider.ValueSource
 
+@Ignore
 class TranslationFileGenerationTest: ExtractionTestBase() {
 
     // @TODO 16
