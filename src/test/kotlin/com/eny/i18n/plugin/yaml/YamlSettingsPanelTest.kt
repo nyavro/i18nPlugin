@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.yaml
 
+import com.eny.i18n.plugin.addons.yaml.YamlSettings
+import com.eny.i18n.plugin.addons.yaml.YamlSettingsFormFragment
 import com.eny.i18n.plugin.ide.settings.SettingsPanelBase
 import com.eny.i18n.plugin.utils.PluginBundle
 import org.junit.Test

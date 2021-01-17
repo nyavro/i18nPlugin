@@ -1,11 +1,10 @@
 package com.eny.i18n.plugin.ide.completion
 
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.vue.VueSettings
+import com.eny.i18n.plugin.addons.technology.vue.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.eny.i18n.plugin.yaml.YamlTranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.junit.Test
 

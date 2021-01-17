@@ -16,11 +16,6 @@ class KeyContextTest: PlatformBaseTest() {
 
     private val hint = "Extract i18n key"
 
-    @Test
-    fun testStub1() {
-        Assert.assertTrue(true)
-    }
-
 //    @ParameterizedTest
 //    @ArgumentsSource(CodeGeneratorsWithNs::class)
 //    fun testKeyContext(codeGenerator: CodeGenerator, defaultNs: Boolean) {

@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.utils
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.ide.settings.mainFactory
-import com.eny.i18n.plugin.vue.vueSettings
+import com.eny.i18n.plugin.addons.technology.vue.vueSettings
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile

@@ -11,8 +11,8 @@ import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.ellipsis
 import com.eny.i18n.plugin.utils.unQuote
-import com.eny.i18n.plugin.vue.VueSettings
-import com.eny.i18n.plugin.vue.vueSettings
+import com.eny.i18n.plugin.addons.technology.vue.VueSettings
+import com.eny.i18n.plugin.addons.technology.vue.vueSettings
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor

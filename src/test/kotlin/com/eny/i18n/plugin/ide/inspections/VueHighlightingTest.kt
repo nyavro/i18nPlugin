@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.vue.VueSettings
+import com.eny.i18n.plugin.addons.technology.vue.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import org.junit.Test
 

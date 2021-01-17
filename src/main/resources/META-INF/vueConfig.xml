@@ -1,15 +1,16 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="VueJS" implementationClass="com.eny.i18n.plugin.ide.annotator.VueCompositeKeyAnnotator"/>
-        <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.ide.references.code.VueReferenceContributor"/>
-        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.ide.completion.VueCompletionContributor"/>
-        <lang.foldingBuilder language="HTML" implementationClass="com.eny.i18n.plugin.ide.folding.VueJsFoldingBuilder"/>
-        <projectService serviceImplementation="com.eny.i18n.plugin.vue.VueSettings"/>
+        <annotator language="VueJS" implementationClass="com.eny.i18n.plugin.addons.technology.vue.VueCompositeKeyAnnotator"/>
+        <psi.referenceContributor language="VueJS" implementation="com.eny.i18n.plugin.addons.technology.vue.VueReferenceContributor"/>
+        <completion.contributor language="VueJS" implementationClass="com.eny.i18n.plugin.addons.technology.vue.VueCompletionContributor"/>
+        <lang.foldingBuilder language="HTML" implementationClass="com.eny.i18n.plugin.addons.technology.vue.VueJsFoldingBuilder"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.addons.technology.vue.VueSettings"/>
+        <languageInjector implementation="com.eny.i18n.plugin.addons.technology.vue.VueSFCTranslationInjector"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
-        <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.vue.VueLocalizationSources"/>
-        <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.vue.VueSfcLocalizationSources"/>
-        <customSettings implementation="com.eny.i18n.plugin.vue.VueConfigurable"/>
-        <technologyFactory implementation="com.eny.i18n.plugin.language.vue.VueLanguageFactory"/>
+        <localizationSourceProvider implementation="com.eny.i18n.plugin.addons.technology.vue.VueLocalizationSources"/>
+        <localizationSourceProvider implementation="com.eny.i18n.plugin.addons.technology.vue.VueSfcLocalizationSources"/>
+        <customSettings implementation="com.eny.i18n.plugin.addons.technology.vue.VueConfigurable"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.addons.technology.vue.VueLanguageFactory"/>
     </extensions>
 </idea-plugin>

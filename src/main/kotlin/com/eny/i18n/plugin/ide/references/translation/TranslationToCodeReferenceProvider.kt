@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote
-import com.eny.i18n.plugin.vue.vueSettings
+import com.eny.i18n.plugin.addons.technology.vue.vueSettings
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.search.PsiSearchHelper

@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runPoConfig
-import com.eny.i18n.plugin.ide.settings.PoSettings
+import com.eny.i18n.plugin.addons.technology.po.PoSettings
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote

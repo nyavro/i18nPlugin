@@ -149,29 +149,28 @@
         <extensionPoint interface="com.eny.i18n.plugin.factory.CustomSettings" name="customSettings" area="IDEA_PROJECT" dynamic="true"/>
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
-        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.code.JsReferenceContributor"/>
-        <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.plugin.ide.references.code.JsxReferenceContributor"/>
-        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.ide.references.translation.JsonReferenceContributor"/>
-        <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.completion.JsCompletionContributor"/>
+        <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsCompositeKeyAnnotator"/>
+        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.addons.js.JsReferenceContributor"/>
+        <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.plugin.addons.js.JsxReferenceContributor"/>
+        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.addons.json.JsonReferenceContributor"/>
+        <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.CommonSettings"/>
-        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.I18NextSettings"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
         <intentionAction>
             <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
         </intentionAction>
-        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
-        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
-        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.addons.js.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.addons.js.JsFoldingBuilder"/>
         <lang.documentationProvider language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
-        <languageInjector implementation="com.eny.i18n.plugin.ide.injections.VueSFCTranslationInjector"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
-        <localizationFactory implementation="com.eny.i18n.plugin.localization.json.JsonLocalizationFactory"/>
-        <localizationSourceProvider implementation="com.eny.i18n.plugin.technology.i18n.I18nLocalizationSources"/>
-        <customSettings implementation="com.eny.i18n.plugin.vue.CommonConfigurable"/>
-        <customSettings implementation="com.eny.i18n.plugin.vue.I18NextConfigurable"/>
-        <technologyFactory implementation="com.eny.i18n.plugin.language.js.JsLanguageFactory"/>
-        <technologyFactory implementation="com.eny.i18n.plugin.language.jsx.JsxLanguageFactory"/>
+        <localizationFactory implementation="com.eny.i18n.plugin.addons.json.JsonLocalizationFactory"/>
+        <localizationSourceProvider implementation="com.eny.i18n.plugin.addons.technology.i18n.I18nLocalizationSources"/>
+        <customSettings implementation="com.eny.i18n.plugin.addons.technology.vue.CommonConfigurable"/>
+        <customSettings implementation="com.eny.i18n.plugin.addons.technology.vue.I18NextConfigurable"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.addons.js.JsLanguageFactory"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.addons.js.JsxLanguageFactory"/>
     </extensions>
 </idea-plugin>

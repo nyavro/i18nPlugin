@@ -2,14 +2,9 @@ package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
 //import com.eny.i18n.plugin.ide.JsCodeAndTranslationGenerators
-import com.eny.i18n.plugin.ide.runI18nConfig
-import com.eny.i18n.plugin.ide.settings.I18NextSettings
-import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.ReactTransJsxContentGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
-import com.intellij.psi.PsiElement
 import org.junit.Test
 //import org.junit.jupiter.params.ParameterizedTest
 //import org.junit.jupiter.params.provider.ArgumentsSource

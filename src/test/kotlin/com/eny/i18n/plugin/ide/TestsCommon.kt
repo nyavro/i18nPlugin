@@ -1,13 +1,14 @@
 package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.ide.settings.CommonSettings
-import com.eny.i18n.plugin.ide.settings.I18NextSettings
-import com.eny.i18n.plugin.ide.settings.PoSettings
-import com.eny.i18n.plugin.vue.VueSettings
+import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings
+import com.eny.i18n.plugin.addons.technology.po.PoSettings
+import com.eny.i18n.plugin.addons.technology.vue.VueSettings
+import com.eny.i18n.plugin.addons.yaml.YamlSettings
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import kotlin.reflect.KMutableProperty1
 
-private fun <T> runWithBooleanSettings(props: Map<KMutableProperty1<T, Boolean>, Boolean>, actual: T, block: (T) -> Unit) {
+fun <T> runWithBooleanSettings(props: Map<KMutableProperty1<T, Boolean>, Boolean>, actual: T, block: (T) -> Unit) {
     val stash = props.mapValues { it.key.get(actual) }
     props.forEach { it.key.set(actual, it.value) }
     block(actual)
