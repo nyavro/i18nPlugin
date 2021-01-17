@@ -10,7 +10,7 @@ import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.junit.Ignore
 import org.junit.Test
 
-private fun noop (fixture: CodeInsightTestFixture, block: () -> Unit) = block()
+fun noop (fixture: CodeInsightTestFixture, block: () -> Unit) = block()
 
 class ExtractI18nIntentionActionJsTest: ExtractI18nIntentionActionTest (JsCodeGenerator(), JsonTranslationGenerator(), ::noop)
 class ExtractI18nIntentionActionTsTest: ExtractI18nIntentionActionTest (TsCodeGenerator(), JsonTranslationGenerator(), ::noop)
@@ -22,8 +22,6 @@ abstract class ExtractI18nIntentionActionTest(
         private val tg: TranslationGenerator,
         private val wrapper: (CodeInsightTestFixture, () -> Unit) -> Unit
 ): ExtractionTestBase() {
-
-    private val cgs = listOf(JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
 
     @Test
     fun testKeyExtraction() = wrapper(myFixture) {
@@ -95,8 +93,7 @@ abstract class ExtractI18nIntentionActionTest(
     }
 
     //TODO: fix broken test
-    @Ignore
-    fun testRootSource() = wrapper(myFixture) {
+    fun ignoreTestRootSource() = wrapper(myFixture) {
         runTestCase(
             "simple.${cg.ext()}",
             "I want to <caret>move it to translation",
