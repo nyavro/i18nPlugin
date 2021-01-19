@@ -26,4 +26,3 @@ class JsCodeCompletionInvalidTest: CodeCompletionInvalidTestBase(JsCodeGenerator
 class TsCodeCompletionInvalidTest: CodeCompletionInvalidTestBase(TsCodeGenerator())
 class JsxCodeCompletionInvalidTest: CodeCompletionInvalidTestBase(JsxCodeGenerator())
 class TsxCodeCompletionInvalidTest: CodeCompletionInvalidTestBase(TsxCodeGenerator())
-class PhpCodeCompletionInvalidTest: CodeCompletionInvalidTestBase(PhpCodeGenerator())

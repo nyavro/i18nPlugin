@@ -1,7 +1,10 @@
-package com.eny.i18n.plugin.ide.completion
+package com.eny.i18n.plugin.addons.technology.vue
 
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.addons.technology.vue.VueSettings
+import com.eny.i18n.plugin.ide.completion.BasicChecker
+import com.eny.i18n.plugin.ide.completion.Checker
+import com.eny.i18n.plugin.ide.completion.CodeCompletionTestBase
+import com.eny.i18n.plugin.ide.completion.DefaultNsKeyGenerator
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
