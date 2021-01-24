@@ -1,5 +1,6 @@
-package com.eny.i18n.plugin.ide.actions
+package com.eny.i18n.plugin.addons.technology.php
 
+import com.eny.i18n.plugin.ide.actions.ExtractionTestBase
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 import org.junit.Assert

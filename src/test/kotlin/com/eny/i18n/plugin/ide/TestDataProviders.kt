@@ -16,14 +16,6 @@ fun translationGenerator(ext: String): TranslationGenerator? = tgs.find {it.ext(
 
 fun codeGenerator(ext: String): CodeGenerator? = cgs.find {it.ext() == ext}
 
-//class CodeGeneratorsWithNs : ArgumentsProvider {
-//    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-//        (cgs
-//            .flatMap {
-//                listOf(Arguments.of(it, true), Arguments.of(it, false))
-//            }
-//        ).stream()
-//}
 
 //class CodeGenerators : ArgumentsProvider {
 //    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
