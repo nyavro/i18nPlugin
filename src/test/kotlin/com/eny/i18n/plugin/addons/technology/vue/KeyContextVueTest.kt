@@ -12,8 +12,7 @@ class KeyContextVueTest: PlatformBaseTest() {
 
     private val codeGenerator = VueCodeGenerator()
 
-    @Test
-    fun testKeyContextScript() {
+    fun disableTestKeyContextScript() {
         myFixture.runVueConfig {
             myFixture.configureByText("keyContextScript.${codeGenerator.ext()}", codeGenerator.generateScript("this.\$t('ref.<caret>value3')"))
             assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
