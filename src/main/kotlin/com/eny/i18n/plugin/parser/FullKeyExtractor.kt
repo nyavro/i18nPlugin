@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.factory.CallContext
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
+import com.eny.i18n.plugin.ide.settings.poSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.intellij.psi.PsiElement
@@ -28,9 +29,9 @@ class KeyExtractorImpl: Extractor {
      * Extracts fullkey from element, if possible
      */
     override fun extractFullKey(element: PsiElement): FullKey? {
-        val config = Settings.getInstance(element.project).config()
+        val config = element.project.i18NextSettings()
         val parser = (
-            if (config.gettext)
+            if (element.project.poSettings().gettext)
                 KeyParserBuilder.withoutTokenizer()
             else
                 KeyParserBuilder

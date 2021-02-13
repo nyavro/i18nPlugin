@@ -1,13 +1,13 @@
 package com.eny.i18n.plugin.ide.settings
 
 import com.eny.i18n.plugin.utils.PluginBundle
-import com.intellij.openapi.project.Project
 import com.jgoodies.forms.factories.DefaultComponentFactory
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
+import java.lang.reflect.Modifier
 import javax.swing.*
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
@@ -17,7 +17,7 @@ import javax.swing.event.DocumentListener
 import javax.swing.text.JTextComponent
 import kotlin.reflect.KMutableProperty0
 
-private fun addLimitationsAndHandlers(component: JTextComponent, maxLength: Int, onChange: (newText: String) -> Unit = {}, isValid: (e: Char) -> Boolean = { true }) {
+fun addLimitationsAndHandlers(component: JTextComponent, maxLength: Int, onChange: (newText: String) -> Unit = {}, isValid: (e: Char) -> Boolean = { true }) {
     component.addKeyListener(object: KeyAdapter() {
         override fun keyTyped(e: KeyEvent) {
             if (component.text.length - (if (component.selectedText==null) 0 else component.selectedText.length) >= maxLength || !isValid(e.keyChar)) {
@@ -32,23 +32,9 @@ private fun addLimitationsAndHandlers(component: JTextComponent, maxLength: Int,
     })
 }
 
-/**
- * Settings configuration panel
- */
-class SettingsPanel(val settings: Settings, val project: Project) {
+class FormUtils {
 
-    /**
-     * Returns Settings main panel
-     */
-    fun getRootPanel(): JPanel {
-        val root = JPanel()
-        root.layout = BorderLayout()
-        root.add(DefaultComponentFactory.getInstance().createSeparator("Settings"), BorderLayout.NORTH)
-        root.add(settingsPanel(), BorderLayout.WEST)
-        return root
-    }
-
-    private fun checkbox(label:String, property: KMutableProperty0<Boolean>): JPanel {
+    fun checkbox(label:String, property: KMutableProperty0<Boolean>): JPanel {
         val panel = JPanel()
         panel.preferredSize = Dimension(350, 30)
         panel.layout = BorderLayout()
@@ -59,20 +45,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         return panel
     }
 
-    private fun separator(label:String, property: KMutableProperty0<String>):JPanel {
-        val panel = JPanel()
-        panel.layout = BorderLayout()
-        panel.preferredSize = Dimension(350, 30)
-        panel.add(JLabel(label), BorderLayout.WEST)
-        val control = JTextField(property.get())
-        control.name = label
-        addLimitationsAndHandlers(control, 1, property::set, {!" {}$`".contains(it)})
-        control.preferredSize = Dimension(30, 30)
-        panel.add(control, BorderLayout.EAST)
-        return panel
-    }
-
-    private fun textInput(label:String, property: KMutableProperty0<String>):JPanel {
+    fun textInput(label:String, property: KMutableProperty0<String>):JPanel {
         val panel = JPanel()
         panel.layout = BorderLayout()
         panel.preferredSize = Dimension(350, 30)
@@ -85,7 +58,20 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         return panel
     }
 
-    private fun textArea(label:String, property: KMutableProperty0<String>):JPanel {
+    fun numberInput(label:String, property: KMutableProperty0<Int>):JPanel {
+        val panel = JPanel()
+        panel.layout = BorderLayout()
+        panel.preferredSize = Dimension(350, 30)
+        panel.add(JLabel(label), BorderLayout.WEST)
+        val control = JTextField(property.get().toString())
+        control.name = label
+        addLimitationsAndHandlers(control, 2, {property.set(it.toInt())}, {('0'..'9').contains(it)})
+        panel.add(control, BorderLayout.EAST)
+        control.preferredSize = Dimension(100, 30)
+        return panel
+    }
+
+    fun textArea(label:String, property: KMutableProperty0<String>):JPanel {
         val panel = JPanel()
         panel.layout = BorderLayout()
         val labelPanel = JPanel()
@@ -103,63 +89,53 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(control, BorderLayout.EAST)
         return panel
     }
+}
 
-    private fun numberInput(label:String, property: KMutableProperty0<Int>):JPanel {
-        val panel = JPanel()
-        panel.layout = BorderLayout()
-        panel.preferredSize = Dimension(350, 30)
-        panel.add(JLabel(label), BorderLayout.WEST)
-        val control = JTextField(property.get().toString())
-        control.name = label
-        addLimitationsAndHandlers(control, 2, {property.set(it.toInt())}, {('0'..'9').contains(it)})
-        panel.add(control, BorderLayout.EAST)
-        control.preferredSize = Dimension(100, 30)
-        return panel
+class ModificationCheck<T : Any> {
+    fun hash(settings: T): String {
+        return settings
+            .javaClass
+            .declaredFields
+            .filter { !Modifier.isStatic(it.modifiers)}
+            .map {it.setAccessible(true); it.name + ":" + it.get(settings)}
+            .joinToString()
     }
+}
+/**
+ * Settings configuration panel
+ */
+class CommonSettingsFormFragment(val settings: CommonSettings): SettingsFormFragment<CommonSettings> {
 
-    private fun vue(): JPanel {
-        val panel = JPanel()
-        panel.layout = BorderLayout()
-        panel.preferredSize = Dimension(350, 30)
-        val label = PluginBundle.getMessage("settings.vue")
-        val vueMode = JCheckBox(label, settings.vue)
-        vueMode.name = label
-        vueMode.addItemListener { _ -> settings.vue = vueMode.isSelected}
-        panel.add(vueMode, BorderLayout.WEST)
-        return panel
-    }
+    private val formUtils = FormUtils()
 
-    private fun gettext(): JPanel {
-        val panel = JPanel()
-        panel.layout = BorderLayout()
-        panel.preferredSize = Dimension(350, 30)
-        val gettextMode = JCheckBox(PluginBundle.getMessage("settings.gettext.enabled"), settings.gettext)
-        gettextMode.addItemListener { _ -> settings.gettext = gettextMode.isSelected}
-        panel.add(gettextMode, BorderLayout.WEST)
-        return panel
+    private val modificationCheck = ModificationCheck<CommonSettings>()
+
+    private val initialHash = modificationCheck.hash(settings)
+
+    /**
+     * Returns Settings main panel
+     */
+    override fun getRootPanel(): JPanel {
+        val root = JPanel()
+        root.layout = BorderLayout()
+        //TODO move to bundle
+        root.add(DefaultComponentFactory.getInstance().createSeparator("Settings"), BorderLayout.NORTH)
+        root.add(settingsPanel(), BorderLayout.WEST)
+        return root
     }
 
     private fun settingsPanel(): JPanel {
-        val root = JPanel()
         val panel = JPanel()
-        root.layout = BorderLayout()
         panel.layout = BoxLayout(panel, BoxLayout.Y_AXIS)
-        panel.add(checkbox(PluginBundle.getMessage("settings.search.in.project.files.only"), settings::searchInProjectOnly))
-        panel.add(separator(PluginBundle.getMessage("settings.namespace.separator"), settings::nsSeparator))
-        panel.add(separator(PluginBundle.getMessage("settings.key.separator"), settings::keySeparator))
-        panel.add(separator(PluginBundle.getMessage("settings.plural.separator"), settings::pluralSeparator))
-        panel.add(textArea(PluginBundle.getMessage("settings.default.namespace"), settings::defaultNs))
-        panel.add(checkbox(PluginBundle.getMessage("settings.prefer.yaml.files.generation"), settings::preferYamlFilesGeneration))
-        panel.add(checkbox(PluginBundle.getMessage("settings.folding.enabled"), settings::foldingEnabled))
-        panel.add(textInput(PluginBundle.getMessage("settings.folding.preferredLanguage"), settings::foldingPreferredLanguage))
-        panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
-        panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
-        panel.add(checkbox(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), settings::partialTranslationInspectionEnabled))
-        panel.add(vue())
-        panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), settings::vueDirectory))
-        panel.add(checkbox(PluginBundle.getMessage("settings.gettext.enabled"), settings::gettext))
-        panel.add(textInput(PluginBundle.getMessage("settings.gettext.aliases"), settings::gettextAliases))
-        root.add(panel, BorderLayout.PAGE_START)
-        return root
+        panel.add(formUtils.checkbox(PluginBundle.getMessage("settings.search.in.project.files.only"), settings::searchInProjectOnly))
+        panel.add(formUtils.checkbox(PluginBundle.getMessage("settings.folding.enabled"), settings::foldingEnabled))
+        panel.add(formUtils.textInput(PluginBundle.getMessage("settings.folding.preferredLanguage"), settings::foldingPreferredLanguage))
+        panel.add(formUtils.numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
+        panel.add(formUtils.checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
+        panel.add(formUtils.checkbox(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), settings::partialTranslationInspectionEnabled))
+        return panel
     }
+
+    override fun isModified(): Boolean = initialHash == modificationCheck.hash(settings)
 }
+

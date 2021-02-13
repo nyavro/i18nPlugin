@@ -3,13 +3,13 @@ package utils
 import com.eny.i18n.plugin.key.lexer.*
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.nullableToList
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 
 internal class TokenizerTest {
 
     @Test
-    fun tokenizeLiteral() {
+    fun testTokenizeLiteral() {
         val keyElement = KeyElement.literal("item.value:some.test:another")
         val tokenizer = NsKeyTokenizer(":", ".")
         val keySeparator = KeySeparator
@@ -31,7 +31,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteral2() {
+    fun testTokenizeLiteral2() {
         val keyElement = KeyElement.literal(":::")
         val tokenizer = NsKeyTokenizer(":", ".")
         assertEquals(
@@ -41,7 +41,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteral3() {
+    fun testTokenizeLiteral3() {
         val keyElement = KeyElement.literal(":.:.:")
         val tokenizer = NsKeyTokenizer(":", ".")
         assertEquals(
@@ -51,7 +51,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteral4() {
+    fun testTokenizeLiteral4() {
         val keyElement = KeyElement.literal("...")
         val tokenizer = NsKeyTokenizer(":", ".")
         assertEquals(
@@ -61,7 +61,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteral5() {
+    fun testTokenizeLiteral5() {
         val keyElement = KeyElement.literal(".some.")
         val tokenizer = NsKeyTokenizer(":", ".")
         assertEquals(
@@ -83,7 +83,7 @@ internal class TokenizerTest {
 //    }
 
     @Test
-    fun tokenizeLiteralCustomSeparator() {
+    fun testTokenizeLiteralCustomSeparator() {
         val keyElement = KeyElement.literal("item#value:some#test:another")
         val tokenizer = NsKeyTokenizer(":", "#")
         val keySeparator = KeySeparator
@@ -105,7 +105,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteralCustomSeparator2() {
+    fun testTokenizeLiteralCustomSeparator2() {
         val keyElement = KeyElement.literal("###")
         val tokenizer = NsKeyTokenizer("#", "@")
         assertEquals(
@@ -115,7 +115,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteralCustomSeparator3() {
+    fun testTokenizeLiteralCustomSeparator3() {
         val keyElement = KeyElement.literal("#$#$#")
         val tokenizer = NsKeyTokenizer("#", "$")
         assertEquals(
@@ -125,7 +125,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteralCustomSeparator4() {
+    fun testTokenizeLiteralCustomSeparator4() {
         val keyElement = KeyElement.literal("$$$")
         val tokenizer = NsKeyTokenizer("%", "$")
         assertEquals(
@@ -135,7 +135,7 @@ internal class TokenizerTest {
     }
 
     @Test
-    fun tokenizeLiteralCustomSeparator5() {
+    fun testTokenizeLiteralCustomSeparator5() {
         val keyElement = KeyElement.literal("^some^")
         val tokenizer = NsKeyTokenizer("*", "^")
         assertEquals(

@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.intellij.json.JsonFileType
 import org.junit.Assert.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 /**
  * CompositeKeyResolver tests
@@ -26,13 +26,13 @@ internal class CompositeKeyVariantsTest {
             fixed.map{Literal(it)},
             testTree(),
             request,
-            LocalizationType(JsonFileType.INSTANCE, "test")
+            LocalizationType(listOf(JsonFileType.INSTANCE), "test")
         )
         assertEquals(expected, variants.map {it.value()}.toSet())
     }
 
     @Test
-    fun runRequests() {
+    fun testRunRequests() {
         check("acti", listOf("main"), setOf("activity"))
         check("", listOf("main", "activity"), setOf("swimming"))
         check("activity", listOf("main"), setOf("activity"))
@@ -67,7 +67,7 @@ internal class CompositeKeyVariantsTest {
     }
 
     @Test
-    fun listCompositeKeyVariantsOmitPlurals() {
+    fun testListCompositeKeyVariantsOmitPlurals() {
         val list = listOf("s-tr1", "s-tr2", "str3-1", "str3-2", "str3-5", "str4-1", "str4-2", "str5", "str6-1", "str6-2", "str6-5")
         val grouped = list
             .groupBy {it.substringBeforeLast("-")}

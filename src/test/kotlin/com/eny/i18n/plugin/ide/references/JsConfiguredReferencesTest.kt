@@ -2,8 +2,8 @@ package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.Config
-import org.junit.jupiter.api.Test
+import com.eny.i18n.plugin.addons.technology.vue.VueSettings
+import org.junit.Test
 
 abstract class JsConfiguredReferencesTest : PlatformBaseTest() {
 
@@ -12,7 +12,7 @@ abstract class JsConfiguredReferencesTest : PlatformBaseTest() {
     }
 
     @Test
-    fun testReference() = myFixture.runVueConfig(Config(vueDirectory = "i18n")) {
+    fun testReference() = myFixture.runVueConfig(Pair(VueSettings::vueDirectory, "i18n")) {
         myFixture.configureByFiles(
             "vue/testReference.vue", "jsConfigured/i18n/index.js", "jsConfigured/i18n/en-uk/index.js", "jsConfigured/i18n/en-uk/profile.js")
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent

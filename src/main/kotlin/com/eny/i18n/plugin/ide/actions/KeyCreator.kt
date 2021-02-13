@@ -1,13 +1,15 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.factory.TranslationExtractor
-import com.eny.i18n.plugin.ide.quickfix.*
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.quickfix.CreateKeyQuickFix
+import com.eny.i18n.plugin.ide.quickfix.CreateTranslationFileQuickFix
+import com.eny.i18n.plugin.ide.quickfix.UserChoice
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
+import com.eny.i18n.plugin.ide.settings.mainFactory
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.localization.json.JsonLocalizationFactory
-import com.eny.i18n.plugin.localization.yaml.YamlLocalizationFactory
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.addons.technology.vue.vueSettings
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 
@@ -21,16 +23,12 @@ class KeyCreator {
      */
     fun createKey(project:Project, i18nKey: FullKey, source: String, editor:Editor, extractor: TranslationExtractor, onComplete: () -> Unit) {
         val search = LocalizationSourceSearch(project)
-        val settings = Settings.getInstance(project)
-        val config = settings.config()
         val files = search.findSources(i18nKey.allNamespaces())
-        val generators = settings.mainFactory().contentGenerators()
+        val generators = project.mainFactory().contentGenerators()
         val quickFix = if (files.isEmpty()) {
-            val contentGenerator = if (config.preferYamlFilesGeneration)
-                YamlLocalizationFactory().contentGenerator() else
-                JsonLocalizationFactory().contentGenerator()
+            val contentGenerator = generators.find {it.isPreferred(project)} ?: generators.first()
             //TODO - get rid of hardcoded 'en' value
-            val fileName = if (config.vue) "en" else (i18nKey.ns?.text ?: config.defaultNamespaces().first())
+            val fileName = if (project.vueSettings().vue) "en" else (i18nKey.ns?.text ?: project.i18NextSettings().defaultNamespaces().first())
             CreateTranslationFileQuickFix(i18nKey, contentGenerator, extractor.folderSelector(), fileName, source, onComplete)
         } else {
             CreateKeyQuickFix(i18nKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators, source, onComplete)

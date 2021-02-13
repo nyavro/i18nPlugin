@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.settings.Config
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
@@ -14,12 +13,12 @@ abstract class ExtractionTestBase: PlatformBaseTest() {
 
     override fun getTestDataPath(): String = "src/test/resources/keyExtraction"
 
-    protected fun config(ext: String, extractSorted: Boolean = false) =
-            Config(yamlContentGenerationEnabled = ext == "yml",
-                    jsonContentGenerationEnabled = ext == "json",
-                    preferYamlFilesGeneration = ext == "yml",
-                    extractSorted = extractSorted
-            )
+//    protected fun config(ext: String, extractSorted: Boolean = false) =
+//            Config(yamlContentGenerationEnabled = ext == "yml",
+//                    jsonContentGenerationEnabled = ext == "json",
+//                    preferYamlFilesGeneration = ext == "yml",
+//                    extractSorted = extractSorted
+//            )
 
     protected fun runTestCase(
             srcName: String,

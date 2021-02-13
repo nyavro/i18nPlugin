@@ -1,13 +1,15 @@
 package com.eny.i18n.plugin.ide.hint
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVue
+import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.codeInsight.documentation.DocumentationManager
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 class HintTestVueSfc: PlatformBaseTest() {
+
+    // @TODO 9
 
     private val cg = VueCodeGenerator()
     private val tg = JsonTranslationGenerator()
@@ -50,7 +52,7 @@ class HintTestVueSfc: PlatformBaseTest() {
     )
 
     @Test
-    fun testSingleHint() = myFixture.runVue {
+    fun testSingleHint() = myFixture.runVueConfig {
         myFixture.configureByText(
             "App.vue",
             cg.generateSfcBlock(
@@ -58,17 +60,15 @@ class HintTestVueSfc: PlatformBaseTest() {
                 translation
             )
         )
-        read {
-            val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
-            //Not supported for Vue SFC:
-            assertNull(
-                DocumentationManager
-                    .getProviderFromElement(codeElement)
-                    .getQuickNavigateInfo(
-                        myFixture.elementAtCaret,
-                        codeElement
-                    )
-            )
-        }
+        val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
+        //Not supported for Vue SFC:
+        assertNull(
+            DocumentationManager
+                .getProviderFromElement(codeElement)
+                .getQuickNavigateInfo(
+                    myFixture.elementAtCaret,
+                    codeElement
+                )
+        )
     }
 }

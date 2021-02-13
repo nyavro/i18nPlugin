@@ -1,7 +1,8 @@
 package com.eny.i18n.plugin.ide.annotator
 
 import com.eny.i18n.plugin.factory.TranslationFolderSelector
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.commonSettings
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
@@ -40,13 +41,12 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             }
         }
         else {
-            val config = Settings.getInstance(element.project).config()
-            val pluralSeparator = config.pluralSeparator
+            val pluralSeparator = element.project.i18NextSettings().pluralSeparator
             val references = files.flatMap {resolve(fullKey.compositeKey, PsiElementTree.create(it.element), pluralSeparator, it.type)}
             val allEqual = references.zipWithNext().all { it.first.path == it.second.path }
             val mostResolvedReference = if (allEqual) references.first() else references.maxBy { v -> v.path.size }!!
             if (mostResolvedReference.unresolved.isEmpty()) {
-                if (!allEqual && config.partialTranslationInspectionEnabled) {
+                if (!allEqual && element.project.commonSettings().partialTranslationInspectionEnabled) {
                     annotationHelper.annotatePartiallyTranslated(fullKey, references)
                 } else {
                     if (mostResolvedReference.element?.isLeaf() ?: false) {

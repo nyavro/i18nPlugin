@@ -1,13 +1,13 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 
 internal class CustomSeparatorsParserTest: ParserTestBase {
 //fileName:ROOT.Key2.Key3                   /                       / fileName{8}:ROOT.Key2.Key3{14}
     @Test
-    fun parseSimpleLiteral() {
+    fun testParseSimpleLiteral() {
         val elements = listOf(
                 KeyElement.literal("fileName:ROOT.Key2.Key3")
         )
@@ -18,7 +18,7 @@ internal class CustomSeparatorsParserTest: ParserTestBase {
 
 //${fileExpr}$ROOT^Key1^Key31               / *         *{11}:ROOT{4}.Key1{4}.Key31{5}
     @Test
-    fun parseExpressionWithFilePartInTemplate2() {
+    fun testParseExpressionWithFilePartInTemplate2() {
         val elements = listOf(
                 KeyElement.template("\${fileExpr}"),
                 KeyElement.literal("\$ROOT^Key1^Key31")

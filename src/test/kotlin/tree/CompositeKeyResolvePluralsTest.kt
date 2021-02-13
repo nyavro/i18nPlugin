@@ -6,17 +6,17 @@ import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.intellij.json.JsonFileType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 /**
  * CompositeKeyResolver tests
  */
 internal class CompositeKeyResolvePluralsTest {
 
-    private val localizationType: LocalizationType = LocalizationType(JsonFileType.INSTANCE, "test")
+    private val localizationType: LocalizationType = LocalizationType(listOf(JsonFileType.INSTANCE), "test")
 
     @Test
-    fun resolvePluralElementByKey() {
+    fun testResolvePluralElementByKey() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base1"
         val sub = "sub1"
@@ -52,7 +52,7 @@ internal class CompositeKeyResolvePluralsTest {
     }
 
     @Test
-    fun resolveCustomPluralSeparator() {
+    fun testResolveCustomPluralSeparator() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base2"
         val sub = "sub2"
@@ -89,7 +89,7 @@ internal class CompositeKeyResolvePluralsTest {
     }
 
     @Test
-    fun resolvePluralSkippedForLeaf() {
+    fun testResolvePluralSkippedForLeaf() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base3"
         val sub = "sub3"
@@ -124,7 +124,7 @@ internal class CompositeKeyResolvePluralsTest {
     }
 
     @Test
-    fun resolvePluralSkippedForLongUnresolvedPaths() {
+    fun testResolvePluralSkippedForLongUnresolvedPaths() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base4"
         val sub = "sub4"

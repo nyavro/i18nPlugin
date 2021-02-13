@@ -4,7 +4,7 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.openapi.util.TextRange
 import org.junit.Assert.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertTrue
 
 internal class Check(
@@ -18,7 +18,7 @@ internal class Check(
 internal class AnnotationHolderFacadeTest : TestBase {
 
     @Test
-    fun measureTotallyResolvedKey() {
+    fun testMeasureTotallyResolvedKey() {
         val resolvedChecks = listOf(
             Check(
                 TextRange(19, 43),
@@ -51,7 +51,7 @@ internal class AnnotationHolderFacadeTest : TestBase {
     }
 
     @Test
-    fun measureUnresolvedKey() {
+    fun testMeasureUnresolvedKey() {
         listOf(
             Check(
                 TextRange(26, 55),
@@ -104,7 +104,7 @@ internal class AnnotationHolderFacadeTest : TestBase {
     }
 
     @Test
-    fun measureUnresolvedTemplateKey() {
+    fun testMeasureUnresolvedTemplateKey() {
         listOf(
             Check(
                 TextRange(26, 52),
@@ -124,7 +124,7 @@ internal class AnnotationHolderFacadeTest : TestBase {
     }
 
     @Test
-    fun measureUnresolvedFile() {
+    fun testMeasureUnresolvedFile() {
         listOf(
             Check(
                 TextRange(19, 43),

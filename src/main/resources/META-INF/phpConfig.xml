@@ -1,9 +1,15 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="PHP" implementationClass="com.eny.i18n.plugin.ide.annotator.PhpCompositeKeyAnnotator"/>
-        <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.references.code.PhpReferenceContributor"/>
-        <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.ide.completion.PhpCompletionContributor"/>
-        <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.plugin.ide.folding.PhpFoldingBuilder"/>
+        <annotator language="PHP" implementationClass="com.eny.i18n.plugin.addons.technology.php.PhpCompositeKeyAnnotator"/>
+        <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.addons.technology.php.PhpReferenceContributor"/>
+        <completion.contributor language="PHP" implementationClass="com.eny.i18n.plugin.addons.technology.php.PhpCompletionContributor"/>
+        <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.plugin.addons.technology.php.PhpFoldingBuilder"/>
         <lang.documentationProvider language="PHP" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.addons.technology.po.PoSettings"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.eny.i18n">
+        <localizationSourceProvider implementation="com.eny.i18n.plugin.addons.technology.po.PlainObjectLocalizationSources"/>
+        <customSettings implementation="com.eny.i18n.plugin.addons.technology.vue.PoConfigurable"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.addons.technology.php.PhpLanguageFactory"/>
     </extensions>
 </idea-plugin>

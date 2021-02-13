@@ -2,8 +2,48 @@ package com.eny.i18n.plugin.factory
 
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.PsiElementTree
 import com.intellij.lang.Language
+import com.intellij.openapi.fileTypes.FileType
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import javax.swing.Icon
+
+/**
+ * Localization components factory
+ */
+interface LocalizationFactory {
+
+    /**
+     * Content generator
+     */
+    fun contentGenerator(): ContentGenerator
+
+    /**
+     * Localization format-specific reference assistant
+     */
+    fun referenceAssistant(): TranslationReferenceAssistant<out PsiElement>
+
+    /**
+     * Element tree
+     */
+    fun elementTreeFactory(): (file: PsiElement) -> PsiElementTree?
+
+    /**
+     * Options
+     */
+    fun options(): LocalizationOptions
+}
+
+interface LocalizationOptions {
+    fun icon(): Icon
+}
+
+/**
+ * Represents localization type.
+ * subSystem defines usage cases.
+ */
+data class LocalizationType(val fileTypes: List<FileType>, val subSystem: String)
 
 /**
  * Localization file content generator
@@ -56,4 +96,9 @@ interface ContentGenerator {
      * Generates content and psi element
      */
     fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?)
+
+    /**
+     * Checks if generator is preferred
+     */
+    fun isPreferred(project: Project): Boolean
 }

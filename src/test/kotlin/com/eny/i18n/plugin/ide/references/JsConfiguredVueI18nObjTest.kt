@@ -2,8 +2,8 @@ package com.eny.i18n.plugin.ide.references
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.ide.settings.Config
-import org.junit.jupiter.api.Test
+import com.eny.i18n.plugin.addons.technology.vue.VueSettings
+import org.junit.Test
 
 abstract class JsConfiguredVueI18nObjTest : PlatformBaseTest() {
 
@@ -11,7 +11,7 @@ abstract class JsConfiguredVueI18nObjTest : PlatformBaseTest() {
         return "src/test/resources/references/"
     }
 
-    private val testConfig = Config(jsConfiguration = "i18n.js")
+    private val testConfig = Pair(VueSettings::jsConfiguration, "i18n.js")
 
     @Test
     fun testInvalidConfiguration() = myFixture.runVueConfig(testConfig) {

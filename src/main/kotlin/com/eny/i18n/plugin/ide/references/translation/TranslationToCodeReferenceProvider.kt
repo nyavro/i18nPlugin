@@ -1,9 +1,11 @@
 package com.eny.i18n.plugin.ide.references.translation
 
-import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.ide.settings.commonSettings
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote
+import com.eny.i18n.plugin.addons.technology.vue.vueSettings
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.search.PsiSearchHelper
@@ -17,15 +19,17 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
      */
     fun getReferences(element: PsiElement, textRange: TextRange, parents: List<String>): List<PsiReference> {
         val project = element.project
-        val config = Settings.getInstance(project).config()
+        val config = project.i18NextSettings()
+        val commonSettings = project.commonSettings()
+        val vueSettings = project.vueSettings()
         val key = composeKey(
             parents,
             Separators(config.nsSeparator, config.keySeparator, config.pluralSeparator),
             config.defaultNamespaces(),
-            config.vue && element.containingFile.parent?.name == config.vueDirectory
+            vueSettings.vue && element.containingFile.parent?.name == vueSettings.vueDirectory
         )
         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES ==
-                PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, config.searchScope(project), null, null)) {
+                PsiSearchHelper.getInstance(project).isCheapEnoughToSearch(key, commonSettings.searchScope(project), null, null)) {
             return listOf(TranslationToCodeReference(element, textRange, key))
         }
         return emptyList()
@@ -73,7 +77,7 @@ class TranslationToCodeReference(element: PsiElement, textRange: TextRange, val 
         val project = element.project
         val referencesAccumulator = ReferencesAccumulator(composedKey)
         PsiSearchHelper.getInstance(project).processElementsWithWord(
-            referencesAccumulator.process(), Settings.getInstance(project).config().searchScope(project), composedKey, UsageSearchContext.ANY, true
+            referencesAccumulator.process(), project.commonSettings().searchScope(project), composedKey, UsageSearchContext.ANY, true
         )
         return referencesAccumulator.entries()
     }

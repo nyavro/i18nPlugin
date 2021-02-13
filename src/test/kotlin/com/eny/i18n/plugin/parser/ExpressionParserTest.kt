@@ -1,13 +1,13 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 //TODO rename class
 internal class ExpressionParserTest {
 
     @Test
-    fun parse() {
+    fun testParse() {
         val text = ":ROOT.Key1.Key31"
         val elements = listOf(
             KeyElement.literal("`"),

@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.references.code
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runWithConfig
-import com.eny.i18n.plugin.ide.settings.Config
+import com.eny.i18n.plugin.ide.runPoConfig
+import com.eny.i18n.plugin.addons.technology.po.PoSettings
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
@@ -13,10 +13,10 @@ class ReferenceTestPhpGettext : PlatformBaseTest() {
 
     private val cg = PhpGetTextCodeGenerator("gettext")
     private val tg = PoTranslationGenerator()
-    private val config = Config(gettext = true)
+    private val config = Pair(PoSettings::gettext, true)
 
     @Test
-    fun testReference() = myFixture.runWithConfig(config){
+    fun testReference() = myFixture.runPoConfig(config){
         myFixture.addFileToProject(
                 "en-US/LC_MESSAGES/test.${tg.ext()}",
                 tg.generateContent("ref", "section", "key", "Reference in json"))
@@ -28,7 +28,7 @@ class ReferenceTestPhpGettext : PlatformBaseTest() {
     }
 
     @Test
-    fun testMultiReference() = myFixture.runWithConfig(config) {
+    fun testMultiReference() = myFixture.runPoConfig(config) {
         myFixture.addFileToProject(
             "en-US/LC_MESSAGES/multi.${tg.ext()}",
             tg.generateContent("main", "header", "title", "Welcome")
@@ -44,7 +44,7 @@ class ReferenceTestPhpGettext : PlatformBaseTest() {
     }
 
     @Test
-    fun testMultiReferenceDefNs() = myFixture.runWithConfig(config) {
+    fun testMultiReferenceDefNs() = myFixture.runPoConfig(config) {
         myFixture.addFileToProject(
             "en-US/LC_MESSAGES/translation.${tg.ext()}",
             tg.generateContent("main", "header", "title", "Welcome")
@@ -63,7 +63,7 @@ class ReferenceTestPhpGettext : PlatformBaseTest() {
         (element?.references?.get(0) as? I18nReference)?.references?.map { it.reference.element?.value()?.text?.unQuote() }?.toSet() ?: emptySet()
 
     @Test
-    fun testInvalidTranslationRoot() = myFixture.runWithConfig(config){
+    fun testInvalidTranslationRoot() = myFixture.runPoConfig(config){
         myFixture.addFileToProject(
             "de-DE/LC_MESSAGES/invalidRoot.${tg.ext()}",
             tg.generateInvalidRoot())
@@ -73,7 +73,7 @@ class ReferenceTestPhpGettext : PlatformBaseTest() {
         assertEmpty(element!!.references)
     }
 
-    fun testInvalidContent() = myFixture.runWithConfig(config) {
+    fun testInvalidContent() = myFixture.runPoConfig(config) {
         myFixture.addFileToProject(
             "de-DE/LC_MESSAGES/invalidTranslationValue.${tg.ext()}",
             tg.generateInvalid()
@@ -95,7 +95,7 @@ class ReferenceTestPhpGettext : PlatformBaseTest() {
         assertEmpty(element!!.references)
     }
 
-    fun testInvalidTranslationValue() = myFixture.runWithConfig(config) {
+    fun testInvalidTranslationValue() = myFixture.runPoConfig(config) {
         myFixture.addFileToProject(
             "de-DE/LC_MESSAGES/invalidTranslationValue.${tg.ext()}",
             tg.generateInvalidValue("ref.section.invalid")

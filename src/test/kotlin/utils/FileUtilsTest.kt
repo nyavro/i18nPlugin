@@ -3,13 +3,13 @@ package utils
 import com.eny.i18n.plugin.utils.distance
 import com.eny.i18n.plugin.utils.pathToRoot
 import org.junit.Assert.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import java.io.File
 
 class FileUtilsTest {
 
     @Test
-    fun calculateRelativePathToRoot() {
+    fun testCalculateRelativePathToRoot() {
         assertEquals("\\src\\assets\\lang",
             pathToRoot(
                 "C:\\Projects\\react\\test",
@@ -25,7 +25,7 @@ class FileUtilsTest {
     }
 
     @Test
-    fun doesNotAffectPathIfNotUnderRoot() {
+    fun testDoesNotAffectPathIfNotUnderRoot() {
         assertEquals("C:\\Projects\\react\\test\\src\\assets\\lang",
             pathToRoot(
             "C:\\Projects\\react\\somethingWentWrong",
@@ -41,27 +41,27 @@ class FileUtilsTest {
     }
 
     @Test
-    fun equalPathsHaveZeroDistance() {
+    fun testEqualPathsHaveZeroDistance() {
         val path = listOf("src", "test", "kotlin", "utils").joinToString(File.separator)
         assertEquals(0, distance(path, path))
     }
 
     @Test
-    fun nestedPathsDistance() {
+    fun testNestedPathsDistance() {
         val path = listOf("src", "test", "kotlin", "utils").joinToString(File.separator)
         val sub = listOf("src", "test", "kotlin", "utils", "distance", "sub").joinToString(File.separator)
         assertEquals(2, distance(path, sub))
     }
 
     @Test
-    fun arbitraryPathsDistance() {
+    fun testArbitraryPathsDistance() {
         val path = listOf("src", "test", "kotlin", "utils").joinToString(File.separator)
         val sub = listOf("src", "main", "kotlin", "utils", "distance", "sub").joinToString(File.separator)
         assertEquals(8, distance(path, sub))
     }
 
     @Test
-    fun boundaryDistance() {
+    fun testBoundaryDistance() {
         assertEquals(0, distance("", ""))
         assertEquals(1, distance("one", ""))
         assertEquals(1, distance("", "one"))

@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
-import org.junit.jupiter.api.Test
+import org.junit.Test
 import kotlin.test.assertEquals
 
 //@Ignore
@@ -9,7 +9,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //${fileExpa}:ROOT.Key1.Key31               / *         *{11}:ROOT{4}.Key1{4}.Key31{5}
     @Test
-    fun parseExpressionWithFilePartInTemplate() {
+    fun testParseExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.template("\${fileExpa}"),
             KeyElement.literal(":ROOT.Key1.Key31")
@@ -20,7 +20,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //prefia${fileExpb}:ROOT.Kea4.Key5          / *         prefia*{17}:ROOT{4}.Key4{4}.Key5{4}
     @Test
-    fun parsePrefixedExpressionWithFilePartInTemplate() {
+    fun testParsePrefixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefia"),
             KeyElement.template("\${fileExpb}"),
@@ -32,7 +32,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //${fileExpc}postfin:ROOT.Key4.Key5         / *         *postfin{18}:ROOT{4}.Key4{4}.Key5{4}
     @Test
-    fun parsePostfixedExpressionWithFilePartInTemplate() {
+    fun testParsePostfixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.template("\${fileExpc}"),
             KeyElement.literal("postfin"),
@@ -44,7 +44,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //prefib${fileExpd}postfim:ROOT.Key4.Key5   / *         prefib*postfim{24}:ROOT{4}.Key4{4}.Key5{4}
     @Test
-    fun parseMixedExpressionWithFilePartInTemplate() {
+    fun testParseMixedExpressionWithFilePartInTemplate() {
         val elements = listOf(
             KeyElement.literal("prefib"),
             KeyElement.template("\${fileExpd}"),
@@ -57,7 +57,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //prefic${fileExpr}postfih.ROOT.Key4.Key5   / *         prefic*postfih{24}.ROOT{4}.Key4{4}.Key5{4} || prefix*:*postfih{24}.ROOT{4}.Key4{4}.Key5{4}
     @Test
-    fun parseNsSeparatorInExpression() {
+    fun testParseNsSeparatorInExpression() {
         val elements = listOf(
             KeyElement.literal("prefic"),
             KeyElement.template("\${fileExpr}"),
@@ -70,7 +70,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //filenamz:${kez}                           / *         filenamz{8}:*{6}
     @Test
-    fun parseExpressionWithKeyInTemplate() {
+    fun testParseExpressionWithKeyInTemplate() {
         val elements = listOf(
             KeyElement.literal("filenamz:"),
             KeyElement.template("\${kez}")
@@ -81,7 +81,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //filenamw:${kew}itew                       / *         filenamw{8}:*itew{10}
     @Test
-    fun parseExpressionWithKeyInTemplate2() {
+    fun testParseExpressionWithKeyInTemplate2() {
         val elements = listOf(
             KeyElement.literal("filenamw:"),
             KeyElement.template("\${kew}"),
@@ -93,7 +93,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //filename:${kei}.item                      / *         filename{8}:*{6}.item{4}
     @Test
-    fun parseExpressionWithKeyInTemplate3() {
+    fun testParseExpressionWithKeyInTemplate3() {
         val elements = listOf(
             KeyElement.literal("filename:"),
             KeyElement.template("\${kei}"),
@@ -105,7 +105,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //filename:root.${keo}                      / *         filename{8}:root{4}.*{6}
     @Test
-    fun partOfKeyIsExpression() {
+    fun testPartOfKeyIsExpression() {
         val elements = listOf(
             KeyElement.literal("filename:root."),
             KeyElement.template("\${keo}")
@@ -116,7 +116,7 @@ internal class AsteriskKeyParserTest : ParserTestBase {
 
 //filename:root${key}                       / *         filename{8}:root*{10}
     @Test
-    fun partOfKeyIsExpression2() {
+    fun testPartOfKeyIsExpression2() {
         val elements = listOf(
             KeyElement.literal("filename:root"),
             KeyElement.template("\${key}")

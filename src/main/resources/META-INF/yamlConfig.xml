@@ -1,0 +1,10 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.eny.i18n">
+        <localizationFactory implementation="com.eny.i18n.plugin.addons.yaml.YamlLocalizationFactory"/>
+        <customSettings implementation="com.eny.i18n.plugin.addons.yaml.YamlConfigurable"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.addons.yaml.YamlReferenceContributor"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.addons.yaml.YamlSettings"/>
+    </extensions>
+</idea-plugin>

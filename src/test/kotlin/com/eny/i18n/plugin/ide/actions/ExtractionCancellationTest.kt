@@ -2,15 +2,16 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.fasterxml.jackson.core.JsonGenerator
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestInputDialog
-import org.junit.jupiter.api.Test
+import org.junit.Ignore
+import org.junit.Test
 import kotlin.concurrent.thread
 
+@Ignore
 class ExtractionCancellationTest: PlatformBaseTest() {
 
     private val hint = "Extract i18n key"
