@@ -57,8 +57,7 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
-    fun testMultipleReferences() {
+    fun disabledTestMultipleReferences() {
         cgs.forEachIndexed { index, cg ->
             val key = "'multiTest:ref.section.subsection1.key${index}'"
             myFixture.configureByText(
