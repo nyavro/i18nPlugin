@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.ide.inspections
+package com.eny.i18n.plugin.addons.technology.vue
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.addons.technology.vue.VueSettings

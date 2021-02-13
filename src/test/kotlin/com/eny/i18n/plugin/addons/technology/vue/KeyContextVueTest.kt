@@ -4,8 +4,7 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.intellij.codeInsight.intention.IntentionAction
-import org.junit.Test
-
+//@TODO disabled test 6
 class KeyContextVueTest: PlatformBaseTest() {
 
     private val hint = "Extract i18n key"

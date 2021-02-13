@@ -10,12 +10,12 @@ import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.openapi.ui.Messages
 import org.junit.Assert
 import org.junit.Test
-
+//@TODO disabled test 9
 class VueTranslationGenerationTest: ExtractionTestBase() {
 
     private val tg = JsonTranslationGenerator()
 
-    fun testTranslationFileGenerationVue() = myFixture.runVueConfig {
+    fun disabledTestTranslationFileGenerationVue() = myFixture.runVueConfig {
         val cg = VueScriptCodeGenerator()
         myFixture.tempDirFixture.findOrCreateDir("locales")
         myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("\"I want<caret> to move it to translation\""))
@@ -31,7 +31,7 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
         )
     }
 
-    fun testTranslationFileGenerationVueTs() = myFixture.runVueConfig {
+    fun disabledTestTranslationFileGenerationVueTs() = myFixture.runVueConfig {
         val cg = VueTsCodeGenerator()
         myFixture.tempDirFixture.findOrCreateDir("locales")
         myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("\"I want<caret> to move it to translation\""))
@@ -47,7 +47,7 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
         )
     }
 
-    fun testTranslationFileGenerationVueAttributeFix() = myFixture.runVueConfig {
+    fun disabledTestTranslationFileGenerationVueAttributeFix() = myFixture.runVueConfig {
         val cg = VueScriptAttributeCodeGenerator("attr")
         myFixture.tempDirFixture.findOrCreateDir("locales")
         myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"I want<caret> to move it to translation\""))
