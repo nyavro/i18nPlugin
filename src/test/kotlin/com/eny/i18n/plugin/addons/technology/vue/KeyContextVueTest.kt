@@ -20,8 +20,7 @@ class KeyContextVueTest: PlatformBaseTest() {
         }
     }
 
-    @Test
-    fun testKeyContext() {
+    fun disabledTestKeyContext() {
         myFixture.runVueConfig {
             myFixture.configureByText("keyContext.${codeGenerator.ext()}", codeGenerator.generate("\"ref<caret>.value.sub1\""))
             assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
