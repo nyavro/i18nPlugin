@@ -64,7 +64,7 @@ class LocalizationSourceSearch(private val project: Project) {
             .flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map {localizationSource(it, directParent)}} +
         if (config.vue) {
             findVirtualFilesUnder(config.vueDirectory)
-                .filter { file -> translationFileTypes.any { file.fileType == it } }
+                .filter { file -> translationFileTypes.any { file.fileType == it.key } }
                 .map {localizationSource(it, directParent)} +
                 findSfcSources(isHost, element)
         } else listOf()
