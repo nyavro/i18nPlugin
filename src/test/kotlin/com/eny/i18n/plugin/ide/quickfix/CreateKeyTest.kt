@@ -67,6 +67,55 @@ class CreateKeyTest: PlatformBaseTest() {
     }
 
     @Test
+    fun testCreateKeyEmptyYml() {
+        val cg = JsCodeGenerator()
+        val tg = YamlTranslationGenerator()
+        val hint = "Create i18n key"
+        val translationFileName = "test" + "." + tg.ext()
+        myFixture.addFileToProject(
+                translationFileName,
+                ""
+        )
+        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"test:ref.section.mi<caret>ssing\""))
+        val action = myFixture.filterAvailableIntentions(hint).find {it.text == hint}!!
+        assertNotNull(action)
+        myFixture.launchAction(action)
+        myFixture.checkResult(
+                translationFileName,
+                """
+                |  ref:
+                |    section:
+                |      missing: test:ref.section.missing""".trimMargin(),
+                false
+        )
+    }
+
+    @Test
+    fun testCreateKeyBracesYml() {
+        val cg = JsCodeGenerator()
+        val tg = YamlTranslationGenerator()
+        val hint = "Create i18n key"
+        val translationFileName = "test" + "." + tg.ext()
+        myFixture.addFileToProject(
+                translationFileName,
+                "{}"
+        )
+        myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"test:ref.section.mi<caret>ssing\""))
+        val action = myFixture.filterAvailableIntentions(hint).find {it.text == hint}!!
+        assertNotNull(action)
+        myFixture.launchAction(action)
+        myFixture.checkResult(
+                translationFileName,
+                """
+                |{
+                |  ref:
+                |    section:
+                |      missing: test:ref.section.missing}""".trimMargin(),
+                false
+        )
+    }
+
+    @Test
     fun testCreateKeyEmptyYaml() {
         val cg = JsCodeGenerator()
         val tg = YamlTranslationGenerator()

@@ -82,12 +82,12 @@ private class YamlContentGenerator: ContentGenerator {
         val (element, anchor) = if (Settings.getInstance(item.project).extractSorted) {
             val before = props.takeWhile {it.name ?: "" < key}
             if (before.isEmpty()) {
-                Pair(separator, obj.addBefore(keyValue, props.first()))
+                Pair(separator, obj.addBefore(keyValue, if (props.isEmpty()) item.node.firstChildNode.psi else props.first()))
             } else {
                 Pair(keyValue, obj.addAfter(separator, before.last()))
             }
         } else {
-            Pair(keyValue, obj.addAfter(separator, props.last()))
+            Pair(keyValue, obj.addAfter(separator, if (props.isEmpty()) item.node.firstChildNode.psi else props.last()))
         }
         obj.addAfter(element, anchor)
     }

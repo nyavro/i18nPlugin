@@ -34,7 +34,12 @@ data class LocalizationSource(
  */
 class LocalizationSourceSearch(private val project: Project) {
 
-    private val translationFileTypes = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE, YAMLFileType.YML)
+    private val translationFileTypes =
+        mapOf(
+            Pair(JsonFileType.INSTANCE, emptyList()),
+            Pair(Json5FileType.INSTANCE, emptyList()),
+            Pair(YAMLFileType.YML, listOf("yaml"))
+        )
     private val config = Settings.getInstance(project).config()
 
     /**
@@ -59,7 +64,7 @@ class LocalizationSourceSearch(private val project: Project) {
             .flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map {localizationSource(it, directParent)}} +
         if (config.vue) {
             findVirtualFilesUnder(config.vueDirectory)
-                .filter { file -> translationFileTypes.any { file.fileType == it } }
+                .filter { file -> translationFileTypes.any { file.fileType == it.key } }
                 .map {localizationSource(it, directParent)} +
                 findSfcSources(isHost, element)
         } else listOf()
@@ -167,14 +172,14 @@ class LocalizationSourceSearch(private val project: Project) {
         translationFileTypes.flatMap {findVirtualFilesByName(fileNames, it)}
 
 //    Finds virtual files by names and type
-    private fun findVirtualFilesByName(fileNames: List<String>, fileType: FileType): List<VirtualFile> {
-        val ext = fileType.defaultExtension
+    private fun findVirtualFilesByName(fileNames: List<String>, entry: Map.Entry<FileType, List<String>>): List<VirtualFile> {
+        val exts = entry.value + entry.key.defaultExtension
         return FileTypeIndex
             .getFiles(
-                    fileType,
-                    config.searchScope(project)
+                entry.key,
+                config.searchScope(project)
             )
-            .filter { file -> fileNames.find {"$it.$ext" == file.name}.toBoolean()}
+            .filter { file -> fileNames.find { exts.any {ext -> "$it.$ext" == file.name}}.toBoolean()}
     }
 
 //    Finds root of virtual file
