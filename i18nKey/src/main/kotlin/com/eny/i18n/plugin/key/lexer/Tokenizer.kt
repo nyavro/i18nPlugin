@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.key.lexer
 
-import com.eny.i18n.plugin.parser.KeyNormalizer
-import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.KeyElementType
+import com.eny.i18n.plugin.key.KeyElement
+import com.eny.i18n.plugin.key.KeyElementType
+import com.eny.i18n.plugin.key.KeyNormalizer
 import com.eny.i18n.plugin.utils.foldWhileAccum
 import java.util.*
 
@@ -57,7 +57,7 @@ class NormalizingTokenizer(private val tokenizer: Tokenizer, private val normali
  */
 class NoTokenizer: Tokenizer {
     override fun tokenize(elements: List<KeyElement>): Pair<String, List<Token>> = Pair(
-        elements.joinToString(""){it.text}, elements.map {Literal(it.text)}
+        elements.joinToString(""){it.text}, elements.map { Literal(it.text) }
     )
 }
 
@@ -70,17 +70,17 @@ class NsKeyTokenizer(private val nsSeparator: String, private val keySeparator: 
      * Tokenize list of key elements into list of tokens
      */
     override fun tokenize(elements: List<KeyElement>): Pair<String, List<Token>> {
-        return Pair(elements.joinToString(""){it.text}, elements.flatMap (::tokenize))
+        return Pair(elements.joinToString(""){it.text}, elements.flatMap (::tokenizeItem))
     }
 
     /**
      * Tokenizes single key element into list of tokens
      */
-    fun tokenize(element: KeyElement): List<Token> =
+    fun tokenizeItem(element: KeyElement): Iterable<Token> =
         when {
             element.type == KeyElementType.LITERAL -> tokenizeLiteral(element.text)
             else -> listOf(
-                Literal("*", element.text.length)
+                    Literal("*", element.text.length)
             )
         }
 

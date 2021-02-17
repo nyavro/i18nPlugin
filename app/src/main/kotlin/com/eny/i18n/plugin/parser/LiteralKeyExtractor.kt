@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.parser
 
-import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.key.KeyElement
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLiteralValue
 import com.intellij.psi.xml.XmlElementType

@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
+import com.eny.i18n.plugin.parser.ExpressionNormalizer
 import com.eny.i18n.plugin.parser.XmlAttributeKeyExtractor
 import com.eny.i18n.plugin.utils.toBoolean
 import com.intellij.lang.ecmascript6.JSXHarmonyFileType
@@ -47,7 +48,7 @@ class JsxReferenceAssistant: ReferenceAssistant {
         val config = element.project.i18NextSettings()
         val parser = KeyParserBuilder
             .withSeparators(config.nsSeparator, config.keySeparator)
-            .withTemplateNormalizer()
+            .withNormalizer(ExpressionNormalizer())
             .build()
         return listOf(
             XmlAttributeKeyExtractor()

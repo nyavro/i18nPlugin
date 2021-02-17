@@ -82,7 +82,7 @@ fun <T, A> Collection<T>.foldWhileAccum(accum: A, block: (A, T) -> A?): A? {
 /**
  * A sequence that returns the values from the underlying [sequence] that successfully (not null result) evaluates the specified [transform].
  */
-internal class CollectingSequence<T, R>(
+class CollectingSequence<T, R>(
     private val sequence: Sequence<T>,
     private val transform: (T) -> R?
 ) : Sequence<R> {

@@ -6,6 +6,7 @@
 /buildSrc/build/**
 /list/build/**
 /utilities/build/**
+/i18nKey/build/**
 /build/**
 /out/**
 /examples/simple/.idea/**

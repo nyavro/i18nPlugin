@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.key.parser
 
 import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.KeyElement
 import com.eny.i18n.plugin.key.lexer.*
-import com.eny.i18n.plugin.utils.KeyElement
 
 /**
  * Parses list of normalized key elements into FullKey
@@ -13,8 +13,8 @@ class KeyParser(private val tokenizer: Tokenizer) {
      * Parses list of key elements into i18n key
      */
     fun parse(
-        pair: Pair<List<KeyElement>, List<String>?>,
-        emptyNamespace: Boolean = false
+            pair: Pair<List<KeyElement>, List<String>?>,
+            emptyNamespace: Boolean = false
     ): FullKey? {
         val startState = if (emptyNamespace) {
             WaitingLiteral(file = null, key = emptyList())

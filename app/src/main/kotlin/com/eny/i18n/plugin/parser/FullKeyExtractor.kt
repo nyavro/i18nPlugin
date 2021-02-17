@@ -36,8 +36,8 @@ class KeyExtractorImpl: Extractor {
             else
                 KeyParserBuilder
                     .withSeparators(config.nsSeparator, config.keySeparator)
-                    .withDummyNormalizer()
-                    .withTemplateNormalizer()
+                    .withNormalizer(DummyTextNormalizer())
+                    .withNormalizer(ExpressionNormalizer())
         ).build()
         return listOf(
             ReactUseTranslationHookExtractor(),

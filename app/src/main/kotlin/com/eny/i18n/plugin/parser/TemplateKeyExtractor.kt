@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.parser
 
-import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.KeyElementType
+import com.eny.i18n.plugin.key.KeyElement
+import com.eny.i18n.plugin.key.KeyElementType
 import com.intellij.lang.javascript.psi.JSExpression
 import com.intellij.psi.PsiElement
 

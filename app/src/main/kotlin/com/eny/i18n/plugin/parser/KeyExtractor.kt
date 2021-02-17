@@ -1,6 +1,9 @@
 package com.eny.i18n.plugin.parser
 
-import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.key.KeyElement
+import com.eny.i18n.plugin.key.KeyElementType
+import com.eny.i18n.plugin.key.KeyNormalizer
+import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.psi.PsiElement
 
 /**
@@ -16,4 +19,30 @@ interface KeyExtractor {
      * Extracts key from psi element
      */
     fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?>
+}
+
+/**
+ * Normalizers element with template expression
+ */
+class ExpressionNormalizer: KeyNormalizer {
+    private val dropItems = listOf("`", "{", "}", "$")
+    override fun normalize(element: KeyElement): KeyElement? = when {
+        dropItems.contains(element.text) -> null
+        element.type == KeyElementType.TEMPLATE -> element.copy(text="\${${element.text}}")
+        else -> element
+    }
+}
+
+/**
+ * Normalizes dummy key, used in key completion
+ */
+class DummyTextNormalizer: KeyNormalizer {
+    override fun normalize(element: KeyElement): KeyElement? {
+        return element.copy(
+                text = element.text.replace(
+                        CompletionInitializationContext.DUMMY_IDENTIFIER,
+                        CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED
+                )
+        )
+    }
 }

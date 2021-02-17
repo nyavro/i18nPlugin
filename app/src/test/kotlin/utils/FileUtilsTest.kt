@@ -11,32 +11,32 @@ class FileUtilsTest {
     @Test
     fun testCalculateRelativePathToRoot() {
         assertEquals("\\src\\assets\\lang",
-            pathToRoot(
-                "C:\\Projects\\react\\test",
-            "C:\\Projects\\react\\test\\src\\assets\\lang"
-            )
+                pathToRoot(
+                        "C:\\Projects\\react\\test",
+                        "C:\\Projects\\react\\test\\src\\assets\\lang"
+                )
         )
         assertEquals("/src/assets/lang",
-            pathToRoot(
-                "/Users/user/projects/react/test",
-                "/Users/user/projects/react/test/src/assets/lang"
-            )
+                pathToRoot(
+                        "/Users/user/projects/react/test",
+                        "/Users/user/projects/react/test/src/assets/lang"
+                )
         )
     }
 
     @Test
     fun testDoesNotAffectPathIfNotUnderRoot() {
         assertEquals("C:\\Projects\\react\\test\\src\\assets\\lang",
-            pathToRoot(
-            "C:\\Projects\\react\\somethingWentWrong",
-            "C:\\Projects\\react\\test\\src\\assets\\lang"
-            )
+                pathToRoot(
+                        "C:\\Projects\\react\\somethingWentWrong",
+                        "C:\\Projects\\react\\test\\src\\assets\\lang"
+                )
         )
         assertEquals("/Users/user/projects/react/test/src/assets/lang",
-            pathToRoot(
-            "/Users/user/projects/react/somethingWentWrong",
-            "/Users/user/projects/react/test/src/assets/lang"
-            )
+                pathToRoot(
+                        "/Users/user/projects/react/somethingWentWrong",
+                        "/Users/user/projects/react/test/src/assets/lang"
+                )
         )
     }
 

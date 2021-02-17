@@ -32,10 +32,10 @@ fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirec
         file.name,
         parentDirectory.name,
         pathToRoot(
-            file.project.basePath ?: "",
-            file.containingDirectory
-                .virtualFile
-                .path
+                file.project.basePath ?: "",
+                file.containingDirectory
+                        .virtualFile
+                        .path
         ).trim('/') + '/' + file.name,
         localizationType
     )

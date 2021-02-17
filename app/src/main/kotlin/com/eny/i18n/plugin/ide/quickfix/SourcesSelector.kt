@@ -45,7 +45,8 @@ class UserChoice: SourcesSelector {
                 factory.contentGenerator().getType().fileTypes.map { Pair(it, factory.options().icon()) }
             }
             ?.toMap()
-        val currentFile = pathToRoot(editor.project?.basePath ?: "", FileDocumentManager.getInstance().getFile(editor.document)?.path ?: "").trim(File.separatorChar)
+        val currentFile = pathToRoot(editor.project?.basePath
+                ?: "", FileDocumentManager.getInstance().getFile(editor.document)?.path ?: "").trim(File.separatorChar)
         sources
             .sortedBy {
                 //Closest to current file first:

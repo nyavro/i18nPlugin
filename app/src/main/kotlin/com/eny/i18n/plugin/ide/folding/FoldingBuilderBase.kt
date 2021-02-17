@@ -7,12 +7,13 @@ import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.ellipsis
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.addons.technology.vue.VueSettings
 import com.eny.i18n.plugin.addons.technology.vue.vueSettings
+import com.eny.i18n.plugin.key.KeyElement
+import com.eny.i18n.plugin.parser.ExpressionNormalizer
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
@@ -39,7 +40,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
         val commonSettings = root.project.commonSettings()
         val parser = (
             if (poSettings.gettext) KeyParserBuilder.withoutTokenizer()
-            else KeyParserBuilder.withSeparators(i18NextSettings.nsSeparator, i18NextSettings.keySeparator).withTemplateNormalizer()
+            else KeyParserBuilder.withSeparators(i18NextSettings.nsSeparator, i18NextSettings.keySeparator).withNormalizer(ExpressionNormalizer())
         ).build()
         if (!commonSettings.foldingEnabled) return arrayOf()
         val search = LocalizationSourceSearch(root.project)

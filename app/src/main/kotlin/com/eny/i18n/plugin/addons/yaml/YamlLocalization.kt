@@ -8,7 +8,6 @@ import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
-import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.icons.AllIcons
 import com.intellij.lang.Language
 import com.intellij.openapi.project.Project
@@ -49,7 +48,7 @@ private class YamlReferenceAssistant : TranslationReferenceAssistant<YAMLKeyValu
     private fun parents(element: YAMLKeyValue): List<String> =
         CollectingSequence(element.parents()) {
             when {
-                it is YAMLKeyValue -> it.key!!.text.unQuote()
+                it is YAMLKeyValue -> it.key!!.text.removeSurrounding("\"")
                 it is YAMLFile -> it.name.substringBeforeLast(".")
                 else -> null
             }

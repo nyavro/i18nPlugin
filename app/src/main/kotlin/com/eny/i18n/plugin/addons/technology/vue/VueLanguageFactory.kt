@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
+import com.eny.i18n.plugin.parser.ExpressionNormalizer
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
@@ -233,7 +234,7 @@ internal class VueReferenceAssistant: ReferenceAssistant {
         val settings = element.project.i18NextSettings()
         val parser = KeyParserBuilder
             .withSeparators(settings.nsSeparator, settings.keySeparator)
-            .withTemplateNormalizer()
+            .withNormalizer(ExpressionNormalizer())
             .build()
         return listOf(LiteralKeyExtractor())
                 .find {it.canExtract(element)}

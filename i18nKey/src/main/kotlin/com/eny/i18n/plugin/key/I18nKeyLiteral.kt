@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.utils
+package com.eny.i18n.plugin.key
 
 /**
  * Key element types

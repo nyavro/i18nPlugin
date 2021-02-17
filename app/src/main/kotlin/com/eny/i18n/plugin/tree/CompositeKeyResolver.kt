@@ -18,7 +18,7 @@ data class PropertyReference<T>(
  */
 interface CompositeKeyResolver<T> {
 
-    fun resolve(compositeKey: List<Literal>, root: Tree<T>?, pluralSeparator: String, type: LocalizationType): List<PropertyReference<T>> =
+    fun resolve(compositeKey: List<Literal>, root: Tree<T>?, pluralSeparator: String, type: LocalizationType): Iterable<PropertyReference<T>> =
         tryToResolvePlural(
             resolveCompositeKey(
                 compositeKey,
