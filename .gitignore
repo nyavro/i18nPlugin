@@ -1,6 +1,11 @@
 /*.iml
 /.idea/**
 /.gradle/**
+/buildSrc/.gradle/**
+/app/build/**
+/buildSrc/build/**
+/list/build/**
+/utilities/build/**
 /build/**
 /out/**
 /examples/simple/.idea/**
