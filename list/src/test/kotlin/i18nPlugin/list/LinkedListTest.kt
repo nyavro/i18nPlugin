@@ -3,12 +3,13 @@
  */
 package i18nPlugin.list
 
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.Assert.*
+import org.junit.Test
 
 class LinkedListTest {
-    @Test fun testConstructor() {
+
+    @Test
+    fun testConstructor() {
         val list = LinkedList()
         assertEquals(0, list.size())
     }

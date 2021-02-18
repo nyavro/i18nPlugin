@@ -1,4 +1,4 @@
 rootProject.name = 'i18n'
 
-include('app', 'list', 'utilities', 'i18nKey')
+include('app', 'list', 'utilities', 'i18nKey', 'vue', 'core', 'php', 'yaml')
 

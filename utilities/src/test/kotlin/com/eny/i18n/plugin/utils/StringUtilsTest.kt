@@ -1,12 +1,9 @@
-package utils
+package com.eny.i18n.plugin.utils
 
-import com.eny.i18n.plugin.utils.isQuoted
-import com.eny.i18n.plugin.utils.unQuote
 import org.junit.Assert.*
 import org.junit.Test
 
-//@Ignore
-internal class StringUtilsTest : TestBase {
+class StringUtilsTest {
 
     @Test
     fun testMatchPattern() {

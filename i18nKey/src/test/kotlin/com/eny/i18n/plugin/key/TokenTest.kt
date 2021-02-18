@@ -1,10 +1,11 @@
-package utils
+package com.eny.i18n.plugin.key
 
 import com.eny.i18n.plugin.key.lexer.Literal
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.test.assertEquals
 
 internal class TokenTest {
+
     @Test
     fun testMergeTwoLiterals() {
         val a = Literal("first", 5)

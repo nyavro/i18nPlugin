@@ -1,10 +1,9 @@
-package utils
+package com.eny.i18n.plugin.utils
 
-import com.eny.i18n.plugin.utils.distance
-import com.eny.i18n.plugin.utils.pathToRoot
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
+import org.junit.Assert.*
 
 class FileUtilsTest {
 

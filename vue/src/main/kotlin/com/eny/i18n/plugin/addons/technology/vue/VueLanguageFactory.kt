@@ -8,10 +8,6 @@ import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.ExpressionNormalizer
 import com.eny.i18n.plugin.parser.LiteralKeyExtractor
 import com.eny.i18n.plugin.parser.type
-import com.eny.i18n.plugin.utils.default
-import com.eny.i18n.plugin.utils.toBoolean
-import com.eny.i18n.plugin.utils.unQuote
-import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.lang.javascript.psi.JSCallExpression
