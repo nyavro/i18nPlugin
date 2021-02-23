@@ -7,10 +7,24 @@ buildscript {
 }
 plugins {
     id 'i18nPlugin.kotlin-application-conventions'
+    id 'org.jetbrains.intellij' version '0.6.5'
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'jacoco'
+apply plugin: 'org.jetbrains.intellij'
+intellij {
+    version 'IU-2020.1'
+    pluginName 'i18n'
+    plugins = [
+            'yaml',
+            'JavaScriptLanguage',
+            'CSS',
+            "org.jetbrains.plugins.vue:201.6668.153",
+            "com.jetbrains.php:201.6668.153",
+            "org.jetbrains.plugins.localization:201.6668.60"
+    ]
+}
 
 dependencies {
     implementation 'org.apache.commons:commons-text'
@@ -18,6 +32,8 @@ dependencies {
     implementation project(':yaml')
     implementation project(':php')
     implementation project(':vue')
+    implementation project(':i18nKey')
+    implementation project(':utilities')
 }
 
 patchPluginXml {

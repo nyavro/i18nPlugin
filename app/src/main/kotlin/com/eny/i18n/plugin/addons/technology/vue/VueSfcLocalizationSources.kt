@@ -3,6 +3,8 @@ package com.eny.i18n.plugin.addons.technology.vue
 import com.eny.i18n.plugin.factory.LocalizationSourcesProvider
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.utils.LocalizationSource
+import com.eny.i18n.plugin.utils.fromNullable
+import com.eny.i18n.plugin.utils.maybe
 import com.intellij.json.*
 import com.intellij.json.psi.JsonObject
 import com.intellij.lang.impl.PsiBuilderFactoryImpl

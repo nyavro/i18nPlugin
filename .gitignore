@@ -3,6 +3,10 @@
 /.gradle/**
 /buildSrc/.gradle/**
 /app/build/**
+/core/build/**
+/php/build/**
+/vue/build/**
+/yaml/build/**
 /buildSrc/build/**
 /list/build/**
 /utilities/build/**

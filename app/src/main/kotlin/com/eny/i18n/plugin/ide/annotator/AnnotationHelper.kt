@@ -79,7 +79,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
      * Annotates partially translated key and creates quick fix for it.
      */
     fun annotatePartiallyTranslated(fullKey: FullKey, references: List<PropertyReference<PsiElement>>) {
-        val minimalResolvedReference = references.minByOrNull { it.path.size }!!
+        val minimalResolvedReference = references.minBy { it.path.size }!!
         val annotation = holder.createAnnotation(
             errorSeverity,
             rangesCalculator.unresolvedKey(fullKey, minimalResolvedReference.path),
