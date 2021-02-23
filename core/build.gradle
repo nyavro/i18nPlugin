@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation project(':utilities')
+    implementation project(':i18nKey')
 }
 
 intellij {

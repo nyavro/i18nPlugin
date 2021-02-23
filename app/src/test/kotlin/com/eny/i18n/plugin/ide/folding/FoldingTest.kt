@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.ide.folding
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runCommonConfig
 import com.eny.i18n.plugin.ide.runCommonConfigStr
-import com.eny.i18n.plugin.ide.settings.CommonSettings
+import com.eny.i18n.plugin.ide.annotator.CommonSettings
 import org.junit.Test
 
 internal abstract class FoldingTestBase(private val lang:String, private val translationLang:String): PlatformBaseTest() {

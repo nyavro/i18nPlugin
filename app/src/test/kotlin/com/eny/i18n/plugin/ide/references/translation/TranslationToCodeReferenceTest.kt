@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.ide.references.translation
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runI18nConfig
 import com.eny.i18n.plugin.ide.runVueConfig
-import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings
+import com.eny.i18n.plugin.ide.annotator.I18NextSettings
 import com.eny.i18n.plugin.addons.technology.vue.VueSettings
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator

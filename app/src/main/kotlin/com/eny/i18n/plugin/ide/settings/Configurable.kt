@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.settings
 
-import com.eny.i18n.plugin.extension.Extensions
-import com.eny.i18n.plugin.factory.CustomSettings
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.annotator.Extensions
+import com.eny.i18n.plugin.ide.annotator.CustomSettings
+import com.eny.i18n.plugin.ide.annotator.PluginBundle
 import com.intellij.openapi.extensions.BaseExtensionPointName
 import com.intellij.openapi.options.CompositeConfigurable
 import com.intellij.openapi.options.Configurable

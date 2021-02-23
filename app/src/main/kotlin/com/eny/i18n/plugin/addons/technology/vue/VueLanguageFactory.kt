@@ -1,13 +1,11 @@
 package com.eny.i18n.plugin.addons.technology.vue
 
-import com.eny.i18n.plugin.factory.*
-import com.eny.i18n.plugin.ide.settings.commonSettings
-import com.eny.i18n.plugin.ide.settings.i18NextSettings
+import com.eny.i18n.plugin.ide.annotator.*
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.ExpressionNormalizer
-import com.eny.i18n.plugin.parser.LiteralKeyExtractor
-import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.ide.annotator.LiteralKeyExtractor
+import com.eny.i18n.plugin.ide.annotator.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.toBoolean
 import com.eny.i18n.plugin.utils.unQuote

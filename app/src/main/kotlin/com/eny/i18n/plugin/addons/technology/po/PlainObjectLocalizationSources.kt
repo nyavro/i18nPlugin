@@ -1,10 +1,10 @@
 package com.eny.i18n.plugin.addons.technology.po
 
-import com.eny.i18n.plugin.factory.LocalizationSourcesProvider
+import com.eny.i18n.plugin.ide.annotator.LocalizationSourcesProvider
 import com.eny.i18n.plugin.factory.LocalizationType
-import com.eny.i18n.plugin.utils.LocalizationSource
-import com.eny.i18n.plugin.utils.SearchUtility
-import com.eny.i18n.plugin.utils.localizationSource
+import com.eny.i18n.plugin.ide.annotator.LocalizationSource
+import com.eny.i18n.plugin.ide.annotator.SearchUtility
+import com.eny.i18n.plugin.ide.annotator.localizationSource
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile

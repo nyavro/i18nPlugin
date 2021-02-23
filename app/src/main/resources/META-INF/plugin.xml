@@ -143,10 +143,10 @@
 <!--    <depends optional="true" config-file="META-INF/vueConfig.xml">org.jetbrains.plugins.vue</depends>-->
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensionPoints>
-        <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationFactory" name="localizationFactory" dynamic="true"/>
-        <extensionPoint interface="com.eny.i18n.plugin.factory.LanguageFactory" name="technologyFactory" dynamic="true"/>
-        <extensionPoint interface="com.eny.i18n.plugin.factory.LocalizationSourcesProvider" name="localizationSourceProvider" dynamic="true"/>
-        <extensionPoint interface="com.eny.i18n.plugin.factory.CustomSettings" name="customSettings" area="IDEA_PROJECT" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.annotator.LocalizationFactory" name="localizationFactory" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.annotator.LanguageFactory" name="technologyFactory" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.annotator.LocalizationSourcesProvider" name="localizationSourceProvider" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.annotator.CustomSettings" name="customSettings" area="IDEA_PROJECT" dynamic="true"/>
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsCompositeKeyAnnotator"/>
@@ -154,8 +154,8 @@
 <!--        <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.plugin.addons.js.JsxReferenceContributor"/>-->
 <!--        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.addons.json.JsonReferenceContributor"/>-->
 <!--        <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsCompletionContributor"/>-->
-        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.CommonSettings"/>
-        <projectService serviceImplementation="com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.annotator.CommonSettings"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.annotator.I18NextSettings"/>
         <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
 <!--        <intentionAction>-->
 <!--            <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>-->
@@ -170,7 +170,7 @@
         <localizationSourceProvider implementation="com.eny.i18n.plugin.addons.technology.i18n.I18nLocalizationSources"/>
         <customSettings implementation="com.eny.i18n.plugin.addons.technology.CommonConfigurable"/>
         <customSettings implementation="com.eny.i18n.plugin.addons.technology.i18n.I18NextConfigurable"/>
-        <technologyFactory implementation="com.eny.i18n.plugin.addons.js.JsLanguageFactory"/>
-        <technologyFactory implementation="com.eny.i18n.plugin.addons.js.JsxLanguageFactory"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.ide.annotator.JsLanguageFactory"/>
+        <technologyFactory implementation="com.eny.i18n.plugin.ide.annotator.JsxLanguageFactory"/>
     </extensions>
 </idea-plugin>

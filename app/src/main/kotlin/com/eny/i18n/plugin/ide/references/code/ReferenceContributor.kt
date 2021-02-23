@@ -1,10 +1,10 @@
 package com.eny.i18n.plugin.ide.references.code
 
-import com.eny.i18n.plugin.factory.ReferenceAssistant
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.ide.annotator.ReferenceAssistant
+import com.eny.i18n.plugin.key.CompositeKeyResolver
+import com.eny.i18n.plugin.key.PropertyReference
+import com.eny.i18n.plugin.ide.annotator.PsiElementTree
+import com.eny.i18n.plugin.ide.annotator.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.eny.i18n.plugin.utils.whenNotEmpty

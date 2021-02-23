@@ -2,8 +2,8 @@ package tree
 
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.Tree
+import com.eny.i18n.plugin.key.CompositeKeyResolver
+import com.eny.i18n.plugin.key.Tree
 import com.intellij.json.JsonFileType
 import org.junit.Assert.*
 import org.junit.Test
@@ -29,7 +29,7 @@ internal class CompositeKeyResolverTest {
 
     @Test
     fun testResolveElementByKey() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val root = "root1"
         val key = "key1"
         val text = "subkey1"
@@ -52,7 +52,7 @@ internal class CompositeKeyResolverTest {
 
     @Test
     fun testResolveObjectByKey() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val root = "root2"
         val key = "key3"
         val value = "key4"
@@ -77,7 +77,7 @@ internal class CompositeKeyResolverTest {
 
     @Test
     fun testPartialResolve() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val root = "root3"
         val key = "key7"
         val sub = "subkey5"
@@ -103,7 +103,7 @@ internal class CompositeKeyResolverTest {
 
     @Test
     fun testPartialResolve2() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val root = "root4"
         val key = "key11"
         val text = "subkey7"
@@ -129,7 +129,7 @@ internal class CompositeKeyResolverTest {
 
     @Test
     fun testStopResolvingAfterFirstFailure2() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val root = "ROOT"
         val key = "Key1"
         val sub = "key3"
@@ -159,7 +159,7 @@ internal class CompositeKeyResolverTest {
 
     @Test
     fun testResolveProperty() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val main = "main1"
         val sub = "submain1"
         val text = "subsub2"
@@ -187,7 +187,7 @@ internal class CompositeKeyResolverUnresolvedTest {
 
     @Test
     fun testUnresolvedPathIsNull() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val main = "main2"
         val sub = "submain4"
         val property = resolver.resolveCompositeKeyProperty(
@@ -208,7 +208,7 @@ internal class CompositeKeyResolverUnresolvedTest {
 
     @Test
     fun testUnresolvedPathIsNull2() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val property = resolver.resolveCompositeKeyProperty(
             listOf(Literal("main3"), Literal("submain6"), Literal("subsub8"), Literal("subsub12")),
             root(
@@ -227,7 +227,7 @@ internal class CompositeKeyResolverUnresolvedTest {
 
     @Test
     fun testWholeKeyUnresolved() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val root = "root6"
         val key = "key12"
         val sub = "subkey8"
@@ -252,7 +252,7 @@ internal class CompositeKeyResolverUnresolvedTest {
 
     @Test
     fun testStopResolvingAfterFirstFailure() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val root = "root8"
         val key = "key15"
         val subkey = "subkey9"
@@ -278,7 +278,7 @@ internal class CompositeKeyResolverUnresolvedTest {
 
     @Test
     fun testResolvesToEmptyElementOnEmptyTree() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val property = resolver.resolveCompositeKey(
             listOf(Literal("root9"), Literal("key18"), Literal("subkey10")),
             null,

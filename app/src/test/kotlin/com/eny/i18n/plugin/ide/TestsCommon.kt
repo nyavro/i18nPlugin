@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide
 
-import com.eny.i18n.plugin.ide.settings.CommonSettings
-import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings
+import com.eny.i18n.plugin.ide.annotator.CommonSettings
+import com.eny.i18n.plugin.ide.annotator.I18NextSettings
 import com.eny.i18n.plugin.addons.technology.po.PoSettings
 import com.eny.i18n.plugin.addons.technology.vue.VueSettings
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture

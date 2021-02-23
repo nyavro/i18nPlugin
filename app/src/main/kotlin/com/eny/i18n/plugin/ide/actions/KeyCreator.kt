@@ -1,14 +1,14 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.factory.TranslationExtractor
-import com.eny.i18n.plugin.ide.quickfix.CreateKeyQuickFix
-import com.eny.i18n.plugin.ide.quickfix.CreateTranslationFileQuickFix
-import com.eny.i18n.plugin.ide.quickfix.UserChoice
-import com.eny.i18n.plugin.ide.settings.i18NextSettings
-import com.eny.i18n.plugin.ide.settings.mainFactory
+import com.eny.i18n.plugin.ide.annotator.TranslationExtractor
+import com.eny.i18n.plugin.ide.annotator.CreateKeyQuickFix
+import com.eny.i18n.plugin.ide.annotator.CreateTranslationFileQuickFix
+import com.eny.i18n.plugin.ide.annotator.UserChoice
+import com.eny.i18n.plugin.ide.annotator.i18NextSettings
+import com.eny.i18n.plugin.ide.annotator.mainFactory
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.annotator.LocalizationSourceSearch
+import com.eny.i18n.plugin.ide.annotator.PluginBundle
 import com.eny.i18n.plugin.addons.technology.vue.vueSettings
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project

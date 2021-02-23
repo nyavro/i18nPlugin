@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.ide.references.translation
 
-import com.eny.i18n.plugin.ide.settings.commonSettings
-import com.eny.i18n.plugin.ide.settings.i18NextSettings
+import com.eny.i18n.plugin.ide.annotator.commonSettings
+import com.eny.i18n.plugin.ide.annotator.i18NextSettings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote

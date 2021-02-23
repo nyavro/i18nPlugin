@@ -1,10 +1,11 @@
 package com.eny.i18n.plugin.addons.technology.i18n
 
+import com.eny.i18n.plugin.ide.annotator.I18NextSettings
 import com.eny.i18n.plugin.ide.settings.FormUtils
 import com.eny.i18n.plugin.ide.settings.ModificationCheck
 import com.eny.i18n.plugin.ide.settings.SettingsFormFragment
 import com.eny.i18n.plugin.ide.settings.addLimitationsAndHandlers
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.annotator.PluginBundle
 import com.jgoodies.forms.factories.DefaultComponentFactory
 import java.awt.BorderLayout
 import java.awt.Dimension

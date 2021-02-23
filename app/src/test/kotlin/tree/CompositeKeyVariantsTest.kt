@@ -2,7 +2,7 @@ package tree
 
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.key.CompositeKeyResolver
 import com.intellij.json.JsonFileType
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -21,7 +21,7 @@ internal class CompositeKeyVariantsTest {
      * main.place.fo    -> forest
      */
     fun check(request: String, fixed: List<String>, expected: Set<String>) {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val variants = resolver.listCompositeKeyVariants(
             fixed.map{Literal(it)},
             testTree(),

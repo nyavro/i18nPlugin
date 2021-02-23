@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.addons.technology
 
-import com.eny.i18n.plugin.factory.CustomSettings
-import com.eny.i18n.plugin.ide.settings.CommonSettings
+import com.eny.i18n.plugin.ide.annotator.CustomSettings
+import com.eny.i18n.plugin.ide.annotator.CommonSettings
 import com.eny.i18n.plugin.ide.settings.CommonSettingsFormFragment
 import com.intellij.openapi.project.Project
 import javax.swing.JComponent

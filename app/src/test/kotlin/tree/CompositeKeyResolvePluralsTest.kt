@@ -2,7 +2,7 @@ package tree
 
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
+import com.eny.i18n.plugin.key.CompositeKeyResolver
 import com.intellij.json.JsonFileType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -17,7 +17,7 @@ internal class CompositeKeyResolvePluralsTest {
 
     @Test
     fun testResolvePluralElementByKey() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val base = "base1"
         val sub = "sub1"
         val pl1 = "plural1"
@@ -53,7 +53,7 @@ internal class CompositeKeyResolvePluralsTest {
 
     @Test
     fun testResolveCustomPluralSeparator() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val base = "base2"
         val sub = "sub2"
         val pl2 = "plural2"
@@ -90,7 +90,7 @@ internal class CompositeKeyResolvePluralsTest {
 
     @Test
     fun testResolvePluralSkippedForLeaf() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val base = "base3"
         val sub = "sub3"
         val pl3 = "plural3"
@@ -125,7 +125,7 @@ internal class CompositeKeyResolvePluralsTest {
 
     @Test
     fun testResolvePluralSkippedForLongUnresolvedPaths() {
-        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
+        val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String> {}
         val base = "base4"
         val sub = "sub4"
         val pl4 = "plural4"

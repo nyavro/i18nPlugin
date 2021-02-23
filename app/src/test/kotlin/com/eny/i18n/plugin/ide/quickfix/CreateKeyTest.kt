@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.PlatformBaseTest
 //import com.eny.i18n.plugin.ide.JsCodeAndTranslationGeneratorsNs
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.annotator.PluginBundle
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator

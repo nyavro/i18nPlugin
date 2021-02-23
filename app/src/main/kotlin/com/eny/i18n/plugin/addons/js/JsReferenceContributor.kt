@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.addons.js
 
+import com.eny.i18n.plugin.ide.annotator.JsLanguageFactory
 import com.eny.i18n.plugin.ide.references.code.ReferenceContributorBase
 
 /**

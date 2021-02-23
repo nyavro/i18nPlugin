@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.addons.yaml
 
-import com.eny.i18n.plugin.factory.CustomSettings
+import com.eny.i18n.plugin.ide.annotator.CustomSettings
 import com.intellij.openapi.project.Project
 import javax.swing.JComponent
 

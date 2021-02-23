@@ -1,15 +1,15 @@
 package com.eny.i18n.plugin.ide.completion
 
-import com.eny.i18n.plugin.factory.CallContext
-import com.eny.i18n.plugin.ide.settings.i18NextSettings
+import com.eny.i18n.plugin.ide.annotator.CallContext
+import com.eny.i18n.plugin.ide.annotator.i18NextSettings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.FullKeyExtractor
+import com.eny.i18n.plugin.ide.annotator.FullKeyExtractor
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.parser.DummyContext
-import com.eny.i18n.plugin.parser.KeyExtractorImpl
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.ide.annotator.DummyContext
+import com.eny.i18n.plugin.ide.annotator.KeyExtractorImpl
+import com.eny.i18n.plugin.key.CompositeKeyResolver
+import com.eny.i18n.plugin.ide.annotator.PsiElementTree
+import com.eny.i18n.plugin.ide.annotator.LocalizationSourceSearch
 import com.eny.i18n.plugin.utils.nullableToList
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor

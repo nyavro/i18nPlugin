@@ -1,7 +1,7 @@
 package com.eny.i18n.plugin.addons.yaml
 
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.tree.Tree
+import com.eny.i18n.plugin.ide.annotator.PsiElementTree
+import com.eny.i18n.plugin.key.Tree
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.yaml.psi.YAMLDocument

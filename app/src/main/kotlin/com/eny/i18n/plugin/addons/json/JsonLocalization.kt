@@ -1,14 +1,11 @@
 package com.eny.i18n.plugin.addons.json
 
-import com.eny.i18n.plugin.factory.*
+import com.eny.i18n.plugin.ide.annotator.*
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
-import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.tree.Tree
+import com.eny.i18n.plugin.key.Tree
 import com.eny.i18n.plugin.utils.CollectingSequence
-import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
 import com.fasterxml.jackson.core.io.JsonStringEncoder
 import com.intellij.icons.AllIcons

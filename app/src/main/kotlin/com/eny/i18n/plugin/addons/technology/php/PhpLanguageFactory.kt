@@ -1,13 +1,11 @@
 package com.eny.i18n.plugin.addons.technology.php
 
-import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.addons.technology.po.PoSettings
-import com.eny.i18n.plugin.ide.settings.i18NextSettings
-import com.eny.i18n.plugin.ide.settings.poSettings
+import com.eny.i18n.plugin.ide.annotator.*
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.parser.StringLiteralKeyExtractor
-import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.ide.annotator.StringLiteralKeyExtractor
+import com.eny.i18n.plugin.ide.annotator.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.util.TextRange

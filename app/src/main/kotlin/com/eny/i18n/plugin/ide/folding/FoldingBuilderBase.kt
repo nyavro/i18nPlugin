@@ -1,17 +1,15 @@
 package com.eny.i18n.plugin.ide.folding
 
-import com.eny.i18n.plugin.factory.LanguageFactory
-import com.eny.i18n.plugin.ide.settings.*
+import com.eny.i18n.plugin.ide.annotator.LanguageFactory
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
-import com.eny.i18n.plugin.utils.ellipsis
+import com.eny.i18n.plugin.key.CompositeKeyResolver
+import com.eny.i18n.plugin.key.PropertyReference
+import com.eny.i18n.plugin.ide.annotator.PsiElementTree
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.addons.technology.vue.VueSettings
 import com.eny.i18n.plugin.addons.technology.vue.vueSettings
+import com.eny.i18n.plugin.ide.annotator.*
 import com.eny.i18n.plugin.key.KeyElement
 import com.eny.i18n.plugin.parser.ExpressionNormalizer
 import com.intellij.lang.ASTNode
