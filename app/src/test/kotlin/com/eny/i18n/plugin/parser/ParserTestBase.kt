@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.parser
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.key.KeyElement
 
 /**
  * Base class and utils for parser unit tests

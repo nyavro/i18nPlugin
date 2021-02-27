@@ -10,7 +10,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 /**
  * Utility to get project's vue settings
  */
-fun Project.vueSettings() = VueSettings.getInstance(this)
+fun Project.vueSettings() = com.eny.i18n.plugin.addons.technology.vue.VueSettings.getInstance(this)
 
 /**
  * Vue-i18n settings

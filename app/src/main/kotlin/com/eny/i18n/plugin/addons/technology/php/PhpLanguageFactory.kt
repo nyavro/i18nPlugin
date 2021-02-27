@@ -1,13 +1,12 @@
 package com.eny.i18n.plugin.addons.technology.php
 
-import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.addons.technology.po.PoSettings
-import com.eny.i18n.plugin.ide.settings.i18NextSettings
-import com.eny.i18n.plugin.ide.settings.poSettings
+import com.eny.i18n.plugin.ide.*
+import com.eny.i18n.plugin.ide.annotator.*
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.parser.StringLiteralKeyExtractor
-import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.ide.annotator.type
+import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.util.TextRange
@@ -57,14 +56,15 @@ private fun gettextPattern(config: PoSettings) =
 
 internal class PhpCallContext: CallContext {
     override fun accepts(element: PsiElement): Boolean {
-        return listOf("String").contains(element.type()) &&
-            PlatformPatterns.or(
-                PhpPatternsExt.phpArgument("t", 0),
-                    gettextPattern(element.project.poSettings())
-            ).let { pattern ->
-                pattern.accepts(element) ||
-                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list" }))
-            }
+        return false
+//        listOf("String").contains(element.type()) &&
+//            PlatformPatterns.or(
+//                PhpPatternsExt.phpArgument("t", 0),
+//                    gettextPattern(element.project.poSettings())
+//            ).let { pattern ->
+//                pattern.accepts(element) ||
+//                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list" }))
+//            }
     }
 }
 
@@ -75,13 +75,14 @@ internal class PhpReferenceAssistant: ReferenceAssistant {
     }
 
     override fun extractKey(element: PsiElement): FullKey? {
-        val config = element.project.poSettings()
+//        val config = element.project.poSettings()
         val i18NextSettings = element.project.i18NextSettings()
-        if (config.gettext) {
-            if (!gettextPattern(config).accepts(element)) return null
-        }
+        val gettext = false//config.gettext
+//        if (gettext) {
+//            if (!gettextPattern(config).accepts(element)) return null
+//        }
         val parser = (
-            if (config.gettext) {
+            if (gettext) {
                 KeyParserBuilder.withoutTokenizer()
             } else
                 KeyParserBuilder.withSeparators(i18NextSettings.nsSeparator, i18NextSettings.keySeparator)

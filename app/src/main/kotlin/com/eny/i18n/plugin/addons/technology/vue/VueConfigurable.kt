@@ -1,10 +1,10 @@
 package com.eny.i18n.plugin.addons.technology.vue
 
-import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings
+import com.eny.i18n.plugin.ide.settings.I18NextSettings
 import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettingsFormFragment
 import com.eny.i18n.plugin.addons.technology.po.PlainObjectSettingsFormFragment
 import com.eny.i18n.plugin.addons.technology.po.PoSettings
-import com.eny.i18n.plugin.factory.CustomSettings
+import com.eny.i18n.plugin.ide.CustomSettings
 import com.eny.i18n.plugin.ide.settings.*
 import com.intellij.openapi.project.Project
 import javax.swing.JComponent

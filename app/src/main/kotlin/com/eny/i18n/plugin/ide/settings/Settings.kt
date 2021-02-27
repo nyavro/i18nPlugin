@@ -1,13 +1,8 @@
 package com.eny.i18n.plugin.ide.settings
 
-import com.eny.i18n.plugin.factory.MainFactory
-import com.eny.i18n.plugin.addons.js.JsLanguageFactory
-import com.eny.i18n.plugin.addons.js.JsxLanguageFactory
-import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings
-import com.eny.i18n.plugin.addons.technology.php.PhpLanguageFactory
-import com.eny.i18n.plugin.addons.technology.po.PoSettings
-import com.eny.i18n.plugin.addons.technology.vue.VueLanguageFactory
-import com.eny.i18n.plugin.addons.technology.vue.vueSettings
+import com.eny.i18n.plugin.ide.JsLanguageFactory
+import com.eny.i18n.plugin.ide.JsxLanguageFactory
+import com.eny.i18n.plugin.ide.MainFactory
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
@@ -17,7 +12,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.xmlb.XmlSerializerUtil
 
 fun Project.i18NextSettings() = I18NextSettings.getInstance(this)
-fun Project.poSettings() = PoSettings.getInstance(this)
+//fun Project.poSettings() = PoSettings.getInstance(this)
 fun Project.commonSettings() = CommonSettings.getInstance(this)
 
 /**
@@ -64,9 +59,11 @@ class CommonSettings : PersistentStateComponent<CommonSettings> {
 }
 
 fun Project.mainFactory(): MainFactory {
+    //TODO
+    val vue = false //this.vueSettings().vue
     return MainFactory(
         listOf(
-            listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory())
+            listOf(JsLanguageFactory(), JsxLanguageFactory())//, PhpLanguageFactory())
 //            if (this.vueSettings().vue) listOf(VueLanguageFactory()) else emptyList()
         ).flatten()
     )

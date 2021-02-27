@@ -1,0 +1,8 @@
+plugins {
+    id 'i18nPlugin.kotlin-library-conventions'
+}
+
+dependencies {
+    implementation project(':utilities')
+    implementation project(':core')
+}

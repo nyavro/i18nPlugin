@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.factory.TranslationExtractor
+import com.eny.i18n.plugin.ide.TranslationExtractor
+import com.eny.i18n.plugin.ide.PluginBundle
 import com.eny.i18n.plugin.ide.settings.mainFactory
-import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction

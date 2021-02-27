@@ -1,8 +1,7 @@
 package com.eny.i18n.plugin.ide.settings
 
-import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettings
 import com.eny.i18n.plugin.addons.technology.i18n.I18NextSettingsFormFragment
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.PluginBundle
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

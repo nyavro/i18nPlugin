@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.addons.technology.vue
 
-import com.eny.i18n.plugin.factory.LocalizationSourcesProvider
-import com.eny.i18n.plugin.factory.LocalizationType
-import com.eny.i18n.plugin.utils.LocalizationSource
+import com.eny.i18n.plugin.ide.LocalizationSourcesProvider
+import com.eny.i18n.plugin.ide.LocalizationSource
+import com.eny.i18n.plugin.ide.LocalizationType
 import com.eny.i18n.plugin.utils.fromNullable
 import com.eny.i18n.plugin.utils.maybe
 import com.intellij.json.*
@@ -32,12 +32,12 @@ class VueSfcLocalizationSources : LocalizationSourcesProvider {
                         ?.propertyList
                         ?.map {
                             LocalizationSource(
-                                it.value!!,
-                                it.name,
-                                fileName,
-                                "SFC: ${fileName}/${it.name} ",
-                                LocalizationType(listOf(JsonFileType.INSTANCE), "vue-sfc"),
-                                sfcSourceText
+                                    it.value!!,
+                                    it.name,
+                                    fileName,
+                                    "SFC: ${fileName}/${it.name} ",
+                                    LocalizationType(listOf(JsonFileType.INSTANCE), "vue-sfc"),
+                                    sfcSourceText
                             )
                         }
                 }

@@ -1,15 +1,14 @@
 package com.eny.i18n.plugin.ide.completion
 
-import com.eny.i18n.plugin.factory.CallContext
+import com.eny.i18n.plugin.ide.CallContext
+import com.eny.i18n.plugin.ide.LocalizationSourceSearch
+import com.eny.i18n.plugin.ide.LocalizationType
+import com.eny.i18n.plugin.ide.PsiElementTree
+import com.eny.i18n.plugin.ide.annotator.*
 import com.eny.i18n.plugin.ide.settings.i18NextSettings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.parser.DummyContext
-import com.eny.i18n.plugin.parser.KeyExtractorImpl
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.key.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.nullableToList
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor
@@ -22,7 +21,7 @@ import com.intellij.psi.PsiElement
 /**
  * Completion of i18n key
  */
-abstract class CompositeKeyCompletionContributor(private val callContext: CallContext): CompletionContributor(), CompositeKeyResolver<PsiElement> {
+abstract class CompositeKeyCompletionContributor(private val callContext: CallContext): CompletionContributor(), CompositeKeyResolver<PsiElement, LocalizationType> {
     private val DUMMY_KEY = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED
     private val keyExtractor = FullKeyExtractor(DummyContext(), KeyExtractorImpl())
 

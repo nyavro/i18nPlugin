@@ -1,20 +1,18 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72"
-    }
 }
 plugins {
-    id 'org.jetbrains.intellij' version '0.6.5'
     id 'i18nPlugin.kotlin-application-conventions'
+    id 'org.jetbrains.intellij' version '0.6.5'
 }
 
-apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'kotlin'
 apply plugin: 'jacoco'
-
+apply plugin: 'org.jetbrains.intellij'
 intellij {
     version 'IU-2020.1'
     pluginName 'i18n'
@@ -28,49 +26,14 @@ intellij {
     ]
 }
 
-test {
-//    intellij {
-//        version 'IU-2020.1'
-//        type "IC"
-//        pluginName 'i18n'
-//        plugins = [
-//            'yaml',
-//            'JavaScriptLanguage',
-//            'CSS',
-//            "org.jetbrains.plugins.vue:201.6668.30",
-//            "com.jetbrains.php:201.6668.30",
-//            "org.jetbrains.plugins.localization:201.6668.9"
-//        ]
-//    }
-//    intellij {
-//        version 'IU-2020.1'
-//        pluginName 'i18n'
-//        plugins = [
-//                'yaml',
-//                'JavaScriptLanguage',
-//                'CSS',
-//                "org.jetbrains.plugins.vue:201.6668.153",
-//                "com.jetbrains.php:201.6668.153",
-//                "org.jetbrains.plugins.localization:201.6668.60"
-//        ]
-//    }
-
-}
-
 dependencies {
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-//    testCompile 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-//    testCompile 'org.junit.jupiter:junit-jupiter-params:5.6.2'
-//        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
-//        testCompile 'org.junit.vintage:junit-vintage-engine:5.6.2'
-//    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.70"
-    testImplementation 'io.mockk:mockk:1.10.2'
-    testImplementation 'com.jaliansystems:marathon-java-driver:5.2.5.0'
-
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
     implementation 'org.apache.commons:commons-text'
-    implementation project(':utilities')
+    implementation project(':core')
+    implementation project(':yaml')
+    implementation project(':php')
+    implementation project(':vue')
     implementation project(':i18nKey')
+    implementation project(':utilities')
 }
 
 patchPluginXml {
@@ -84,7 +47,7 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+tasks.withType(KotlinCompile).all {
     kotlinOptions {
         jvmTarget = "1.8"
     }

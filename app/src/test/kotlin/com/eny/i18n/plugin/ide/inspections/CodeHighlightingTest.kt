@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runCommonConfig
-import com.eny.i18n.plugin.ide.settings.CommonSettings
+import com.eny.i18n.plugin.ide.annotator.CommonSettings
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture

@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide.settings
 
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.PluginBundle
 import org.junit.Test
 
 class CommonSettingsPanelTest: SettingsPanelBase<CommonSettings>(::CommonSettingsFormFragment, ::CommonSettings) {

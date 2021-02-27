@@ -1,0 +1,24 @@
+plugins {
+    id 'i18nPlugin.kotlin-library-conventions'
+    id 'org.jetbrains.intellij' version '0.6.5'
+}
+
+dependencies {
+    implementation project(':utilities')
+    implementation project(':i18nKey')
+}
+
+intellij {
+    version 'IU-2020.1'
+    pluginName 'i18n'
+    plugins = [
+            'yaml',
+            'JavaScriptLanguage',
+            'CSS',
+            "org.jetbrains.plugins.vue:201.6668.153",
+            "com.jetbrains.php:201.6668.153",
+            "org.jetbrains.plugins.localization:201.6668.60"
+    ]
+}
+
+apply plugin: 'org.jetbrains.intellij'

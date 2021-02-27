@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.addons.js
 
+import com.eny.i18n.plugin.ide.JsLanguageFactory
 import com.eny.i18n.plugin.ide.folding.FoldingBuilderBase
 
 /**

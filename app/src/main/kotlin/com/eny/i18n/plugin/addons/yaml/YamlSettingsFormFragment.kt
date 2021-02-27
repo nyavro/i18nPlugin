@@ -3,7 +3,7 @@ package com.eny.i18n.plugin.addons.yaml
 import com.eny.i18n.plugin.ide.settings.FormUtils
 import com.eny.i18n.plugin.ide.settings.ModificationCheck
 import com.eny.i18n.plugin.ide.settings.SettingsFormFragment
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.PluginBundle
 import com.jgoodies.forms.factories.DefaultComponentFactory
 import java.awt.BorderLayout
 import javax.swing.BoxLayout

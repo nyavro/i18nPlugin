@@ -2,8 +2,8 @@ package com.eny.i18n.plugin.ide.quickfix
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.runCommonConfig
-import com.eny.i18n.plugin.ide.settings.CommonSettings
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.annotator.CommonSettings
+import com.eny.i18n.plugin.ide.PluginBundle
 import com.eny.i18n.plugin.utils.generator.code.TsxCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import org.junit.Test

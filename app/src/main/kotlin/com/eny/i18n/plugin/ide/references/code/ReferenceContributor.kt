@@ -1,10 +1,11 @@
 package com.eny.i18n.plugin.ide.references.code
 
-import com.eny.i18n.plugin.factory.ReferenceAssistant
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.ide.ReferenceAssistant
+import com.eny.i18n.plugin.key.CompositeKeyResolver
+import com.eny.i18n.plugin.key.PropertyReference
+import com.eny.i18n.plugin.ide.PsiElementTree
+import com.eny.i18n.plugin.ide.LocalizationSourceSearch
+import com.eny.i18n.plugin.ide.LocalizationType
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.eny.i18n.plugin.utils.whenNotEmpty
@@ -15,7 +16,7 @@ import com.intellij.util.ProcessingContext
 /**
  * Data class
  */
-data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val host: PsiElement?)
+data class ReferenceDescriptor(val reference: PropertyReference<PsiElement, LocalizationType>, val host: PsiElement?)
 
 /**
  * I18nReference to json/yaml translation
@@ -47,7 +48,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val references: L
 /**
  * Provides navigation from i18n key to it's value in json
  */
-abstract class ReferenceContributorBase(private val referenceContributor: ReferenceAssistant): PsiReferenceContributor(), CompositeKeyResolver<PsiElement> {
+abstract class ReferenceContributorBase(private val referenceContributor: ReferenceAssistant): PsiReferenceContributor(), CompositeKeyResolver<PsiElement, LocalizationType> {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(
             referenceContributor.pattern(),

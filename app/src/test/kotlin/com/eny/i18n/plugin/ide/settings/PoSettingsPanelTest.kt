@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.ide.settings
 
 import com.eny.i18n.plugin.addons.technology.po.PlainObjectSettingsFormFragment
 import com.eny.i18n.plugin.addons.technology.po.PoSettings
-import com.eny.i18n.plugin.utils.PluginBundle
+import com.eny.i18n.plugin.ide.PluginBundle
 import org.junit.Test
 
 class PoSettingsPanelTest: SettingsPanelBase<PoSettings>(::PlainObjectSettingsFormFragment, ::PoSettings) {

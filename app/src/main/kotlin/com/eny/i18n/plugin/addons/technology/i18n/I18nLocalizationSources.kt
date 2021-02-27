@@ -1,9 +1,9 @@
 package com.eny.i18n.plugin.addons.technology.i18n
 
-import com.eny.i18n.plugin.factory.LocalizationSourcesProvider
+import com.eny.i18n.plugin.ide.LocalizationSourcesProvider
+import com.eny.i18n.plugin.ide.LocalizationSource
+import com.eny.i18n.plugin.ide.SearchUtility
 import com.eny.i18n.plugin.ide.settings.i18NextSettings
-import com.eny.i18n.plugin.utils.LocalizationSource
-import com.eny.i18n.plugin.utils.SearchUtility
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement

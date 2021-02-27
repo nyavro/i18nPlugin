@@ -1,19 +1,17 @@
 package com.eny.i18n.plugin.ide.folding
 
-import com.eny.i18n.plugin.factory.LanguageFactory
-import com.eny.i18n.plugin.ide.settings.*
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
-import com.eny.i18n.plugin.utils.ellipsis
+import com.eny.i18n.plugin.key.CompositeKeyResolver
+import com.eny.i18n.plugin.key.PropertyReference
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.addons.technology.vue.VueSettings
 import com.eny.i18n.plugin.addons.technology.vue.vueSettings
+import com.eny.i18n.plugin.ide.*
+import com.eny.i18n.plugin.ide.settings.CommonSettings
+import com.eny.i18n.plugin.ide.settings.commonSettings
 import com.eny.i18n.plugin.key.KeyElement
-import com.eny.i18n.plugin.parser.ExpressionNormalizer
+import com.eny.i18n.plugin.utils.ellipsis
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
@@ -21,13 +19,14 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiElement
+import com.eny.i18n.plugin.ide.settings.i18NextSettings as i18NextSettings1
 
-internal data class ElementToReferenceBinding(val psiElement: PsiElement, val reference: PropertyReference<PsiElement>)
+internal data class ElementToReferenceBinding(val psiElement: PsiElement, val reference: PropertyReference<PsiElement, LocalizationType>)
 
 /**
  * Provides folding mechanism for i18n keys
  */
-abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
+abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement, LocalizationType> {
 
     private val group = FoldingGroup.newGroup("i18n")
 
@@ -35,11 +34,12 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
 
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
         val vueSettings = root.project.vueSettings()
-        val poSettings = root.project.poSettings()
-        val i18NextSettings = root.project.i18NextSettings()
+//        val poSettings = root.project.poSettings()
+        val i18NextSettings = root.project.i18NextSettings1()
         val commonSettings = root.project.commonSettings()
+        val gettext = false//poSettings.gettext
         val parser = (
-            if (poSettings.gettext) KeyParserBuilder.withoutTokenizer()
+            if (gettext) KeyParserBuilder.withoutTokenizer()
             else KeyParserBuilder.withSeparators(i18NextSettings.nsSeparator, i18NextSettings.keySeparator).withNormalizer(ExpressionNormalizer())
         ).build()
         if (!commonSettings.foldingEnabled) return arrayOf()
@@ -49,7 +49,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
-                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , vueSettings.vue || poSettings.gettext)
+                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , vueSettings.vue || gettext)
                         ?.let { key -> resolve(container, literal, search, commonSettings, key, vueSettings) }
                         ?.let { resolved ->
                             FoldingDescriptor(
