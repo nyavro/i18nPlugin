@@ -46,8 +46,6 @@ fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirec
  */
 class LocalizationSourceSearch(private val project: Project) {
 
-    private val vueSettings = project.vueSettings()
-
     /**
      * Finds localization sources
      */
@@ -65,11 +63,11 @@ class LocalizationSourceSearch(private val project: Project) {
      */
     private fun findSourcesInner(fileNames: List<String>, element: PsiElement? = null, isHost: Boolean): List<LocalizationSource> =
         project.mainFactory().localizationSourcesProviders()
-            .filter {
-                //Temporary compatibility fix
-                (vueSettings.vue && it.javaClass.name.contains("Vue")) ||
-                (!vueSettings.vue && !it.javaClass.name.contains("Vue"))
-            }
+//            .filter {
+//                //Temporary compatibility fix
+//                (vueSettings.vue && it.javaClass.name.contains("Vue")) ||
+//                (!vueSettings.vue && !it.javaClass.name.contains("Vue"))
+//            }
             .flatMap {
                 it.find(fileNames, element, isHost, project)
             }

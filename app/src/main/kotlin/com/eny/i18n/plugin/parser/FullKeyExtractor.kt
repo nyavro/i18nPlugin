@@ -30,8 +30,10 @@ class KeyExtractorImpl: Extractor {
      */
     override fun extractFullKey(element: PsiElement): FullKey? {
         val config = element.project.i18NextSettings()
+        //TODO
+        val gettext = false//element.project.poSettings().gettext
         val parser = (
-            if (element.project.poSettings().gettext)
+            if (gettext)
                 KeyParserBuilder.withoutTokenizer()
             else
                 KeyParserBuilder
