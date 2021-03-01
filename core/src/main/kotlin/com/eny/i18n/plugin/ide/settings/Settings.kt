@@ -65,6 +65,7 @@ fun Project.mainFactory(): MainFactory {
         listOf(
             listOf(JsLanguageFactory(), JsxLanguageFactory())//, PhpLanguageFactory())
 //            if (this.vueSettings().vue) listOf(VueLanguageFactory()) else emptyList()
-        ).flatten()
+        ).flatten(),
+        this
     )
 }

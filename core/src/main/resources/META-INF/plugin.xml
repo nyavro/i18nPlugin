@@ -1,0 +1,35 @@
+<idea-plugin>
+    <id>com.eny.i18n.core</id>
+    <vendor/>
+    <depends>com.intellij.modules.platform</depends>
+
+    <depends>JavaScript</depends>
+<!--    <depends optional="true" config-file="META-INF/yamlConfig.xml">org.jetbrains.plugins.yaml</depends>-->
+<!--    <depends optional="true" config-file="META-INF/phpConfig.xml">com.jetbrains.php</depends>-->
+<!--    <depends optional="true" config-file="META-INF/vueConfig.xml">org.jetbrains.plugins.vue</depends>-->
+    <resource-bundle>messages.I18nBundle</resource-bundle>
+    <extensionPoints>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.LocalizationFactory" name="localizationFactory" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.LanguageFactory" name="technologyFactory" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.LocalizationSourcesProvider" name="localizationSourceProvider" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.plugin.ide.CustomSettings" name="customSettings" area="IDEA_PROJECT" dynamic="true"/>
+    </extensionPoints>
+    <extensions defaultExtensionNs="com.intellij">
+        <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsCompositeKeyAnnotator"/>
+<!--        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.addons.js.JsReferenceContributor"/>-->
+<!--        <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.plugin.addons.js.JsxReferenceContributor"/>-->
+<!--        <psi.referenceContributor language="JSON" implementation="com.eny.i18n.plugin.addons.json.JsonReferenceContributor"/>-->
+<!--        <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsCompletionContributor"/>-->
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.CommonSettings"/>
+        <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.I18NextSettings"/>
+        <projectConfigurable groupId="tools" displayName="I18n Plugin Configuration" instance="com.eny.i18n.plugin.ide.settings.Configurable"/>
+<!--        <intentionAction>-->
+<!--            <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>-->
+<!--        </intentionAction>-->
+<!--        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.addons.js.JsFoldingBuilder"/>-->
+<!--        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.addons.js.JsFoldingBuilder"/>-->
+<!--        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.addons.js.JsFoldingBuilder"/>-->
+<!--        <lang.documentationProvider language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>-->
+    </extensions>
+
+</idea-plugin>

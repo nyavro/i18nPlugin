@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id 'i18nPlugin.kotlin-library-conventions'
     id 'org.jetbrains.intellij' version '0.6.5'
@@ -10,7 +12,6 @@ dependencies {
 
 intellij {
     version 'IU-2020.1'
-    pluginName 'i18n'
     plugins = [
             'yaml',
             'JavaScriptLanguage',
@@ -21,4 +22,10 @@ intellij {
     ]
 }
 
-apply plugin: 'org.jetbrains.intellij'
+//apply plugin: 'org.jetbrains.intellij'
+
+tasks.withType(KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

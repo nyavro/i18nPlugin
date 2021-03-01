@@ -76,16 +76,16 @@ internal class VueTranslationExtractor: TranslationExtractor {
         }
 
     override fun postProcess(editor: Editor, offset: Int) {
-        val file = PsiDocumentManager.getInstance(editor.project!!).getPsiFile(editor.document)!!
-        val attribute = file.findElementAt(offset)?.parentOfType<XmlAttribute>()
-
-        if (attribute != null) {
-            val nameElement = attribute.firstChild
-
-            if (!nameElement.text.startsWith(":")) {
-                editor.document.insertString(nameElement.textOffset, ":")
-            }
-        }
+//        val file = PsiDocumentManager.getInstance(editor.project!!).getPsiFile(editor.document)!!
+//        val attribute = file.findElementAt(offset)?.parentOfType<XmlAttribute>()
+//
+//        if (attribute != null) {
+//            val nameElement = attribute.firstChild
+//
+//            if (!nameElement.text.startsWith(":")) {
+//                editor.document.insertString(nameElement.textOffset, ":")
+//            }
+//        }
     }
 
     override fun folderSelector(): TranslationFolderSelector = VueTranslationFolderSelector()
