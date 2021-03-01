@@ -16,10 +16,16 @@ class KeyParser(private val tokenizer: Tokenizer) {
      */
     fun parse(
         pair: Pair<List<KeyElement>, List<String>?>,
-        emptyNamespace: Boolean = false
+        emptyNamespace: Boolean = false,
+        firstComponentNamespace: Boolean = false
     ): FullKey? {
         val startState = if (emptyNamespace) {
-            WaitingLiteral(file = null, key = emptyList())
+            if (firstComponentNamespace) {
+                Start(null, KeySeparator)
+            }
+            else {
+                WaitingLiteral(file = null, key = emptyList())
+            }
         } else {
             Start(null)
         }
@@ -55,10 +61,10 @@ private data class Error(val msg: String): State {
 /**
  * Initial state
  */
-private class Start(private val init: Literal?) : State {
+private class Start(private val init: Literal?, private val nsSeparator: Separator = NsSeparator) : State {
     override fun next(token: Token): State =
         when {
-            token is NsSeparator && init != null  -> WaitingLiteral(init, listOf())
+            token == nsSeparator && init != null  -> WaitingLiteral(init, listOf())
             token is KeySeparator && init != null -> WaitingLiteral(null, listOf(init))
             token is Literal -> Start(init?.merge(token) ?: token)
             else -> Error("Invalid ns separator position (0)") // Never get here

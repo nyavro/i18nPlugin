@@ -44,7 +44,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
-                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , config.vue || config.gettext)
+                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null), config.vue || config.gettext)
                         ?.let { key -> resolve(container, literal, search, config, key) }
                         ?.let { resolved ->
                             FoldingDescriptor(
