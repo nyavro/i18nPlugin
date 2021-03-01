@@ -1,0 +1,21 @@
+intellij {
+    plugins = [project('core')]
+}
+
+// OR
+
+//dependencies {
+//    implementation project('core')
+//    rootProject.name = 'i18n'
+//
+//    include('list', 'utilities', 'i18nKey', 'vue', 'core', 'php', 'yaml')
+//}
+//
+//prepareSandbox {
+//    def task = project.tasks.getByPath(':i18nPlugin:core:prepareSandbox')
+//    from(new File(task.destinationDir, task.pluginName)) {
+//        into task.pluginName
+//    }
+//    dependsOn task
+//}
+//
