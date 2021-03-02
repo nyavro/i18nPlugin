@@ -3,8 +3,7 @@ package com.eny.i18n.plugin.ide.hint
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.CodeTranslationGenerators
 import com.eny.i18n.plugin.ide.runVue
-import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
-import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.codeInsight.documentation.DocumentationManager
@@ -14,18 +13,23 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 
 class HintTest: PlatformBaseTest() {
 
-    @ParameterizedTest
-    @ArgumentsSource(CodeTranslationGenerators::class)
-    fun testSingleHint(cg: CodeGenerator, tg: TranslationGenerator) {
+    @Test
+    fun testSingleHint() {
+        val cgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator(), PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
         val translation = "translation here"
-        myFixture.addFileToProject("test.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
-        myFixture.configureByText("content.${cg.ext()}", cg.generate("\"test:root.first.<caret>second\""))
-        read {
-            val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
-            assertEquals(
-                translation,
-                DocumentationManager.getProviderFromElement(codeElement).getQuickNavigateInfo(myFixture.elementAtCaret, codeElement)
-            )
+        val tg = JsonTranslationGenerator()
+        cgs.forEachIndexed {
+            index, cg ->
+                myFixture.addFileToProject("test${index}.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
+                myFixture.configureByText("content.${cg.ext()}", cg.generate("\"test${index}:root.first.<caret>second\""))
+                read {
+                    val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
+                    assertEquals(
+                        translation,
+                        DocumentationManager.getProviderFromElement(codeElement)
+                            .getQuickNavigateInfo(myFixture.elementAtCaret, codeElement)
+                    )
+                }
         }
     }
 

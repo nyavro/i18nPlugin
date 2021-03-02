@@ -16,7 +16,7 @@
     name: "AppHeader",
     computed: {
       title() {
-        return this.$t('title');
+        return this.$t('common.save');
       }
     }
   }

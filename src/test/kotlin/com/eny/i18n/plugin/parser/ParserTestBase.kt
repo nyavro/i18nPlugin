@@ -24,6 +24,6 @@ interface ParserTestBase {
      * Parse utility
      */
     fun parse(elements: List<KeyElement>, isTemplate: Boolean = false, nsSeparator: String = ":", keySeparator: String = ".",
-              stopCharacters: String = "", emptyNamespace: Boolean = false): FullKey? =
-        KeyParserBuilder.withSeparators(nsSeparator, keySeparator).build().parse(Pair(elements, null), emptyNamespace)
+              stopCharacters: String = "", emptyNamespace: Boolean = false, firstComponentNamespace: Boolean = false): FullKey? =
+        KeyParserBuilder.withSeparators(nsSeparator, keySeparator).build().parse(Pair(elements, null), emptyNamespace, firstComponentNamespace)
 }

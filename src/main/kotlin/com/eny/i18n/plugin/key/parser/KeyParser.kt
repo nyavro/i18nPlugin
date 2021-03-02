@@ -66,7 +66,7 @@ private class Start(private val init: Literal?, private val nsSeparator: Separat
         when {
             token == nsSeparator && init != null  -> WaitingLiteral(init, listOf())
             token is KeySeparator && init != null -> WaitingLiteral(null, listOf(init))
-            token is Literal -> Start(init?.merge(token) ?: token)
+            token is Literal -> Start(init?.merge(token) ?: token, nsSeparator)
             else -> Error("Invalid ns separator position (0)") // Never get here
         }
     override fun fullKey(source: String, namespaces: List<String>?): FullKey? =

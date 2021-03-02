@@ -236,7 +236,7 @@ internal class VueReferenceAssistant: ReferenceAssistant {
             .build()
         return listOf(LiteralKeyExtractor())
                 .find {it.canExtract(element)}
-                ?.let{parser.parse(it.extract(element))}
+                ?.let{parser.parse(it.extract(element), settings.vue, settings.firstComponentNs)}
     }
 }
 
