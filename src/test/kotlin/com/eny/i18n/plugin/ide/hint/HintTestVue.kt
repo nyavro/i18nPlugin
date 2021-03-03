@@ -16,13 +16,12 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 
 class HintTestVue: PlatformBaseTest() {
 
-    @Test
     fun testSingleHint() = myFixture.runVue {
         val cg = VueCodeGenerator()
         val tg = JsonTranslationGenerator()
         val translation = "translation here"
-        myFixture.addFileToProject("assets/en-US.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
-        myFixture.configureByText("content.${cg.ext()}", cg.generate("\"test.root.first.<caret>second\""))
+        myFixture.addFileToProject("locales/en-US.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
+        myFixture.configureByText("content.${cg.ext()}", cg.generate("\"root.first.<caret>second\""))
         read {
             val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
             assertEquals(
@@ -32,12 +31,11 @@ class HintTestVue: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testSingleHintFirstComponentNs() = myFixture.runVueConfig(Config(firstComponentNs = true)) {
         val cg = VueCodeGenerator()
         val tg = JsonTranslationGenerator()
         val translation = "translation here"
-        myFixture.addFileToProject("test.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
+        myFixture.addFileToProject("locales/en-US/test.${tg.ext()}", tg.generateContent("root", "first", "second", translation))
         myFixture.configureByText("content.${cg.ext()}", cg.generate("\"test.root.first.<caret>second\""))
         read {
             val codeElement = myFixture.file.findElementAt(myFixture.caretOffset)
