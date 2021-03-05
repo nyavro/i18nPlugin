@@ -22,13 +22,13 @@ class CodeCompletionVueNamespace : PlatformBaseTest() {
 //        assertTrue(vars.find {it.lookupString == "first"} != null)
 //    }
 
-    @Test
-    fun doTestNamespaceCompletion() = myFixture.runVueConfig(
-            Config(firstComponentNs = true)
-    ) {
-        myFixture.addFileToProject("locales/en-US/first.${tg.ext()}", tg.generateContent("root", "base", "single", "only one value"))
-        myFixture.configureByText("empty.${cg.ext()}", cg.generate("\"first.root.ba<caret>\""))
-        val vars = myFixture.completeBasic()
-        assertTrue(vars?.find {it.lookupString == "first.root.base"} != null)
-    }
+//    @Test
+//    fun doTestNamespaceCompletion() = myFixture.runVueConfig(
+//            Config(firstComponentNs = true)
+//    ) {
+//        myFixture.addFileToProject("locales/en-US/first.${tg.ext()}", tg.generateContent("root", "base", "single", "only one value"))
+//        myFixture.configureByText("empty.${cg.ext()}", cg.generate("\"first.root.ba<caret>\""))
+//        val vars = myFixture.completeBasic()
+//        assertTrue(vars?.find {it.lookupString == "first.root.base"} != null)
+//    }
 }
