@@ -46,6 +46,6 @@ class KeyExtractorImpl: Extractor {
             XmlAttributeKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let{parser.parse(it.extract(element))}
+            ?.let{parser.parse(it.extract(element), config.vue || config.gettext, config.firstComponentNs)}
     }
 }

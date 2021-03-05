@@ -44,7 +44,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
-                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null) , config.vue || config.gettext)
+                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null), config.vue || config.gettext, config.firstComponentNs)
                         ?.let { key -> resolve(container, literal, search, config, key) }
                         ?.let { resolved ->
                             FoldingDescriptor(
@@ -62,7 +62,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
         return search
             .findFilesByHost(fullKey.allNamespaces(), container)
             .filter {
-                if (config.vue) it.name.contains(config.foldingPreferredLanguage)
+                if (config.vue) it.name.contains(config.foldingPreferredLanguage) || config.firstComponentNs && it.parent.contains(config.foldingPreferredLanguage)
                 else it.parent == config.foldingPreferredLanguage
             }
             .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element), it.type)}

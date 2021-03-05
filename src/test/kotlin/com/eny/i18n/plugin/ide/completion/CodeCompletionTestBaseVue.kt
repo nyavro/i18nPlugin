@@ -46,3 +46,4 @@ internal abstract class CodeCompletionTestBaseVue(translationGenerator: Translat
 
 internal class CodeCompletionVueJsonTest: CodeCompletionTestBaseVue(JsonTranslationGenerator())
 internal class CodeCompletionVueYamlTest: CodeCompletionTestBaseVue(YamlTranslationGenerator())
+

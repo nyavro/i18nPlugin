@@ -38,7 +38,8 @@ class KeyRequest {
                 (if(config.gettext) KeyParserBuilder.withoutTokenizer() else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
                     .parse(
                         Pair(listOf(KeyElement.literal(keyStr)), null),
-                        emptyNamespace = config.vue || config.gettext
+                        emptyNamespace = config.vue || config.gettext,
+                        firstComponentNamespace = config.firstComponentNs
                     ),
                 false
             )

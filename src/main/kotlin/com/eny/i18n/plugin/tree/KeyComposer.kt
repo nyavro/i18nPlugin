@@ -23,13 +23,13 @@ interface KeyComposer<T> {
     /**
      * Composes string representation of key by given path
      */
-    fun composeKey(parents: List<String>, separators: Separators = Separators(":", ".", "-"), defaultNs: List<String> = listOf("translation"), dropRoot: Boolean = false): String {
+    fun composeKey(parents: List<String>, separators: Separators = Separators(":", ".", "-"), defaultNs: List<String> = listOf("translation"), dropRoot: Boolean = false, firstComponentNs: Boolean = false): String {
         val (head, tail) = parents.headTail()
         return listOf(
             head.whenMatches {!(defaultNs.contains(it) || dropRoot)},
             tail?.joinToString(separators.key)?.let {fixPlural(it, separators.plural)}
         )
             .mapNotNull {it}
-            .joinToString(separators.ns)
+            .joinToString(if (firstComponentNs) separators.key else separators.ns)
     }
 }

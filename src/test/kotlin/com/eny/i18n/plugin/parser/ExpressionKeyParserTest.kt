@@ -38,4 +38,16 @@ internal class ExpressionKeyParserTest : ParserTestBase {
         assertEquals("fileName{8}:ROOT{4}.Key3{4}.Key4{4}.{0}", toTestString(parsed))
         assertEquals("fileName:ROOT.Key3.Key4.", parsed?.source)
     }
+
+    @Test
+    fun parseFirstComponentNamespace() {
+        val elements = listOf(
+            KeyElement.literal("file"),
+            KeyElement.literal("Name.ROOT.Key3.Key4.")
+        )
+        val parsed = parse(elements, emptyNamespace = true, firstComponentNamespace = true)
+        assertEquals("fileName", parsed?.ns?.text)
+        assertEquals("fileName{8}:ROOT{4}.Key3{4}.Key4{4}.{0}", toTestString(parsed))
+        assertEquals("fileName.ROOT.Key3.Key4.", parsed?.source)
+    }
 }

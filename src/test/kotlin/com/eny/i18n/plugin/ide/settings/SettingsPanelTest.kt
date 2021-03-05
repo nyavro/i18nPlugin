@@ -34,6 +34,11 @@ class SettingsPanelTest {
     }
 
     @Test
+    fun testFirstComponentNs() {
+        checkBooleanProperty(PluginBundle.getMessage("settings.vue.first.component.ns"), Settings::firstComponentNs)
+    }
+
+    @Test
     fun testPreferYamlFilesGeneration() {
         checkBooleanProperty(PluginBundle.getMessage("settings.prefer.yaml.files.generation"), Settings::preferYamlFilesGeneration)
     }

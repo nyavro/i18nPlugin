@@ -78,4 +78,11 @@ internal class KeyComposerTest {
         val tree = listOf("second31k", "first1k", "BASEk", "Firstk").reversed()
         assertEquals("BASEk.first1k.second31k", composer.composeKey(tree, Separators("\$", ".", "-"), listOf(), true))
     }
+
+    @Test
+    fun firstComponentNs() {
+        val composer = object : KeyComposer<String>{}
+        val tree = listOf("second31n", "first1n", "BASEn", "Firstn").reversed()
+        assertEquals("Firstn.BASEn.first1n.second31n", composer.composeKey(tree, Separators("\$", ".", "-"), listOf(), false, true))
+    }
 }

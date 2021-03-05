@@ -16,6 +16,7 @@ data class Config (
     val defaultNs: String = "translation",
     val vue: Boolean = false,
     val vueDirectory: String = "locales",
+    val firstComponentNs: Boolean = false,
     val jsConfiguration: String = "",
     val preferYamlFilesGeneration: Boolean = false,
     val foldingEnabled: Boolean = false,

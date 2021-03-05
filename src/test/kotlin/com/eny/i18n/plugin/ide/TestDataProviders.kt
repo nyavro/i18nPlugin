@@ -28,11 +28,6 @@ class CodeGeneratorsWithNs : ArgumentsProvider {
         ).stream()
 }
 
-class CodeGenerators : ArgumentsProvider {
-    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        cgs.map {Arguments.of(it)}.stream()
-}
-
 class JsonYamlCodeGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
         listOf(
@@ -40,11 +35,6 @@ class JsonYamlCodeGenerators : ArgumentsProvider {
             YamlTranslationGenerator()).flatMap {
             tg -> cgs.map {Arguments.of(it, tg)}
         }.stream()
-}
-
-class JsonYamlTranslationGenerators: ArgumentsProvider {
-    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        listOf(JsonTranslationGenerator(), YamlTranslationGenerator()).map {Arguments.of(it)}.stream()
 }
 
 class JsCodeAndTranslationGenerators : ArgumentsProvider {
@@ -60,11 +50,6 @@ class JsCodeAndTranslationGeneratorsNs : ArgumentsProvider {
 class PhpCodeAndTranslationGenerators : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
         listOf(PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator()).flatMap { cg -> tgs.map {Arguments.of(cg, it)}}.stream()
-}
-
-class TranslationGenerators: ArgumentsProvider {
-    override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-        tgs.map {Arguments.of(it)}.stream()
 }
 
 class CodeTranslationGenerators: ArgumentsProvider {

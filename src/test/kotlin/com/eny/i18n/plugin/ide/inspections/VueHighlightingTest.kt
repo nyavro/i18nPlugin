@@ -1,19 +1,15 @@
 package com.eny.i18n.plugin.ide.inspections
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.TranslationGenerators
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ArgumentsSource
 
 class VueHighlightingTest : PlatformBaseTest() {
 
-    private val codeGenerator = VueCodeGenerator()
+    private val cg = VueCodeGenerator()
+    private val tg = JsonTranslationGenerator()
 
     private val testConfig = Config(vueDirectory = "assets", defaultNs = "translation")
 
@@ -25,23 +21,19 @@ class VueHighlightingTest : PlatformBaseTest() {
         }
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testReferenceToObjectVue(tg: TranslationGenerator) {
+    fun testReferenceToObjectVue() {
         check(
-            "refToObject.${codeGenerator.ext()}",
-            codeGenerator.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+            "refToObject.${cg.ext()}",
+            cg.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
             "assets/en-US.${tg.ext()}",
             tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
         )
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testDefaultNsUnresolvedVue(tg: TranslationGenerator) {
+    fun testDefaultNsUnresolvedVue() {
         check(
-            "defNsUnresolved.${codeGenerator.ext()}",
-            codeGenerator.multiGenerate(
+            "defNsUnresolved.${cg.ext()}",
+            cg.multiGenerate(
                 "\"<warning descr=\"Unresolved key\">missing.default.translation</warning>\"",
                 "`<warning descr=\"Unresolved key\">missing.default.in.\${template}</warning>`"
             ),
@@ -50,12 +42,10 @@ class VueHighlightingTest : PlatformBaseTest() {
         )
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testNotArg(tg: TranslationGenerator) {
+    fun testNotArg() {
         check(
-            "defNsUnresolved.${codeGenerator.ext()}",
-            codeGenerator.generateInvalid(
+            "defNsUnresolved.${cg.ext()}",
+            cg.generateInvalid(
                 "\"test:tst1.base5.single\""
             ),
             "assets/en-US.${tg.ext()}",
@@ -63,14 +53,18 @@ class VueHighlightingTest : PlatformBaseTest() {
         )
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(TranslationGenerators::class)
-    fun testExpressionInsideTranslation(tg: TranslationGenerator) {
+    fun testExpressionInsideTranslation() {
         check(
-            "expressionInTranslation.${codeGenerator.ext()}",
-            codeGenerator.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
+            "expressionInTranslation.${cg.ext()}",
+            cg.generate("isSelected ? \"<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
             "assets/en-US.${tg.ext()}",
             tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
         )
+    }
+
+    fun testFirstComponentNs() = myFixture.runVueConfig(testConfig.copy(firstComponentNs = true)) {
+        myFixture.addFileToProject("assets/en-US/tst2.${tg.ext()}", tg.generatePlural("plurals", "sub","value", "value1", "value2", "value5"))
+        myFixture.configureByText("expressionInTranslation.${cg.ext()}", cg.generate("isSelected ? \"tst2.<warning descr=\"Reference to object\">plurals</warning>\" : \"<warning descr=\"Unresolved namespace\">unresolved</warning>.whole.key\""))
+        myFixture.checkHighlighting(true, true, true, true)
     }
 }

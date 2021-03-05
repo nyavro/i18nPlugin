@@ -25,7 +25,6 @@ internal abstract class FoldingTestBase(private val lang:String, private val tra
         myFixture.testFolding("$testDataPath/$lang/preferredLanguageTest.$lang")
     }
 
-    @Test
     fun testIncompleteKey() = myFixture.runWithConfig(testConfig) {
         myFixture.configureByFiles("assets/ru/test.$translationLang", "assets/en/test.$translationLang")
         myFixture.testFolding("$testDataPath/$lang/incompleteKeys.$lang")

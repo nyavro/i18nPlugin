@@ -37,6 +37,8 @@ class Settings : PersistentStateComponent<Settings> {
 
     internal var vueDirectory = default.vueDirectory
 
+    internal var firstComponentNs = default.firstComponentNs
+
     internal var jsConfiguration = default.jsConfiguration
 
     internal var preferYamlFilesGeneration = default.preferYamlFilesGeneration
@@ -80,6 +82,7 @@ class Settings : PersistentStateComponent<Settings> {
         defaultNs = defaultNs,
         vue = vue,
         vueDirectory = vueDirectory,
+        firstComponentNs = firstComponentNs,
         jsConfiguration = jsConfiguration,
         preferYamlFilesGeneration = preferYamlFilesGeneration,
         foldingEnabled = foldingEnabled,
@@ -112,6 +115,7 @@ class Settings : PersistentStateComponent<Settings> {
         defaultNs = config.defaultNs
         vue = config.vue
         vueDirectory = config.vueDirectory
+        firstComponentNs = config.firstComponentNs
         jsConfiguration = config.jsConfiguration
         preferYamlFilesGeneration = config.preferYamlFilesGeneration
         foldingEnabled = config.foldingEnabled
