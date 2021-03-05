@@ -77,6 +77,15 @@ Intellij idea i18next support plugin
 -   Enable partially translated keys inspection
     
     When set, warns when key exists in some translation files and is missing in another; suggests 'Create missing translations' quick fix 
+
+-   Vue 
+
+    Enables vue-i18n support
+    
+-   Support vue namespaces 
+
+    Applicable only with Vue setting. When set, considers first component of a translation key as 'namespace'. 
+    For instance, key 'sample.xx.xx' will try to find translation inside the file 'sample.json/yml'. 
     
 ## Frameworks & Libraries
 

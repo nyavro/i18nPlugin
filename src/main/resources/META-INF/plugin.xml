@@ -20,6 +20,13 @@
 
     <change-notes><![CDATA[
         <div>
+            <h3>2.6.0</h3>
+            <ul>
+                <li>Introduced vue-i18n namespaces</li>
+                <li>Files with 'yaml' extension get resolved as well as 'yml' files</li>
+            </ul>
+        </div>
+        <div>
             <h3>2.5.0</h3>
             <ul>
                 <li>Missing translation inspection introduced</li>

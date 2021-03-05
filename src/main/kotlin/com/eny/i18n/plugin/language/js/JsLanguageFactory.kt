@@ -57,10 +57,10 @@ internal class JsCallContext: CallContext {
                 pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
             } ||
             //TODO: what about vue $t function?
-//            JSPatterns.jsArgument("\$t", 0).let { pattern ->
-//                pattern.accepts(element) ||
-//                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
-//            } ||
+            JSPatterns.jsArgument("\$t", 0).let { pattern ->
+                pattern.accepts(element) ||
+                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
+            } ||
             XmlPatterns.xmlAttributeValue("i18nKey").accepts(element)
 }
 
@@ -81,6 +81,6 @@ internal class JsReferenceAssistant: ReferenceAssistant {
             LiteralKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let {parser.parse(it.extract(element))}
+            ?.let {parser.parse(it.extract(element), emptyNamespace = config.vue, firstComponentNamespace = config.firstComponentNs)}
     }
 }
