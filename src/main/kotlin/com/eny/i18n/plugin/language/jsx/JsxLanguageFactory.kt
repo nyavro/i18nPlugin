@@ -15,6 +15,7 @@ import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.xml.XmlAttributeValue
 import com.intellij.psi.xml.XmlTag
 
 /**
@@ -60,20 +61,24 @@ class JsxReferenceAssistant: ReferenceAssistant {
 internal class JsxTranslationExtractor: TranslationExtractor {
     override fun canExtract(element: PsiElement): Boolean =
         listOf(JSXHarmonyFileType.INSTANCE, TypeScriptJSXFileType.INSTANCE).any { it == element.containingFile.fileType } &&
-            !PsiTreeUtil.findChildOfType(PsiTreeUtil.getParentOfType(element, XmlTag::class.java), XmlTag::class.java).toBoolean()
+            PsiTreeUtil.getParentOfType(element, XmlTag::class.java)?.let {
+                !PsiTreeUtil.findChildOfType(it, XmlTag::class.java).toBoolean()
+            } ?: false
 
     override fun isExtracted(element: PsiElement): Boolean =
         element.isJs() && JSPatterns.jsArgument("t", 0).accepts(element.parent)
 
     override fun text(element: PsiElement): String =
-        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)!!
+        if (element.parent is XmlAttributeValue) element.text
+        else PsiTreeUtil.getParentOfType(element, XmlTag::class.java)!!
             .value
             .textElements
             .map {it.text}
             .joinToString(" ")
 
     override fun textRange(element: PsiElement): TextRange =
-        PsiTreeUtil.getParentOfType(element, XmlTag::class.java)!!
+        if (element.parent is XmlAttributeValue) element.parent.textRange
+        else PsiTreeUtil.getParentOfType(element, XmlTag::class.java)!!
             .value
             .textElements
             .let {
@@ -83,6 +88,8 @@ internal class JsxTranslationExtractor: TranslationExtractor {
                 )
             }
 
-    override fun template(element: PsiElement): (argument: String) -> String = {"{i18n.t($it)}"}
+    override fun template(element: PsiElement): (argument: String) -> String = {
+        "{i18n.t($it)}"
+    }
     private fun PsiElement.isJs(): Boolean = this.language == JavascriptLanguage.INSTANCE
 }

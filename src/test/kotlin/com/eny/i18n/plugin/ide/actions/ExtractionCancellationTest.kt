@@ -76,4 +76,18 @@ class ExtractionCancellationTest: PlatformBaseTest() {
         )
         assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
     }
+
+    @Test
+    fun testExtractionUnavailable2() {
+        myFixture.configureByText(
+            "unavailable.tsx",
+            """
+                const Component = () => {
+                   const {t} = useTranslation();
+                   return (<Text value="My string" /><caret>)
+                };
+            """
+        )
+        assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
+    }
 }

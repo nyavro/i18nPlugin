@@ -3,7 +3,10 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.ReactTransJsxAttrGenerator
+import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
+import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
@@ -91,6 +94,23 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
                 tg.generate("ref", arrayOf("section", "key", "Reference in json")),
                 tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
                 predefinedTextInputDialog("test:ref.value3")
+            )
+        }
+    }
+
+    @Test
+    fun testRootSource2() {
+        val tg = JsonTranslationGenerator()
+        val cg = ReactTransJsxAttrGenerator()
+        myFixture.runWithConfig(config(tg.ext())) {
+            runTestCase(
+                    "simple.${cg.ext()}",
+                    cg.generateBlock("\"I want to <caret>move it to translation\""),
+                    cg.generateBlock("{i18n.t('test:ref.value3')}"),
+                    "assets/test.${tg.ext()}",
+                    tg.generate("ref", arrayOf("section", "key", "Reference in json")),
+                    tg.generate("ref", arrayOf("section", "key", "Reference in json"), arrayOf("value3", "I want to move it to translation")),
+                    predefinedTextInputDialog("test:ref.value3")
             )
         }
     }
