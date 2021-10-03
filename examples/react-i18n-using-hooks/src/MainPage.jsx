@@ -29,6 +29,11 @@ const UseTranslationHookComponent = () => {
     );
 };
 
+const Component = () => {
+    const {t} = useTranslation();
+    return (<Text value="My text" />)
+};
+
 const MainComponent = () => {
     const { t, i18n } = useTranslation();
 

@@ -8,6 +8,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.UsageSearchContext
+import java.util.Collections.synchronizedList
 
 internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
 
@@ -38,7 +39,7 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
  */
 class ReferencesAccumulator(private val key: String) {
 
-    private val res = mutableListOf<PsiElement>()
+    private val res = synchronizedList(mutableListOf<PsiElement>())
 
     /**
      * Processing function for PsiSearchHelper
