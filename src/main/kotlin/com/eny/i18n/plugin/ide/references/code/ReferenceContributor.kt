@@ -23,7 +23,7 @@ data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val
 class I18nReference(element: PsiElement, textRange: TextRange, val references: List<ReferenceDescriptor>) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
 
     private fun filterMostResolved(): List<ReferenceDescriptor> {
-        val mostResolved = references.maxBy {it.reference.path.size}?.reference?.path?.size
+        val mostResolved = references.maxByOrNull {it.reference.path.size}?.reference?.path?.size
         return references.filter {it.reference.path.size == mostResolved}
     }
 

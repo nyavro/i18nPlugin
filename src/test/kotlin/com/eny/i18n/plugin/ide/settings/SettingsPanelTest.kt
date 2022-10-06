@@ -8,11 +8,11 @@ import net.sourceforge.marathon.javadriver.JavaProfile
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import kotlin.reflect.KMutableProperty1
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class SettingsPanelTest {
 

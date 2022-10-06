@@ -10,6 +10,7 @@ import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
@@ -220,17 +221,18 @@ class ReferencesTestJs : PlatformBaseTest() {
     /**
      * Reference from <Trans i18nKey="...key...">...</Trans>
      */
-    @Test
-    fun testTransReference() {
-        val cg = ReactTransJsxContentGenerator()
-        val tg = JsonTranslationGenerator()
-        myFixture.addFileToProject(
-            "assets/test.${tg.ext()}",
-            tg.generateContent("ref", "section", "key", "Reference in json"))
-        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("\"test:ref.section.key<caret>\""))
-        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-        assertNotNull(element)
-        assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)
-        assertEquals("Failed ${tg.ext()}, ${cg.ext()}", "Reference in json", element.references[0].resolve()?.text?.unQuote())
-    }
+//    @Test
+//    @Ignore
+//    fun testTransReference() {
+//        val cg = ReactTransJsxContentGenerator()
+//        val tg = JsonTranslationGenerator()
+//        myFixture.addFileToProject(
+//            "assets/test.${tg.ext()}",
+//            tg.generateContent("ref", "section", "key", "Reference in json"))
+//        myFixture.configureByText("resolved.${cg.ext()}", cg.generate("\"test:ref.section.key<caret>\""))
+//        val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
+//        assertNotNull(element)
+//        assertTrue("Failed ${tg.ext()}, ${cg.ext()}", element!!.references.size > 0)
+//        assertEquals("Failed ${tg.ext()}, ${cg.ext()}", "Reference in json", element.references[0].resolve()?.text?.unQuote())
+//    }
 }

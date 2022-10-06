@@ -2,7 +2,7 @@ package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
 
 //@Ignore
 internal class AsteriskKeyParserTest : ParserTestBase {

@@ -16,9 +16,11 @@ import com.intellij.lang.javascript.psi.JSCallExpression
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
+import com.intellij.patterns.ElementPatternCondition
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.util.ProcessingContext
 
 /**
  * Vue language components factory
@@ -67,7 +69,21 @@ internal class JsCallContext: CallContext {
 internal class JsReferenceAssistant: ReferenceAssistant {
 
     override fun pattern(): ElementPattern<out PsiElement> =
-        JSPatterns.jsLiteralExpression().andOr(JSPatterns.jsArgument("t", 0), JSPatterns.jsArgument("\$t", 0))
+        object : ElementPattern<PsiElement> {
+            val v = JSPatterns.jsLiteralExpression().andOr(JSPatterns.jsArgument("t", 0), JSPatterns.jsArgument("\$t", 0))
+            override fun accepts(o: Any?): Boolean {
+                return v.accepts(o)
+            }
+
+            override fun accepts(o: Any?, context: ProcessingContext?): Boolean {
+                return v.accepts(o, context)
+            }
+
+            override fun getCondition(): ElementPatternCondition<PsiElement>? {
+                return v.condition as ElementPatternCondition<PsiElement>
+            }
+        }
+
 
     override fun extractKey(element: PsiElement): FullKey? {
         val config = Settings.getInstance(element.project).config()

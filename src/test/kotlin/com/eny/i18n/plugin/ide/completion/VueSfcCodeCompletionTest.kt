@@ -5,8 +5,10 @@ import com.eny.i18n.plugin.ide.runVue
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.codeInsight.completion.CompletionType
+import org.junit.Ignore
 import org.junit.jupiter.api.Test
 
+@Ignore
 class VueSfcCodeCompletionTest: PlatformBaseTest() {
 
     val cg = VueCodeGenerator()

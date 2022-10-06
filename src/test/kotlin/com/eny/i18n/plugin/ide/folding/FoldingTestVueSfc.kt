@@ -6,8 +6,10 @@ import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.VueCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl
+import org.junit.Ignore
 import org.junit.jupiter.api.Test
 
+@Ignore
 class FoldingTestVueSfc: PlatformBaseTest() {
 
     private val testConfig = Config(foldingEnabled = true)
