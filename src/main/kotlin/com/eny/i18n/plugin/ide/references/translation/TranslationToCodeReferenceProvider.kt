@@ -4,6 +4,9 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote
+import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator
+import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.util.Computable
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.search.PsiSearchHelper
@@ -72,12 +75,21 @@ class TranslationToCodeReference(element: PsiElement, textRange: TextRange, val 
      * Finds usages of json translation
      */
     fun findRefs(): Collection<PsiElement> {
-        val project = element.project
-        val referencesAccumulator = ReferencesAccumulator(composedKey)
-        PsiSearchHelper.getInstance(project).processElementsWithWord(
-            referencesAccumulator.process(), Settings.getInstance(project).config().searchScope(project), composedKey, UsageSearchContext.ANY, true
+        return ProgressManager.getInstance().runProcess (
+            Computable {
+                val project = element.project
+                val referencesAccumulator = ReferencesAccumulator(composedKey)
+                PsiSearchHelper.getInstance(project).processElementsWithWord(
+                    referencesAccumulator.process(),
+                    Settings.getInstance(project).config().searchScope(project),
+                    composedKey,
+                    UsageSearchContext.ANY,
+                    true
+                )
+                referencesAccumulator.entries()
+            },
+            DaemonProgressIndicator()
         )
-        return referencesAccumulator.entries()
     }
 
     override fun resolve(): PsiElement? = multiResolve(false).firstOrNull()?.element
