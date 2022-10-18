@@ -4,29 +4,14 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote
-import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.progress.ProcessCanceledException
-import com.intellij.openapi.progress.ProgressIndicator
+import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
+import com.intellij.openapi.util.Computable
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.UsageSearchContext
 import java.util.Collections.synchronizedList
-import org.bouncycastle.crypto.params.Blake3Parameters.context
-
-import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator
-import com.intellij.openapi.util.Computable
-import com.intellij.openapi.util.Disposer
-import com.intellij.psi.PsiDocumentManager
-
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx
-
-import com.intellij.codeInsight.daemon.impl.HighlightInfo
-
-
-
-
 
 internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
 
