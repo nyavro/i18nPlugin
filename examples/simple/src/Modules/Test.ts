@@ -1,5 +1,5 @@
 class I18n {
-    t(key, params?: Object) {console.log(key, params);}
+    t(key, params?: Object):string {console.log(key, params);return key;}
 }
 class Test {
     static obj = {
@@ -12,9 +12,9 @@ class Test {
         console.log('sample:missing.whole.composite.key');                              //Unresolved whole key
         console.log('sample:ROOT.missing.composite.key');                               //Unresolved part of the key
         console.log('MissingFile:Ex.Sub.Val');                                          //Unresolved File
-        console.log(i18n.t('sample:ROOT.Key1.missingKey'));                        //Unresolved property
-        console.log(i18n.t('sample:ROOT.Key1'));                                   //Reference to Json object
-        console.log(i18n.t('sample:ROOT.Key1.plurals.value', {count: 2})); //Reference to plural key
+        console.log(i18n.t('sample1:ROOT.Key1.missingKey'));                        //Unresolved property
+        console.log(i18n.t('sample:ROOT.Key1.key21'));                                   //Reference to Json object
+        console.log(i18n.t('sample:ROOT.Key12.plurals2.value', {count: 2})); //Reference to plural key
         const sub0 = 'Key1';
         const sub = sub0;
         console.log(i18n.t(`sample:ROOT.${sub}.plurals`));                           //Resolved simple expression

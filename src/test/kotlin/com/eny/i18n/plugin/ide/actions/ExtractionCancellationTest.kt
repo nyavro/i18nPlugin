@@ -2,14 +2,13 @@ package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import com.fasterxml.jackson.core.JsonGenerator
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.ui.InputValidator
-import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
+import com.intellij.openapi.ui.TestDialogManager.setTestDialog
+import com.intellij.openapi.ui.TestDialogManager.setTestInputDialog
 import com.intellij.openapi.ui.TestInputDialog
-import org.junit.jupiter.api.Test
-import kotlin.concurrent.thread
+import org.junit.Test
 
 class ExtractionCancellationTest: PlatformBaseTest() {
 
@@ -29,7 +28,7 @@ class ExtractionCancellationTest: PlatformBaseTest() {
         myFixture.addFileToProject("assets/test.json", testJson)
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
-        Messages.setTestInputDialog(object : TestInputDialog {
+        setTestInputDialog(object : TestInputDialog {
             override fun show(message: String): String? = null
             override fun show(message: String, validator: InputValidator?) = null
         })
@@ -44,11 +43,11 @@ class ExtractionCancellationTest: PlatformBaseTest() {
         myFixture.addFileToProject("assets/test.json", testJson)
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
-        Messages.setTestInputDialog(object : TestInputDialog {
+        setTestInputDialog(object : TestInputDialog {
             override fun show(message: String): String? = null
             override fun show(message: String, validator: InputValidator?) = "not:a:key{here}"
         })
-        Messages.setTestDialog(object : TestDialog {
+        setTestDialog(object : TestDialog {
             override fun show(message: String): Int {
                 assertEquals("Invalid i18n key", message)
                 return 1

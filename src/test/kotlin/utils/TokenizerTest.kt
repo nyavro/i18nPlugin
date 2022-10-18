@@ -1,10 +1,13 @@
 package utils
 
-import com.eny.i18n.plugin.key.lexer.*
+import com.eny.i18n.plugin.key.lexer.KeySeparator
+import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.key.lexer.NsKeyTokenizer
+import com.eny.i18n.plugin.key.lexer.NsSeparator
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.nullableToList
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 internal class TokenizerTest {
 

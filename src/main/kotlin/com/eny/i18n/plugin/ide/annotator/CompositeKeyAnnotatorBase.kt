@@ -44,7 +44,7 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             val pluralSeparator = config.pluralSeparator
             val references = files.flatMap {resolve(fullKey.compositeKey, PsiElementTree.create(it.element), pluralSeparator, it.type)}
             val allEqual = references.zipWithNext().all { it.first.path == it.second.path }
-            val mostResolvedReference = if (allEqual) references.first() else references.maxBy { v -> v.path.size }!!
+            val mostResolvedReference = if (allEqual) references.first() else references.maxByOrNull { v -> v.path.size }!!
             if (mostResolvedReference.unresolved.isEmpty()) {
                 if (!allEqual && config.partialTranslationInspectionEnabled) {
                     annotationHelper.annotatePartiallyTranslated(fullKey, references)

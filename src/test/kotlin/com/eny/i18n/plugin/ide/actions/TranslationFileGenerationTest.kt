@@ -4,9 +4,12 @@ import com.eny.i18n.plugin.ide.JsonYamlCodeGenerators
 import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.translationGenerator
-import com.eny.i18n.plugin.utils.generator.code.*
+import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueScriptAttributeCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueScriptCodeGenerator
+import com.eny.i18n.plugin.utils.generator.code.VueTsCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.ui.TestDialogManager.setTestInputDialog
 import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
@@ -20,7 +23,7 @@ class TranslationFileGenerationTest: ExtractionTestBase() {
         myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("<caret>I want to move it to translation"))
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
-        Messages.setTestInputDialog(predefinedTextInputDialog("main:component.header.title"))
+        setTestInputDialog(predefinedTextInputDialog("main:component.header.title"))
         myFixture.launchAction(action)
         myFixture.checkResult(cg.generate("'main:component.header.title'"))
         myFixture.checkResult(
@@ -42,7 +45,7 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
         myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("\"I want<caret> to move it to translation\""))
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
-        Messages.setTestInputDialog(predefinedTextInputDialog("component.header.title"))
+        setTestInputDialog(predefinedTextInputDialog("component.header.title"))
         myFixture.launchAction(action)
         myFixture.checkResult(cg.generateBlock("this.\$t('component.header.title')"))
         myFixture.checkResult(
@@ -60,7 +63,7 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
         myFixture.configureByText("simple.${cg.ext()}", cg.generateBlock("\"I want<caret> to move it to translation\""))
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
-        Messages.setTestInputDialog(predefinedTextInputDialog("component.header.title"))
+        setTestInputDialog(predefinedTextInputDialog("component.header.title"))
         myFixture.launchAction(action)
         myFixture.checkResult(cg.generateBlock("this.\$t('component.header.title').toString()"))
         myFixture.checkResult(
@@ -78,7 +81,7 @@ class VueTranslationGenerationTest: ExtractionTestBase() {
         myFixture.configureByText("simple.${cg.ext()}", cg.generate("\"I want<caret> to move it to translation\""))
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
-        Messages.setTestInputDialog(predefinedTextInputDialog("component.header.title"))
+        setTestInputDialog(predefinedTextInputDialog("component.header.title"))
         myFixture.launchAction(action)
         myFixture.checkResult(VueScriptAttributeCodeGenerator(":attr").generate("\"\$t('component.header.title')\""))
         myFixture.checkResult(

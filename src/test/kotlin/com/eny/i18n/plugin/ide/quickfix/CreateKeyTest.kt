@@ -110,7 +110,7 @@ class CreateKeyTest: PlatformBaseTest() {
                 |{
                 |  ref:
                 |    section:
-                |      missing: test:ref.section.missing}""".trimMargin(),
+                |      missing: test:ref.section.missing }""".trimMargin(),
                 false
         )
     }

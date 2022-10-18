@@ -4,8 +4,9 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.ide.settings.Config
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.ui.InputValidator
-import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
+import com.intellij.openapi.ui.TestDialogManager.setTestDialog
+import com.intellij.openapi.ui.TestDialogManager.setTestInputDialog
 import com.intellij.openapi.ui.TestInputDialog
 
 abstract class ExtractionTestBase: PlatformBaseTest() {
@@ -35,8 +36,8 @@ abstract class ExtractionTestBase: PlatformBaseTest() {
         if (!ApplicationManager.getApplication().isReadAccessAllowed()) return
         val action = myFixture.findSingleIntention(hint)
         assertNotNull(action)
-        Messages.setTestInputDialog(inputDialog)
-        if (message != null) Messages.setTestDialog(message)
+        setTestInputDialog(inputDialog)
+        if (message != null) setTestDialog(message)
         myFixture.launchAction(action)
         myFixture.checkResult(patched)
         myFixture.checkResult(translationName, patchedTranslation, false)

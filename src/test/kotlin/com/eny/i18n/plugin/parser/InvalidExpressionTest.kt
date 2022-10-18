@@ -1,8 +1,8 @@
 package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import kotlin.test.assertNull
 
 //@Ignore
 internal class InvalidExpressionTest : ParserTestBase {

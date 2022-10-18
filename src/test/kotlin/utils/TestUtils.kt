@@ -4,11 +4,8 @@ import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.whenMatches
 import com.eny.i18n.plugin.utils.whenMatchesDo
 import com.eny.i18n.plugin.utils.whenNotEmpty
-import groovy.util.GroovyTestCase.assertEquals
 import org.junit.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.Assertions.*
 
 class TestUtils {
 

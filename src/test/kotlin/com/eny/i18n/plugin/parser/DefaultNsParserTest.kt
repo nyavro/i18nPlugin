@@ -2,9 +2,9 @@ package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 
 internal class CheckDefaultNs(val elements: List<KeyElement>, val expected: String)
 
@@ -84,7 +84,7 @@ internal class DefaultNsParserTest : ParserTestBase {
         ).forEach {
             val fullKey = parse(it.elements, emptyNamespace = true)
             assertNotNull(fullKey)
-            assertNull(fullKey.ns)
+            assertNull(fullKey?.ns)
             assertEquals(it.expected, toTestString(fullKey))
         }
     }
@@ -96,7 +96,7 @@ internal class DefaultNsParserTest : ParserTestBase {
         )
         val fullKey = parse(literal)
         assertNotNull(fullKey)
-        assertNull(fullKey.ns)
+        assertNull(fullKey?.ns)
         assertEquals("root{4}", toTestString(fullKey))
     }
 }
