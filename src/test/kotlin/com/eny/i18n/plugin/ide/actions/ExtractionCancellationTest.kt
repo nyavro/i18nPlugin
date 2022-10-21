@@ -8,7 +8,6 @@ import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestDialogManager.setTestDialog
 import com.intellij.openapi.ui.TestDialogManager.setTestInputDialog
 import com.intellij.openapi.ui.TestInputDialog
-import org.junit.Test
 
 class ExtractionCancellationTest: PlatformBaseTest() {
 
@@ -22,7 +21,6 @@ class ExtractionCancellationTest: PlatformBaseTest() {
 
     private val testJson = JsonTranslationGenerator().generateContent("ref", "section", "key", "Reference in Json")
 
-    @Test
     fun testCancel() {
         myFixture.configureByText("simple.js", simpleJs)
         myFixture.addFileToProject("assets/test.json", testJson)
@@ -37,7 +35,6 @@ class ExtractionCancellationTest: PlatformBaseTest() {
         myFixture.checkResult("assets/test.json", testJson, false)
     }
 
-    @Test
     fun testCancelInvalid() {
         myFixture.configureByText("simple.js", simpleJs)
         myFixture.addFileToProject("assets/test.json", testJson)
@@ -58,7 +55,6 @@ class ExtractionCancellationTest: PlatformBaseTest() {
         myFixture.checkResult("assets/test.json", testJson, false)
     }
 
-    @Test
     fun testExtractionUnavailable() {
         myFixture.configureByText(
             "unavailable.tsx",
@@ -76,7 +72,6 @@ class ExtractionCancellationTest: PlatformBaseTest() {
         assertEquals(emptyList<IntentionAction>(), myFixture.filterAvailableIntentions(hint).toList())
     }
 
-    @Test
     fun testExtractionUnavailable2() {
         myFixture.configureByText(
             "unavailable.tsx",

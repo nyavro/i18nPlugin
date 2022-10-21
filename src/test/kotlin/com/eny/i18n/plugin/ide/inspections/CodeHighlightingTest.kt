@@ -11,11 +11,11 @@ import com.eny.i18n.plugin.utils.generator.code.TsxCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
-private fun CodeInsightTestFixture.customCheck(fileName: String, code: String, translationName: String, translation: String) = this.runWithConfig(Config(vueDirectory = "assets", defaultNs = "translation")) {
+private fun CodeInsightTestFixture.customCheck(fileName: String, code: String, translationName: String, translation: String) = this.runWithConfig(Config(defaultNs = "translation")) {
     this.addFileToProject(translationName, translation)
     this.configureByText(fileName, code)
     this.checkHighlighting(true, true, true, true)
@@ -148,6 +148,9 @@ class JsDialectCodeHighlightingTestBase: PlatformBaseTest() {
         "assets/translation.${tg.ext()}",
         tg.generateContent("tst1", "base", "value", "translation")
     )
+
+    @Test
+    fun testResolvedTemplate1() {}
 }
 
 class PhpHighlightingTest: PlatformBaseTest() {
@@ -189,4 +192,7 @@ class PhpHighlightingTest: PlatformBaseTest() {
         "test.${tg.ext()}",
         tg.generateContent("root", "first", "key", "value")
     )
+
+    @Test
+    fun testResolvedTemplate1() {}
 }

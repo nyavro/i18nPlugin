@@ -13,7 +13,7 @@ import com.intellij.psi.PsiFileSystemItem
 import com.intellij.psi.PsiManager
 
 /**
- * Vue translation folder selector
+ * Translation folder selector
  */
 class DefaultTranslationFolderSelector : TranslationFolderSelector {
 

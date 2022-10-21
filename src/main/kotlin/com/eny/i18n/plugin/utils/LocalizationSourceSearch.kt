@@ -62,12 +62,7 @@ class LocalizationSourceSearch(private val project: Project) {
         findPlainObjectFiles() +
         findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces())
             .flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map {localizationSource(it, directParent)}} +
-        if (config.vue) {
-            findVirtualFilesUnder(config.vueDirectory)
-                .filter { file -> translationFileTypes.any { file.fileType == it.key } }
-                .map {localizationSource(it, directParent)} +
-                findSfcSources(isHost, element)
-        } else listOf()
+        listOf()
 
     private fun findSfcSources(isHost: Boolean, element: PsiElement?): Iterable<LocalizationSource> {
         return PsiTreeUtil

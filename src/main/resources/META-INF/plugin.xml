@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.eny.i18n</id>
-    <name>i18n support</name>
+    <name>I18n Support</name>
     <vendor email="e.nyavro@gmail.com" url="https://github.com/nyavro/i18nPlugin">i18nPlugin</vendor>
     <depends>com.intellij.modules.platform</depends>
     <description><![CDATA[
@@ -148,7 +148,6 @@
     <depends>JavaScript</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
     <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>
-    <depends optional="true" config-file="vueConfig.xml">org.jetbrains.plugins.vue</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
@@ -166,6 +165,5 @@
         <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.documentationProvider language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
-        <languageInjector implementation="com.eny.i18n.plugin.ide.injections.VueSFCTranslationInjector"/>
     </extensions>
 </idea-plugin>

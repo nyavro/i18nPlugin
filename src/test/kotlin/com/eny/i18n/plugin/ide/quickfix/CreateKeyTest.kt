@@ -7,8 +7,8 @@ import com.eny.i18n.plugin.utils.generator.code.JsCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
-import org.junit.Test
 import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.*
@@ -37,7 +37,6 @@ class CreateKeyTest: PlatformBaseTest() {
         )
     }
 
-    @Test
     fun testCreateKeyEmptyJson() {
         val cg = JsCodeGenerator()
         val tg = JsonTranslationGenerator()

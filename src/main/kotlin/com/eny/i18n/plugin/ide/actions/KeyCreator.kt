@@ -29,8 +29,7 @@ class KeyCreator {
             val contentGenerator = if (config.preferYamlFilesGeneration)
                 YamlLocalizationFactory().contentGenerator() else
                 JsonLocalizationFactory().contentGenerator()
-            //TODO - get rid of hardcoded 'en' value
-            val fileName = if (config.vue) "en" else (i18nKey.ns?.text ?: config.defaultNamespaces().first())
+            val fileName = i18nKey.ns?.text ?: config.defaultNamespaces().first()
             CreateTranslationFileQuickFix(i18nKey, contentGenerator, extractor.folderSelector(), fileName, source, onComplete)
         } else {
             CreateKeyQuickFix(i18nKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators, source, onComplete)

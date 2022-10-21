@@ -7,9 +7,10 @@ import net.sourceforge.marathon.javadriver.JavaDriver
 import net.sourceforge.marathon.javadriver.JavaProfile
 import org.junit.After
 import org.junit.Before
-import org.junit.Test
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import kotlin.reflect.KMutableProperty1
@@ -26,16 +27,6 @@ class SettingsPanelTest {
     @Test
     fun testSearchInProjectFilesOnly() {
         checkBooleanProperty(PluginBundle.getMessage("settings.search.in.project.files.only"), Settings::searchInProjectOnly)
-    }
-
-    @Test
-    fun testVue() {
-        checkBooleanProperty(PluginBundle.getMessage("settings.vue"), Settings::vue)
-    }
-
-    @Test
-    fun testFirstComponentNs() {
-        checkBooleanProperty(PluginBundle.getMessage("settings.vue.first.component.ns"), Settings::firstComponentNs)
     }
 
     @Test
@@ -99,11 +90,6 @@ class SettingsPanelTest {
     @Test
     fun testDefaultNs() {
         checkStringProperty("testloc", PluginBundle.getMessage("settings.default.namespace"), Settings::defaultNs)
-    }
-
-    @Test
-    fun testVueDirectory() {
-        checkStringProperty("testloc", PluginBundle.getMessage("settings.vue.locales.directory"), Settings::vueDirectory)
     }
 
     @Test

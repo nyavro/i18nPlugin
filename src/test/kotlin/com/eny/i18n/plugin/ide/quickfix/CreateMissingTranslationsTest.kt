@@ -6,11 +6,10 @@ import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.generator.code.TsxCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
-import org.junit.Test
+
 
 class CreateMissingTranslationsTest: PlatformBaseTest() {
 
-    @Test
     fun testUnavailableFix() = myFixture.runWithConfig(Config(partialTranslationInspectionEnabled = true)){
         val hint = PluginBundle.getMessage("quickfix.create.missing.keys")
         val cg = TsxCodeGenerator()
@@ -30,7 +29,6 @@ class CreateMissingTranslationsTest: PlatformBaseTest() {
         assertNull(action)
     }
 
-    @Test
     fun testCreateMissingTranslations() = myFixture.runWithConfig(Config(partialTranslationInspectionEnabled = true)){
         val hint = PluginBundle.getMessage("quickfix.create.missing.keys")
         val cg = TsxCodeGenerator()

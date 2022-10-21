@@ -6,7 +6,6 @@ import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
 import com.eny.i18n.plugin.utils.generator.code.ReactTransJsxAttrGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
-import org.junit.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
@@ -98,7 +97,6 @@ class ExtractI18nIntentionActionTest: ExtractionTestBase() {
         }
     }
 
-    @Test
     fun testRootSource2() {
         val tg = JsonTranslationGenerator()
         val cg = ReactTransJsxAttrGenerator()
