@@ -4,9 +4,10 @@ import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Test
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
 
 class ConfigurableTest {
 

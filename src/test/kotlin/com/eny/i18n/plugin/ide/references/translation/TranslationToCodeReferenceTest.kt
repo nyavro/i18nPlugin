@@ -1,14 +1,13 @@
 package com.eny.i18n.plugin.ide.references.translation
 
 import com.eny.i18n.plugin.PlatformBaseTest
-import com.eny.i18n.plugin.ide.runVueConfig
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
-import org.junit.Test
+
 
 private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator())
 private val jsCgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator())
@@ -16,7 +15,6 @@ private val cgs = jsCgs + listOf(PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCo
 
 class TranslationToCodeTestBase: PlatformBaseTest() {
 
-    @Test
     fun testSingleReference() {
         cgs.forEachIndexed { i0, cg ->
             val key = "'test:ref.section.key${i0}'"
@@ -33,7 +31,6 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testInvalidTranslation() {
         tgs.forEach { tg ->
             myFixture.configureByText("invalid.${tg.ext()}", "item<caret> text")
@@ -43,7 +40,6 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testNoReference() {
         tgs.forEach { tg ->
             myFixture.configureByText(
@@ -56,7 +52,6 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testMultipleReferences() {
         cgs.forEachIndexed { index, cg ->
             val key = "'multiTest:ref.section.subsection1.key${index}'"
@@ -92,7 +87,6 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testObjectReference() {
         jsCgs.forEachIndexed { index, cg ->
             tgs.forEach { tg ->
@@ -124,7 +118,6 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testInvalidRange() {
         val tg = JsonTranslationGenerator()
         jsCgs.forEachIndexed { index, cg ->
@@ -149,7 +142,6 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testDefaultNs() {
         jsCgs.forEachIndexed { index, cg ->
             myFixture.runWithConfig(Config(defaultNs = "Common")) {
@@ -182,7 +174,6 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
         }
     }
 
-    @Test
     fun testClickOnValue() {
         tgs.forEach { tg ->
             myFixture.configureByText(
@@ -200,7 +191,6 @@ class YamlReferencesTestBase : PlatformBaseTest() {
 
     val tg = YamlTranslationGenerator()
 
-    @Test
     fun testSingleReferenceQuoted() {
         cgs.forEachIndexed { index, cg ->
             val key = "'testQuoted:ref.section.key${index}'"
@@ -215,62 +205,6 @@ class YamlReferencesTestBase : PlatformBaseTest() {
             val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
             assertNotNull(element)
             assertEquals(key.unQuote(), element!!.references[0].resolve()?.text?.unQuote())
-        }
-    }
-}
-
-class VueReferencesTestBase: PlatformBaseTest() {
-
-    private val codeGenerator = VueCodeGenerator()
-
-    @Test
-    fun testVue() {
-        myFixture.runVueConfig(Config(vueDirectory = "assets")) {
-            tgs.forEachIndexed { index, tg ->
-                val translation = tg.generateContent("ref${index}", "section<caret>", "key1", "val 1")
-                myFixture.configureByText("test${index}.vue",
-                    codeGenerator.multiGenerate(
-                        "'skip.ref.section.key1'",
-                        "'ref${index}.section.key2'",
-                        "'drop.ref.section.key3'",
-                        "'skpref.section.key4'",
-                        "'ref${index}.section.key5'"
-                    )
-                )
-                myFixture.configureFromExistingVirtualFile(
-                    myFixture.addFileToProject("assets/en-US.${tg.ext()}", translation).virtualFile
-                )
-                val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-                val ref = element!!.references[0]
-                assertTrue(ref is TranslationToCodeReference)
-                assertEquals(
-                    setOf("'ref${index}.section.key2'", "'ref${index}.section.key5'"),
-                    (ref as TranslationToCodeReference).findRefs().map { it.text }.toSet()
-                )
-            }
-        }
-    }
-
-    @Test
-    fun testVueIncorrectConfiguration() {
-        myFixture.runVueConfig(Config(vueDirectory = "translations")) {
-            tgs.forEachIndexed { index, tg ->
-                val translation = tg.generateContent("ref${index}", "section<caret>", "key1", "val 1")
-                myFixture.configureByText("test.vue",
-                    codeGenerator.multiGenerate(
-                    "'skip.ref.section.key1'",
-                    "'ref${index}.section.key2'",
-                    "'drop.ref.section.key3'",
-                    "'skpref.section.key4'",
-                    "'ref${index}.section.key5'"
-                ))
-                myFixture.configureFromExistingVirtualFile(
-                    myFixture.addFileToProject("assets/en-US.${tg.ext()}", translation).virtualFile
-                )
-                val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
-                assertNotNull(element)
-                assertTrue(element!!.references.isEmpty())
-            }
         }
     }
 }

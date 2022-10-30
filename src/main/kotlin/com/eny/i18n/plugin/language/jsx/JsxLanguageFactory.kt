@@ -19,7 +19,7 @@ import com.intellij.psi.xml.XmlAttributeValue
 import com.intellij.psi.xml.XmlTag
 
 /**
- * Vue language components factory
+ * Jsx language components factory
  */
 class JsxLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsxTranslationExtractor()

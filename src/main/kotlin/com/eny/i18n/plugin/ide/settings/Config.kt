@@ -14,8 +14,6 @@ data class Config (
     val keySeparator: String = ".",
     val pluralSeparator: String = "-",
     val defaultNs: String = "translation",
-    val vue: Boolean = false,
-    val vueDirectory: String = "locales",
     val firstComponentNs: Boolean = false,
     val jsConfiguration: String = "",
     val preferYamlFilesGeneration: Boolean = false,

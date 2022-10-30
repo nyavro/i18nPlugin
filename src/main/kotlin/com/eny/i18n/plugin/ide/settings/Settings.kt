@@ -4,7 +4,6 @@ import com.eny.i18n.plugin.factory.MainFactory
 import com.eny.i18n.plugin.language.js.JsLanguageFactory
 import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
 import com.eny.i18n.plugin.language.php.PhpLanguageFactory
-import com.eny.i18n.plugin.language.vue.VueLanguageFactory
 import com.eny.i18n.plugin.localization.json.JsonLocalizationFactory
 import com.eny.i18n.plugin.localization.yaml.YamlLocalizationFactory
 import com.intellij.openapi.application.ApplicationManager
@@ -32,10 +31,6 @@ class Settings : PersistentStateComponent<Settings> {
     internal var pluralSeparator = default.pluralSeparator
 
     internal var defaultNs = default.defaultNs
-
-    internal var vue = default.vue
-
-    internal var vueDirectory = default.vueDirectory
 
     internal var firstComponentNs = default.firstComponentNs
 
@@ -80,8 +75,6 @@ class Settings : PersistentStateComponent<Settings> {
         keySeparator = keySeparator,
         pluralSeparator = pluralSeparator,
         defaultNs = defaultNs,
-        vue = vue,
-        vueDirectory = vueDirectory,
         firstComponentNs = firstComponentNs,
         jsConfiguration = jsConfiguration,
         preferYamlFilesGeneration = preferYamlFilesGeneration,
@@ -113,8 +106,6 @@ class Settings : PersistentStateComponent<Settings> {
         keySeparator = config.keySeparator
         pluralSeparator = config.pluralSeparator
         defaultNs = config.defaultNs
-        vue = config.vue
-        vueDirectory = config.vueDirectory
         firstComponentNs = config.firstComponentNs
         jsConfiguration = config.jsConfiguration
         preferYamlFilesGeneration = config.preferYamlFilesGeneration
@@ -140,14 +131,13 @@ class Settings : PersistentStateComponent<Settings> {
         /**
          * Loads project's Settings instance
          */
-        fun getInstance(project: Project): Settings = ServiceManager.getService(project, Settings::class.java)
+        fun getInstance(project: Project): Settings = project.getService(Settings::class.java)
     }
 
     fun mainFactory(): MainFactory =
         MainFactory(
             listOf(
                 listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
-                if (this.vue) listOf(VueLanguageFactory()) else emptyList()
             ).flatten(),
             listOf(
                 if (this.jsonContentGenerationEnabled) listOf(JsonLocalizationFactory()) else emptyList(),

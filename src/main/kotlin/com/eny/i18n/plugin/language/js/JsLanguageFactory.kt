@@ -23,7 +23,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 
 /**
- * Vue language components factory
+ * Js language components factory
  */
 class JsLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsTranslationExtractor()
@@ -58,7 +58,6 @@ internal class JsCallContext: CallContext {
                 pattern.accepts(element) ||
                 pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
             } ||
-            //TODO: what about vue $t function?
             JSPatterns.jsArgument("\$t", 0).let { pattern ->
                 pattern.accepts(element) ||
                     pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
@@ -97,6 +96,6 @@ internal class JsReferenceAssistant: ReferenceAssistant {
             LiteralKeyExtractor()
         )
             .find {it.canExtract(element)}
-            ?.let {parser.parse(it.extract(element), emptyNamespace = config.vue, firstComponentNamespace = config.firstComponentNs)}
+            ?.let {parser.parse(it.extract(element), emptyNamespace = false, firstComponentNamespace = config.firstComponentNs)}
     }
 }

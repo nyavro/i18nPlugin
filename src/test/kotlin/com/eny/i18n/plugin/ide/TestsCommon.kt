@@ -11,7 +11,3 @@ internal fun CodeInsightTestFixture.runWithConfig (config: Config, block: () -> 
     block()
     settings.setConfig(original)
 }
-
-internal fun CodeInsightTestFixture.runVueConfig (config: Config, block: () -> Unit) = runWithConfig(config.copy(vue = true), block)
-
-internal fun CodeInsightTestFixture.runVue (block: () -> Unit) = runVueConfig(Config(), block)

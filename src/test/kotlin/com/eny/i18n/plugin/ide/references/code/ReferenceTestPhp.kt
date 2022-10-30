@@ -9,6 +9,7 @@ import com.eny.i18n.plugin.utils.generator.code.PhpCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ArgumentsSource
 
@@ -175,4 +176,7 @@ class ReferenceTestPhp : PlatformBaseTest() {
             assertEquals("Failed ${tg.ext()}, ${cg.ext()}", "Reference in json", element.references[0].resolve()?.text?.unQuote())
         }
     }
+
+    @Test
+    fun testRootKey1() {}
 }

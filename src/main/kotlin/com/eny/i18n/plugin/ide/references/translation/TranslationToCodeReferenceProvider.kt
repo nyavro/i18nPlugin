@@ -26,7 +26,7 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
             parents,
             Separators(config.nsSeparator, config.keySeparator, config.pluralSeparator),
             config.defaultNamespaces(),
-            config.vue && element.containingFile.parent?.name == config.vueDirectory,
+            false,
             config.firstComponentNs
         )
         if (PsiSearchHelper.SearchCostResult.FEW_OCCURRENCES ==

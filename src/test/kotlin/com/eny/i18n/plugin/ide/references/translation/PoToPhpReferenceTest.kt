@@ -4,13 +4,15 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.at
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
+import org.junit.Ignore
 
+@Ignore
 class PoToPhpReferenceTest: PlatformBaseTest() {
 
     private val cg = PhpGetTextCodeGenerator("gettext")
     private val tg = PoTranslationGenerator()
 
-    fun disabledTranslationToCodeReference() {
+    fun testDisabledTranslationToCodeReference() {
         val translation = tg.generateContent("ref", "section<caret>", "key1", "val 1")
         myFixture.configureByText(
             "test.php",
@@ -34,4 +36,6 @@ class PoToPhpReferenceTest: PlatformBaseTest() {
             (ref as TranslationToCodeReference).findRefs().map { it.text }.toSet()
         )
     }
+
+
 }

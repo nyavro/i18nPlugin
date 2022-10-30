@@ -117,18 +117,6 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         return panel
     }
 
-    private fun vue(): JPanel {
-        val panel = JPanel()
-        panel.layout = BorderLayout()
-        panel.preferredSize = Dimension(350, 30)
-        val label = PluginBundle.getMessage("settings.vue")
-        val vueMode = JCheckBox(label, settings.vue)
-        vueMode.name = label
-        vueMode.addItemListener { _ -> settings.vue = vueMode.isSelected}
-        panel.add(vueMode, BorderLayout.WEST)
-        return panel
-    }
-
     private fun gettext(): JPanel {
         val panel = JPanel()
         panel.layout = BorderLayout()
@@ -155,9 +143,7 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(checkbox(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), settings::partialTranslationInspectionEnabled))
-        panel.add(vue())
-        panel.add(checkbox(PluginBundle.getMessage("settings.vue.first.component.ns"), settings::firstComponentNs))
-        panel.add(textInput(PluginBundle.getMessage("settings.vue.locales.directory"), settings::vueDirectory))
+
         panel.add(checkbox(PluginBundle.getMessage("settings.gettext.enabled"), settings::gettext))
         panel.add(textInput(PluginBundle.getMessage("settings.gettext.aliases"), settings::gettextAliases))
         root.add(panel, BorderLayout.PAGE_START)

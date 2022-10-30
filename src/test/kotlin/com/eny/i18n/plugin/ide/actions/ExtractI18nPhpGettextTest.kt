@@ -1,16 +1,16 @@
 package com.eny.i18n.plugin.ide.actions
 
-import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-@Disabled
 class ExtractI18nPhpGettextTest: ExtractionTestBase() {
 
     private val tg = PoTranslationGenerator()
     private val cg = PhpGetTextCodeGenerator("gettext")
+
+    @Test
+    fun testKeyExtraction() {}
 //
 //    @Test
 //    fun testKeyExtraction() = myFixture.runWithConfig(config(tg.ext())) {

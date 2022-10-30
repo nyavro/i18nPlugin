@@ -7,8 +7,6 @@ import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import org.junit.Test
-import kotlin.concurrent.thread
 
 interface Checker {
     fun doCheck(sourceName: String, sourceCode: String, expectedCode: String, ext: String, translationContent: String)
@@ -67,7 +65,6 @@ abstract class CodeCompletionTestBase(
     }
 
     //No completion happens
-    @Test
     fun testNoCompletion() = checker.doCheck(
         "none.${codeGenerator.ext()}",
         codeGenerator.generate(keyGenerator.generate("test", "none.base.<caret>")),
@@ -77,7 +74,6 @@ abstract class CodeCompletionTestBase(
     )
 
     //Simple case - one possible completion of key: 'test:tst1.base.<caret>'
-    @Test
     fun testSingle() {
         checker.doCheck(
             "single.${codeGenerator.ext()}",
@@ -89,7 +85,6 @@ abstract class CodeCompletionTestBase(
     }
 
     //Completion of plural key: 'test:tst2.plurals.<caret>'
-    @Test
     fun testPlural() {
         checker.doCheck(
             "plural.${codeGenerator.ext()}",
@@ -101,7 +96,6 @@ abstract class CodeCompletionTestBase(
     }
 
     //Completion of partially typed key: 'test:tst1.base.si<caret>'
-    @Test
     fun testPartial() {
         checker.doCheck(
             "partial.${codeGenerator.ext()}",
@@ -112,7 +106,6 @@ abstract class CodeCompletionTestBase(
         )
     }
 
-    @Test
     fun testInvalidCompletion() = checker.doCheck(
         "partial.${codeGenerator.ext()}",
         codeGenerator.generate(keyGenerator.generate("test", "tst1.base.si<caret>ng")),

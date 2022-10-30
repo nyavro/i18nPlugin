@@ -4,8 +4,9 @@ import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.whenMatches
 import com.eny.i18n.plugin.utils.whenMatchesDo
 import com.eny.i18n.plugin.utils.whenNotEmpty
-import org.junit.Test
+
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 class TestUtils {
 
@@ -49,7 +50,8 @@ class CollectingSequenceTest {
         assertFalse(collectingSequence.hasNext())
     }
 
-    @Test(expected = NoSuchElementException::class)
+    @Test
+//        (expected = NoSuchElementException::class)
     fun emptyIteratorNextThrowsException() {
         CollectingSequence(emptySequence<Int>(), {it}).iterator().next()
     }
