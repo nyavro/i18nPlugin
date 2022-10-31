@@ -12,6 +12,10 @@
 
 Intellij idea i18next support plugin
 
+<!-- Plugin description -->
+
+<!-- Plugin description end -->
+
 ## Features
    ### Annotations
 
