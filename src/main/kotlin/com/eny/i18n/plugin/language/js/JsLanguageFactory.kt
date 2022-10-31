@@ -10,16 +10,20 @@ import com.eny.i18n.plugin.parser.TemplateKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.unQuote
+import com.intellij.lang.ecmascript6.psi.ES6Property
 import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.lang.javascript.psi.JSCallExpression
 import com.intellij.lang.javascript.psi.JSLiteralExpression
+import com.intellij.lang.javascript.psi.JSProperty
+import com.intellij.lang.javascript.psi.ecma6.TypeScriptEnumField
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.ElementPatternCondition
 import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parents
 import com.intellij.util.ProcessingContext
 
 /**
@@ -79,7 +83,7 @@ internal class JsReferenceAssistant: ReferenceAssistant {
             }
 
             override fun getCondition(): ElementPatternCondition<PsiElement>? {
-                return v.condition as ElementPatternCondition<PsiElement>
+                return v.condition as? ElementPatternCondition<PsiElement>
             }
         }
 
