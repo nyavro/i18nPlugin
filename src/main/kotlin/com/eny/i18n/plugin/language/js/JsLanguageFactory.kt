@@ -57,29 +57,44 @@ internal class JsFoldingProvider: FoldingProvider {
 internal class JsCallContext: CallContext {
     override fun accepts(element: PsiElement): Boolean =
         listOf("JS:STRING_LITERAL", "JS:LITERAL_EXPRESSION", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION")
-            .contains(element.type()) &&
-            JSPatterns.jsArgument("t", 0).let { pattern ->
-                pattern.accepts(element) ||
-                pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
-            } ||
-            JSPatterns.jsArgument("\$t", 0).let { pattern ->
-                pattern.accepts(element) ||
+            .contains(element.type()) && (
+                JSPatterns.jsArgument("t", 0).let { pattern ->
+                    pattern.accepts(element) ||
                     pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
-            } ||
-            XmlPatterns.xmlAttributeValue("i18nKey").accepts(element)
+                } ||
+                JSPatterns.jsArgument("\$t", 0).let { pattern ->
+                    pattern.accepts(element) ||
+                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
+                } ||
+                XmlPatterns.xmlAttributeValue("i18nKey").accepts(element) ||
+                element.parents(false).toList()
+                    .mapNotNull {(it as? JSProperty)?.name ?: (it as? ES6Property)?.computedPropertyName?.let {it.expression?.reference?.resolve() as? TypeScriptEnumField }?.name}
+                    .reversed().joinToString(Settings.getInstance(element.project).config().keySeparator).endsWith(element.text.unQuote())
+            )
 }
 
 internal class JsReferenceAssistant: ReferenceAssistant {
 
     override fun pattern(): ElementPattern<out PsiElement> =
         object : ElementPattern<PsiElement> {
-            val v = JSPatterns.jsLiteralExpression().andOr(JSPatterns.jsArgument("t", 0), JSPatterns.jsArgument("\$t", 0))
+            private val v = JSPatterns.jsLiteralExpression().andOr(
+                JSPatterns.jsArgument("t", 0),
+                JSPatterns.jsArgument("\$t", 0),
+            )
+
+            private fun isAlias(element: JSLiteralExpression): Boolean {
+                val config = Settings.getInstance(element.project).config()
+                return element.parents(false).toList()
+                    .mapNotNull {(it as? JSProperty)?.name ?: (it as? ES6Property)?.computedPropertyName?.let {it.expression?.reference?.resolve() as? TypeScriptEnumField }?.name}
+                    .reversed().joinToString(config.keySeparator).endsWith(element.text.unQuote())
+            }
+
             override fun accepts(o: Any?): Boolean {
-                return v.accepts(o)
+                return JSPatterns.jsLiteralExpression().accepts(o) && isAlias(o as JSLiteralExpression) || v.accepts(o)
             }
 
             override fun accepts(o: Any?, context: ProcessingContext?): Boolean {
-                return v.accepts(o, context)
+                return JSPatterns.jsLiteralExpression().accepts(o) && isAlias(o as JSLiteralExpression) || v.accepts(o, context)
             }
 
             override fun getCondition(): ElementPatternCondition<PsiElement>? {
