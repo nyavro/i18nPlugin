@@ -9,6 +9,7 @@ import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
+import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 
 /**
@@ -31,7 +32,8 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             element.project,
             folderSelector
         )
-        val files = LocalizationSourceSearch(element.project).findSources(fullKey.allNamespaces(), element)
+        val sourceService = element.project.service<LocalizationSourceService>()
+        val files = sourceService.findSources(fullKey.allNamespaces(), element)
         if (files.isEmpty()) {
             if (fullKey.ns == null) {
                 annotationHelper.unresolvedDefaultNs(fullKey)

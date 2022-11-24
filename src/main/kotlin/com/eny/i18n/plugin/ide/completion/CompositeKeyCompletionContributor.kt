@@ -9,7 +9,7 @@ import com.eny.i18n.plugin.parser.DummyContext
 import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.eny.i18n.plugin.utils.nullableToList
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.completion.CompletionContributor
@@ -17,6 +17,7 @@ import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 
 /**
@@ -64,7 +65,7 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
 
     private fun findCompletions(prefix: String, source: String, ns: String?, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
         return groupPlurals(
-            LocalizationSourceSearch(element.project).findSources(ns.nullableToList(), element).flatMap {
+            element.project.service<LocalizationSourceService>().findSources(ns.nullableToList(), element).flatMap {
                 listCompositeKeyVariants(
                     compositeKey,
                     PsiElementTree.create(it.element),

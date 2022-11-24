@@ -6,10 +6,11 @@ import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.LocalizationSource
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
+import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.command.UndoConfirmationPolicy
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
@@ -30,7 +31,8 @@ class CreateKeyQuickFix(
 
     override fun invoke(project: Project, editor: Editor) =
         ApplicationManager.getApplication().invokeLater {
-            val jsonFiles = LocalizationSourceSearch(project).findSources(fullKey.allNamespaces())
+            val sourceService = project.service<LocalizationSourceService>()
+            val jsonFiles = sourceService.findSources(fullKey.allNamespaces(), project)
             if (jsonFiles.size == 1) {
                 createPropertyInFile(project, jsonFiles.first())
             } else if (jsonFiles.size > 1) {

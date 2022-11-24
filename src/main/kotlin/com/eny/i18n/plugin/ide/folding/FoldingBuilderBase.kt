@@ -8,13 +8,11 @@ import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
-import com.eny.i18n.plugin.utils.ellipsis
-import com.eny.i18n.plugin.utils.unQuote
+import com.eny.i18n.plugin.utils.*
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
@@ -38,14 +36,13 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator).withTemplateNormalizer()
         ).build()
         if (!config.foldingEnabled) return arrayOf()
-        val search = LocalizationSourceSearch(root.project)
         val foldingProvider = languageFactory.foldingProvider()
         return foldingProvider.collectContainers(root)
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
                     parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null), config.gettext, config.firstComponentNs)
-                        ?.let { key -> resolve(container, literal, search, config, key) }
+                        ?.let { key -> resolve(container, literal, config, key) }
                         ?.let { resolved ->
                             FoldingDescriptor(
                                 container.node,
@@ -58,8 +55,8 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             }.toTypedArray()
     }
 
-    private fun resolve(container: PsiElement, element: PsiElement, search: LocalizationSourceSearch, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
-        return search
+    private fun resolve(container: PsiElement, element: PsiElement, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
+        return element.project.service<LocalizationSourceService>()
             .findFilesByHost(fullKey.allNamespaces(), container)
             .filter {
                 it.parent == config.foldingPreferredLanguage

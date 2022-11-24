@@ -4,10 +4,8 @@ import com.eny.i18n.plugin.factory.ReferenceAssistant
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.tree.PsiElementTree
-import com.eny.i18n.plugin.utils.LocalizationSourceSearch
-import com.eny.i18n.plugin.utils.unQuote
-import com.eny.i18n.plugin.utils.whenMatches
-import com.eny.i18n.plugin.utils.whenNotEmpty
+import com.eny.i18n.plugin.utils.*
+import com.intellij.openapi.components.service
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
@@ -57,7 +55,8 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                 }
                 private fun getReferencesList(element: PsiElement): List<PsiReference> {
                     return referenceContributor.extractKey(element)?.let { fullKey ->
-                        LocalizationSourceSearch(element.project)
+                        val sourceService = element.project.service<LocalizationSourceService>()
+                        sourceService
                             .findSources(fullKey.allNamespaces(), element)
                             .map {
                                 ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element), it.type), it.host)
