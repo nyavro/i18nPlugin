@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide.quickfix
 
-import com.eny.i18n.plugin.utils.LocalizationSource
+import com.eny.i18n.LocalizationSource
 import com.eny.i18n.plugin.utils.distance
 import com.eny.i18n.plugin.utils.pathToRoot
 import com.intellij.icons.AllIcons

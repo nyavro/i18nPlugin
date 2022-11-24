@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.utils
 
+import com.eny.i18n.Extensions
+import com.eny.i18n.LocalizationSource
 import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.json.*
@@ -16,19 +18,10 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.html.HtmlTag
 import com.intellij.psi.impl.source.resolve.FileContextUtil.INJECTED_IN_ELEMENT
 import com.intellij.psi.search.FileTypeIndex
-import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlText
 import org.jetbrains.yaml.YAMLFileType
 
-/**
- * Describes localization source.
- * May be root of json, yaml file, js object
- */
-data class LocalizationSource(
-    val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: LocalizationType,
-    val host: PsiElement? = null
-)
 /**
  * Provides search of localization files (json, yaml)
  */
@@ -59,7 +52,7 @@ class LocalizationSourceSearch(private val project: Project) {
      * Finds json roots by json file name
      */
     private fun findSourcesInner(fileNames: List<String>, element: PsiElement? = null, isHost: Boolean): List<LocalizationSource> =
-        findPlainObjectFiles() +
+        Extensions.LOCALIZATION_SOURCE_PROVIDER.extensionList.flatMap{it.findLocalizationSources(project)} +
         findVirtualFilesByName(fileNames.whenMatches { it.isNotEmpty() } ?: config.defaultNamespaces())
             .flatMap { vf -> listOfNotNull(findPsiRoot(vf)).map {localizationSource(it, directParent)}} +
         listOf()
@@ -147,21 +140,6 @@ class LocalizationSourceSearch(private val project: Project) {
 //                }
 //            } ?: listOf()
 //    }
-
-    private fun findVirtualFilesUnder(directory: String): List<PsiFile> =
-        FilenameIndex.getFilesByName(project, directory, config.searchScope(project), true).toList().flatMap {
-            it.children.toList().mapNotNull { root -> root.containingFile}
-        }
-
-    private fun findPlainObjectFiles(): List<LocalizationSource> {
-        return findVirtualFilesUnder("LC_MESSAGES")
-            .filter { it.virtualFile.extension == "po" }
-            .map {
-                localizationSource(it, { file: PsiFile ->
-                    file.containingDirectory.parentDirectory ?: file.containingDirectory
-                })
-            }
-    }
 
     private fun findVirtualFilesByName(fileNames: List<String>) =
         translationFileTypes.flatMap {findVirtualFilesByName(fileNames, it)}

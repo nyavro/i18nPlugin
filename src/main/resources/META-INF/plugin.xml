@@ -148,6 +148,9 @@
     <depends optional="true" config-file="ymlConfig.xml">org.jetbrains.plugins.yaml</depends>
     <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
+    <extensionPoints>
+        <extensionPoint interface="com.eny.i18n.LocalizationSourceProvider" name="translationSourceProvider" dynamic="true"/>
+    </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.annotator.JsCompositeKeyAnnotator"/>
         <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.code.JsReferenceContributor"/>
@@ -163,5 +166,8 @@
         <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
         <lang.documentationProvider language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.eny.i18n">
+        <translationSourceProvider implementation="com.eny.i18n.plugin.utils.PlainObjectSourcesProvider"/>
     </extensions>
 </idea-plugin>
