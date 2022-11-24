@@ -108,3 +108,6 @@ tasks {
         dependsOn(jacocoTestReport)
     }
 }
+
+val compileKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
+compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
