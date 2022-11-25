@@ -33,7 +33,7 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
             folderSelector
         )
         val sourceService = element.project.service<LocalizationSourceService>()
-        val files = sourceService.findSources(fullKey.allNamespaces(), element)
+        val files = sourceService.findSources(fullKey.allNamespaces(), element.project)
         if (files.isEmpty()) {
             if (fullKey.ns == null) {
                 annotationHelper.unresolvedDefaultNs(fullKey)

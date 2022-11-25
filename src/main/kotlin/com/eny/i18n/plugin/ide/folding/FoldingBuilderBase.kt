@@ -57,7 +57,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
 
     private fun resolve(container: PsiElement, element: PsiElement, config: Config, fullKey: FullKey): ElementToReferenceBinding? {
         return element.project.service<LocalizationSourceService>()
-            .findFilesByHost(fullKey.allNamespaces(), container)
+            .findSources(fullKey.allNamespaces(), container.project)
             .filter {
                 it.parent == config.foldingPreferredLanguage
             }

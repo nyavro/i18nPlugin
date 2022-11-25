@@ -57,7 +57,7 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                     return referenceContributor.extractKey(element)?.let { fullKey ->
                         val sourceService = element.project.service<LocalizationSourceService>()
                         sourceService
-                            .findSources(fullKey.allNamespaces(), element)
+                            .findSources(fullKey.allNamespaces(), element.project)
                             .map {
                                 ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element), it.type), it.host)
                             }
