@@ -2,7 +2,6 @@ package com.eny.i18n.plugin.localization.yaml
 
 import com.eny.i18n.plugin.factory.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
-import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.Settings
@@ -12,6 +11,7 @@ import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.Language
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
@@ -65,7 +65,7 @@ private class YamlContentGenerator: ContentGenerator {
             "$caret$tab${key.text}: $acc"
         })
 
-    override fun getType(): LocalizationType = LocalizationType(YAMLFileType.YML)
+    override fun getType(): FileType = YAMLFileType.YML
     override fun getLanguage(): Language = YAMLLanguage.INSTANCE
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.yaml.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = (element is YAMLMapping) || (element is YAMLDocument)

@@ -2,7 +2,6 @@ package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.LocalizationSource
 import com.eny.i18n.LocalizationSourceProvider
-import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
@@ -31,7 +30,7 @@ class PlainObjectSourcesProvider: LocalizationSourceProvider {
                     .virtualFile
                     .path
             ).trim('/') + '/' + file.name,
-            LocalizationType(file.fileType)
+            file.fileType
         )
     }
 

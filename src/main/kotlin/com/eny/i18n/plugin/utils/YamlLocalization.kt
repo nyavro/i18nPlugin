@@ -1,9 +1,9 @@
 package com.eny.i18n.plugin.utils
 
 import com.eny.i18n.Localization
-import com.eny.i18n.LocalizationType
+import com.eny.i18n.FileType
 import org.jetbrains.yaml.YAMLFileType
 
 class YamlLocalization : Localization {
-    override fun types(): List<LocalizationType> = listOf(LocalizationType(YAMLFileType.YML, listOf("yaml")))
+    override fun types(): List<FileType> = listOf(FileType(YAMLFileType.YML, listOf("yaml")))
 }

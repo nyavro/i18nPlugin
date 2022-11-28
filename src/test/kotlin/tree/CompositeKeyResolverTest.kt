@@ -1,6 +1,5 @@
 package tree
 
-import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.Tree
@@ -25,7 +24,7 @@ internal fun root(tree: TestTree) = TestTree("", listOf(tree))
  */
 internal class CompositeKeyResolverTest {
 
-    private val type = LocalizationType(JsonFileType.INSTANCE)
+    private val type = JsonFileType.INSTANCE
 
     @Test
     fun resolveElementByKey() {
@@ -183,7 +182,7 @@ internal class CompositeKeyResolverTest {
 
 internal class CompositeKeyResolverUnresolvedTest {
 
-    private val type = LocalizationType(JsonFileType.INSTANCE)
+    private val type = JsonFileType.INSTANCE
 
     @Test
     fun unresolvedPathIsNull() {

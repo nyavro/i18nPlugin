@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.utils
 import com.eny.i18n.Extensions
 import com.eny.i18n.Localization
 import com.eny.i18n.LocalizationSource
-import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
@@ -23,7 +22,8 @@ class LocalizationSourceService {
 
     private fun findLocalizationSources(project: Project, fileNames: List<String>): List<LocalizationSource> {
         return findVirtualFilesByName(project, fileNames.whenMatches { it.isNotEmpty() } ?: Settings.getInstance(project).config().defaultNamespaces())
-            .flatMap { vf -> listOfNotNull(findPsiRoot(project, vf)).map {localizationSource(it){it.containingDirectory}}}
+            .mapNotNull {findPsiRoot(project, it)}
+            .map {localizationSource(it){it.containingDirectory}}
     }
 
     private fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirectory): LocalizationSource {
@@ -38,7 +38,7 @@ class LocalizationSourceService {
                     .virtualFile
                     .path
             ).trim('/') + '/' + file.name,
-            LocalizationType(file.fileType)
+            file.fileType
         )
     }
 
@@ -75,9 +75,8 @@ class LocalizationSourceService {
     //    Finds virtual files by names and type
     private fun findVirtualFilesByName(project: Project, fileNames: List<String>): List<VirtualFile> {
         val searchScope = Settings.getInstance(project).config().searchScope(project)
-        val flatMap = Extensions.LOCALIZATION.extensionList
+        return Extensions.LOCALIZATION.extensionList
             .flatMap(Localization::types)
-        return flatMap
             .flatMap { localizationType ->
                 FileTypeIndex
                     .getFiles(localizationType.languageFileType, searchScope)

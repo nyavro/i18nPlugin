@@ -1,15 +1,15 @@
 package com.eny.i18n
 
-import com.eny.i18n.plugin.factory.LocalizationType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.openapi.fileTypes.FileType
 
 /**
  * Describes localization source.
  * May be root of json, yaml file, js object
  */
 data class LocalizationSource(
-    val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: LocalizationType,
+    val element: PsiElement, val name: String, val parent: String, val displayPath: String, val type: FileType,
     val host: PsiElement? = null
 )
 

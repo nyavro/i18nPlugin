@@ -1,6 +1,5 @@
 package tree
 
-import com.eny.i18n.plugin.factory.LocalizationType
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.intellij.json.JsonFileType
@@ -26,7 +25,7 @@ internal class CompositeKeyVariantsTest {
             fixed.map{Literal(it)},
             testTree(),
             request,
-            LocalizationType(JsonFileType.INSTANCE)
+            JsonFileType.INSTANCE
         )
         assertEquals(expected, variants.map {it.value()}.toSet())
     }

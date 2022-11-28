@@ -26,11 +26,6 @@ interface LanguageFactory {
 }
 
 /**
- * Represents localization type.
- */
-data class LocalizationType(val fileType: FileType)
-
-/**
  * Localization components factory
  */
 interface LocalizationFactory {
@@ -66,6 +61,6 @@ class MainFactory(private val languageFactories: List<LanguageFactory>, private 
     /**
      * Pick content generator by file type
      */
-    fun contentGenerator(type: LocalizationType): ContentGenerator? =
+    fun contentGenerator(type: FileType): ContentGenerator? =
         localizationFactories.find {it.contentGenerator().getType() == type}?.contentGenerator()
 }
