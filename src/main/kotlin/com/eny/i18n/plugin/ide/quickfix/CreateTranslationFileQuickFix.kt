@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide.quickfix
 
-import com.eny.i18n.plugin.factory.ContentGenerator
+import com.eny.i18n.ContentGenerator
 import com.eny.i18n.plugin.factory.TranslationFolderSelector
 import com.eny.i18n.plugin.key.FullKey
 import com.intellij.openapi.application.ApplicationManager

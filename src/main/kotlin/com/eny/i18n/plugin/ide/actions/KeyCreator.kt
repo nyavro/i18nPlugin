@@ -8,9 +8,12 @@ import com.eny.i18n.plugin.localization.json.JsonLocalizationFactory
 import com.eny.i18n.plugin.localization.yaml.YamlLocalizationFactory
 import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.intellij.json.JsonFileType
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import org.jetbrains.yaml.YAMLFileType
+import org.jetbrains.yaml.psi.YAMLFile
 
 /**
  * Extracts translation key
@@ -28,13 +31,13 @@ class KeyCreator {
         val generators = settings.mainFactory().contentGenerators()
         val quickFix = if (files.isEmpty()) {
             val contentGenerator = if (config.preferYamlFilesGeneration)
-                YamlLocalizationFactory().contentGenerator() else
-                JsonLocalizationFactory().contentGenerator()
+                settings.mainFactory().contentGenerator(YAMLFileType.YML) else
+                settings.mainFactory().contentGenerators().firstOrNull()
             val fileName = i18nKey.ns?.text ?: config.defaultNamespaces().first()
-            CreateTranslationFileQuickFix(i18nKey, contentGenerator, extractor.folderSelector(), fileName, source, onComplete)
+            contentGenerator?.let{CreateTranslationFileQuickFix(i18nKey, it, extractor.folderSelector(), fileName, source, onComplete)}
         } else {
             CreateKeyQuickFix(i18nKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators, source, onComplete)
         }
-        quickFix.invoke(project, editor)
+        quickFix?.invoke(project, editor)
     }
 }

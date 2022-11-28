@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.localization.yaml
 
-import com.eny.i18n.plugin.factory.ContentGenerator
+import com.eny.i18n.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
@@ -26,10 +26,8 @@ import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
 
-private val tabChar = "  "
 
 class YamlLocalizationFactory: LocalizationFactory {
-    override fun contentGenerator(): ContentGenerator = YamlContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<YAMLKeyValue> = YamlReferenceAssistant()
 }
 
@@ -57,44 +55,3 @@ private class YamlReferenceAssistant : TranslationReferenceAssistant<YAMLKeyValu
         provider.getReferences(element, textRange(element), parents(element))
 }
 
-private class YamlContentGenerator: ContentGenerator {
-    override fun generateContent(compositeKey: List<Literal>, value: String): String =
-        compositeKey.foldRightIndexed(value, { i, key, acc ->
-            val caret = if (i == 0) "" else "\n"
-            val tab = tabChar.repeat(i)
-            "$caret$tab${key.text}: $acc"
-        })
-
-    override fun getType(): FileType = YAMLFileType.YML
-    override fun getLanguage(): Language = YAMLLanguage.INSTANCE
-    override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.yaml.translation.files")
-    override fun isSuitable(element: PsiElement): Boolean = (element is YAMLMapping) || (element is YAMLDocument)
-    override fun generateTranslationEntry(item: PsiElement, key: String, value: String) {
-        val generator = YAMLElementGenerator.getInstance(item.project)
-        val keyValue = generator.createYamlKeyValue(key, value)
-        if (item is YAMLDocument) {
-            item.add(keyValue)
-            return
-        }
-        val obj = (item as YAMLMapping)
-        val props = obj.keyValues
-        val separator = generator.createEol()
-        val (element, anchor) = if (Settings.getInstance(item.project).extractSorted) {
-            val before = props.takeWhile {it.name ?: "" < key}
-            if (before.isEmpty()) {
-                Pair(separator, obj.addBefore(keyValue, if (props.isEmpty()) item.node.firstChildNode.psi else props.first()))
-            } else {
-                Pair(keyValue, obj.addAfter(separator, before.last()))
-            }
-        } else {
-            Pair(keyValue, obj.addAfter(separator, if (props.isEmpty()) item.node.firstChildNode.psi else props.last()))
-        }
-        obj.addAfter(element, anchor)
-    }
-    override fun generate(element: PsiElement, fullKey: FullKey, unresolved: List<Literal>, translationValue: String?) =
-        generateTranslationEntry(
-            element,
-            unresolved.first().text,
-            generateContent(unresolved.drop(1), translationValue ?: fullKey.source)
-        )
-}

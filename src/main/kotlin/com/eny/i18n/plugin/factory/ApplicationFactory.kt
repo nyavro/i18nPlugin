@@ -1,5 +1,7 @@
 package com.eny.i18n.plugin.factory
 
+import com.eny.i18n.ContentGenerator
+import com.eny.i18n.Extensions
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.PsiElement
 
@@ -31,11 +33,6 @@ interface LanguageFactory {
 interface LocalizationFactory {
 
     /**
-     * Content generator
-     */
-    fun contentGenerator(): ContentGenerator
-
-    /**
      * Localization format-specific reference assistant
      */
     fun referenceAssistant(): TranslationReferenceAssistant<out PsiElement>
@@ -56,11 +53,11 @@ class MainFactory(private val languageFactories: List<LanguageFactory>, private 
      * Get available content generators
      */
     fun contentGenerators(): List<ContentGenerator> =
-        localizationFactories.map {it.contentGenerator()}
+        Extensions.LOCALIZATION.extensionList.map {it.contentGenerator()}
 
     /**
      * Pick content generator by file type
      */
     fun contentGenerator(type: FileType): ContentGenerator? =
-        localizationFactories.find {it.contentGenerator().getType() == type}?.contentGenerator()
+        contentGenerators().find {it.getType() == type}
 }
