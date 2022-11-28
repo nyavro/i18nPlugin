@@ -11,7 +11,7 @@ import com.intellij.psi.search.FilenameIndex
 
 class PlainObjectSourcesProvider: LocalizationSourceProvider {
 
-    override fun findLocalizationSources(project: Project): List<LocalizationSource> {
+    override fun findLocalizationSources(project: Project, fileNames: List<String>): List<LocalizationSource> {
         return findVirtualFilesUnder(project, "LC_MESSAGES")
             .filter { it.virtualFile.extension == "po" }
             .map {
@@ -31,7 +31,7 @@ class PlainObjectSourcesProvider: LocalizationSourceProvider {
                     .virtualFile
                     .path
             ).trim('/') + '/' + file.name,
-            LocalizationType(file.fileType, "general")
+            LocalizationType(file.fileType)
         )
     }
 

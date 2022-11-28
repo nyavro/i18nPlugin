@@ -14,5 +14,5 @@ data class LocalizationSource(
 )
 
 interface LocalizationSourceProvider {
-    fun findLocalizationSources(project: Project): List<LocalizationSource>
+    fun findLocalizationSources(project: Project, fileNames: List<String>): List<LocalizationSource>
 }

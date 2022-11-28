@@ -26,7 +26,7 @@ internal class CompositeKeyVariantsTest {
             fixed.map{Literal(it)},
             testTree(),
             request,
-            LocalizationType(JsonFileType.INSTANCE, "test")
+            LocalizationType(JsonFileType.INSTANCE)
         )
         assertEquals(expected, variants.map {it.value()}.toSet())
     }

@@ -67,7 +67,7 @@ private class JsonContentGenerator: ContentGenerator {
         })
     }
 
-    override fun getType(): LocalizationType = LocalizationType(JsonFileType.INSTANCE, "general")
+    override fun getType(): LocalizationType = LocalizationType(JsonFileType.INSTANCE)
     override fun getLanguage(): Language = JsonLanguage.INSTANCE
     override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.json.translation.files")
     override fun isSuitable(element: PsiElement): Boolean = element is JsonObject
