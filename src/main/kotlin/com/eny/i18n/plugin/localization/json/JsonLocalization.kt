@@ -1,24 +1,15 @@
 package com.eny.i18n.plugin.localization.json
 
-import com.eny.i18n.ContentGenerator
 import com.eny.i18n.plugin.factory.LocalizationFactory
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
-import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.utils.CollectingSequence
-import com.eny.i18n.plugin.utils.PluginBundle
-import com.fasterxml.jackson.core.io.JsonStringEncoder
-import com.intellij.json.JsonFileType
-import com.intellij.json.JsonLanguage
-import com.intellij.json.psi.*
-import com.intellij.lang.Language
-import com.intellij.openapi.fileTypes.FileType
+import com.intellij.json.psi.JsonFile
+import com.intellij.json.psi.JsonProperty
+import com.intellij.json.psi.JsonStringLiteral
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.util.parents
 
@@ -40,7 +31,7 @@ private class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringL
         }
 
     private fun parents(element: JsonStringLiteral): List<String> =
-        CollectingSequence(element.parents()) {
+        CollectingSequence(element.parents(true)) {
             when {
                 it is JsonProperty -> it.name
                 it is JsonFile -> it.name.substringBeforeLast(".")
