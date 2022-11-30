@@ -3,6 +3,8 @@ package com.eny.i18n.plugin.utils
 import com.eny.i18n.ContentGenerator
 import com.eny.i18n.Localization
 import com.eny.i18n.LocalizationFileType
+import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
+import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
@@ -10,15 +12,20 @@ import com.fasterxml.jackson.core.io.JsonStringEncoder
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
 import com.intellij.json.json5.Json5FileType
-import com.intellij.json.psi.JsonElementGenerator
-import com.intellij.json.psi.JsonObject
+import com.intellij.json.psi.*
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
+import com.intellij.openapi.util.TextRange
+import com.intellij.patterns.ElementPattern
+import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
+import com.intellij.psi.util.parents
 
-class JsonLocalization : Localization {
+class JsonLocalization : Localization<JsonStringLiteral> {
     override fun types(): List<LocalizationFileType> = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE).map { LocalizationFileType(it) }
     override fun contentGenerator(): ContentGenerator = JsonContentGenerator()
+    override fun referenceAssistant(): TranslationReferenceAssistant<JsonStringLiteral> = JsonReferenceAssistant()
 }
 
 /**
@@ -70,4 +77,29 @@ private class JsonContentGenerator: ContentGenerator {
             unresolved.first().text,
             generateContent(unresolved.drop(1), translationValue ?: fullKey.source)
         )
+}
+
+class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringLiteral> {
+
+    private val provider = TranslationToCodeReferenceProvider()
+
+    override fun pattern(): ElementPattern<out JsonStringLiteral> = PlatformPatterns.psiElement(JsonStringLiteral::class.java)
+
+    override fun references(element: JsonStringLiteral): List<PsiReference> =
+        if (element.isPropertyName && element.textLength > 1) {
+            provider.getReferences(element, textRange(element), parents(element))
+        } else {
+            emptyList()
+        }
+
+    private fun parents(element: JsonStringLiteral): List<String> =
+        CollectingSequence(element.parents(true)) {
+            when {
+                it is JsonProperty -> it.name
+                it is JsonFile -> it.name.substringBeforeLast(".")
+                else -> null
+            }
+        }.toList().reversed()
+
+    private fun textRange(element: JsonStringLiteral): TextRange = TextRange(1, element.textLength - 1)
 }

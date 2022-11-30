@@ -4,11 +4,8 @@ import com.eny.i18n.plugin.factory.MainFactory
 import com.eny.i18n.plugin.language.js.JsLanguageFactory
 import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
 import com.eny.i18n.plugin.language.php.PhpLanguageFactory
-import com.eny.i18n.plugin.localization.json.JsonLocalizationFactory
-import com.eny.i18n.plugin.localization.yaml.YamlLocalizationFactory
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
@@ -138,10 +135,6 @@ class Settings : PersistentStateComponent<Settings> {
         MainFactory(
             listOf(
                 listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
-            ).flatten(),
-            listOf(
-                if (this.jsonContentGenerationEnabled) listOf(JsonLocalizationFactory()) else emptyList(),
-                if (this.yamlContentGenerationEnabled) listOf(YamlLocalizationFactory()) else emptyList()
             ).flatten()
         )
 }

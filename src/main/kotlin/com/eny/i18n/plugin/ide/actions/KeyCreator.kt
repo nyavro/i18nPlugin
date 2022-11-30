@@ -1,19 +1,17 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.plugin.factory.TranslationExtractor
-import com.eny.i18n.plugin.ide.quickfix.*
+import com.eny.i18n.plugin.ide.quickfix.CreateKeyQuickFix
+import com.eny.i18n.plugin.ide.quickfix.CreateTranslationFileQuickFix
+import com.eny.i18n.plugin.ide.quickfix.UserChoice
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.localization.json.JsonLocalizationFactory
-import com.eny.i18n.plugin.localization.yaml.YamlLocalizationFactory
 import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.eny.i18n.plugin.utils.PluginBundle
-import com.intellij.json.JsonFileType
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import org.jetbrains.yaml.YAMLFileType
-import org.jetbrains.yaml.psi.YAMLFile
 
 /**
  * Extracts translation key

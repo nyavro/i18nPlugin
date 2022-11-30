@@ -76,7 +76,7 @@ class LocalizationSourceService {
     private fun findVirtualFilesByName(project: Project, fileNames: List<String>): List<VirtualFile> {
         val searchScope = Settings.getInstance(project).config().searchScope(project)
         return Extensions.LOCALIZATION.extensionList
-            .flatMap(Localization::types)
+            .flatMap {it.types()}
             .flatMap { localizationType ->
                 FileTypeIndex
                     .getFiles(localizationType.languageFileType, searchScope)

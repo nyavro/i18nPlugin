@@ -57,10 +57,6 @@ class ReferencesAccumulator(private val key: String) {
      */
     fun process() = {
         entry: PsiElement, _:Int ->
-//        if(indicator.isCanceled) {
-//            indicator.checkCanceled() // maybe it'll throw with some useful additional information
-//            throw ProcessCanceledException()
-//        }
         val typeName = entry.node.elementType.toString()
         if (entry.text.unQuote().startsWith(key)) {
             if (listOf("JS:STRING_LITERAL", "quoted string", "JS:STRING_TEMPLATE_EXPRESSION").any { typeName.contains(it) }) {

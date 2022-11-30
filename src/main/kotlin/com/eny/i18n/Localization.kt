@@ -1,5 +1,6 @@
 package com.eny.i18n
 
+import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.lang.Language
@@ -9,9 +10,10 @@ import com.intellij.psi.PsiElement
 
 data class LocalizationFileType(val languageFileType: LanguageFileType, val auxExtensions: List<String> = listOf())
 
-interface Localization {
+interface Localization <T: PsiElement> {
     fun types(): List<LocalizationFileType>
     fun contentGenerator(): ContentGenerator
+    fun referenceAssistant(): TranslationReferenceAssistant<T>
 }
 
 /**
