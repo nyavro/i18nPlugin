@@ -1,8 +1,9 @@
-package com.eny.i18n.plugin.utils
+package com.eny.i18n.extensions.source.providers
 
 import com.eny.i18n.LocalizationSource
 import com.eny.i18n.LocalizationSourceProvider
 import com.eny.i18n.plugin.ide.settings.Settings
+import com.eny.i18n.plugin.utils.pathToRoot
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
@@ -14,7 +15,9 @@ class PlainObjectSourcesProvider: LocalizationSourceProvider {
         return findVirtualFilesUnder(project, "LC_MESSAGES")
             .filter { it.virtualFile.extension == "po" }
             .map {
-                localizationSource(it, { file: PsiFile -> file.containingDirectory.parentDirectory ?: file.containingDirectory })
+                localizationSource(it) { file: PsiFile ->
+                    file.containingDirectory.parentDirectory ?: file.containingDirectory
+                }
             }
     }
 

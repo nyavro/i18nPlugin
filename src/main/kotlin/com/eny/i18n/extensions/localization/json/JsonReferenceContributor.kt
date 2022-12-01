@@ -1,6 +1,6 @@
-package com.eny.i18n.plugin.ide.references.translation
+package com.eny.i18n.extensions.localization.json
 
-import com.eny.i18n.plugin.utils.JsonReferenceAssistant
+import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceContributor
 import com.intellij.json.psi.JsonStringLiteral
 
 /**

@@ -7,6 +7,6 @@
         <lang.documentationProvider language="PHP" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
-        <localizationSourceProvider implementation="com.eny.i18n.plugin.utils.PlainObjectSourcesProvider"/>
+        <localizationSourceProvider implementation="com.eny.i18n.extensions.source.providers.PlainObjectSourcesProvider"/>
     </extensions>
 </idea-plugin>

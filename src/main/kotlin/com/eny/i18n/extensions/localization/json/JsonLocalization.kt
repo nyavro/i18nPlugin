@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.utils
+package com.eny.i18n.extensions.localization.json
 
 import com.eny.i18n.ContentGenerator
 import com.eny.i18n.Localization
@@ -8,6 +8,8 @@ import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.utils.CollectingSequence
+import com.eny.i18n.plugin.utils.PluginBundle
 import com.fasterxml.jackson.core.io.JsonStringEncoder
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage

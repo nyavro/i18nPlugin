@@ -1,6 +1,6 @@
-package com.eny.i18n.plugin.ide.references.translation
+package com.eny.i18n.extensions.localization.yaml
 
-import com.eny.i18n.plugin.utils.YamlReferenceAssistant
+import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceContributor
 import org.jetbrains.yaml.psi.YAMLKeyValue
 
 /**

@@ -1,8 +1,8 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
-        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.plugin.ide.references.translation.YamlReferenceContributor"/>
+        <psi.referenceContributor language="yaml" implementation="com.eny.i18n.extensions.localization.yaml.YamlReferenceContributor"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
-        <localization implementation="com.eny.i18n.plugin.utils.YamlLocalization"/>
+        <localization implementation="com.eny.i18n.extensions.localization.yaml.YamlLocalization"/>
     </extensions>
 </idea-plugin>
