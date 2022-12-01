@@ -46,7 +46,7 @@ class CreateKeyQuickFix(
     private fun createPropertyInFile(project: Project, target: LocalizationSource) {
         val ref = resolveCompositeKey(
             fullKey.compositeKey,
-            PsiElementTree.create(target.element),
+            target.tree,
             target.type
         )
         if (ref.element != null) {

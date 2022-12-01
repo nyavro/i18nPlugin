@@ -68,7 +68,7 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
             element.project.service<LocalizationSourceService>().findSources(ns.nullableToList(), element.project).flatMap {
                 listCompositeKeyVariants(
                     compositeKey,
-                    PsiElementTree.create(it.element),
+                    it.tree,
                     prefix,
                     it.type
                 ).map { it.value().text.unQuote() }

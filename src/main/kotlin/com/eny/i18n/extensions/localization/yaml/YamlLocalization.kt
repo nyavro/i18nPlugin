@@ -8,6 +8,7 @@ import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
@@ -31,6 +32,7 @@ class YamlLocalization : Localization<YAMLKeyValue> {
     override fun types(): List<LocalizationFileType> = listOf(LocalizationFileType(YAMLFileType.YML, listOf("yaml")))
     override fun contentGenerator(): ContentGenerator = YamlContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<YAMLKeyValue> = YamlReferenceAssistant()
+    override fun elementsTree(file: PsiElement): Tree<PsiElement>? = YamlElementTree.create(file)
 }
 
 private class YamlContentGenerator: ContentGenerator {

@@ -24,7 +24,7 @@ class PlainObjectSourcesProvider: LocalizationSourceProvider {
     private fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirectory): LocalizationSource {
         val parentDirectory = resolveParent(file)
         return LocalizationSource(
-            file,
+            PlainTextTree.create(file),
             file.name,
             parentDirectory.name,
             pathToRoot(

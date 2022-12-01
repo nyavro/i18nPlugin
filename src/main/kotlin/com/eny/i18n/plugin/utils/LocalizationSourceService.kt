@@ -8,38 +8,19 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.SearchScope
 
 @Service
 class LocalizationSourceService {
 
-    fun findSources(allNamespaces: List<String>, project: Project): List<LocalizationSource> {
-        return Extensions.LOCALIZATION_SOURCE_PROVIDER.extensionList.flatMap{it.findLocalizationSources(project, allNamespaces)} +
-                findLocalizationSources(project, allNamespaces)
-    }
-
-    private fun findLocalizationSources(project: Project, fileNames: List<String>): List<LocalizationSource> {
-        return findVirtualFilesByName(project, fileNames.whenMatches { it.isNotEmpty() } ?: Settings.getInstance(project).config().defaultNamespaces())
-            .mapNotNull {findPsiRoot(project, it)}
-            .map {localizationSource(it){it.containingDirectory}}
-    }
-
-    private fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirectory): LocalizationSource {
-        val parentDirectory = resolveParent(file)
-        return LocalizationSource(
-            file,
-            file.name,
-            parentDirectory.name,
-            pathToRoot(
-                file.project.basePath ?: "",
-                file.containingDirectory
-                    .virtualFile
-                    .path
-            ).trim('/') + '/' + file.name,
-            file.fileType
-        )
+    fun findSources(fileNames: List<String>, project: Project): List<LocalizationSource> {
+        return Extensions.LOCALIZATION_SOURCE_PROVIDER.extensionList.flatMap{it.findLocalizationSources(project, fileNames)} +
+            findVirtualFilesByName(project, fileNames.whenMatches { it.isNotEmpty() } ?: Settings.getInstance(project).config().defaultNamespaces())
     }
 
 //    private fun resolveJsRootsFromI18nObject(file: PsiFile?): List<LocalizationSource> {
@@ -73,19 +54,33 @@ class LocalizationSourceService {
 //    }
 
     //    Finds virtual files by names and type
-    private fun findVirtualFilesByName(project: Project, fileNames: List<String>): List<VirtualFile> {
-        val searchScope = Settings.getInstance(project).config().searchScope(project)
-        return Extensions.LOCALIZATION.extensionList
-            .flatMap {it.types()}
-            .flatMap { localizationType ->
-                FileTypeIndex
-                    .getFiles(localizationType.languageFileType, searchScope)
-                    .filter { file ->
-                        fileNames.any { fileName -> (listOf(localizationType.languageFileType.defaultExtension) + localizationType.auxExtensions).any { ext -> "$fileName.$ext"==file.name}}
-                    }
-            }
+    private fun findVirtualFilesByName(project: Project, fileNames: List<String>): List<LocalizationSource> {
+        return Extensions.LOCALIZATION.extensionList.flatMap {findSourcesByFileType(project, fileNames, it)}
     }
 
-    //    Finds root of virtual file
-    private fun findPsiRoot(project: Project, virtualFile: VirtualFile): PsiFile? = PsiManager.getInstance(project).findFile(virtualFile)
+    private fun findSourcesByFileType(project: Project, fileNames: List<String>, localization: Localization<PsiElement>): List<LocalizationSource> {
+        val searchScope = Settings.getInstance(project).config().searchScope(project)
+        return localization.types().flatMap { localizationType ->
+            FileTypeIndex
+                .getFiles(localizationType.languageFileType, searchScope)
+                .filter { file ->
+                    fileNames.any { fileName -> (listOf(localizationType.languageFileType.defaultExtension) + localizationType.auxExtensions).any { ext -> "$fileName.$ext"==file.name}}
+                }.mapNotNull { virtualFile ->
+                    PsiManager.getInstance(project).findFile(virtualFile)?.let { file ->
+                        LocalizationSource(
+                            localization.elementsTree(file),
+                            file.name,
+                            file.containingDirectory.name,
+                            pathToRoot(
+                                file.project.basePath ?: "",
+                                file.containingDirectory
+                                    .virtualFile
+                                    .path
+                            ).trim('/') + '/' + file.name,
+                            file.fileType
+                        )
+                    }
+                }
+        }
+    }
 }

@@ -8,6 +8,7 @@ import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.fasterxml.jackson.core.io.JsonStringEncoder
@@ -28,6 +29,11 @@ class JsonLocalization : Localization<JsonStringLiteral> {
     override fun types(): List<LocalizationFileType> = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE).map { LocalizationFileType(it) }
     override fun contentGenerator(): ContentGenerator = JsonContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<JsonStringLiteral> = JsonReferenceAssistant()
+    override fun elementsTree(root: PsiElement): Tree<PsiElement>? {
+        return if (root is JsonFile) JsonElementTree.create(root)
+            else if (root is JsonObject) JsonElementTree(root)
+            else null
+    }
 }
 
 /**

@@ -59,7 +59,7 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                         sourceService
                             .findSources(fullKey.allNamespaces(), element.project)
                             .map {
-                                ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element), it.type), it.host)
+                                ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, it.tree, it.type), it.host)
                             }
                             .filter { it.reference.path.isNotEmpty() }
                             .whenNotEmpty { listOf(I18nReference(element, TextRange(1 + element.text.unQuote().indexOf(fullKey.source), element.textLength - 1), it)) }

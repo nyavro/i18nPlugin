@@ -61,7 +61,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .filter {
                 it.parent == config.foldingPreferredLanguage
             }
-            .map { resolveCompositeKey(fullKey.compositeKey, PsiElementTree.create(it.element), it.type)}
+            .map { resolveCompositeKey(fullKey.compositeKey, it.tree, it.type)}
             .firstOrNull { it.unresolved.isEmpty() && it.element?.isLeaf() == true }
             ?.let { ElementToReferenceBinding(element, it) }
     }
