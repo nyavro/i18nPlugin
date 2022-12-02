@@ -6,14 +6,9 @@ import com.eny.i18n.LocalizationSource
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.search.SearchScope
 
 @Service
 class LocalizationSourceService {
@@ -77,7 +72,8 @@ class LocalizationSourceService {
                                     .virtualFile
                                     .path
                             ).trim('/') + '/' + file.name,
-                            file.fileType
+                            file.fileType,
+                            localization
                         )
                     }
                 }

@@ -2,6 +2,8 @@ package com.eny.i18n.extensions.source.providers
 
 import com.eny.i18n.LocalizationSource
 import com.eny.i18n.LocalizationSourceProvider
+import com.eny.i18n.extensions.localization.plain.`object`.PlainObjectLocalization
+import com.eny.i18n.extensions.localization.plain.`object`.PlainObjectTextTree
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.utils.pathToRoot
 import com.intellij.openapi.project.Project
@@ -24,7 +26,7 @@ class PlainObjectSourcesProvider: LocalizationSourceProvider {
     private fun localizationSource(file: PsiFile, resolveParent: (file: PsiFile) -> PsiDirectory): LocalizationSource {
         val parentDirectory = resolveParent(file)
         return LocalizationSource(
-            PlainTextTree.create(file),
+            PlainObjectTextTree.create(file),
             file.name,
             parentDirectory.name,
             pathToRoot(
@@ -33,7 +35,8 @@ class PlainObjectSourcesProvider: LocalizationSourceProvider {
                     .virtualFile
                     .path
             ).trim('/') + '/' + file.name,
-            file.fileType
+            file.fileType,
+            PlainObjectLocalization()
         )
     }
 

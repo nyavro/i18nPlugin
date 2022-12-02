@@ -5,7 +5,6 @@ import com.eny.i18n.LocalizationSource
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.CommandProcessor

@@ -1,6 +1,5 @@
 package com.eny.i18n.extensions.localization.yaml
 
-import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.tree.Tree
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
@@ -10,7 +9,7 @@ import org.jetbrains.yaml.psi.YAMLMapping
 /**
  * Tree wrapper around yaml psi tree
  */
-class YamlElementTree(val element: PsiElement): PsiElementTree() {
+class YamlElementTree(val element: PsiElement): Tree<PsiElement> {
     override fun value(): PsiElement = element
     override fun isTree(): Boolean = element is YAMLMapping
 

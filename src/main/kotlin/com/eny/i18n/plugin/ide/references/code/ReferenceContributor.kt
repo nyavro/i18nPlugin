@@ -3,7 +3,6 @@ package com.eny.i18n.plugin.ide.references.code
 import com.eny.i18n.plugin.factory.ReferenceAssistant
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
 import com.intellij.openapi.components.service
 import com.intellij.openapi.util.TextRange

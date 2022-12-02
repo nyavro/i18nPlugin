@@ -7,7 +7,6 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.*
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx

@@ -10,7 +10,12 @@ import com.intellij.openapi.fileTypes.FileType
  * May be root of json, yaml file, js object
  */
 data class LocalizationSource(
-    val tree: Tree<PsiElement>?, val name: String, val parent: String, val displayPath: String, val type: FileType,
+    val tree: Tree<PsiElement>?,
+    val name: String,
+    val parent: String,
+    val displayPath: String,
+    val type: FileType,
+    val localization: Localization<PsiElement>,
     val host: PsiElement? = null
 )
 

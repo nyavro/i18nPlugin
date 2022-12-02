@@ -1,4 +1,4 @@
-package com.eny.i18n.extensions.source.providers
+package com.eny.i18n.extensions.localization.plain.`object`
 
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.tree.Tree
@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement
 /**
  * Plain text file wrapper
  */
-class PlainTextTree(val element: PsiElement): Tree<PsiElement> {
+class PlainObjectTextTree(val element: PsiElement): Tree<PsiElement> {
 
     override fun findChild(name: String): Tree<PsiElement>? {
         return element.children.find {
@@ -16,7 +16,7 @@ class PlainTextTree(val element: PsiElement): Tree<PsiElement> {
                     it.children.at(0)?.let {
                         it.type()=="ID_LINE" && it.toString()==name
                     } == true
-        }?.children?.at(0)?.let {PlainTextTree(it)}
+        }?.children?.at(0)?.let { PlainObjectTextTree(it) }
     }
 
     override fun isTree(): Boolean {
@@ -33,6 +33,6 @@ class PlainTextTree(val element: PsiElement): Tree<PsiElement> {
         /**
          * Creates instance of PlainTextTree
          */
-        fun create(file: PsiElement): Tree<PsiElement>? = PlainTextTree(file)
+        fun create(file: PsiElement): Tree<PsiElement>? = PlainObjectTextTree(file)
     }
 }

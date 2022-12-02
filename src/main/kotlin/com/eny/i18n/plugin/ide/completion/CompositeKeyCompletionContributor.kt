@@ -8,7 +8,6 @@ import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.parser.DummyContext
 import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.tree.PsiElementTree
 import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.eny.i18n.plugin.utils.nullableToList
 import com.eny.i18n.plugin.utils.unQuote
