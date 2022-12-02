@@ -58,9 +58,8 @@ class LocalizationSourceService {
         return localization.types().flatMap { localizationType ->
             FileTypeIndex
                 .getFiles(localizationType.languageFileType, searchScope)
-                .filter { file ->
-                    fileNames.any { fileName -> (listOf(localizationType.languageFileType.defaultExtension) + localizationType.auxExtensions).any { ext -> "$fileName.$ext"==file.name}}
-                }.mapNotNull { virtualFile ->
+                .filter { file -> localization.matches(localizationType, file, fileNames) }
+                .mapNotNull { virtualFile ->
                     PsiManager.getInstance(project).findFile(virtualFile)?.let { file ->
                         LocalizationSource(
                             localization.elementsTree(file),

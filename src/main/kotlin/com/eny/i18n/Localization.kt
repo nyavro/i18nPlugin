@@ -7,15 +7,19 @@ import com.eny.i18n.plugin.tree.Tree
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.fileTypes.LanguageFileType
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 
-data class LocalizationFileType(val languageFileType: LanguageFileType, val auxExtensions: List<String> = listOf())
+data class LocalizationFileType(val languageFileType: LanguageFileType, val auxExtensions: List<String> = listOf()) {
+    fun extensions(): List<String> = auxExtensions + languageFileType.defaultExtension
+}
 
 interface Localization <T: PsiElement> {
     fun types(): List<LocalizationFileType>
     fun contentGenerator(): ContentGenerator
     fun referenceAssistant(): TranslationReferenceAssistant<T>
     fun elementsTree(file: PsiElement): Tree<PsiElement>?
+    fun matches(localizationFileType:LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean
 }
 
 /**

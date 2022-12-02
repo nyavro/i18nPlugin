@@ -15,6 +15,7 @@ import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
@@ -33,6 +34,10 @@ class YamlLocalization : Localization<YAMLKeyValue> {
     override fun contentGenerator(): ContentGenerator = YamlContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<YAMLKeyValue> = YamlReferenceAssistant()
     override fun elementsTree(file: PsiElement): Tree<PsiElement>? = YamlElementTree.create(file)
+    override fun matches(localizationFileType: LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean =
+        fileNames.any {
+            fileName -> localizationFileType.extensions().any { ext -> "$fileName.$ext"==file?.name}
+        }
 }
 
 private class YamlContentGenerator: ContentGenerator {

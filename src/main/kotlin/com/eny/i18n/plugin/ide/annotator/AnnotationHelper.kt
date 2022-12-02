@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.annotator
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.plugin.factory.TranslationFolderSelector
 import com.eny.i18n.plugin.ide.quickfix.*
 import com.eny.i18n.plugin.ide.settings.Settings
@@ -50,8 +51,8 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
         val builder = holder
             .newAnnotation(errorSeverity, PluginBundle.getMessage("annotator.unresolved.ns"))
             .range(rangesCalculator.unresolvedNs(fullKey))
-        Settings.getInstance(project).mainFactory().contentGenerators().forEach {
-            builder.withFix(CreateTranslationFileQuickFix(fullKey, it, folderSelector, ns.text))
+        Extensions.LOCALIZATION.extensionList.forEach {
+            builder.withFix(CreateTranslationFileQuickFix(fullKey, it.contentGenerator(), folderSelector, ns.text))
         }
         builder.create()
     }
@@ -73,9 +74,8 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
         val builder = holder
             .newAnnotation(errorSeverity, PluginBundle.getMessage("annotator.unresolved.key"))
             .range(rangesCalculator.unresolvedKey(fullKey, mostResolvedReference.path))
-        val generators = Settings.getInstance(project).mainFactory().contentGenerators()
-        builder.withFix(CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
-        builder.withFix(CreateKeyQuickFix(fullKey, AllSourcesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files"), generators))
+        builder.withFix(CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key")))
+        builder.withFix(CreateKeyQuickFix(fullKey, AllSourcesSelector(), PluginBundle.getMessage("quickfix.create.key.in.files")))
         builder.create()
     }
 
@@ -87,9 +87,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             val builder = holder
                 .newAnnotation(errorSeverity, PluginBundle.getMessage("annotator.partially.translated"))
                 .range(rangesCalculator.unresolvedKey(fullKey, it.path))
-            val generators = Settings.getInstance(project).mainFactory().contentGenerators()
-            builder.withFix(CreateKeyQuickFix(fullKey, UserChoice(), PluginBundle.getMessage("quickfix.create.key"), generators))
-            builder.withFix(CreateKeyQuickFix(fullKey, AllSourcesSelector(), PluginBundle.getMessage("quickfix.create.missing.keys"), generators))
+            builder.withFix(CreateMissingKeysQuickFix(fullKey, Settings.getInstance(project).mainFactory(), references, PluginBundle.getMessage("quickfix.create.missing.keys")))
             builder.create()
         }
     }

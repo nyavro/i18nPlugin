@@ -6,6 +6,7 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.LocalizationSourceService
+import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.command.UndoConfirmationPolicy
@@ -21,7 +22,6 @@ class CreateKeyQuickFix(
     private val fullKey: FullKey,
     private val selector: SourcesSelector,
     private val commandCaption: String,
-    private val generators: List<ContentGenerator>,
         //TODO: request translation value after invoking 'Create i18n key' quickfix
     private val translationValue: String? = null,
     private val onComplete: () -> Unit = {}): QuickFix(), CompositeKeyResolver<PsiElement> {
@@ -53,7 +53,7 @@ class CreateKeyQuickFix(
                 project,
                 {
                     ApplicationManager.getApplication().runWriteAction {
-                        createPropertiesChain(ref.element.value(), ref.unresolved)
+                        createPropertiesChain(ref.element.value(), ref.unresolved, target.localization.contentGenerator())
                         onComplete()
                     }
                 },
@@ -63,8 +63,9 @@ class CreateKeyQuickFix(
         }
     }
 
-    private fun createPropertiesChain(element: PsiElement, unresolved: List<Literal>) =
-        generators
-            .filter { it.isSuitable(element) }
-            .forEach { it.generate(element, fullKey, unresolved, translationValue) }
+    private fun createPropertiesChain(element: PsiElement, unresolved: List<Literal>, generator: ContentGenerator) {
+        if(generator.isSuitable(element)) {
+            generator.generate(element, fullKey, unresolved, translationValue)
+        }
+    }
 }

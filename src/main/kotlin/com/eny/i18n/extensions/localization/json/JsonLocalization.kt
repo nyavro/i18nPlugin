@@ -19,6 +19,7 @@ import com.intellij.json.psi.*
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
@@ -34,6 +35,10 @@ class JsonLocalization : Localization<JsonStringLiteral> {
             else if (root is JsonObject) JsonElementTree(root)
             else null
     }
+    override fun matches(localizationFileType: LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean =
+        fileNames.any {
+            fileName -> localizationFileType.extensions().any { ext -> "$fileName.$ext"==file?.name}
+        }
 }
 
 /**
