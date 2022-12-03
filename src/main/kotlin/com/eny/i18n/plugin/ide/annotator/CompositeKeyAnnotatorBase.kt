@@ -43,7 +43,7 @@ abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtrac
         else {
             val config = Settings.getInstance(element.project).config()
             val pluralSeparator = config.pluralSeparator
-            val references = files.flatMap {resolve(fullKey.compositeKey, it.tree, pluralSeparator, it.type)}
+            val references = files.flatMap {resolve(fullKey.compositeKey, it, pluralSeparator)}
             val allEqual = references.zipWithNext().all { it.first.path == it.second.path }
             val mostResolvedReference = if (allEqual) references.first() else references.maxByOrNull { v -> v.path.size }!!
             if (mostResolvedReference.unresolved.isEmpty()) {

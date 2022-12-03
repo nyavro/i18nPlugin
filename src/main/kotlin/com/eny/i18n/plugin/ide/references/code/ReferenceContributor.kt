@@ -12,7 +12,7 @@ import com.intellij.util.ProcessingContext
 /**
  * Data class
  */
-data class ReferenceDescriptor(val reference: PropertyReference<PsiElement>, val host: PsiElement?)
+data class ReferenceDescriptor(val reference: PropertyReference, val host: PsiElement?)
 
 /**
  * I18nReference to json/yaml translation
@@ -58,7 +58,7 @@ abstract class ReferenceContributorBase(private val referenceContributor: Refere
                         sourceService
                             .findSources(fullKey.allNamespaces(), element.project)
                             .map {
-                                ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, it.tree, it.type), it.host)
+                                ReferenceDescriptor(resolveCompositeKey(fullKey.compositeKey, it), it.host)
                             }
                             .filter { it.reference.path.isNotEmpty() }
                             .whenNotEmpty { listOf(I18nReference(element, TextRange(1 + element.text.unQuote().indexOf(fullKey.source), element.textLength - 1), it)) }

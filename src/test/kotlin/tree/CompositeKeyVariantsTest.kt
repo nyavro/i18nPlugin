@@ -23,9 +23,8 @@ internal class CompositeKeyVariantsTest {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val variants = resolver.listCompositeKeyVariants(
             fixed.map{Literal(it)},
-            testTree(),
             request,
-            JsonFileType.INSTANCE
+            localizationSource(testTree())
         )
         assertEquals(expected, variants.map {it.value()}.toSet())
     }

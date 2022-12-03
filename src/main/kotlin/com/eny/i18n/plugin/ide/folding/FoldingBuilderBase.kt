@@ -17,7 +17,7 @@ import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiElement
 
-internal data class ElementToReferenceBinding(val psiElement: PsiElement, val reference: PropertyReference<PsiElement>)
+internal data class ElementToReferenceBinding(val psiElement: PsiElement, val reference: PropertyReference)
 
 /**
  * Provides folding mechanism for i18n keys
@@ -60,7 +60,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .filter {
                 it.parent == config.foldingPreferredLanguage
             }
-            .map { resolveCompositeKey(fullKey.compositeKey, it.tree, it.type)}
+            .map { resolveCompositeKey(fullKey.compositeKey, it)}
             .firstOrNull { it.unresolved.isEmpty() && it.element?.isLeaf() == true }
             ?.let { ElementToReferenceBinding(element, it) }
     }

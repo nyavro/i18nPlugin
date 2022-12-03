@@ -65,12 +65,7 @@ abstract class CompositeKeyCompletionContributor(private val callContext: CallCo
     private fun findCompletions(prefix: String, source: String, ns: String?, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
         return groupPlurals(
             element.project.service<LocalizationSourceService>().findSources(ns.nullableToList(), element.project).flatMap {
-                listCompositeKeyVariants(
-                    compositeKey,
-                    it.tree,
-                    prefix,
-                    it.type
-                ).map { it.value().text.unQuote() }
+                listCompositeKeyVariants(compositeKey, prefix, it).map { it.value().text.unQuote() }
             },
             Settings.getInstance(element.project).config().pluralSeparator
         ).map { LookupElementBuilder.create(source + it) }

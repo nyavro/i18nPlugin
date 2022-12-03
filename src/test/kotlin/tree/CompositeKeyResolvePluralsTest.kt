@@ -12,33 +12,35 @@ import org.junit.jupiter.api.Test
  */
 internal class CompositeKeyResolvePluralsTest {
 
-    private val localizationType = JsonFileType.INSTANCE
-
     @Test
     fun resolvePluralElementByKey() {
         val resolver: CompositeKeyResolver<String> = object: CompositeKeyResolver<String>{}
         val base = "base1"
         val sub = "sub1"
         val pl1 = "plural1"
+        val ls = localizationSource(
+                root(
+                        TestTree(base,
+                                listOf(
+                                        TestTree(
+                                                sub,
+                                                listOf(
+                                                        TestTree("$pl1-1"),
+                                                        TestTree("$pl1-2"),
+                                                        TestTree("$pl1-5")
+                                                )
+                                        ),
+                                        TestTree("sub2")
+                                )
+                        )
+                )
+        )
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
                 listOf(Literal(base), Literal(sub), Literal(pl1)),
-                root(
-                    TestTree(base,
-                        listOf(
-                            TestTree(
-                                    sub,
-                                listOf(
-                                    TestTree("$pl1-1"),
-                                    TestTree("$pl1-2"),
-                                    TestTree("$pl1-5")
-                                )
-                            ),
-                            TestTree("sub2")
-                        )
-                    )
-                ), localizationType
-            ), "-", localizationType
+                ls
+            ), "-",
+            ls
         )
         assertEquals(3, properties.size)
         properties.zip(listOf(1,2,5)).forEach {
@@ -56,26 +58,30 @@ internal class CompositeKeyResolvePluralsTest {
         val base = "base2"
         val sub = "sub2"
         val pl2 = "plural2"
+        val ls = localizationSource(
+            root(
+                TestTree(base,
+                        listOf(
+                                TestTree(
+                                        sub,
+                                        listOf(
+                                                TestTree("$pl2%1"),
+                                                TestTree("$pl2%2"),
+                                                TestTree("$pl2%5")
+                                        )
+                                ),
+                                TestTree("sub2")
+                        )
+                )
+            )
+        )
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
                 listOf(Literal(base), Literal(sub), Literal(pl2)),
-                root(
-                    TestTree(base,
-                        listOf(
-                            TestTree(
-                                    sub,
-                                listOf(
-                                    TestTree("$pl2%1"),
-                                    TestTree("$pl2%2"),
-                                    TestTree("$pl2%5")
-                                )
-                            ),
-                            TestTree("sub2")
-                        )
-                    )
-                ), localizationType
+                ls
             ),
-            "%", localizationType
+            "%",
+            ls
         )
         assertEquals(3, properties.size)
         properties.zip(listOf(1,2,5)).forEach {
@@ -94,25 +100,29 @@ internal class CompositeKeyResolvePluralsTest {
         val sub = "sub3"
         val pl3 = "plural3"
         val text = "$pl3-2"
+        val ls = localizationSource(
+                root(
+                        TestTree(base,
+                                listOf(
+                                        TestTree(
+                                                sub,
+                                                listOf(
+                                                        TestTree("$pl3-1"),
+                                                        TestTree(text),
+                                                        TestTree("$pl3-5")
+                                                )
+                                        ),
+                                        TestTree("sub4")
+                                )
+                        )
+                )
+        )
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
                 listOf(Literal(base), Literal(sub), Literal(text)),
-                root(
-                    TestTree(base,
-                        listOf(
-                            TestTree(
-                                    sub,
-                                listOf(
-                                    TestTree("$pl3-1"),
-                                    TestTree(text),
-                                    TestTree("$pl3-5")
-                                )
-                            ),
-                            TestTree("sub4")
-                        )
-                    )
-                ), localizationType
-            ), "-", localizationType
+                ls
+            ), "-",
+            ls
         )
         assertEquals(1, properties.size)
         val property = properties.first()
@@ -128,25 +138,28 @@ internal class CompositeKeyResolvePluralsTest {
         val base = "base4"
         val sub = "sub4"
         val pl4 = "plural4"
+        val ls = localizationSource(
+            root(
+                TestTree(base,
+                    listOf(
+                        TestTree(
+                            sub,
+                            listOf(
+                                TestTree("$pl4-1"),
+                                TestTree("$pl4-2"),
+                                TestTree("$pl4-5")
+                            )
+                        ),
+                        TestTree("sub6")
+                    )
+                )
+            )
+        )
         val properties = resolver.tryToResolvePlural(
             resolver.resolveCompositeKey(
                 listOf(Literal(base), Literal(sub)),
-                root(
-                    TestTree(base,
-                        listOf(
-                            TestTree(
-                                    sub,
-                                listOf(
-                                    TestTree("$pl4-1"),
-                                    TestTree("$pl4-2"),
-                                    TestTree("$pl4-5")
-                                )
-                            ),
-                            TestTree("sub6")
-                        )
-                    )
-                ), localizationType
-            ), "-", localizationType
+                ls
+            ), "-", ls
         )
         assertEquals(1, properties.size)
         val property = properties.first()

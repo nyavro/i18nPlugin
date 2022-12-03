@@ -1,6 +1,5 @@
 package com.eny.i18n.plugin.ide.quickfix
 
-import com.eny.i18n.plugin.factory.MainFactory
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
@@ -16,25 +15,22 @@ import com.intellij.psi.PsiElement
  */
 class CreateMissingKeysQuickFix(
         private val fullKey: FullKey,
-        private val mainFactory: MainFactory,
-        private val references: List<PropertyReference<PsiElement>>,
+        private val references: List<PropertyReference>,
         private val commandCaption: String): QuickFix(), CompositeKeyResolver<PsiElement> {
 
     override fun getText(): String = commandCaption
 
     override fun invoke(project: Project, editor: Editor) =
         ApplicationManager.getApplication().invokeLater {
-            references.map { createPropertyInFile(project, it) }
+            references.forEach { createPropertyInFile(project, it) }
         }
 
-    private fun createPropertyInFile(project: Project, ref: PropertyReference<PsiElement>) {
+    private fun createPropertyInFile(project: Project, ref: PropertyReference) {
         if (ref.element != null && !ref.element.isLeaf()) {
             CommandProcessor.getInstance().executeCommand(
                 project,
                 {ApplicationManager.getApplication().runWriteAction {
-                    mainFactory
-                        .contentGenerator(ref.type)
-                        ?.generate(ref.element.value(), fullKey, ref.unresolved, fullKey.source) }
+                    ref.localizationSource.localization.contentGenerator().generate(ref.element.value(), fullKey, ref.unresolved, fullKey.source) }
                 },
                 commandCaption,
                 UndoConfirmationPolicy.DO_NOT_REQUEST_CONFIRMATION

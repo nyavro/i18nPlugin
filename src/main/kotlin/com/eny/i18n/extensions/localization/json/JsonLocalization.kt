@@ -30,9 +30,9 @@ class JsonLocalization : Localization<JsonStringLiteral> {
     override fun types(): List<LocalizationFileType> = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE).map { LocalizationFileType(it) }
     override fun contentGenerator(): ContentGenerator = JsonContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<JsonStringLiteral> = JsonReferenceAssistant()
-    override fun elementsTree(root: PsiElement): Tree<PsiElement>? {
-        return if (root is JsonFile) JsonElementTree.create(root)
-            else if (root is JsonObject) JsonElementTree(root)
+    override fun elementsTree(file: PsiElement): Tree<PsiElement>? {
+        return if (file is JsonFile) JsonElementTree.create(file)
+            else if (file is JsonObject) JsonElementTree(file)
             else null
     }
     override fun matches(localizationFileType: LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean =

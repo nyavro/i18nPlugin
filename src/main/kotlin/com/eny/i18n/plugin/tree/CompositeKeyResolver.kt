@@ -1,32 +1,33 @@
 package com.eny.i18n.plugin.tree
 
+import com.eny.i18n.LocalizationSource
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.intellij.openapi.fileTypes.FileType
+import com.intellij.psi.PsiElement
 
 /**
  * Property reference represents PsiElement and it's path from Json file root
  */
-data class PropertyReference<T>(
+data class PropertyReference(
     val path: List<Literal>,
-    val element: Tree<T>?,
+    val element: Tree<PsiElement>?,
     val unresolved: List<Literal>,
-    val type: FileType,
-    val isPlural: Boolean = false)
+    val localizationSource: LocalizationSource,
+    val isPlural: Boolean = false
+)
 
 /**
  * Key resolving utils
  */
 interface CompositeKeyResolver<T> {
 
-    fun resolve(compositeKey: List<Literal>, root: Tree<T>?, pluralSeparator: String, type: FileType): List<PropertyReference<T>> =
+    fun resolve(compositeKey: List<Literal>, localizationSource: LocalizationSource, pluralSeparator: String): List<PropertyReference> =
         tryToResolvePlural(
             resolveCompositeKey(
                 compositeKey,
-                root,
-                type
+                localizationSource
             ),
             pluralSeparator,
-            type
+            localizationSource
         )
 
     /**
@@ -35,8 +36,8 @@ interface CompositeKeyResolver<T> {
      * @param {FileType} type Localization source type
      * Returns PropertyReference by composite key
      */
-    fun resolveCompositeKey(compositeKey: List<Literal>, root: Tree<T>?, type: FileType): PropertyReference<T> {
-        return compositeKey.fold(PropertyReference(listOf(), root, listOf(), type)) {
+    fun resolveCompositeKey(compositeKey: List<Literal>, localizationSource: LocalizationSource): PropertyReference {
+        return compositeKey.fold(PropertyReference(listOf(), localizationSource.tree, listOf(), localizationSource)) {
             propertyReference, key ->
                 if (propertyReference.element != null && propertyReference.element.isTree() && propertyReference.unresolved.isEmpty()) {
                     val value = propertyReference.element.findChild(key.text)
@@ -60,13 +61,13 @@ interface CompositeKeyResolver<T> {
      * }
      * PropertyReference for this case is PropertyReference(path = ["root", "key"], element[key], unresolved = ["plural"])
      */
-    fun tryToResolvePlural(propertyReference: PropertyReference<T>, pluralSeparator: String, type: FileType): List<PropertyReference<T>> {
+    fun tryToResolvePlural(propertyReference: PropertyReference, pluralSeparator: String, localizationSource: LocalizationSource): List<PropertyReference> {
         return if (propertyReference.unresolved.size == 1 && propertyReference.element != null && propertyReference.element.isTree()) {
             val singleUnresolvedKey = propertyReference.unresolved[0]
             val plurals = listOf("1","2","5").mapNotNull {
                 propertyReference.element.findChild("${singleUnresolvedKey.text}${pluralSeparator}$it")
             }.map {
-                PropertyReference(propertyReference.path + singleUnresolvedKey, it, listOf(), type, isPlural = true)
+                PropertyReference(propertyReference.path + singleUnresolvedKey, it, listOf(), localizationSource, true)
             }
             if (plurals.isEmpty()) listOf(propertyReference) else plurals
         } else listOf(propertyReference)
@@ -75,12 +76,12 @@ interface CompositeKeyResolver<T> {
     /**
      * Returns PsiElement by composite key from file's root node
      */
-    fun resolveCompositeKeyProperty(compositeKey: List<Literal>, root: Tree<T>?, type: FileType): Tree<T>? =
-        resolveCompositeKey(compositeKey, root, type).let {ref -> if (ref.unresolved.isNotEmpty()) null else ref.element}
+    fun resolveCompositeKeyProperty(compositeKey: List<Literal>, localizationSource: LocalizationSource): Tree<PsiElement>? =
+        resolveCompositeKey(compositeKey, localizationSource).let {ref -> if (ref.unresolved.isNotEmpty()) null else ref.element}
 
     /**
      * Returns keys at current composite key position
      */
-    fun listCompositeKeyVariants(fixedKey: List<Literal>, root: Tree<T>?, prefix: String, type: FileType): List<Tree<T>> =
-        resolveCompositeKeyProperty(fixedKey, root, type)?.findChildren(prefix) ?: listOf()
+    fun listCompositeKeyVariants(fixedKey: List<Literal>, prefix: String, localizationSource: LocalizationSource): List<Tree<PsiElement>> =
+        resolveCompositeKeyProperty(fixedKey, localizationSource)?.findChildren(prefix) ?: listOf()
 }

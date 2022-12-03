@@ -6,7 +6,6 @@ import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.LocalizationSourceService
-import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.command.UndoConfirmationPolicy
@@ -45,8 +44,7 @@ class CreateKeyQuickFix(
     private fun createPropertyInFile(project: Project, target: LocalizationSource) {
         val ref = resolveCompositeKey(
             fullKey.compositeKey,
-            target.tree,
-            target.type
+            target
         )
         if (ref.element != null) {
             CommandProcessor.getInstance().executeCommand(
