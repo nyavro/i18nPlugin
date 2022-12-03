@@ -33,7 +33,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
     }
 
     /**
-     * Annotates reference to object, not a leaf key in json/yaml
+     * Annotates reference to object, not a leaf key in translation
      */
     fun annotateReferenceToObject(fullKey: FullKey) {
         holder

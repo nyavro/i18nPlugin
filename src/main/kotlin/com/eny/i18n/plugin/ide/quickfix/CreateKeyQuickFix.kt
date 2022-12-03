@@ -30,11 +30,11 @@ class CreateKeyQuickFix(
     override fun invoke(project: Project, editor: Editor) =
         ApplicationManager.getApplication().invokeLater {
             val sourceService = project.service<LocalizationSourceService>()
-            val jsonFiles = sourceService.findSources(fullKey.allNamespaces(), project)
-            if (jsonFiles.size == 1) {
-                createPropertyInFile(project, jsonFiles.first())
-            } else if (jsonFiles.size > 1) {
-                createPropertyInFiles(project, editor, jsonFiles)
+            val localizationSources = sourceService.findSources(fullKey.allNamespaces(), project)
+            if (localizationSources.size == 1) {
+                createPropertyInFile(project, localizationSources.first())
+            } else if (localizationSources.size > 1) {
+                createPropertyInFiles(project, editor, localizationSources)
             }
         }
 

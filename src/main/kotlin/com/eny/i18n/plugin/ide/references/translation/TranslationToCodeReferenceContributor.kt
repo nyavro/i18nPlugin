@@ -5,7 +5,7 @@ import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 
 /**
- * Provides navigation from i18n key to it's value in json
+ * Provides navigation from i18n key to it's value in translation
  */
 abstract class TranslationToCodeReferenceContributor<T : PsiElement>(private val translationToCode: TranslationReferenceAssistant<T>): PsiReferenceContributor() {
 

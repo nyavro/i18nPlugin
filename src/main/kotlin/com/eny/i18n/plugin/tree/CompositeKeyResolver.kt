@@ -5,7 +5,7 @@ import com.eny.i18n.plugin.key.lexer.Literal
 import com.intellij.psi.PsiElement
 
 /**
- * Property reference represents PsiElement and it's path from Json file root
+ * Property reference represents PsiElement and it's path from translation root
  */
 data class PropertyReference(
     val path: List<Literal>,

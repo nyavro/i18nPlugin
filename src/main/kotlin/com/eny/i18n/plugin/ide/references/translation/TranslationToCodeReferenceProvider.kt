@@ -75,7 +75,7 @@ class ReferencesAccumulator(private val key: String) {
 }
 
 /**
- * Reference to key usage for json translation file
+ * Reference to key usage for translation file
  */
 class TranslationToCodeReference(element: PsiElement, textRange: TextRange, val composedKey: String) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
 

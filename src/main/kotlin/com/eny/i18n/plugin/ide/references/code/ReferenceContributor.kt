@@ -15,7 +15,7 @@ import com.intellij.util.ProcessingContext
 data class ReferenceDescriptor(val reference: PropertyReference, val host: PsiElement?)
 
 /**
- * I18nReference to json/yaml translation
+ * I18nReference to translation
  */
 class I18nReference(element: PsiElement, textRange: TextRange, val references: List<ReferenceDescriptor>) : PsiReferenceBase<PsiElement>(element, textRange), PsiPolyVariantReference {
 
@@ -42,7 +42,7 @@ class I18nReference(element: PsiElement, textRange: TextRange, val references: L
 }
 
 /**
- * Provides navigation from i18n key to it's value in json
+ * Provides navigation from i18n key to it's value in translation
  */
 abstract class ReferenceContributorBase(private val referenceContributor: ReferenceAssistant): PsiReferenceContributor(), CompositeKeyResolver<PsiElement> {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
