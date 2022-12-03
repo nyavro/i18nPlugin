@@ -30,11 +30,6 @@ class SettingsPanelTest {
     }
 
     @Test
-    fun testPreferYamlFilesGeneration() {
-        checkBooleanProperty(PluginBundle.getMessage("settings.prefer.yaml.files.generation"), Settings::preferYamlFilesGeneration)
-    }
-
-    @Test
     fun testFoldingEnabled() {
         checkBooleanProperty(PluginBundle.getMessage("settings.folding.enabled"), Settings::foldingEnabled)
     }

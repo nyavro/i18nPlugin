@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.ide.quickfix.CreateKeyQuickFix
 import com.eny.i18n.plugin.ide.quickfix.CreateTranslationFileQuickFix
@@ -24,9 +25,9 @@ class KeyCreator {
         val config = settings.config()
         val files = sourceService.findSources(i18nKey.allNamespaces(), project)
         val quickFix = if (files.isEmpty()) {
-            val contentGenerator = if (config.preferYamlFilesGeneration)
-                settings.mainFactory().contentGenerator(YAMLFileType.YML) else
-                settings.mainFactory().contentGenerators().firstOrNull()
+            val contentGenerator = Extensions.LOCALIZATION.extensionList.find {
+                it.config().id() == config.preferredLocalization
+            }?.contentGenerator()
             val fileName = i18nKey.ns?.text ?: config.defaultNamespaces().first()
             contentGenerator?.let{CreateTranslationFileQuickFix(i18nKey, it, extractor.folderSelector(), fileName, source, onComplete)}
         } else {

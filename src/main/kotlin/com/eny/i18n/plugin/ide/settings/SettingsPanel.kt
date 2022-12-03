@@ -137,7 +137,6 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(separator(PluginBundle.getMessage("settings.key.separator"), settings::keySeparator))
         panel.add(separator(PluginBundle.getMessage("settings.plural.separator"), settings::pluralSeparator))
         panel.add(textArea(PluginBundle.getMessage("settings.default.namespace"), settings::defaultNs))
-        panel.add(checkbox(PluginBundle.getMessage("settings.prefer.yaml.files.generation"), settings::preferYamlFilesGeneration))
         panel.add(checkbox(PluginBundle.getMessage("settings.folding.enabled"), settings::foldingEnabled))
         panel.add(textInput(PluginBundle.getMessage("settings.folding.preferredLanguage"), settings::foldingPreferredLanguage))
         panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
