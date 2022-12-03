@@ -18,7 +18,3 @@ data class LocalizationSource(
     val localization: Localization<PsiElement>,
     val host: PsiElement? = null
 )
-
-interface LocalizationSourceProvider {
-    fun findLocalizationSources(project: Project, fileNames: List<String>): List<LocalizationSource>
-}

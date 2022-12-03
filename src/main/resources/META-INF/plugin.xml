@@ -149,7 +149,6 @@
     <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensionPoints>
-        <extensionPoint interface="com.eny.i18n.LocalizationSourceProvider" name="localizationSourceProvider" dynamic="true"/>
         <extensionPoint interface="com.eny.i18n.Localization" name="localization" dynamic="true"/>
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
