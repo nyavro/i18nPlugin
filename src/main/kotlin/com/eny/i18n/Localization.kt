@@ -1,5 +1,6 @@
 package com.eny.i18n
 
+import com.eny.i18n.plugin.ConfigurationProperty
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
@@ -16,6 +17,11 @@ data class LocalizationFileType(val languageFileType: LanguageFileType, val auxE
     fun extensions(): List<String> = auxExtensions + languageFileType.defaultExtension
 }
 
+interface LocalizationConfig {
+    fun id(): String
+    fun props(): List<ConfigurationProperty>
+}
+
 interface Localization <T: PsiElement> {
     fun types(): List<LocalizationFileType>
     fun contentGenerator(): ContentGenerator
@@ -23,6 +29,7 @@ interface Localization <T: PsiElement> {
     fun elementsTree(file: PsiElement): Tree<PsiElement>?
     fun matches(localizationFileType:LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean
     fun icon(): Icon = AllIcons.FileTypes.Unknown
+    fun config(): LocalizationConfig
 }
 
 /**

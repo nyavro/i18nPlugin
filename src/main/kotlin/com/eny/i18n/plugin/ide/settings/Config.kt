@@ -25,7 +25,9 @@ data class Config (
     val extractSorted: Boolean = false,
     val gettext: Boolean = false,
     val gettextAliases: String = "gettext,_,__",
-    val partialTranslationInspectionEnabled: Boolean = false
+    val partialTranslationInspectionEnabled: Boolean = false,
+    val preferredLocalization: String = "",
+    val localizationConfig: Map<String, String> = mapOf()
 ) {
 
     private val MAX_DEFAULT_NAMESPACES = 100
@@ -47,4 +49,8 @@ data class Config (
     fun searchScope(project: Project): GlobalSearchScope =
         if (this.searchInProjectOnly) GlobalSearchScope.projectScope(project)
         else GlobalSearchScope.allScope(project)
+
+    fun getLocalizationSetting(localizationId: String, setting: String): String? {
+        return localizationConfig.get(localizationId + "/" + setting)
+    }
 }

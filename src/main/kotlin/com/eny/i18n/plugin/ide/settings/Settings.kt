@@ -1,10 +1,10 @@
 package com.eny.i18n.plugin.ide.settings
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.plugin.factory.MainFactory
 import com.eny.i18n.plugin.language.js.JsLanguageFactory
 import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
 import com.eny.i18n.plugin.language.php.PhpLanguageFactory
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
@@ -20,84 +20,56 @@ class Settings : PersistentStateComponent<Settings> {
     private val default: Config = Config()
 
     internal var searchInProjectOnly = default.searchInProjectOnly
-
     internal var nsSeparator = default.nsSeparator
-
     internal var keySeparator = default.keySeparator
-
     internal var pluralSeparator = default.pluralSeparator
-
     internal var defaultNs = default.defaultNs
-
     internal var firstComponentNs = default.firstComponentNs
-
     internal var jsConfiguration = default.jsConfiguration
-
     internal var preferYamlFilesGeneration = default.preferYamlFilesGeneration
-
     internal var foldingEnabled = default.foldingEnabled
-
     internal var foldingPreferredLanguage = default.foldingPreferredLanguage
-
     internal var foldingMaxLength = default.foldingMaxLength
-
     internal var jsonContentGenerationEnabled = default.jsonContentGenerationEnabled
-
     internal var yamlContentGenerationEnabled = default.yamlContentGenerationEnabled
-
     internal var extractSorted = default.extractSorted
-
     internal var gettext = default.gettext
-
     internal var gettextAliases = default.gettextAliases
-
     internal var partialTranslationInspectionEnabled = default.partialTranslationInspectionEnabled
+    internal var preferredLocalization = default.preferredLocalization
+    internal var localizationConfig = default.localizationConfig
 
     /**
      * Returns plugin configuration
      */
     fun config(): Config {
-        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
-            synchronized(this) {
-                return doGetConfig()
-            }
-        } else {
-            return doGetConfig()
+        if (preferredLocalization.isEmpty()) {
+            preferredLocalization = Extensions.LOCALIZATION.extensionList.firstOrNull()?.config()?.id() ?: ""
         }
+        return Config(
+            searchInProjectOnly = searchInProjectOnly,
+            nsSeparator = nsSeparator,
+            keySeparator = keySeparator,
+            pluralSeparator = pluralSeparator,
+            defaultNs = defaultNs,
+            firstComponentNs = firstComponentNs,
+            jsConfiguration = jsConfiguration,
+            preferYamlFilesGeneration = preferYamlFilesGeneration,
+            foldingEnabled = foldingEnabled,
+            foldingPreferredLanguage = foldingPreferredLanguage,
+            foldingMaxLength = foldingMaxLength,
+            jsonContentGenerationEnabled = jsonContentGenerationEnabled,
+            yamlContentGenerationEnabled = yamlContentGenerationEnabled,
+            extractSorted = extractSorted,
+            gettext = gettext,
+            gettextAliases = gettextAliases,
+            partialTranslationInspectionEnabled = partialTranslationInspectionEnabled,
+            preferredLocalization = preferredLocalization,
+            localizationConfig = localizationConfig
+        )
     }
-
-    private fun doGetConfig() = Config(
-        searchInProjectOnly = searchInProjectOnly,
-        nsSeparator = nsSeparator,
-        keySeparator = keySeparator,
-        pluralSeparator = pluralSeparator,
-        defaultNs = defaultNs,
-        firstComponentNs = firstComponentNs,
-        jsConfiguration = jsConfiguration,
-        preferYamlFilesGeneration = preferYamlFilesGeneration,
-        foldingEnabled = foldingEnabled,
-        foldingPreferredLanguage = foldingPreferredLanguage,
-        foldingMaxLength = foldingMaxLength,
-        jsonContentGenerationEnabled = jsonContentGenerationEnabled,
-        yamlContentGenerationEnabled = yamlContentGenerationEnabled,
-        extractSorted = extractSorted,
-        gettext = gettext,
-        gettextAliases = gettextAliases,
-        partialTranslationInspectionEnabled = partialTranslationInspectionEnabled
-    )
 
     fun setConfig(config: Config) {
-        if (ApplicationManager.getApplication().isHeadlessEnvironment) {
-            // Only in Test mode
-            synchronized(this) {
-                doSetConfig(config)
-            }
-        } else {
-            doSetConfig(config)
-        }
-    }
-
-    private fun doSetConfig(config: Config) {
         searchInProjectOnly = config.searchInProjectOnly
         nsSeparator = config.nsSeparator
         keySeparator = config.keySeparator
@@ -115,6 +87,8 @@ class Settings : PersistentStateComponent<Settings> {
         gettext = config.gettext
         gettextAliases = config.gettextAliases
         partialTranslationInspectionEnabled = config.partialTranslationInspectionEnabled
+        preferredLocalization = config.preferredLocalization
+        localizationConfig = config.localizationConfig
     }
 
     override fun loadState(state: Settings) = XmlSerializerUtil.copyBean(state, this)

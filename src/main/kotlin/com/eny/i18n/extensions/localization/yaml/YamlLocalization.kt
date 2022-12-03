@@ -2,7 +2,9 @@ package com.eny.i18n.extensions.localization.yaml
 
 import com.eny.i18n.ContentGenerator
 import com.eny.i18n.Localization
+import com.eny.i18n.LocalizationConfig
 import com.eny.i18n.LocalizationFileType
+import com.eny.i18n.plugin.ConfigurationProperty
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.Settings
@@ -41,6 +43,12 @@ class YamlLocalization : Localization<YAMLKeyValue> {
             fileName -> localizationFileType.extensions().any { ext -> "$fileName.$ext"==file?.name}
         }
     override fun icon(): Icon = AllIcons.FileTypes.Yaml
+    override fun config(): LocalizationConfig {
+        return object: LocalizationConfig {
+            override fun id(): String = "yaml"
+            override fun props(): List<ConfigurationProperty> = listOf()
+        }
+    }
 }
 
 private class YamlContentGenerator: ContentGenerator {

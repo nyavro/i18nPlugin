@@ -143,7 +143,6 @@ class SettingsPanel(val settings: Settings, val project: Project) {
         panel.add(numberInput(PluginBundle.getMessage("settings.folding.maxLength"), settings::foldingMaxLength))
         panel.add(checkbox(PluginBundle.getMessage("settings.extraction.sorted"), settings::extractSorted))
         panel.add(checkbox(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), settings::partialTranslationInspectionEnabled))
-
         panel.add(checkbox(PluginBundle.getMessage("settings.gettext.enabled"), settings::gettext))
         panel.add(textInput(PluginBundle.getMessage("settings.gettext.aliases"), settings::gettextAliases))
         root.add(panel, BorderLayout.PAGE_START)

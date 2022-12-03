@@ -1,9 +1,6 @@
 package tree
 
-import com.eny.i18n.ContentGenerator
-import com.eny.i18n.Localization
-import com.eny.i18n.LocalizationFileType
-import com.eny.i18n.LocalizationSource
+import com.eny.i18n.*
 import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
@@ -53,6 +50,10 @@ fun testLocalization(): Localization<PsiElement> {
         }
 
         override fun matches(localizationFileType: LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean {
+            TODO("Not yet implemented")
+        }
+
+        override fun config(): LocalizationConfig {
             TODO("Not yet implemented")
         }
 
