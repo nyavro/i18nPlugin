@@ -14,8 +14,7 @@ import com.intellij.psi.search.FileTypeIndex
 class LocalizationSourceService {
 
     fun findSources(fileNames: List<String>, project: Project): List<LocalizationSource> {
-        return Extensions.LOCALIZATION_SOURCE_PROVIDER.extensionList.flatMap{it.findLocalizationSources(project, fileNames)} +
-            findVirtualFilesByName(project, fileNames.whenMatches { it.isNotEmpty() } ?: Settings.getInstance(project).config().defaultNamespaces())
+        return findVirtualFilesByName(project, fileNames.whenMatches { it.isNotEmpty() } ?: Settings.getInstance(project).config().defaultNamespaces())
     }
 
 //    private fun resolveJsRootsFromI18nObject(file: PsiFile?): List<LocalizationSource> {
