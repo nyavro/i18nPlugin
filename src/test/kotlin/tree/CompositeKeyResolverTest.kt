@@ -30,7 +30,7 @@ internal fun root(tree: TestTree) = TestTree("", listOf(tree))
 
 internal fun localizationSource(tree: TestTree?): LocalizationSource {
     return LocalizationSource(
-        treeAdapter(tree), "test", "parent", "test", JsonFileType.INSTANCE, testLocalization()
+        treeAdapter(tree), "test", "parent", "test", testLocalization()
     )
 }
 

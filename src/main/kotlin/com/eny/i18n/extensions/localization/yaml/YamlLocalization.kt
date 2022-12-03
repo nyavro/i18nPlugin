@@ -12,6 +12,7 @@ import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
+import com.intellij.icons.AllIcons
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.util.TextRange
@@ -28,6 +29,7 @@ import org.jetbrains.yaml.psi.YAMLDocument
 import org.jetbrains.yaml.psi.YAMLFile
 import org.jetbrains.yaml.psi.YAMLKeyValue
 import org.jetbrains.yaml.psi.YAMLMapping
+import javax.swing.Icon
 
 class YamlLocalization : Localization<YAMLKeyValue> {
     override fun types(): List<LocalizationFileType> = listOf(LocalizationFileType(YAMLFileType.YML, listOf("yaml")))
@@ -38,6 +40,7 @@ class YamlLocalization : Localization<YAMLKeyValue> {
         fileNames.any {
             fileName -> localizationFileType.extensions().any { ext -> "$fileName.$ext"==file?.name}
         }
+    override fun icon(): Icon = AllIcons.FileTypes.Yaml
 }
 
 private class YamlContentGenerator: ContentGenerator {

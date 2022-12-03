@@ -12,6 +12,7 @@ import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.fasterxml.jackson.core.io.JsonStringEncoder
+import com.intellij.icons.AllIcons
 import com.intellij.json.JsonFileType
 import com.intellij.json.JsonLanguage
 import com.intellij.json.json5.Json5FileType
@@ -25,6 +26,7 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.util.parents
+import javax.swing.Icon
 
 class JsonLocalization : Localization<JsonStringLiteral> {
     override fun types(): List<LocalizationFileType> = listOf(JsonFileType.INSTANCE, Json5FileType.INSTANCE).map { LocalizationFileType(it) }
@@ -39,6 +41,7 @@ class JsonLocalization : Localization<JsonStringLiteral> {
         fileNames.any {
             fileName -> localizationFileType.extensions().any { ext -> "$fileName.$ext"==file?.name}
         }
+    override fun icon(): Icon = AllIcons.FileTypes.Json
 }
 
 /**

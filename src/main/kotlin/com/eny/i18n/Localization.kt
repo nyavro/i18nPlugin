@@ -4,11 +4,13 @@ import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.Tree
+import com.intellij.icons.AllIcons
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
+import javax.swing.Icon
 
 data class LocalizationFileType(val languageFileType: LanguageFileType, val auxExtensions: List<String> = listOf()) {
     fun extensions(): List<String> = auxExtensions + languageFileType.defaultExtension
@@ -20,6 +22,7 @@ interface Localization <T: PsiElement> {
     fun referenceAssistant(): TranslationReferenceAssistant<T>
     fun elementsTree(file: PsiElement): Tree<PsiElement>?
     fun matches(localizationFileType:LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean
+    fun icon(): Icon = AllIcons.FileTypes.Unknown
 }
 
 /**

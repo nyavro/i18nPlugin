@@ -14,7 +14,6 @@ data class LocalizationSource(
     val name: String,
     val parent: String,
     val displayPath: String,
-    val type: FileType,
     val localization: Localization<PsiElement>,
     val host: PsiElement? = null
 )

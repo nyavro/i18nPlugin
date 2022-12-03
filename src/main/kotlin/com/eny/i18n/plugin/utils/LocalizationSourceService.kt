@@ -70,7 +70,6 @@ class LocalizationSourceService {
                                     .virtualFile
                                     .path
                             ).trim('/') + '/' + file.name,
-                            file.fileType,
                             localization
                         )
                     }
