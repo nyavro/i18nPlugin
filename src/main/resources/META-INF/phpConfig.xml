@@ -6,7 +6,4 @@
         <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.plugin.ide.folding.PhpFoldingBuilder"/>
         <lang.documentationProvider language="PHP" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
     </extensions>
-    <extensions defaultExtensionNs="com.eny.i18n">
-        <localization implementation="com.eny.i18n.extensions.localization.plain.object.PlainObjectLocalization"/>
-    </extensions>
 </idea-plugin>

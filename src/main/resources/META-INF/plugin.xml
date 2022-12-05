@@ -147,6 +147,7 @@
     <depends>JavaScript</depends>
     <depends optional="true" config-file="ymlConfig.xml">org.jetbrains.plugins.yaml</depends>
     <depends optional="true" config-file="phpConfig.xml">com.jetbrains.php</depends>
+    <depends optional="true" config-file="plainObjectConfig.xml">org.jetbrains.plugins.localization</depends>
     <resource-bundle>messages.I18nBundle</resource-bundle>
     <extensionPoints>
         <extensionPoint interface="com.eny.i18n.Localization" name="localization" dynamic="true"/>
