@@ -6,5 +6,6 @@ import com.intellij.psi.PsiElement
 class Extensions {
     companion object {
         val LOCALIZATION = ExtensionPointName.create<Localization<PsiElement>>("com.eny.i18n.localization")
+        val LANG = ExtensionPointName.create<Lang>("com.eny.i18n.lang")
     }
 }
