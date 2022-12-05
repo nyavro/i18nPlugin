@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.ide
 
 import com.eny.i18n.plugin.utils.generator.code.*
-import com.eny.i18n.plugin.utils.generator.translation.Json5TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator

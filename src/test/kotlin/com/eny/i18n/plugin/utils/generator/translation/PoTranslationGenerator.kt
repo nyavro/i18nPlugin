@@ -84,8 +84,4 @@ class PoTranslationGenerator: TranslationGenerator {
     override fun generateNamedBlock(key: String, block: String, level: Int): String {
         TODO("Not yet implemented")
     }
-
-    override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String {
-        TODO("Not yet implemented")
-    }
 }

@@ -95,11 +95,5 @@ class JsonTranslationGenerator: TranslationGenerator {
 $tab}"""
     }
 
-    override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String =
-        """{
-            ${blocks.map{(name, block) -> formatBlock(name, block)}.joinToString(",\n")}
-        }"""
-
-    private fun formatBlock(name: String, block: String): String = """"$name": $block"""
 
 }

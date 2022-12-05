@@ -9,7 +9,7 @@ import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 
 
-private val tgs = listOf(JsonTranslationGenerator(), YamlTranslationGenerator())
+private val tgs = listOf(JsonTranslationGenerator())
 private val jsCgs = listOf(JsCodeGenerator(), TsCodeGenerator(), JsxCodeGenerator(), TsxCodeGenerator())
 private val cgs = jsCgs + listOf(PhpSingleQuoteCodeGenerator(), PhpDoubleQuoteCodeGenerator())
 

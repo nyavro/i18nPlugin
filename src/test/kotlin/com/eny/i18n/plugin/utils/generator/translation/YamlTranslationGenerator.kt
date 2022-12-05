@@ -83,9 +83,4 @@ class YamlTranslationGenerator: TranslationGenerator {
     override fun generateNamedBlock(key: String, block: String, level: Int): String = """ 
     ${"\t".repeat(level)}$key: $block 
     """
-
-    override fun generateNamedBlocks(vararg blocks: Pair<String, String>): String =
-        blocks.map{(name, block) -> formatBlock(name, block)}.joinToString("\n")
-
-    private fun formatBlock(name: String, block: String): String = "\t$name: $block"
 }

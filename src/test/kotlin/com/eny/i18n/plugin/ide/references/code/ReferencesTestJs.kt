@@ -5,13 +5,9 @@ import com.eny.i18n.plugin.ide.JsCodeAndTranslationGenerators
 import com.eny.i18n.plugin.ide.runWithConfig
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.utils.generator.code.CodeGenerator
-import com.eny.i18n.plugin.utils.generator.code.ReactTransJsxContentGenerator
-import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.TranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
-import org.junit.Ignore
-
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

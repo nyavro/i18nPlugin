@@ -12,5 +12,4 @@ interface TranslationGenerator {
     fun generate(root: String, vararg branches: Array<String>): String
     fun generate(vararg branches: Array<String>): String
     fun generateNamedBlock(key: String, block: String, level: Int = 0): String
-    fun generateNamedBlocks(vararg blocks: Pair<String, String>): String
 }
