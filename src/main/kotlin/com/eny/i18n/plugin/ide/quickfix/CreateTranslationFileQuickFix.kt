@@ -15,10 +15,11 @@ import com.intellij.psi.PsiFileFactory
 class CreateTranslationFileQuickFix(
     private val fullKey: FullKey,
     private val contentGenerator: ContentGenerator,
-    private val folderSelector: TranslationFolderSelector,
     private val fileName: String,
     private val translationValue: String? = null,
     private val onComplete: () -> Unit = {}): QuickFix() {
+
+    private val folderSelector = TranslationFolderSelector()
 
     override fun getText(): String = contentGenerator.getDescription()
 

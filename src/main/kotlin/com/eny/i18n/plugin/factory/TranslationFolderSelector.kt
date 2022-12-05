@@ -1,6 +1,5 @@
-package com.eny.i18n.plugin.factory.impl
+package com.eny.i18n.plugin.factory
 
-import com.eny.i18n.plugin.factory.TranslationFolderSelector
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.nullableToList
 import com.intellij.openapi.application.ApplicationManager
@@ -12,15 +11,14 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFileSystemItem
 import com.intellij.psi.PsiManager
 
-/**
- * Translation folder selector
- */
-class DefaultTranslationFolderSelector : TranslationFolderSelector {
-
-    override fun select(project: Project, callback: (List<PsiFileSystemItem>) -> Unit) {
+class TranslationFolderSelector {
+    /**
+     * Selects folders
+     */
+    fun select(project: Project, callback: (List<PsiFileSystemItem>) -> Unit) {
         val projectDir = project.guessProjectDir()
         val processFiles: (files: List<VirtualFile>) -> Unit = {
-            files -> callback(files.mapNotNull{ PsiManager.getInstance(project).findDirectory(it)})
+                files -> callback(files.mapNotNull{ PsiManager.getInstance(project).findDirectory(it)})
         }
         if (ApplicationManager.getApplication().isHeadlessEnvironment) {
             // Hate this hack (because it is solely for testing purposes), but there is no way to substitute FileChooser from tests

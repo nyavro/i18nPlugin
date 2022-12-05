@@ -32,7 +32,6 @@ import com.intellij.util.ProcessingContext
 class JsLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsTranslationExtractor()
     override fun foldingProvider(): FoldingProvider = JsFoldingProvider()
-    override fun callContext(): CallContext = JsCallContext()
     override fun referenceAssistant(): ReferenceAssistant = JsReferenceAssistant()
 }
 
@@ -54,24 +53,6 @@ internal class JsFoldingProvider: FoldingProvider {
         PsiTreeUtil.getParentOfType(psiElement, JSCallExpression::class.java).default(psiElement).textRange
 }
 
-internal class JsCallContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean =
-        listOf("JS:STRING_LITERAL", "JS:LITERAL_EXPRESSION", "JS:STRING_TEMPLATE_PART", "JS:STRING_TEMPLATE_EXPRESSION")
-            .contains(element.type()) && (
-                JSPatterns.jsArgument("t", 0).let { pattern ->
-                    pattern.accepts(element) ||
-                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
-                } ||
-                JSPatterns.jsArgument("\$t", 0).let { pattern ->
-                    pattern.accepts(element) ||
-                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "JS:ARGUMENT_LIST" }))
-                } ||
-                XmlPatterns.xmlAttributeValue("i18nKey").accepts(element) ||
-                element.parents(false).toList()
-                    .mapNotNull {(it as? JSProperty)?.name ?: (it as? ES6Property)?.computedPropertyName?.let {it.expression?.reference?.resolve() as? TypeScriptEnumField }?.name}
-                    .reversed().joinToString(Settings.getInstance(element.project).config().keySeparator).endsWith(element.text.unQuote())
-            )
-}
 
 internal class JsReferenceAssistant: ReferenceAssistant {
 

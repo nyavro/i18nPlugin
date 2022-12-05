@@ -17,10 +17,7 @@ interface LanguageFactory {
      * Get folding provider
      */
     fun foldingProvider(): FoldingProvider
-    /**
-     * Get pattern to extract i18n keys from code
-     */
-    fun callContext(): CallContext
+
     /**
      * Assistant for code to translation navigation
      */

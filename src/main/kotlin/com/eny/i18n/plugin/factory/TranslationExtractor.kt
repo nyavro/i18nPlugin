@@ -1,14 +1,10 @@
 package com.eny.i18n.plugin.factory
 
-import com.eny.i18n.plugin.factory.impl.DefaultTranslationFolderSelector
 import com.eny.i18n.plugin.key.FullKey
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFileSystemItem
-import com.intellij.psi.PsiReference
 
 /**
  * Defines translation text extraction
@@ -41,11 +37,6 @@ interface TranslationExtractor {
     fun template(element: PsiElement): (argument: String) -> String = {"i18n.t($it)"}
 
     fun postProcess(editor: Editor, offset: Int) {}
-
-    /**
-     * Folder selector
-     */
-    fun folderSelector(): TranslationFolderSelector = DefaultTranslationFolderSelector()
 }
 
 /**
@@ -89,16 +80,5 @@ interface ReferenceAssistant {
      * Extract i18n key from element
      */
     fun extractKey(element: PsiElement): FullKey?
-}
-
-/**
- * Represents folder selection
- */
-interface TranslationFolderSelector {
-
-    /**
-     * Selects folders
-     */
-    fun select(project: Project, callback: (List<PsiFileSystemItem>) -> Unit)
 }
 

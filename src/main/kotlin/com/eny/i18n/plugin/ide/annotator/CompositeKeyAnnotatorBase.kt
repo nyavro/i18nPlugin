@@ -1,6 +1,6 @@
 package com.eny.i18n.plugin.ide.annotator
 
-import com.eny.i18n.plugin.factory.TranslationFolderSelector
+import com.eny.i18n.Lang
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.FullKeyExtractor
@@ -14,22 +14,21 @@ import com.intellij.psi.PsiElement
 /**
  * Annotator for i18n keys
  */
-abstract class CompositeKeyAnnotatorBase(private val keyExtractor: FullKeyExtractor, private val folderSelector: TranslationFolderSelector): Annotator, CompositeKeyResolver<PsiElement> {
+abstract class CompositeKeyAnnotatorBase(private val lang: Lang): Annotator, CompositeKeyResolver<PsiElement> {
 
     /**
      * Tries to parse element as i18n key and annotates it when succeeded
      */
-    override fun annotate(element: PsiElement, holder: AnnotationHolder) =
-        keyExtractor.extractFullKey(element).nullableToList().forEach {
+    override fun annotate(element: PsiElement, holder: AnnotationHolder) {
+        lang.extractFullKey(element)?.also {
             annotateI18nLiteral(it, element, holder)
         }
+    }
 
     private fun annotateI18nLiteral(fullKey: FullKey, element: PsiElement, holder: AnnotationHolder) {
         val annotationHelper = AnnotationHelper(
             holder,
             KeyRangesCalculator(element.textRange.shiftRight(element.text.unQuote().indexOf(fullKey.source)), element.text.isQuoted()),
-            element.project,
-            folderSelector
         )
         val sourceService = element.project.service<LocalizationSourceService>()
         val files = sourceService.findSources(fullKey.allNamespaces(), element.project)

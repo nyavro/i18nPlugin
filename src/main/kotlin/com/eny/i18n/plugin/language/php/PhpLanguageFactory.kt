@@ -26,7 +26,6 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 class PhpLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = PhpTranslationExtractor()
     override fun foldingProvider(): FoldingProvider = PhpFoldingProvider()
-    override fun callContext(): CallContext = PhpCallContext()
     override fun referenceAssistant(): ReferenceAssistant = PhpReferenceAssistant()
 }
 
@@ -54,22 +53,6 @@ internal class PhpFoldingProvider: FoldingProvider {
         PsiTreeUtil.getParentOfType(psiElement, FunctionReference::class.java).default(psiElement).textRange
 }
 
-private fun gettextPattern(config: Config) =
-    PlatformPatterns.or(*config.gettextAliases.split(",").map { PhpPatternsExt.phpArgument(it.trim(), 0) }.toTypedArray())
-
-internal class PhpCallContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean {
-        return listOf("String").contains(element.type()) &&
-            PlatformPatterns.or(
-                PhpPatternsExt.phpArgument("t", 0),
-                gettextPattern(Settings.getInstance(element.project).config())
-            ).let { pattern ->
-                pattern.accepts(element) ||
-                    pattern.accepts(PsiTreeUtil.findFirstParent(element, { it.parent?.type() == "Parameter list" }))
-            }
-    }
-}
-
 internal class PhpReferenceAssistant: ReferenceAssistant {
 
     override fun pattern(): ElementPattern<out PsiElement> {
@@ -91,4 +74,7 @@ internal class PhpReferenceAssistant: ReferenceAssistant {
             .find { it.canExtract(element) }
             ?.let { parser.parse(it.extract(element)) }
     }
+
+    private fun gettextPattern(config: Config) =
+        PlatformPatterns.or(*config.gettextAliases.split(",").map { PhpPatternsExt.phpArgument(it.trim(), 0) }.toTypedArray())
 }

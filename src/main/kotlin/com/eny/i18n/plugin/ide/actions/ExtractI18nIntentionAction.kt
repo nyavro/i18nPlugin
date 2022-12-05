@@ -62,7 +62,7 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
         val i18nKey = requestResult.key
         val template = extractor.template(element)
         val range = extractor.textRange(element)
-        keyCreator.createKey(project, i18nKey, text, editor, extractor) {
+        keyCreator.createKey(project, i18nKey, text, editor) {
             document.replaceString(range.startOffset, range.endOffset, template("'${i18nKey.source}'"))
             extractor.postProcess(editor, range.startOffset)
         }

@@ -16,7 +16,7 @@ import com.intellij.openapi.project.Project
 /**
  * Annotation helper methods
  */
-class AnnotationHelper(private val holder: AnnotationHolder, private val rangesCalculator: RangesCalculator, private val project: Project, private val folderSelector: TranslationFolderSelector) {
+class AnnotationHelper(private val holder: AnnotationHolder, private val rangesCalculator: RangesCalculator) {
 
     private val errorSeverity = HighlightSeverity.WARNING
     private val infoSeverity = HighlightSeverity.INFORMATION
@@ -50,7 +50,7 @@ class AnnotationHelper(private val holder: AnnotationHolder, private val rangesC
             .newAnnotation(errorSeverity, PluginBundle.getMessage("annotator.unresolved.ns"))
             .range(rangesCalculator.unresolvedNs(fullKey))
         Extensions.LOCALIZATION.extensionList.forEach {
-            builder.withFix(CreateTranslationFileQuickFix(fullKey, it.contentGenerator(), folderSelector, ns.text))
+            builder.withFix(CreateTranslationFileQuickFix(fullKey, it.contentGenerator(), ns.text))
         }
         builder.create()
     }

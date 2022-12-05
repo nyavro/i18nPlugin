@@ -32,10 +32,6 @@ class JsxLanguageFactory: LanguageFactory {
         override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange = TextRange.EMPTY_RANGE
     }
 
-    override fun callContext() = object: CallContext {
-        override fun accepts(element: PsiElement): Boolean = false
-    }
-
     override fun referenceAssistant(): ReferenceAssistant = JsxReferenceAssistant()
 }
 
