@@ -28,17 +28,6 @@ interface LanguageFactory {
 }
 
 /**
- * Localization components factory
- */
-interface LocalizationFactory {
-
-    /**
-     * Localization format-specific reference assistant
-     */
-    fun referenceAssistant(): TranslationReferenceAssistant<out PsiElement>
-}
-
-/**
  * Plugin's components factory
  */
 class MainFactory(private val languageFactories: List<LanguageFactory>) {
@@ -48,16 +37,4 @@ class MainFactory(private val languageFactories: List<LanguageFactory>) {
      */
     fun translationExtractors(): List<TranslationExtractor> =
         languageFactories.map {it.translationExtractor()}
-
-    /**
-     * Get available content generators
-     */
-    fun contentGenerators(): List<ContentGenerator> =
-        Extensions.LOCALIZATION.extensionList.map {it.contentGenerator()}
-
-    /**
-     * Pick content generator by file type
-     */
-    fun contentGenerator(type: FileType): ContentGenerator? =
-        contentGenerators().find {it.getType() == type}
 }
