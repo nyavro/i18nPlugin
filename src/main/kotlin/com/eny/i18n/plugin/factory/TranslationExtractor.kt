@@ -102,14 +102,3 @@ interface TranslationFolderSelector {
     fun select(project: Project, callback: (List<PsiFileSystemItem>) -> Unit)
 }
 
-interface TranslationReferenceAssistant<T: PsiElement>{
-    /**
-     * Defines translation reference pattern
-     */
-    fun pattern(): ElementPattern<out T>
-
-    /**
-     * Calculates element's references
-     */
-    fun references(element: T): List<PsiReference>
-}

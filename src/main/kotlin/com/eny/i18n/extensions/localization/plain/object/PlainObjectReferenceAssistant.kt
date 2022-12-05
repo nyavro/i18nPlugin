@@ -1,6 +1,6 @@
 package com.eny.i18n.extensions.localization.plain.`object`
 
-import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
+import com.eny.i18n.*
 import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference

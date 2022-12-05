@@ -1,7 +1,6 @@
 package com.eny.i18n
 
 import com.eny.i18n.plugin.ConfigurationProperty
-import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.Tree
@@ -10,7 +9,9 @@ import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
 import javax.swing.Icon
 
 data class LocalizationFileType(val languageFileType: LanguageFileType, val auxExtensions: List<String> = listOf()) {
@@ -30,6 +31,18 @@ interface Localization <T: PsiElement> {
     fun matches(localizationFileType:LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean
     fun icon(): Icon = AllIcons.FileTypes.Unknown
     fun config(): LocalizationConfig
+}
+
+interface TranslationReferenceAssistant<T: PsiElement>{
+    /**
+     * Defines translation reference pattern
+     */
+    fun pattern(): ElementPattern<out T>
+
+    /**
+     * Calculates element's references
+     */
+    fun references(element: T): List<PsiReference>
 }
 
 /**

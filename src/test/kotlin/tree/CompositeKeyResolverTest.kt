@@ -1,13 +1,10 @@
 package tree
 
 import com.eny.i18n.*
-import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.Tree
-import com.eny.i18n.plugin.utils.toBoolean
 import com.intellij.json.JsonFileType
-import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import org.junit.Assert.*

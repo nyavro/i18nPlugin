@@ -5,13 +5,11 @@ import com.eny.i18n.Localization
 import com.eny.i18n.LocalizationConfig
 import com.eny.i18n.LocalizationFileType
 import com.eny.i18n.plugin.ConfigurationProperty
-import com.eny.i18n.plugin.factory.TranslationReferenceAssistant
+import com.eny.i18n.*
 import com.eny.i18n.plugin.tree.Tree
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.jetbrains.localization.LocaleFileType
-import javax.swing.Icon
 
 class PlainObjectLocalization : Localization<PsiElement> {
     override fun types(): List<LocalizationFileType> = listOf(LocalizationFileType(LocaleFileType.INSTANCE))
