@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.key.parser
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.*
 import com.eny.i18n.plugin.parser.KeyNormalizer
+import com.eny.i18n.plugin.parser.RawKey
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.foldWhileAccum
 
@@ -15,7 +16,7 @@ class KeyParser(private val tokenizer: Tokenizer) {
      * Parses list of key elements into i18n key
      */
     fun parse(
-        pair: Pair<List<KeyElement>, List<String>?>,
+        rawKey: RawKey,
         emptyNamespace: Boolean = false,
         firstComponentNamespace: Boolean = false
     ): FullKey? {
@@ -29,10 +30,10 @@ class KeyParser(private val tokenizer: Tokenizer) {
         } else {
             Start(null)
         }
-        val (source, tokenized) = tokenizer.tokenize(pair.first)
+        val (source, tokenized) = tokenizer.tokenize(rawKey.keyElements)
         return tokenized
             .fold(startState) { state, token -> state.next(token) }
-            .fullKey(source, pair.second)
+            .fullKey(source, rawKey.arguments)
     }
 }
 

@@ -14,7 +14,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import javax.swing.Icon
 
-data class LocalizationFileType(val languageFileType: LanguageFileType, val auxExtensions: List<String> = listOf()) {
+data class LocalizationFileType(val languageFileType: FileType, val auxExtensions: List<String> = listOf()) {
     fun extensions(): List<String> = auxExtensions + languageFileType.defaultExtension
 }
 

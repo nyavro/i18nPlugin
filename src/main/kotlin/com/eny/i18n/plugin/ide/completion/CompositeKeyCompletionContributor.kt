@@ -1,13 +1,9 @@
 package com.eny.i18n.plugin.ide.completion
 
 import com.eny.i18n.Lang
-import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.key.lexer.Literal
-import com.eny.i18n.plugin.parser.DummyContext
-import com.eny.i18n.plugin.parser.KeyExtractorImpl
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.eny.i18n.plugin.utils.nullableToList
@@ -25,12 +21,10 @@ import com.intellij.psi.PsiElement
  */
 abstract class CompositeKeyCompletionContributor(private val lang: Lang): CompletionContributor(), CompositeKeyResolver<PsiElement> {
     private val DUMMY_KEY = CompletionInitializationContext.DUMMY_IDENTIFIER_TRIMMED
-    private val keyExtractor = FullKeyExtractor(DummyContext(), KeyExtractorImpl())
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
-//        super.fillCompletionVariants(parameters, result)
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
-        val fullKey = keyExtractor.extractFullKey(parameters.position)
+        val fullKey = lang.extractFullKey(parameters.position)
         if (fullKey == null) {
             if (lang.canExtractKey(parameters.position.parent)) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()

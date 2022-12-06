@@ -5,6 +5,7 @@ import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
+import com.eny.i18n.plugin.parser.RawKey
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
 import com.eny.i18n.plugin.utils.*
@@ -40,7 +41,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)
                 literals.mapNotNull { literal ->
-                    parser.parse(Pair(listOf(KeyElement.literal(literal.text.unQuote())), null), config.gettext, config.firstComponentNs)
+                    parser.parse(RawKey(listOf(KeyElement.literal(literal.text.unQuote()))), config.gettext, config.firstComponentNs)
                         ?.let { key -> resolve(container, literal, config, key) }
                         ?.let { resolved ->
                             FoldingDescriptor(

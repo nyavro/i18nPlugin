@@ -14,11 +14,10 @@ class TemplateKeyExtractor : KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean = isTemplateExpression(element)
 
-    override fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?> =
-        Pair(
-            element.node.getChildren(null).mapNotNull {
+    override fun extract(element: PsiElement): RawKey =
+        RawKey(
+            element.node.getChildren(null).map {
                 KeyElement(it.text, if (it is JSExpression) KeyElementType.TEMPLATE else KeyElementType.LITERAL)
-            },
-            null
+            }
         )
 }

@@ -3,9 +3,11 @@ package com.eny.i18n.plugin.ide.annotator
 import com.eny.i18n.Lang
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.FullKeyExtractor
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.KeyRangesCalculator
+import com.eny.i18n.plugin.utils.LocalizationSourceService
+import com.eny.i18n.plugin.utils.isQuoted
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.components.service

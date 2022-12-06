@@ -17,9 +17,9 @@ class ReactUseTranslationHookExtractor: KeyExtractor {
         return resolveHook(element)?.methodExpression?.text=="useTranslation"
     }
 
-    override fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?> {
-        val arguments = resolveHook(element)?.arguments?.filter{it.type()=="JS:LITERAL_EXPRESSION"}?.map{it.text.unQuote()}
-        return Pair(listOf(KeyElement.literal(element.text.unQuote())), arguments)
+    override fun extract(element: PsiElement): RawKey {
+        val arguments = resolveHook(element)?.arguments?.filter{it.type()=="JS:LITERAL_EXPRESSION"}?.map{it.text.unQuote()}?: listOf()
+        return RawKey(listOf(KeyElement.literal(element.text.unQuote())), arguments)
     }
 
     private fun resolveTranslationFunctionDefinition(element: PsiElement): PsiElement? {

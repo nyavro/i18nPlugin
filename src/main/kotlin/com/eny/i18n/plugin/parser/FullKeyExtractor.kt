@@ -15,10 +15,6 @@ interface Extractor {
     fun extractFullKey(element: PsiElement): FullKey?
 }
 
-class DummyContext: CallContext {
-    override fun accepts(element: PsiElement): Boolean = true
-}
-
 /**
  * Extracts translation key from psi element
  */

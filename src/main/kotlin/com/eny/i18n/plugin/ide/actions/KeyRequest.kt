@@ -3,6 +3,7 @@ package com.eny.i18n.plugin.ide.actions
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
+import com.eny.i18n.plugin.parser.RawKey
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.project.Project
@@ -37,7 +38,7 @@ class KeyRequest {
             KeyRequestResult(
                 (if(config.gettext) KeyParserBuilder.withoutTokenizer() else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)).build()
                     .parse(
-                        Pair(listOf(KeyElement.literal(keyStr)), null),
+                        RawKey(listOf(KeyElement.literal(keyStr))),
                         emptyNamespace = config.gettext,
                         firstComponentNamespace = config.firstComponentNs
                     ),

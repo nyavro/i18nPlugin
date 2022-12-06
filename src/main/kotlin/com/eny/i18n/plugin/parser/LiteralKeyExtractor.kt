@@ -12,12 +12,12 @@ class LiteralKeyExtractor: KeyExtractor {
     override fun canExtract(element: PsiElement): Boolean =
         element is PsiLiteralValue && element.node.elementType != XmlElementType.XML_ATTRIBUTE_VALUE
 
-    override fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?> =
-        Pair(
+    override fun extract(element: PsiElement): RawKey =
+        RawKey(
             (element as PsiLiteralValue).value?.let {it as? String}?.let {
                 listOf(KeyElement.literal(it))
             } ?: listOf(),
-            null
+            listOf()
         )
 }
 

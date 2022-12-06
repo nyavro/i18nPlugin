@@ -4,6 +4,7 @@ import com.eny.i18n.Lang
 import com.eny.i18n.plugin.factory.CallContext
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
+import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.*
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.ecmascript6.psi.ES6Property
@@ -45,6 +46,24 @@ open class JsLang : Lang {
     }
 
     override fun extractFullKey(element: PsiElement): FullKey? {
-        return KeyExtractorImpl().extractFullKey(element)
-    }
+        val config = Settings.getInstance(element.project).config()
+        val parser = (
+                if (config.gettext)
+                    KeyParserBuilder.withoutTokenizer()
+                else
+                    KeyParserBuilder
+                            .withSeparators(config.nsSeparator, config.keySeparator)
+                            .withDummyNormalizer()
+                            .withTemplateNormalizer()
+                ).build()
+        return listOf(
+                ReactUseTranslationHookExtractor(),
+                TemplateKeyExtractor(),
+                LiteralKeyExtractor(),
+                StringLiteralKeyExtractor(),
+                XmlAttributeKeyExtractor()
+        )
+                .find {it.canExtract(element)}
+                ?.let{parser.parse(it.extract(element), config.gettext, config.firstComponentNs)}
+        }
 }

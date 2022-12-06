@@ -3,6 +3,8 @@ package com.eny.i18n.plugin.parser
 import com.eny.i18n.plugin.utils.KeyElement
 import com.intellij.psi.PsiElement
 
+data class RawKey(val keyElements: List<KeyElement>, val arguments: List<String> = emptyList())
+
 /**
  * Extractor of i18n key from PsiElement
  */
@@ -15,5 +17,5 @@ interface KeyExtractor {
     /**
      * Extracts key from psi element
      */
-    fun extract(element: PsiElement): Pair<List<KeyElement>, List<String>?>
+    fun extract(element: PsiElement): RawKey
 }

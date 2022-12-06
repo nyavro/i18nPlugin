@@ -7,12 +7,18 @@ import com.eny.i18n.LocalizationFileType
 import com.eny.i18n.plugin.ConfigurationProperty
 import com.eny.i18n.*
 import com.eny.i18n.plugin.tree.Tree
+import com.intellij.openapi.fileTypes.FileTypeManager
+import com.intellij.openapi.fileTypes.PlainTextFileType
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
-import com.jetbrains.localization.LocaleFileType
 
 class PlainObjectLocalization : Localization<PsiElement> {
-    override fun types(): List<LocalizationFileType> = listOf(LocalizationFileType(LocaleFileType.INSTANCE))
+    override fun types(): List<LocalizationFileType> =
+        listOf(FileTypeManager
+            .getInstance()
+            .getStdFileType("Locale"))
+            .filter {it != PlainTextFileType.INSTANCE}
+            .map {LocalizationFileType(it, listOf("pot"))}
     override fun contentGenerator(): ContentGenerator = PlainObjectContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<PsiElement> = PlainObjectReferenceAssistant()
     override fun elementsTree(file: PsiElement): Tree<PsiElement> = PlainObjectTextTree(file)
