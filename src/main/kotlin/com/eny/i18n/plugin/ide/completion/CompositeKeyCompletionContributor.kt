@@ -4,6 +4,7 @@ import com.eny.i18n.Lang
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.parser.RawKeyParser
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.utils.LocalizationSourceService
 import com.eny.i18n.plugin.utils.nullableToList
@@ -24,7 +25,7 @@ abstract class CompositeKeyCompletionContributor(private val lang: Lang): Comple
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
-        val fullKey = lang.extractFullKey(parameters.position)
+        val fullKey = lang.extractRawKey(parameters.position)?.let{RawKeyParser(parameters.position.project).parse(it)}
         if (fullKey == null) {
             if (lang.canExtractKey(parameters.position.parent)) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()
