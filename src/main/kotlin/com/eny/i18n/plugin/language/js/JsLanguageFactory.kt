@@ -7,7 +7,7 @@ import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.extensions.lang.js.extractors.LiteralKeyExtractor
 import com.eny.i18n.extensions.lang.js.extractors.ReactUseTranslationHookExtractor
 import com.eny.i18n.extensions.lang.js.extractors.TemplateKeyExtractor
-import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.ecmascript6.psi.ES6Property

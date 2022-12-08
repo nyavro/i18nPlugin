@@ -6,7 +6,7 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.extensions.lang.js.extractors.StringLiteralKeyExtractor
-import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches

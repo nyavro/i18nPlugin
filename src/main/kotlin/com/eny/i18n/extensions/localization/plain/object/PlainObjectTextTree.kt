@@ -1,6 +1,6 @@
 package com.eny.i18n.extensions.localization.plain.`object`
 
-import com.eny.i18n.plugin.parser.type
+import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.tree.Tree
 import com.eny.i18n.plugin.utils.at
 import com.intellij.psi.PsiElement
