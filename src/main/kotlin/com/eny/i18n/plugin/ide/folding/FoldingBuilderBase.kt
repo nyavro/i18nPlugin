@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.folding
 
+import com.eny.i18n.Lang
 import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
@@ -23,7 +24,7 @@ internal data class ElementToReferenceBinding(val psiElement: PsiElement, val re
 /**
  * Provides folding mechanism for i18n keys
  */
-abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
+abstract class FoldingBuilderBase(private val lang: Lang) : FoldingBuilderEx(), DumbAware, CompositeKeyResolver<PsiElement> {
 
     private val group = FoldingGroup.newGroup("i18n")
 
@@ -36,7 +37,7 @@ abstract class FoldingBuilderBase(private val languageFactory: LanguageFactory) 
             else KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator).withTemplateNormalizer()
         ).build()
         if (!config.foldingEnabled) return arrayOf()
-        val foldingProvider = languageFactory.foldingProvider()
+        val foldingProvider = lang.foldingProvider()
         return foldingProvider.collectContainers(root)
             .flatMap { container ->
                 val (literals, offset) = foldingProvider.collectLiterals(container)

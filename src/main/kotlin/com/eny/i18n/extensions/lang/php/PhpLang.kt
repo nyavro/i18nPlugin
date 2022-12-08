@@ -2,7 +2,8 @@ package com.eny.i18n.extensions.lang.php
 
 import com.eny.i18n.Lang
 import com.eny.i18n.extensions.lang.php.extractors.PhpStringLiteralKeyExtractor
-import com.eny.i18n.plugin.parser.*
+import com.eny.i18n.plugin.factory.FoldingProvider
+import com.eny.i18n.plugin.parser.RawKey
 import com.intellij.psi.PsiElement
 
 class PhpLang: Lang {
@@ -19,11 +20,10 @@ class PhpLang: Lang {
     }
 
     override fun extractRawKey(element: PsiElement): RawKey? {
-        return listOf(
-//            TemplateKeyExtractor(),
-//            LiteralKeyExtractor(),
-            PhpStringLiteralKeyExtractor()
-        ).find {it.canExtract(element)}?.extract(element)
+        val extractor = PhpStringLiteralKeyExtractor()
+        return if (extractor.canExtract(element)) extractor.extract(element) else null
     }
+
+    override fun foldingProvider(): FoldingProvider = PhpFoldingProvider()
 }
 

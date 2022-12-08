@@ -30,7 +30,6 @@ import com.intellij.util.ProcessingContext
  */
 class JsLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsTranslationExtractor()
-    override fun foldingProvider(): FoldingProvider = JsFoldingProvider()
     override fun referenceAssistant(): ReferenceAssistant = JsReferenceAssistant()
 }
 
@@ -40,18 +39,6 @@ internal class JsTranslationExtractor: TranslationExtractor {
     override fun isExtracted(element: PsiElement): Boolean = JSPatterns.jsArgument("t", 0).accepts(element.parent)
     override fun text(element: PsiElement): String = element.text.unQuote()
 }
-
-internal class JsFoldingProvider: FoldingProvider {
-    override fun collectContainers(root: PsiElement): List<PsiElement> =
-        PsiTreeUtil
-            .findChildrenOfType(root, JSLiteralExpression::class.java)
-            .filter {JSPatterns.jsArgument("t", 0).accepts(it)}
-
-    override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> = Pair(listOf(container), 0)
-    override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange =
-        PsiTreeUtil.getParentOfType(psiElement, JSCallExpression::class.java).default(psiElement).textRange
-}
-
 
 internal class JsReferenceAssistant: ReferenceAssistant {
 

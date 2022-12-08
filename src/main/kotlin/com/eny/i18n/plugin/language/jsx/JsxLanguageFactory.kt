@@ -23,14 +23,6 @@ import com.intellij.psi.xml.XmlTag
  */
 class JsxLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsxTranslationExtractor()
-    /**
-     * No special implementation for folding builder is required
-     */
-    override fun foldingProvider(): FoldingProvider = object: FoldingProvider {
-        override fun collectContainers(root: PsiElement): List<PsiElement> = emptyList()
-        override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> = Pair(emptyList(), 0)
-        override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange = TextRange.EMPTY_RANGE
-    }
 
     override fun referenceAssistant(): ReferenceAssistant = JsxReferenceAssistant()
 }

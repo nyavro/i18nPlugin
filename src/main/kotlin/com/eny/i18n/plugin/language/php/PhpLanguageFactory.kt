@@ -23,7 +23,6 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
  */
 class PhpLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = PhpTranslationExtractor()
-    override fun foldingProvider(): FoldingProvider = PhpFoldingProvider()
     override fun referenceAssistant(): ReferenceAssistant = PhpReferenceAssistant()
 }
 
@@ -39,16 +38,6 @@ internal class PhpTranslationExtractor: TranslationExtractor {
         element.whenMatches {it.isBorderToken()}?.prevSibling.default(element)
     private fun PsiElement.isBorderToken(): Boolean = listOf("right double quote", "right single quote").contains(this.type())
     private fun PsiElement.isPhpStringLiteral(): Boolean = listOf("double quoted string", "single quoted string").contains(this.type())
-}
-
-internal class PhpFoldingProvider: FoldingProvider {
-    override fun collectContainers(root: PsiElement): List<PsiElement> =
-        PsiTreeUtil
-            .findChildrenOfType(root, StringLiteralExpression::class.java)
-            .filter { PhpPatternsExt.phpArgument("t", 0).accepts(it)}
-    override fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int> = Pair(listOf(container), 0)
-    override fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange =
-        PsiTreeUtil.getParentOfType(psiElement, FunctionReference::class.java).default(psiElement).textRange
 }
 
 internal class PhpReferenceAssistant: ReferenceAssistant {

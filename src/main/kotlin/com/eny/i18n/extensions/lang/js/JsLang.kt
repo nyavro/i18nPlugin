@@ -2,10 +2,8 @@ package com.eny.i18n.extensions.lang.js
 
 import com.eny.i18n.Lang
 import com.eny.i18n.extensions.lang.js.extractors.*
-import com.eny.i18n.plugin.parser.*
-import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.KeyElementType
-import com.intellij.lang.javascript.psi.JSExpression
+import com.eny.i18n.plugin.factory.FoldingProvider
+import com.eny.i18n.plugin.parser.RawKey
 import com.intellij.psi.PsiElement
 
 open class JsLang : Lang {
@@ -46,4 +44,6 @@ open class JsLang : Lang {
                     XmlAttributeKeyExtractor()
             ).find {it.canExtract(element)}?.extract(element)
         }
+
+    override fun foldingProvider(): FoldingProvider = JsFoldingProvider()
 }
