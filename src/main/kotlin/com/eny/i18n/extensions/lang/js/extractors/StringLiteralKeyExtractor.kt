@@ -1,5 +1,8 @@
-package com.eny.i18n.plugin.parser
+package com.eny.i18n.extensions.lang.js.extractors
 
+import com.eny.i18n.plugin.parser.KeyExtractor
+import com.eny.i18n.plugin.parser.RawKey
+import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
@@ -10,7 +13,7 @@ import com.intellij.psi.PsiElement
 class StringLiteralKeyExtractor: KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean =
-        listOf("JS:STRING_LITERAL", "quoted string", "String").any{element.type().contains(it)}
+        listOf("JS:STRING_LITERAL", "String").any{element.type().contains(it)}
 
     override fun extract(element: PsiElement): RawKey =
             RawKey(listOf(KeyElement.literal(element.text.unQuote())))

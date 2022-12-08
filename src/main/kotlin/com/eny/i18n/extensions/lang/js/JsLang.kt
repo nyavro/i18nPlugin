@@ -1,10 +1,11 @@
 package com.eny.i18n.extensions.lang.js
 
 import com.eny.i18n.Lang
-import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParserBuilder
+import com.eny.i18n.extensions.lang.js.extractors.*
 import com.eny.i18n.plugin.parser.*
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.KeyElementType
+import com.intellij.lang.javascript.psi.JSExpression
 import com.intellij.psi.PsiElement
 
 open class JsLang : Lang {

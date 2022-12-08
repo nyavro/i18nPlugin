@@ -1,5 +1,8 @@
-package com.eny.i18n.plugin.parser
+package com.eny.i18n.extensions.lang.js.extractors
 
+import com.eny.i18n.plugin.parser.KeyExtractor
+import com.eny.i18n.plugin.parser.RawKey
+import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
 import com.intellij.lang.javascript.psi.JSExpression

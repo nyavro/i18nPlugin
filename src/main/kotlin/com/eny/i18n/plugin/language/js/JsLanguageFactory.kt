@@ -4,9 +4,9 @@ import com.eny.i18n.plugin.factory.*
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.parser.LiteralKeyExtractor
-import com.eny.i18n.plugin.parser.ReactUseTranslationHookExtractor
-import com.eny.i18n.plugin.parser.TemplateKeyExtractor
+import com.eny.i18n.extensions.lang.js.extractors.LiteralKeyExtractor
+import com.eny.i18n.extensions.lang.js.extractors.ReactUseTranslationHookExtractor
+import com.eny.i18n.extensions.lang.js.extractors.TemplateKeyExtractor
 import com.eny.i18n.plugin.parser.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.unQuote
@@ -20,7 +20,6 @@ import com.intellij.lang.javascript.psi.ecma6.TypeScriptEnumField
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.ElementPatternCondition
-import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parents
