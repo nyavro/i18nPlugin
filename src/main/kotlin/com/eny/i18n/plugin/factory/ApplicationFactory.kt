@@ -8,11 +8,6 @@ interface LanguageFactory {
      * Get translation extractor object
      */
     fun translationExtractor(): TranslationExtractor
-
-    /**
-     * Assistant for code to translation navigation
-     */
-    fun referenceAssistant(): ReferenceAssistant
 }
 
 /**

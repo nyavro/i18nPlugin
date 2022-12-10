@@ -1,9 +1,9 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="PHP" implementationClass="com.eny.i18n.extensions.lang.php.PhpCompositeKeyAnnotator"/>
-        <psi.referenceContributor language="PHP" implementation="com.eny.i18n.plugin.ide.references.code.PhpReferenceContributor"/>
+        <psi.referenceContributor language="PHP" implementation="com.eny.i18n.extensions.lang.php.PhpReferenceContributor"/>
         <completion.contributor language="PHP" implementationClass="com.eny.i18n.extensions.lang.php.PhpCompletionContributor"/>
-        <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.plugin.ide.folding.PhpFoldingBuilder"/>
+        <lang.foldingBuilder language="PHP" implementationClass="com.eny.i18n.extensions.lang.php.PhpFoldingBuilder"/>
         <lang.documentationProvider language="PHP" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
     </extensions>
 </idea-plugin>

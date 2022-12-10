@@ -155,8 +155,8 @@
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.extensions.lang.js.JsCompositeKeyAnnotator"/>
-        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.plugin.ide.references.code.JsReferenceContributor"/>
-        <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.plugin.ide.references.code.JsxReferenceContributor"/>
+        <psi.referenceContributor language="JavaScript" implementation="com.eny.i18n.extensions.lang.js.JsReferenceContributor"/>
+        <psi.referenceContributor language="JSX Harmony" implementation="com.eny.i18n.extensions.lang.js.JsxReferenceContributor"/>
         <psi.referenceContributor language="JSON" implementation="com.eny.i18n.extensions.localization.json.JsonReferenceContributor"/>
         <completion.contributor language="JavaScript" implementationClass="com.eny.i18n.extensions.lang.js.JsCompletionContributor"/>
         <projectService serviceImplementation="com.eny.i18n.plugin.ide.settings.Settings"/>
@@ -164,9 +164,9 @@
         <intentionAction>
             <className>com.eny.i18n.plugin.ide.actions.ExtractI18nIntentionAction</className>
         </intentionAction>
-        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
-        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
-        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.plugin.ide.folding.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript" implementationClass="com.eny.i18n.extensions.lang.js.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="JavaScript" implementationClass="com.eny.i18n.extensions.lang.js.JsFoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript JSX" implementationClass="com.eny.i18n.extensions.lang.js.JsFoldingBuilder"/>
         <lang.documentationProvider language="JavaScript" implementationClass="com.eny.i18n.plugin.ide.hint.HintProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">

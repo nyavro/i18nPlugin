@@ -1,18 +1,12 @@
 package com.eny.i18n.plugin.language.jsx
 
 import com.eny.i18n.plugin.factory.*
-import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.extensions.lang.js.extractors.XmlAttributeKeyExtractor
 import com.eny.i18n.plugin.utils.toBoolean
 import com.intellij.lang.ecmascript6.JSXHarmonyFileType
 import com.intellij.lang.javascript.JavascriptLanguage
 import com.intellij.lang.javascript.TypeScriptJSXFileType
 import com.intellij.lang.javascript.patterns.JSPatterns
 import com.intellij.openapi.util.TextRange
-import com.intellij.patterns.ElementPattern
-import com.intellij.patterns.XmlPatterns
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttributeValue
@@ -23,27 +17,6 @@ import com.intellij.psi.xml.XmlTag
  */
 class JsxLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = JsxTranslationExtractor()
-
-    override fun referenceAssistant(): ReferenceAssistant = JsxReferenceAssistant()
-}
-
-class JsxReferenceAssistant: ReferenceAssistant {
-
-    override fun pattern(): ElementPattern<out PsiElement> {
-        return XmlPatterns.xmlAttributeValue("i18nKey")
-    }
-    override fun extractKey(element: PsiElement): FullKey? {
-        val config = Settings.getInstance(element.project).config()
-        val parser = KeyParserBuilder
-            .withSeparators(config.nsSeparator, config.keySeparator)
-            .withTemplateNormalizer()
-            .build()
-        return listOf(
-            XmlAttributeKeyExtractor()
-        )
-            .find {it.canExtract(element)}
-            ?.let {parser.parse(it.extract(element))}
-    }
 }
 
 internal class JsxTranslationExtractor: TranslationExtractor {

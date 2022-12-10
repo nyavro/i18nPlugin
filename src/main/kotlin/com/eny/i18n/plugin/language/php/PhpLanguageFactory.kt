@@ -1,29 +1,19 @@
 package com.eny.i18n.plugin.language.php
 
+import com.eny.i18n.extensions.lang.php.PhpReferenceAssistant
 import com.eny.i18n.plugin.factory.*
-import com.eny.i18n.plugin.ide.settings.Config
-import com.eny.i18n.plugin.ide.settings.Settings
-import com.eny.i18n.plugin.key.FullKey
-import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.extensions.lang.js.extractors.StringLiteralKeyExtractor
 import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.util.TextRange
-import com.intellij.patterns.ElementPattern
-import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
-import com.jetbrains.php.lang.psi.elements.FunctionReference
-import com.jetbrains.php.lang.psi.elements.StringLiteralExpression
 
 /**
  * Php language components factory
  */
 class PhpLanguageFactory: LanguageFactory {
     override fun translationExtractor(): TranslationExtractor = PhpTranslationExtractor()
-    override fun referenceAssistant(): ReferenceAssistant = PhpReferenceAssistant()
 }
 
 internal class PhpTranslationExtractor: TranslationExtractor {
@@ -40,28 +30,3 @@ internal class PhpTranslationExtractor: TranslationExtractor {
     private fun PsiElement.isPhpStringLiteral(): Boolean = listOf("double quoted string", "single quoted string").contains(this.type())
 }
 
-internal class PhpReferenceAssistant: ReferenceAssistant {
-
-    override fun pattern(): ElementPattern<out PsiElement> {
-        return PhpPatternsExt.phpArgument()
-    }
-
-    override fun extractKey(element: PsiElement): FullKey? {
-        val config = Settings.getInstance(element.project).config()
-        if (config.gettext) {
-            if (!gettextPattern(Settings.getInstance(element.project).config()).accepts(element)) return null
-        }
-        val parser = (
-            if (config.gettext) {
-                KeyParserBuilder.withoutTokenizer()
-            } else
-                KeyParserBuilder.withSeparators(config.nsSeparator, config.keySeparator)
-        ).build()
-        return listOf(StringLiteralKeyExtractor())
-            .find { it.canExtract(element) }
-            ?.let { parser.parse(it.extract(element)) }
-    }
-
-    private fun gettextPattern(config: Config) =
-        PlatformPatterns.or(*config.gettextAliases.split(",").map { PhpPatternsExt.phpArgument(it.trim(), 0) }.toTypedArray())
-}
