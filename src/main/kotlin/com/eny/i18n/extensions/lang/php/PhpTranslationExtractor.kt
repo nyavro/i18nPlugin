@@ -1,20 +1,13 @@
-package com.eny.i18n.plugin.language.php
+package com.eny.i18n.extensions.lang.php
 
-import com.eny.i18n.extensions.lang.php.PhpReferenceAssistant
-import com.eny.i18n.plugin.factory.*
-import com.eny.i18n.plugin.utils.type
+import com.eny.i18n.plugin.factory.TranslationExtractor
+import com.eny.i18n.plugin.language.php.PhpPatternsExt
 import com.eny.i18n.plugin.utils.default
+import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.utils.unQuote
 import com.eny.i18n.plugin.utils.whenMatches
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-
-/**
- * Php language components factory
- */
-class PhpLanguageFactory: LanguageFactory {
-    override fun translationExtractor(): TranslationExtractor = PhpTranslationExtractor()
-}
 
 internal class PhpTranslationExtractor: TranslationExtractor {
     override fun canExtract(element: PsiElement): Boolean =
@@ -29,4 +22,3 @@ internal class PhpTranslationExtractor: TranslationExtractor {
     private fun PsiElement.isBorderToken(): Boolean = listOf("right double quote", "right single quote").contains(this.type())
     private fun PsiElement.isPhpStringLiteral(): Boolean = listOf("double quoted string", "single quoted string").contains(this.type())
 }
-

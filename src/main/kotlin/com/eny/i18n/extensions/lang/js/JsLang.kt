@@ -3,6 +3,7 @@ package com.eny.i18n.extensions.lang.js
 import com.eny.i18n.Lang
 import com.eny.i18n.extensions.lang.js.extractors.*
 import com.eny.i18n.plugin.factory.FoldingProvider
+import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.parser.RawKey
 import com.intellij.psi.PsiElement
 
@@ -46,4 +47,6 @@ open class JsLang : Lang {
         }
 
     override fun foldingProvider(): FoldingProvider = JsFoldingProvider()
+
+    override fun translationExtractor(): TranslationExtractor = JsTranslationExtractor()
 }

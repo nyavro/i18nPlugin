@@ -1,6 +1,7 @@
 package com.eny.i18n
 
 import com.eny.i18n.plugin.factory.FoldingProvider
+import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.parser.RawKey
 import com.intellij.psi.PsiElement
 
@@ -14,4 +15,9 @@ interface Lang {
      * Get folding provider
      */
     fun foldingProvider(): FoldingProvider
+
+    /**
+     * Get translation extractor object
+     */
+    fun translationExtractor(): TranslationExtractor
 }

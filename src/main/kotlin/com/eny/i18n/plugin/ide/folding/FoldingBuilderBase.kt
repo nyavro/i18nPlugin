@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.ide.folding
 
 import com.eny.i18n.Lang
-import com.eny.i18n.plugin.factory.LanguageFactory
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
@@ -9,7 +8,10 @@ import com.eny.i18n.plugin.key.parser.KeyParserBuilder
 import com.eny.i18n.plugin.parser.RawKey
 import com.eny.i18n.plugin.tree.CompositeKeyResolver
 import com.eny.i18n.plugin.tree.PropertyReference
-import com.eny.i18n.plugin.utils.*
+import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.LocalizationSourceService
+import com.eny.i18n.plugin.utils.ellipsis
+import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor

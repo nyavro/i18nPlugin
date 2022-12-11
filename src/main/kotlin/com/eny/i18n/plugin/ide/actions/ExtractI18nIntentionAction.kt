@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.utils.PluginBundle
@@ -37,10 +38,9 @@ class ExtractI18nIntentionAction : PsiElementBaseIntentionAction(), IntentionAct
         }
 
     private fun getExtractor(element: PsiElement): TranslationExtractor =
-        Settings
-            .getInstance(element.project)
-            .mainFactory()
-            .translationExtractors()
+        Extensions.LANG
+            .extensionList
+            .map {it.translationExtractor()}
             .filter { it.canExtract(element) }
             .whenMatches { extractors -> !extractors.any { it.isExtracted(element) } }
             ?.firstOrNull()

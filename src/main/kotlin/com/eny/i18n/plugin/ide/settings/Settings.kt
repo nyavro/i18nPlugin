@@ -1,10 +1,6 @@
 package com.eny.i18n.plugin.ide.settings
 
 import com.eny.i18n.Extensions
-import com.eny.i18n.plugin.factory.MainFactory
-import com.eny.i18n.plugin.language.js.JsLanguageFactory
-import com.eny.i18n.plugin.language.jsx.JsxLanguageFactory
-import com.eny.i18n.plugin.language.php.PhpLanguageFactory
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
@@ -95,11 +91,4 @@ class Settings : PersistentStateComponent<Settings> {
          */
         fun getInstance(project: Project): Settings = project.getService(Settings::class.java)
     }
-
-    fun mainFactory(): MainFactory =
-        MainFactory(
-            listOf(
-                listOf(JsLanguageFactory(), JsxLanguageFactory(), PhpLanguageFactory()),
-            ).flatten()
-        )
 }

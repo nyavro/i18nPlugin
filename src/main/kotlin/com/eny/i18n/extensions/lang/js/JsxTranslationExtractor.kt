@@ -1,6 +1,6 @@
-package com.eny.i18n.plugin.language.jsx
+package com.eny.i18n.extensions.lang.js
 
-import com.eny.i18n.plugin.factory.*
+import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.utils.toBoolean
 import com.intellij.lang.ecmascript6.JSXHarmonyFileType
 import com.intellij.lang.javascript.JavascriptLanguage
@@ -11,13 +11,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlAttributeValue
 import com.intellij.psi.xml.XmlTag
-
-/**
- * Jsx language components factory
- */
-class JsxLanguageFactory: LanguageFactory {
-    override fun translationExtractor(): TranslationExtractor = JsxTranslationExtractor()
-}
 
 internal class JsxTranslationExtractor: TranslationExtractor {
     override fun canExtract(element: PsiElement): Boolean =
@@ -44,8 +37,8 @@ internal class JsxTranslationExtractor: TranslationExtractor {
             .textElements
             .let {
                 TextRange(
-                    it.first().textRange.startOffset,
-                    it.last().textRange.endOffset
+                        it.first().textRange.startOffset,
+                        it.last().textRange.endOffset
                 )
             }
 

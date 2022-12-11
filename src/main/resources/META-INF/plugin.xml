@@ -171,5 +171,7 @@
     </extensions>
     <extensions defaultExtensionNs="com.eny.i18n">
         <localization implementation="com.eny.i18n.extensions.localization.json.JsonLocalization"/>
+        <lang implementation="com.eny.i18n.extensions.lang.js.JsLang"/>
+        <lang implementation="com.eny.i18n.extensions.lang.js.JsxLang"/>
     </extensions>
 </idea-plugin>
