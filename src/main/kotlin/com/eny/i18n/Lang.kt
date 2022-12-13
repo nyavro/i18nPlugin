@@ -20,4 +20,6 @@ interface Lang {
      * Get translation extractor object
      */
     fun translationExtractor(): TranslationExtractor
+
+    fun resolveLiteral(entry: PsiElement): PsiElement?
 }

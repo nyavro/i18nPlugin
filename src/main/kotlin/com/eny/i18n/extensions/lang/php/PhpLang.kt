@@ -28,5 +28,10 @@ class PhpLang: Lang {
     override fun foldingProvider(): FoldingProvider = PhpFoldingProvider()
 
     override fun translationExtractor(): TranslationExtractor = PhpTranslationExtractor()
+
+    override fun resolveLiteral(entry: PsiElement): PsiElement? {
+        val typeName = entry.node.elementType.toString()
+        return if (typeName == "single quoted string") entry else null
+    }
 }
 

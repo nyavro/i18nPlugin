@@ -4,6 +4,7 @@ import com.eny.i18n.plugin.PlatformBaseTest
 import com.eny.i18n.plugin.utils.at
 import com.eny.i18n.plugin.utils.generator.code.PhpGetTextCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.PoTranslationGenerator
+import com.intellij.psi.PsiPolyVariantReference
 import org.junit.Ignore
 
 @Ignore
@@ -30,10 +31,10 @@ class PoToPhpReferenceTest: PlatformBaseTest() {
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element?.references?.at(0)
-        assertTrue(ref is TranslationToCodeReference)
+        assertTrue(ref is PsiPolyVariantReference)
         assertEquals(
             setOf("'ref.section.key1'"),
-            (ref as TranslationToCodeReference).findRefs().map { it.text }.toSet()
+            (ref as PsiPolyVariantReference).multiResolve(true).mapNotNull { it.element?.text }.toSet()
         )
     }
 

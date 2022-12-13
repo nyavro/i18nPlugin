@@ -7,6 +7,7 @@ import com.eny.i18n.plugin.utils.generator.code.*
 import com.eny.i18n.plugin.utils.generator.translation.JsonTranslationGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
+import com.intellij.psi.PsiPolyVariantReference
 
 
 private val tgs = listOf(JsonTranslationGenerator())
@@ -77,11 +78,11 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
                 )
                 val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
                 val msg = cg.ext() + "," + tg.ext()
-                val ref = element!!.references[0] as? TranslationToCodeReference
+                val ref = element!!.references[0] as? PsiPolyVariantReference
                 if (ref == null) {
                     fail(msg)
                 } else {
-                    assertEquals(msg, setOf(key.unQuote()), ref.findRefs().mapNotNull {it.text?.unQuote()}.toSet())
+                    assertEquals(msg, setOf(key.unQuote()), ref.multiResolve(true).mapNotNull {it.element?.text?.unQuote()}.toSet())
                 }
             }
         }
@@ -107,8 +108,8 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
                 )
                 val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
                 val ref = element!!.references[0]
-                assertTrue(ref is TranslationToCodeReference)
-                val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text }.toSet()
+                assertTrue(ref is PsiPolyVariantReference)
+                val refs = (ref as PsiPolyVariantReference).multiResolve(true).mapNotNull { it.element?.text }.toSet()
                 assertEquals(
                     cg.ext() + "," + tg.ext(),
                     setOf("'objectRef${index}:ref.section.key1'", "'objectRef${index}:ref.section.key2'", "`objectRef${index}:ref.section.\${key2}`"),
@@ -163,8 +164,8 @@ class TranslationToCodeTestBase: PlatformBaseTest() {
                     )
                     val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
                     val ref = element!!.references[0]
-                    assertTrue(ref is TranslationToCodeReference)
-                    val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text }.toSet()
+                    assertTrue(ref is PsiPolyVariantReference)
+                    val refs = (ref as PsiPolyVariantReference).multiResolve(true).mapNotNull { it.element?.text }.toSet()
                     assertEquals(
                         setOf("'ref${index}.section.key1'", "'ref${index}.section.key2'", "`ref${index}.section.\${key3}`"),
                         refs

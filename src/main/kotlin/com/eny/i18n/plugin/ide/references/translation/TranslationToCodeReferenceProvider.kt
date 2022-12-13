@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.references.translation
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
@@ -57,13 +58,10 @@ class ReferencesAccumulator(private val key: String) {
      */
     fun process() = {
         entry: PsiElement, _:Int ->
-        val typeName = entry.node.elementType.toString()
+        val languages = Extensions.LANG.extensionList
         if (entry.text.unQuote().startsWith(key)) {
-            if (listOf("JS:STRING_LITERAL", "quoted string", "JS:STRING_TEMPLATE_EXPRESSION").any { typeName.contains(it) }) {
-                res.add(entry)
-            } else if (typeName == "JS:STRING_TEMPLATE_PART") {
-                res.add(entry.parent)
-            }
+            val entryRef = languages.stream().map {lang -> lang.resolveLiteral(entry)}.filter {it!=null}.findFirst()
+            entryRef.ifPresent { res.add(it) }
         }
         true
     }

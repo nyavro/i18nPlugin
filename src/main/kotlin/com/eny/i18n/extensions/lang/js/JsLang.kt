@@ -49,4 +49,11 @@ open class JsLang : Lang {
     override fun foldingProvider(): FoldingProvider = JsFoldingProvider()
 
     override fun translationExtractor(): TranslationExtractor = JsTranslationExtractor()
+
+    override fun resolveLiteral(entry: PsiElement): PsiElement? {
+        val typeName = entry.node.elementType.toString()
+        return if (setOf("JS:STRING_LITERAL", "JS:STRING_TEMPLATE_EXPRESSION").contains (typeName)) entry
+            else if (typeName == "JS:STRING_TEMPLATE_PART") entry.parent
+            else null
+    }
 }

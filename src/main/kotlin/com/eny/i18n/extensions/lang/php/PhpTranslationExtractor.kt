@@ -1,7 +1,6 @@
 package com.eny.i18n.extensions.lang.php
 
 import com.eny.i18n.plugin.factory.TranslationExtractor
-import com.eny.i18n.plugin.language.php.PhpPatternsExt
 import com.eny.i18n.plugin.utils.default
 import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.utils.unQuote

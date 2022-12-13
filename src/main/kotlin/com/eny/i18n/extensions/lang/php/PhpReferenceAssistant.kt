@@ -6,7 +6,6 @@ import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.parser.KeyParserBuilder
-import com.eny.i18n.plugin.language.php.PhpPatternsExt
 import com.intellij.patterns.ElementPattern
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement

@@ -1,7 +1,6 @@
 package com.eny.i18n.extensions.lang.php
 
 import com.eny.i18n.plugin.factory.FoldingProvider
-import com.eny.i18n.plugin.language.php.PhpPatternsExt
 import com.eny.i18n.plugin.utils.default
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement

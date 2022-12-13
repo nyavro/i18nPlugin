@@ -1,4 +1,4 @@
-package com.eny.i18n.plugin.language.php
+package com.eny.i18n.extensions.lang.php
 
 import com.intellij.patterns.InitialPatternCondition
 import com.intellij.util.ProcessingContext

@@ -1,9 +1,9 @@
 package com.eny.i18n.extensions.localization.yaml
 
-import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReference
 import com.eny.i18n.plugin.utils.generator.code.JsCodeGenerator
 import com.eny.i18n.plugin.utils.generator.translation.YamlTranslationGenerator
 import com.eny.i18n.plugin.utils.unQuote
+import com.intellij.psi.PsiPolyVariantReference
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 
@@ -67,11 +67,11 @@ class YamlTranslationToCodeTest: BasePlatformTestCase() {
             )
             val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
             val msg = cg.ext() + "," + tg.ext()
-            val ref = element!!.references[0] as? TranslationToCodeReference
+            val ref = element!!.references[0] as? PsiPolyVariantReference
             if (ref == null) {
                 fail(msg)
             } else {
-                assertEquals(msg, setOf(key.unQuote()), ref.findRefs().mapNotNull {it.text?.unQuote()}.toSet())
+                assertEquals(msg, setOf(key.unQuote()), ref.multiResolve(true).mapNotNull {it.element?.text?.unQuote()}.toSet())
             }
         }
 
@@ -95,8 +95,8 @@ class YamlTranslationToCodeTest: BasePlatformTestCase() {
         )
         val element = myFixture.file.findElementAt(myFixture.caretOffset)?.parent
         val ref = element!!.references[0]
-        assertTrue(ref is TranslationToCodeReference)
-        val refs = (ref as TranslationToCodeReference).findRefs().map { item -> item.text }.toSet()
+        assertTrue(ref is PsiPolyVariantReference)
+        val refs = (ref as PsiPolyVariantReference).multiResolve(true).mapNotNull { it.element?.text }.toSet()
         assertEquals(
             cg.ext() + "," + tg.ext(),
             setOf("'objectRef0:ref.section.key1'", "'objectRef0:ref.section.key2'", "`objectRef0:ref.section.\${key2}`"),
