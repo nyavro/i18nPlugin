@@ -2,10 +2,7 @@ package com.eny.i18n.plugin.key.parser
 
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.*
-import com.eny.i18n.plugin.parser.KeyNormalizer
 import com.eny.i18n.plugin.parser.RawKey
-import com.eny.i18n.plugin.utils.KeyElement
-import com.eny.i18n.plugin.utils.foldWhileAccum
 
 /**
  * Parses list of normalized key elements into FullKey

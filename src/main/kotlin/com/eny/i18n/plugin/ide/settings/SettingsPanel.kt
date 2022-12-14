@@ -8,7 +8,12 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import javax.swing.*
+import javax.swing.BoxLayout
+import javax.swing.JCheckBox
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JTextArea
+import javax.swing.JTextField
 import javax.swing.border.CompoundBorder
 import javax.swing.border.EmptyBorder
 import javax.swing.border.LineBorder

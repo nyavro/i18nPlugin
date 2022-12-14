@@ -1,8 +1,11 @@
 package com.eny.i18n.plugin.ide.annotator
 
 import com.eny.i18n.Extensions
-import com.eny.i18n.plugin.factory.TranslationFolderSelector
-import com.eny.i18n.plugin.ide.quickfix.*
+import com.eny.i18n.plugin.ide.quickfix.AllSourcesSelector
+import com.eny.i18n.plugin.ide.quickfix.CreateKeyQuickFix
+import com.eny.i18n.plugin.ide.quickfix.CreateMissingKeysQuickFix
+import com.eny.i18n.plugin.ide.quickfix.CreateTranslationFileQuickFix
+import com.eny.i18n.plugin.ide.quickfix.UserChoice
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.PropertyReference
@@ -11,7 +14,6 @@ import com.eny.i18n.plugin.utils.RangesCalculator
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.project.Project
 
 /**
  * Annotation helper methods

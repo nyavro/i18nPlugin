@@ -2,8 +2,8 @@ package com.eny.i18n.extensions.lang.js.extractors
 
 import com.eny.i18n.plugin.parser.KeyExtractor
 import com.eny.i18n.plugin.parser.RawKey
-import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.utils.KeyElement
+import com.eny.i18n.plugin.utils.type
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.psi.PsiElement
 

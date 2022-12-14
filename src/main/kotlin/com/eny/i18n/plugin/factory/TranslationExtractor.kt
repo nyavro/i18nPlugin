@@ -61,11 +61,6 @@ interface FoldingProvider {
     fun getFoldingRange(container: PsiElement, offset: Int, psiElement: PsiElement): TextRange
 }
 
-//TODO: rename, javadoc
-interface CallContext {
-    fun accepts(element: PsiElement): Boolean
-}
-
 /**
  * Reference assistant
  */

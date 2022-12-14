@@ -1,7 +1,11 @@
 package com.eny.i18n.plugin.ide.references.translation
 
-import com.eny.i18n.*
-import com.intellij.psi.*
+import com.eny.i18n.TranslationReferenceAssistant
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
+import com.intellij.psi.PsiReferenceContributor
+import com.intellij.psi.PsiReferenceProvider
+import com.intellij.psi.PsiReferenceRegistrar
 import com.intellij.util.ProcessingContext
 
 /**

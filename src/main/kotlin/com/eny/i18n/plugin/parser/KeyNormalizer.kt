@@ -2,9 +2,7 @@ package com.eny.i18n.plugin.parser
 
 import com.eny.i18n.plugin.utils.KeyElement
 import com.eny.i18n.plugin.utils.KeyElementType
-import com.eny.i18n.plugin.utils.foldWhileAccum
 import com.intellij.codeInsight.completion.CompletionInitializationContext
-import kotlin.random.Random
 
 /**
  * Key normalization utils interface

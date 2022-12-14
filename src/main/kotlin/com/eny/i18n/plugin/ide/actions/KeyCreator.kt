@@ -1,7 +1,6 @@
 package com.eny.i18n.plugin.ide.actions
 
 import com.eny.i18n.Extensions
-import com.eny.i18n.plugin.factory.TranslationExtractor
 import com.eny.i18n.plugin.ide.quickfix.CreateKeyQuickFix
 import com.eny.i18n.plugin.ide.quickfix.CreateTranslationFileQuickFix
 import com.eny.i18n.plugin.ide.quickfix.UserChoice
@@ -12,7 +11,6 @@ import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import org.jetbrains.yaml.YAMLFileType
 
 /**
  * Extracts translation key
