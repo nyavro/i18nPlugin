@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement
 
 class JsxLang : JsLang() {
 
-    override fun canExtractKey(element: PsiElement): Boolean = false
+    override fun canExtractKey(element: PsiElement, translationFunctionNames: List<String>): Boolean = false
 
     /**
      * No special implementation for folding builder is required

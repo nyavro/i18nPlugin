@@ -8,7 +8,7 @@ import com.eny.i18n.plugin.parser.RawKey
 import com.intellij.psi.PsiElement
 
 class PhpLang: Lang {
-    override fun canExtractKey(element: PsiElement): Boolean {
+    override fun canExtractKey(element: PsiElement, translationFunctionNames: List<String>): Boolean {
         return extractRawKey(element) != null
 //        listOf("String").contains(element.type()) &&
 //                PlatformPatterns.or(

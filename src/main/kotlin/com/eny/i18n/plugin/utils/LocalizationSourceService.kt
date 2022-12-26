@@ -9,12 +9,19 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
+import com.intellij.psi.util.PsiTreeUtil
 
 @Service
 class LocalizationSourceService {
 
     fun findSources(fileNames: List<String>, project: Project): List<LocalizationSource> {
-        return findVirtualFilesByName(project, fileNames.whenMatches { it.isNotEmpty() } ?: Settings.getInstance(project).config().defaultNamespaces())
+        return findVirtualFilesByName(project,
+            fileNames.whenMatches { it.isNotEmpty() } ?: Settings.getInstance(project).config().defaultNamespaces()
+        ) + findSourcesByConfiguration(project)
+    }
+
+    private fun findSourcesByConfiguration(project: Project): List<LocalizationSource> {
+        return Extensions.TECHNOLOGY.extensionList.flatMap {it.findSourcesByConfiguration(project)}
     }
 
 //    private fun resolveJsRootsFromI18nObject(file: PsiFile?): List<LocalizationSource> {

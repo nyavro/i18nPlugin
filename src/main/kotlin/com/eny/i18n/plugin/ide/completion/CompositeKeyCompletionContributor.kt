@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.completion
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.Lang
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
@@ -27,7 +28,7 @@ abstract class CompositeKeyCompletionContributor(private val lang: Lang): Comple
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
         val fullKey = lang.extractRawKey(parameters.position)?.let{RawKeyParser(parameters.position.project).parse(it)}
         if (fullKey == null) {
-            if (lang.canExtractKey(parameters.position.parent)) {
+            if (lang.canExtractKey(parameters.position.parent, Extensions.TECHNOLOGY.extensionList.flatMap { it.translationFunctionNames() })) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()
                 val emptyKeyCompletions = emptyKeyCompletions(prefix, parameters.position)
                 result.addAllElements(emptyKeyCompletions)

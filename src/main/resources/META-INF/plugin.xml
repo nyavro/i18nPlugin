@@ -152,6 +152,7 @@
     <extensionPoints>
         <extensionPoint interface="com.eny.i18n.Localization" name="localization" dynamic="true"/>
         <extensionPoint interface="com.eny.i18n.Lang" name="lang" dynamic="true"/>
+        <extensionPoint interface="com.eny.i18n.Technology" name="technology" dynamic="true"/>
     </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="JavaScript" implementationClass="com.eny.i18n.extensions.lang.js.JsCompositeKeyAnnotator"/>
@@ -173,5 +174,6 @@
         <localization implementation="com.eny.i18n.extensions.localization.json.JsonLocalization"/>
         <lang implementation="com.eny.i18n.extensions.lang.js.JsLang"/>
         <lang implementation="com.eny.i18n.extensions.lang.js.JsxLang"/>
+        <technology implementation="com.eny.i18n.extensions.technology.i18next.I18NextTechnology"/>
     </extensions>
 </idea-plugin>

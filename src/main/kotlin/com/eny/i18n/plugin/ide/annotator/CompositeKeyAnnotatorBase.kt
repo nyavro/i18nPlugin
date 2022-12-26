@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.annotator
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.Lang
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
@@ -23,8 +24,10 @@ abstract class CompositeKeyAnnotatorBase(private val lang: Lang): Annotator, Com
      * Tries to parse element as i18n key and annotates it when succeeded
      */
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        lang.extractRawKey(element)?.let {RawKeyParser(element.project).parse(it)}?.also {
-            annotateI18nLiteral(it, element, holder)
+        if(lang.canExtractKey(element, Extensions.TECHNOLOGY.extensionList.flatMap {it.translationFunctionNames()})) {
+            lang.extractRawKey(element)?.let { RawKeyParser(element.project).parse(it) }?.also {
+                annotateI18nLiteral(it, element, holder)
+            }
         }
     }
 

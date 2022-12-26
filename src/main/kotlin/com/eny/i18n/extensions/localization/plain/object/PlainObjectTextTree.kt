@@ -28,11 +28,4 @@ class PlainObjectTextTree(val element: PsiElement): Tree<PsiElement> {
     override fun findChildren(prefix: String): List<Tree<PsiElement>> {
         TODO("Not yet implemented")
     }
-
-    companion object {
-        /**
-         * Creates instance of PlainTextTree
-         */
-        fun create(file: PsiElement): Tree<PsiElement>? = PlainObjectTextTree(file)
-    }
 }
