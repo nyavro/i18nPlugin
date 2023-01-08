@@ -11,9 +11,7 @@ import com.jetbrains.php.lang.psi.elements.PhpExpression
  * Php platform extended patterns
  */
 class PhpPatternsExt {
-
     companion object {
-
         /**
          * Captures argument of php function call
          */

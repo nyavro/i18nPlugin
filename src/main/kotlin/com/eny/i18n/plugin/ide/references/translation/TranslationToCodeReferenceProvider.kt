@@ -6,6 +6,7 @@ import com.eny.i18n.plugin.tree.KeyComposer
 import com.eny.i18n.plugin.tree.Separators
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.util.Computable
 import com.intellij.openapi.util.TextRange
@@ -18,7 +19,7 @@ import com.intellij.psi.ResolveResult
 import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.UsageSearchContext
 import java.util.Collections.synchronizedList
-
+@Service
 internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
 
     /**
@@ -31,7 +32,7 @@ internal class TranslationToCodeReferenceProvider : KeyComposer<PsiElement> {
         val key = composeKey(
             parents,
             Separators(config.nsSeparator, config.keySeparator, config.pluralSeparator),
-            config.defaultNamespaces(),
+            config.defaultNamespaces() + Extensions.TECHNOLOGY.extensionList.flatMap {it.cfgNamespaces()},
             false,
             config.firstComponentNs
         )

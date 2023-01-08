@@ -2,12 +2,10 @@ package com.eny.i18n.extensions.localization.json
 
 import com.eny.i18n.*
 import com.eny.i18n.plugin.ConfigurationProperty
-import com.eny.i18n.plugin.ide.references.translation.TranslationToCodeReferenceProvider
 import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.Tree
-import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.fasterxml.jackson.core.io.JsonStringEncoder
 import com.intellij.icons.AllIcons
@@ -17,13 +15,8 @@ import com.intellij.json.json5.Json5FileType
 import com.intellij.json.psi.*
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
-import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.patterns.ElementPattern
-import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiReference
-import com.intellij.psi.util.parents
 import javax.swing.Icon
 
 class JsonLocalization : Localization<JsonStringLiteral> {
@@ -99,27 +92,3 @@ private class JsonContentGenerator: ContentGenerator {
         )
 }
 
-class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringLiteral> {
-
-    private val provider = TranslationToCodeReferenceProvider()
-
-    override fun pattern(): ElementPattern<out JsonStringLiteral> = PlatformPatterns.psiElement(JsonStringLiteral::class.java)
-
-    override fun references(element: JsonStringLiteral): List<PsiReference> =
-        if (element.isPropertyName && element.textLength > 1) {
-            provider.getReferences(element, textRange(element), parents(element))
-        } else {
-            emptyList()
-        }
-
-    private fun parents(element: JsonStringLiteral): List<String> =
-        CollectingSequence(element.parents(true)) {
-            when {
-                it is JsonProperty -> it.name
-                it is JsonFile -> it.name.substringBeforeLast(".")
-                else -> null
-            }
-        }.toList().reversed()
-
-    private fun textRange(element: JsonStringLiteral): TextRange = TextRange(1, element.textLength - 1)
-}

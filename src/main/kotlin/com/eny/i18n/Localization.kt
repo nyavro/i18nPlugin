@@ -7,7 +7,7 @@ import com.eny.i18n.plugin.tree.Tree
 import com.intellij.icons.AllIcons
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
-import com.intellij.openapi.fileTypes.LanguageFileType
+import com.intellij.openapi.util.Key
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.patterns.ElementPattern
 import com.intellij.psi.PsiElement
@@ -32,6 +32,8 @@ interface Localization <T: PsiElement> {
     fun icon(): Icon = AllIcons.FileTypes.Unknown
     fun config(): LocalizationConfig
 }
+
+val SOURCE_ROOT = Key<Boolean>("i18n#sourceRoot")
 
 interface TranslationReferenceAssistant<T: PsiElement>{
     /**

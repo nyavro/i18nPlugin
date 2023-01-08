@@ -11,7 +11,6 @@ import com.eny.i18n.plugin.ide.settings.Settings
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
 import com.eny.i18n.plugin.tree.Tree
-import com.eny.i18n.plugin.utils.CollectingSequence
 import com.eny.i18n.plugin.utils.PluginBundle
 import com.eny.i18n.plugin.utils.unQuote
 import com.intellij.icons.AllIcons
@@ -103,7 +102,7 @@ class YamlReferenceAssistant : TranslationReferenceAssistant<YAMLKeyValue> {
     override fun pattern(): ElementPattern<out YAMLKeyValue> = PlatformPatterns.psiElement(YAMLKeyValue::class.java)
 
     private fun parents(element: YAMLKeyValue): List<String> =
-        CollectingSequence(element.parents(true)) {
+        element.parents(true).mapNotNull {
             when {
                 it is YAMLKeyValue -> it.key!!.text.unQuote()
                 it is YAMLFile -> it.name.substringBeforeLast(".")

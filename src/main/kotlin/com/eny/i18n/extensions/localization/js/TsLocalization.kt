@@ -11,7 +11,7 @@ class TsLocalization : Localization<PsiElement> {
     override fun types(): List<LocalizationFileType> = listOf()
     override fun contentGenerator(): ContentGenerator = TsContentGenerator()
     override fun referenceAssistant(): TranslationReferenceAssistant<PsiElement> = TsReferenceAssistant()
-    override fun elementsTree(file: PsiElement): Tree<PsiElement> = TsLocalizationTree(file)
+    override fun elementsTree(file: PsiElement): Tree<PsiElement>? = TsLocalizationTree.create(file)
     override fun matches(localizationFileType: LocalizationFileType, file: VirtualFile?, fileNames: List<String>): Boolean {
         return localizationFileType.languageFileType == TypeScriptFileType.INSTANCE
     }
