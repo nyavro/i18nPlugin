@@ -5,11 +5,11 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import net.sourceforge.marathon.javadriver.JavaDriver
 import net.sourceforge.marathon.javadriver.JavaProfile
-import org.junit.After
-import org.junit.Before
+import org.junit.jupiter.api.AfterEach
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
@@ -19,7 +19,7 @@ class SettingsPanelTest {
 
     private lateinit var driver: JavaDriver
 
-    @Before
+    @BeforeEach
     fun setUp() {
         driver = JavaDriver(JavaProfile(JavaProfile.LaunchMode.EMBEDDED))
     }
@@ -138,7 +138,7 @@ class SettingsPanelTest {
         frame.dispose()
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         driver.quit()
         unmockkAll()

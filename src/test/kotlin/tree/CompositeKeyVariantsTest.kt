@@ -26,7 +26,7 @@ internal class CompositeKeyVariantsTest {
             request,
             localizationSource(testTree())
         )
-        assertEquals(expected, variants.map {it.value()}.toSet())
+        assertEquals(expected, variants.map {it.value().toString()}.toSet())
     }
 
     @Test

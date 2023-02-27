@@ -35,7 +35,7 @@ class JsonLocalization : Localization<JsonStringLiteral> {
     override fun icon(): Icon = AllIcons.FileTypes.Json
     override fun config(): LocalizationConfig {
         return object: LocalizationConfig {
-            override fun id(): String = "yaml"
+            override fun id(): String = "json"
             override fun props(): List<ConfigurationProperty> = listOf()
         }
     }

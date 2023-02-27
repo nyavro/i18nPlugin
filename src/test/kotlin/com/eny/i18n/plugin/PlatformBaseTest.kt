@@ -18,5 +18,4 @@ abstract class PlatformBaseTest: BasePlatformTestCase() {
     }
 
     fun read(block: () -> Unit) = ApplicationManager.getApplication().runReadAction(block)
-
 }

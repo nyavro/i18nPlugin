@@ -46,7 +46,7 @@ internal class CompositeKeyResolvePluralsTest {
         properties.zip(listOf(1,2,5)).forEach {
             (property, index) ->
                 assertTrue(property.element?.isLeaf() ?: false)
-                assertEquals("$pl1-$index", property.element?.value())
+                assertEquals("$pl1-$index", property.element?.value().toString())
                 assertTrue(property.unresolved.isEmpty())
                 assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(pl1)))
         }
@@ -87,7 +87,7 @@ internal class CompositeKeyResolvePluralsTest {
         properties.zip(listOf(1,2,5)).forEach {
             (property, index) ->
             assertTrue(property.element?.isLeaf() ?: false)
-            assertEquals("$pl2%$index", property.element?.value())
+            assertEquals("$pl2%$index", property.element?.value().toString())
             assertTrue(property.unresolved.isEmpty())
             assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(pl2)))
         }
@@ -127,7 +127,7 @@ internal class CompositeKeyResolvePluralsTest {
         assertEquals(1, properties.size)
         val property = properties.first()
         assertTrue(property.element?.isLeaf() ?: false)
-        assertEquals(text, property.element?.value())
+        assertEquals(text, property.element?.value().toString())
         assertTrue(property.unresolved.isEmpty())
         assertEquals(property.path, listOf(Literal(base), Literal(sub), Literal(text)))
     }
@@ -164,7 +164,7 @@ internal class CompositeKeyResolvePluralsTest {
         assertEquals(1, properties.size)
         val property = properties.first()
         assertTrue(property.element?.isTree() ?: false)
-        assertEquals(sub, property.element?.value())
+        assertEquals(sub, property.element?.value().toString())
         assertTrue(property.unresolved.isEmpty())
         assertEquals(listOf(Literal(base), Literal(sub)), property.path)
     }

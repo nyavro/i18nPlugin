@@ -7,6 +7,8 @@ import com.eny.i18n.plugin.tree.Tree
 import com.intellij.json.JsonFileType
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert.*
 import org.junit.jupiter.api.Test
 
@@ -68,13 +70,16 @@ fun treeAdapter(tree: Tree<String>?): Tree<PsiElement> {
         }
 
         override fun value(): PsiElement {
-            TODO("Not yet implemented")
+            val mock = mockk<PsiElement>()
+            every {
+                mock.toString()
+            } returns (tree?.value() ?: "")
+            return mock
         }
 
         override fun findChildren(prefix: String): List<Tree<PsiElement>> {
             return tree?.findChildren(prefix)?.mapNotNull {treeAdapter(it)} ?: listOf()
         }
-
     }
 }
 
@@ -105,7 +110,7 @@ internal class CompositeKeyResolverTest {
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isLeaf() ?: false)
-        assertEquals(text, property.element?.value())
+        assertEquals(text, property.element?.value()?.toString())
         assertTrue(property.unresolved.isEmpty())
         assertEquals(property.path, listOf(Literal(root), Literal(key), Literal(text)))
     }
@@ -131,7 +136,7 @@ internal class CompositeKeyResolverTest {
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
-        assertEquals(key, property.element?.value())
+        assertEquals(key, property.element?.value()?.toString())
         assertTrue(property.unresolved.isEmpty())
         assertEquals(property.path, listOf(Literal(root), Literal(key)))
     }
@@ -157,7 +162,7 @@ internal class CompositeKeyResolverTest {
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
-        assertEquals(key, property.element?.value())
+        assertEquals(key, property.element?.value()?.toString())
         assertEquals(listOf(Literal(sub)), property.unresolved)
         assertEquals(property.path, listOf(Literal(root), Literal(key)))
     }
@@ -184,7 +189,7 @@ internal class CompositeKeyResolverTest {
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
-        assertEquals(root, property.element?.value())
+        assertEquals(root, property.element?.value().toString())
         assertEquals(listOf(Literal(key), Literal(text)), property.unresolved)
         assertEquals(property.path, listOf(Literal(root)))
     }
@@ -215,7 +220,7 @@ internal class CompositeKeyResolverTest {
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
-        assertEquals(key, property.element?.value())
+        assertEquals(key, property.element?.value().toString())
         assertEquals(listOf(Literal(sub, 0), Literal(text, 5)), property.unresolved)
         assertEquals(listOf(Literal(root), Literal(key, 6)), property.path)
     }
@@ -241,7 +246,7 @@ internal class CompositeKeyResolverTest {
             )
         )
         assertTrue(property?.isLeaf() ?: false)
-        assertEquals(text, property?.value())
+        assertEquals(text, property?.value()?.toString())
     }
 }
 
@@ -339,7 +344,7 @@ internal class CompositeKeyResolverUnresolvedTest {
         )
         assertNotNull(property.element)
         assertTrue(property.element?.isTree() ?: false)
-        assertEquals("", property.element?.value())
+        assertEquals("", property.element?.value().toString())
         assertEquals(listOf(Literal(root), Literal(key), Literal(subkey)), property.unresolved)
         assertTrue(property.path.isEmpty())
     }
@@ -351,7 +356,7 @@ internal class CompositeKeyResolverUnresolvedTest {
             listOf(Literal("root9"), Literal("key18"), Literal("subkey10")),
             localizationSource(null)
         )
-        assertNull(property.element)
+        assertEquals("", property.element?.value().toString())
         assertEquals(listOf(Literal("root9"), Literal("key18"), Literal("subkey10")), property.unresolved)
         assertTrue(property.path.isEmpty())
     }

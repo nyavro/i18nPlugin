@@ -4,7 +4,7 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.7.10"
-    id("org.jetbrains.intellij") version "1.9.0"
+    id("org.jetbrains.intellij") version "1.13.0"
     id("org.jetbrains.changelog") version "1.3.1"
     id("org.jetbrains.qodana") version "0.1.13"
     id("jacoco")
@@ -19,12 +19,20 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
-    testCompileOnly("org.junit.jupiter:junit-jupiter-api:5.9.1")
-    testCompileOnly("org.junit.jupiter:junit-jupiter-params:5.9.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testCompileOnly("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testCompileOnly("org.junit.jupiter:junit-jupiter-params:5.9.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
     testImplementation("io.mockk:mockk:1.13.2")
     testImplementation("com.jaliansystems:marathon-java-driver:5.2.5.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+
+    testImplementation(platform("org.junit:junit-bom:5.9.2"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
+        because("Only needed to run tests in a version of IntelliJ IDEA that bundles older versions")
+    }
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.9.2")
 }
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
@@ -104,6 +112,10 @@ tasks {
 
     check {
         dependsOn(jacocoTestReport)
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
 

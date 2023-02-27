@@ -15,45 +15,45 @@ private fun CodeInsightTestFixture.customCheck(fileName: String, code: String, t
     this.checkHighlighting(true, true, true, true)
 }
 
-class CodeHighlightingTest: BasePlatformTestCase() {
-
+class CodeHighlightingTest2: BasePlatformTestCase() {
     val cg = JsCodeGenerator()
     val tg = YamlTranslationGenerator()
 
     fun testReferenceToObject() = myFixture.customCheck(
-        "refToObject.${cg.ext()}",
-        cg.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
-        "test.${tg.ext()}",
-        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
-
-    fun testReferenceToObjectDefaultNs() = myFixture.customCheck(
-        "refToObjectDefNs.${cg.ext()}",
-        cg.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
-        "assets/translation.${tg.ext()}",
-        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
-
-    fun testResolved() = myFixture.customCheck(
-        "resolved.${cg.ext()}",
-        cg.generate("\"test:tst1.base.single\""),
-        "assets/translation.${tg.ext()}",
-        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
-    )
-
-    fun testNotArg() = myFixture.customCheck(
-        "defNsUnresolved.${cg.ext()}",
-        cg.generateInvalid(
-            "\"test:tst1.base5.single\""
-        ),
-        "assets/test.${tg.ext()}",
-        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+            "refToObject.${cg.ext()}",
+            cg.generate("\"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+            "test.${tg.ext()}",
+            tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
 
     fun testExpressionInsideTranslation() = myFixture.customCheck(
-        "expressionInTranslation.${cg.ext()}",
-        cg.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
-        "test.${tg.ext()}",
-        tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+            "expressionInTranslation.${cg.ext()}",
+            cg.generate("isSelected ? \"test:<warning descr=\"Reference to object\">tst2.plurals</warning>\" : \"test:<warning descr=\"Unresolved key\">unresolved.whole.key</warning>\""),
+            "test.${tg.ext()}",
+            tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
     )
+
+    fun testResolved() = myFixture.customCheck(
+            "resolved.${cg.ext()}",
+            cg.generate("\"test:tst1.base.single\""),
+            "assets/translation.${tg.ext()}",
+            tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
+
+    fun testReferenceToObjectDefaultNs() = myFixture.customCheck(
+            "refToObjectDefNs.${cg.ext()}",
+            cg.generate("\"<warning descr=\"Reference to object\">tst2.plurals</warning>\""),
+            "assets/translation.${tg.ext()}",
+            tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
+
+    fun testNotArg() = myFixture.customCheck(
+            "defNsUnresolved.${cg.ext()}",
+            cg.generateInvalid(
+                    "\"test:tst1.base5.single\""
+            ),
+            "assets/test.${tg.ext()}",
+            tg.generatePlural("tst2", "plurals", "value", "value1", "value2", "value5")
+    )
+
 }
