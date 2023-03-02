@@ -1,3 +1,9 @@
+## [2.8.3]
+### Bugfixes
+
+## [2.8.2]
+### Support 2022.3 builds
+
 ## [2.8.1]
 ### Removed vue-i18n support
 - Vue functionality moved to another plugin  
@@ -13,5 +19,3 @@
             }
         }
      }
-## [2.8.2]
-### Support 2022.3 builds
