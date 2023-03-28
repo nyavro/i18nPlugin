@@ -1,6 +1,7 @@
 package com.eny.i18n.plugin.ide.settings
 
 import com.eny.i18n.plugin.utils.PluginBundle
+import com.intellij.util.ReflectionUtil
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import net.sourceforge.marathon.javadriver.JavaDriver
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.concurrent.DelayQueue
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import kotlin.reflect.KMutableProperty1
@@ -45,7 +47,7 @@ class SettingsPanelTest {
     }
 
     @Test
-    fun testPartiallyTraslated() {
+    fun testPartiallyTranslated() {
         checkBooleanProperty(PluginBundle.getMessage("settings.annotations.partially.translated.enabled"), Settings::partialTranslationInspectionEnabled)
     }
 
@@ -140,6 +142,14 @@ class SettingsPanelTest {
 
     @AfterEach
     fun tearDown() {
+        val timerQueueClass = Class.forName("javax.swing.TimerQueue")
+        val sharedInstance = timerQueueClass.getMethod("sharedInstance")
+        sharedInstance.isAccessible = true
+        val timerQueue = sharedInstance.invoke(null)
+        val delayQueue = ReflectionUtil.getField(timerQueueClass, timerQueue, DelayQueue::class.java, "queue")
+        while(delayQueue.size>0) {
+            delayQueue.poll()
+        }
         driver.quit()
         unmockkAll()
     }
