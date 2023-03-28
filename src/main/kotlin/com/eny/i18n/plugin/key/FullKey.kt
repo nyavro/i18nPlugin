@@ -10,7 +10,9 @@ data class FullKey(
     val source: String,
     val ns: Literal?,
     val compositeKey:List<Literal>,
-    val namespaces: List<String>? = null
+    val namespaces: List<String>? = null,
+    val keyPrefix: List<Literal> = listOf(),
+    val keyPrefixSource: String? = null
 ) {
     fun allNamespaces(): List<String> {
         return ns?.text.nullableToList() + (namespaces ?: listOf())
