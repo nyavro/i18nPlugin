@@ -3,6 +3,7 @@ package com.eny.i18n.extensions.localization.js
 import com.eny.i18n.ContentGenerator
 import com.eny.i18n.plugin.key.FullKey
 import com.eny.i18n.plugin.key.lexer.Literal
+import com.eny.i18n.plugin.utils.PluginBundle
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.PsiElement
@@ -20,13 +21,9 @@ class TsContentGenerator : ContentGenerator {
         TODO("Not yet implemented")
     }
 
-    override fun getDescription(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getDescription(): String = PluginBundle.getMessage("quickfix.create.typeScript.translation.files")
 
-    override fun isSuitable(element: PsiElement): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isSuitable(element: PsiElement): Boolean = false
 
     override fun generateTranslationEntry(item: PsiElement, key: String, value: String) {
         TODO("Not yet implemented")
