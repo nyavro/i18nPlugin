@@ -28,7 +28,7 @@ abstract class CompositeKeyCompletionContributor(private val lang: Lang): Comple
         if(parameters.position.text.unQuote().substringAfter(DUMMY_KEY).trim().isNotBlank()) return
         val fullKey = lang.extractRawKey(parameters.position)?.let{RawKeyParser(parameters.position.project).parse(it)}
         if (fullKey == null) {
-            if (lang.canExtractKey(parameters.position.parent, Extensions.TECHNOLOGY.extensionList.flatMap { it.translationFunctionNames() })) {
+            if (lang.canExtractKey(parameters.position.parent, Extensions.TECHNOLOGY.extensionList.flatMap { it.translationFunctions() })) {
                 val prefix = parameters.position.text.replace(DUMMY_KEY, "").unQuote().trim()
                 val emptyKeyCompletions = emptyKeyCompletions(prefix, parameters.position)
                 result.addAllElements(emptyKeyCompletions)
@@ -42,7 +42,7 @@ abstract class CompositeKeyCompletionContributor(private val lang: Lang): Comple
     }
 
     private fun emptyKeyCompletions(prefix: String, element: PsiElement): List<LookupElementBuilder> = findCompletions(
-        prefix, "", null, emptyList(), element
+        prefix, "", emptyList(), emptyList(), element
     )
 
     private fun groupPlurals(completions: List<String>, pluralSeparator: String):List<String> =
@@ -56,14 +56,17 @@ abstract class CompositeKeyCompletionContributor(private val lang: Lang): Comple
         fullKey.compositeKey.lastOrNull().nullableToList().flatMap { last ->
             val source = fullKey.source.replace(last.text, "")
             val prefix = last.text.replace(DUMMY_KEY, "")
-            findCompletions(prefix, source, fullKey.ns?.text, fullKey.compositeKey.dropLast(1), element)
+            findCompletions(prefix, source, fullKey.allNamespaces(), fullKey.keyPrefix + fullKey.compositeKey.dropLast(1), element)
         }
 
-    private fun findCompletions(prefix: String, source: String, ns: String?, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
+    private fun findCompletions(prefix: String, source: String, ns: List<String>, compositeKey: List<Literal>, element: PsiElement): List<LookupElementBuilder> {
+        val completions =
+            element.project.service<LocalizationSourceService>().findSources(ns, element.project)
+                .flatMap {
+                    listCompositeKeyVariants(compositeKey, prefix, it).map { it.value().text.unQuote() }
+                }
         return groupPlurals(
-            element.project.service<LocalizationSourceService>().findSources(ns.nullableToList(), element.project).flatMap {
-                listCompositeKeyVariants(compositeKey, prefix, it).map { it.value().text.unQuote() }
-            },
+            completions,
             Settings.getInstance(element.project).config().pluralSeparator
         ).map { LookupElementBuilder.create(source + it) }
     }

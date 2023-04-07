@@ -1,6 +1,7 @@
 package com.eny.i18n.extensions.lang.php
 
 import com.eny.i18n.Lang
+import com.eny.i18n.TranslationFunction
 import com.eny.i18n.extensions.lang.php.extractors.PhpStringLiteralKeyExtractor
 import com.eny.i18n.plugin.factory.FoldingProvider
 import com.eny.i18n.plugin.factory.TranslationExtractor
@@ -8,7 +9,7 @@ import com.eny.i18n.plugin.parser.RawKey
 import com.intellij.psi.PsiElement
 
 class PhpLang: Lang {
-    override fun canExtractKey(element: PsiElement, translationFunctionNames: List<String>): Boolean {
+    override fun canExtractKey(element: PsiElement, translationFunctions: List<TranslationFunction>): Boolean {
         return extractRawKey(element) != null
 //        listOf("String").contains(element.type()) &&
 //                PlatformPatterns.or(

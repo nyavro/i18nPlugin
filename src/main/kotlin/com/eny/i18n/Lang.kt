@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement
 
 interface Lang {
 
-    fun canExtractKey(element: PsiElement, translationFunctionNames: List<String>): Boolean
+    fun canExtractKey(element: PsiElement, translationFunctions: List<TranslationFunction>): Boolean
 
     fun extractRawKey(element: PsiElement): RawKey?
 

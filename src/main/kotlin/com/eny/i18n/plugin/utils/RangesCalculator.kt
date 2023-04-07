@@ -40,11 +40,13 @@ class KeyRangesCalculator(private val textRange: TextRange, isQuoted: Boolean = 
             textRange.startOffset + quoteOffset + (fullKey.ns?.length ?: 0)
         )
 
-    override fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange =
-        safeRange(
-            fullKey.compositeKeyStartOffset() + tokensLength(resolvedPath) + (if (resolvedPath.isNotEmpty()) keySeparatorOffset else 0),
+    override fun unresolvedKey(fullKey: FullKey, resolvedPath: List<Literal>): TextRange {
+        val path = resolvedPath.drop(fullKey.keyPrefix.size)
+        return safeRange(
+            fullKey.compositeKeyStartOffset() + tokensLength(path) + (if (path.isNotEmpty()) keySeparatorOffset else 0),
             fullKey.compositeKeyEndOffset()
         )
+    }
 
     override fun compositeKeyFullBounds(fullKey: FullKey) =
         safeRange(

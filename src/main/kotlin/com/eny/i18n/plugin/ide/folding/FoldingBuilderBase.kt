@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.ide.folding
 
+import com.eny.i18n.Extensions
 import com.eny.i18n.Lang
 import com.eny.i18n.plugin.ide.settings.Config
 import com.eny.i18n.plugin.ide.settings.Settings
@@ -40,20 +41,23 @@ abstract class FoldingBuilderBase(private val lang: Lang) : FoldingBuilderEx(), 
         ).build()
         if (!config.foldingEnabled) return arrayOf()
         val foldingProvider = lang.foldingProvider()
-        return foldingProvider.collectContainers(root)
+        return foldingProvider.collectContainers(root, Extensions.TECHNOLOGY.extensionList.flatMap {it.translationFunctions()})
             .flatMap { container ->
-                val (literals, offset) = foldingProvider.collectLiterals(container)
-                literals.mapNotNull { literal ->
-                    parser.parse(RawKey(listOf(KeyElement.literal(literal.text.unQuote()))), config.gettext, config.firstComponentNs)
-                        ?.let { key -> resolve(container, literal, config, key) }
-                        ?.let { resolved ->
-                            FoldingDescriptor(
-                                container.node,
-                                foldingProvider.getFoldingRange(container, offset, resolved.psiElement),
-                                group,
-                                resolved.reference.element?.value()?.text?.unQuote()?.ellipsis(config.foldingMaxLength) ?: ""
-                            )
-                        }
+                listOf(container).mapNotNull { literal ->
+                    val rawKey = lang.extractRawKey(literal)
+                    rawKey?.let {rk ->
+                        parser.parse(rk, config.gettext, config.firstComponentNs)
+                            ?.let { key -> resolve(container, literal, config, key) }
+                            ?.let { resolved ->
+                                FoldingDescriptor(
+                                    container.node,
+                                    foldingProvider.getFoldingRange(container, 0, resolved.psiElement),
+                                    group,
+                                    resolved.reference.element?.value()?.text?.unQuote()
+                                        ?.ellipsis(config.foldingMaxLength) ?: ""
+                                )
+                            }
+                    }
                 }
             }.toTypedArray()
     }
@@ -64,7 +68,7 @@ abstract class FoldingBuilderBase(private val lang: Lang) : FoldingBuilderEx(), 
             .filter {
                 it.parent == config.foldingPreferredLanguage
             }
-            .map { resolveCompositeKey(fullKey.compositeKey, it)}
+            .map { resolveCompositeKey(fullKey.keyPrefix + fullKey.compositeKey, it)}
             .firstOrNull { it.unresolved.isEmpty() && it.element?.isLeaf() == true }
             ?.let { ElementToReferenceBinding(element, it) }
     }

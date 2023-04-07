@@ -29,7 +29,7 @@ class JsonReferenceAssistant : TranslationReferenceAssistant<JsonStringLiteral> 
         element.parents(true).mapNotNull {
             when {
                 it is JsonProperty -> it.name
-                it is JsonFile -> it.name.substringBeforeLast(".")
+//                it is JsonFile -> it.name.substringBeforeLast(".")
                 else -> null
             }
         }.toList().reversed()

@@ -1,5 +1,6 @@
 package com.eny.i18n.plugin.factory
 
+import com.eny.i18n.TranslationFunction
 import com.eny.i18n.plugin.key.FullKey
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.TextRange
@@ -46,14 +47,7 @@ interface FoldingProvider {
     /**
      * First step of folding - collecting list of elements where foldable elements may reside.
      */
-    fun collectContainers(root: PsiElement): List<PsiElement>
-
-    /**
-     * Second step of folding - collect i18n keys inside container
-     *
-     * return pair of list of collected i18n key elements and offset relative to container start
-     */
-    fun collectLiterals(container: PsiElement): Pair<List<PsiElement>, Int>
+    fun collectContainers(root: PsiElement, translationFunctions: List<TranslationFunction>): List<PsiElement>
 
     /**
      * Returns folding range

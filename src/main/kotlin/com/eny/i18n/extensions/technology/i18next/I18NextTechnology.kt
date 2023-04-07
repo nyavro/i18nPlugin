@@ -23,8 +23,8 @@ class I18NextTechnology : Technology {
 
     private var cfgNamespaces: List<String> = listOf()
 
-    override fun translationFunctionNames(): List<String> {
-        return listOf("t")
+    override fun translationFunctions(): List<TranslationFunction> {
+        return listOf(TranslationFunction("t", 0), TranslationFunction("useTranslation", 1))
     }
 
     override fun findSourcesByConfiguration(project: Project): List<LocalizationSource> {

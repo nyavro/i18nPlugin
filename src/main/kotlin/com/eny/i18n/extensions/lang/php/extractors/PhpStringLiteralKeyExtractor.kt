@@ -13,7 +13,7 @@ import com.intellij.psi.PsiElement
 class PhpStringLiteralKeyExtractor: KeyExtractor {
 
     override fun canExtract(element: PsiElement): Boolean =
-        listOf("quoted string").any{element.type().contains(it)}
+        listOf("quoted string", "String").any{element.type().contains(it)}
 
     override fun extract(element: PsiElement): RawKey =
             RawKey(listOf(KeyElement.literal(element.text.unQuote())))

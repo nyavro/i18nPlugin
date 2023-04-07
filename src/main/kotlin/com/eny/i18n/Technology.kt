@@ -1,11 +1,11 @@
 package com.eny.i18n
 
-import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiElement
+
+data class TranslationFunction(val name: String, val argumentIndex: Int)
 
 interface Technology {
-    fun translationFunctionNames(): List<String>
+    fun translationFunctions(): List<TranslationFunction>
     fun findSourcesByConfiguration(project: Project): List<LocalizationSource>
     fun initialize(project: Project)
     fun cfgNamespaces(): List<String>

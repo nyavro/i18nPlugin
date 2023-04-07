@@ -24,7 +24,7 @@ abstract class CompositeKeyAnnotatorBase(private val lang: Lang): Annotator, Com
      * Tries to parse element as i18n key and annotates it when succeeded
      */
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if(lang.canExtractKey(element, Extensions.TECHNOLOGY.extensionList.flatMap {it.translationFunctionNames()})) {
+        if(lang.canExtractKey(element, Extensions.TECHNOLOGY.extensionList.flatMap {it.translationFunctions()})) {
             lang.extractRawKey(element)?.let { RawKeyParser(element.project).parse(it) }?.also {
                 annotateI18nLiteral(it, element, holder)
             }
@@ -48,11 +48,14 @@ abstract class CompositeKeyAnnotatorBase(private val lang: Lang): Annotator, Com
         else {
             val config = Settings.getInstance(element.project).config()
             val pluralSeparator = config.pluralSeparator
-            val references = files.flatMap {resolve(fullKey.compositeKey, it, pluralSeparator)}
+            val references = files.flatMap {resolve(fullKey.keyPrefix + fullKey.compositeKey, it, pluralSeparator)}
             val allEqual = references.zipWithNext().all { it.first.path == it.second.path }
             val mostResolvedReference = if (allEqual) references.first() else references.maxByOrNull { v -> v.path.size }!!
-            if (mostResolvedReference.unresolved.isEmpty()) {
-                if (!allEqual && config.partialTranslationInspectionEnabled) {
+            if (mostResolvedReference.unresolved.isEmpty() || fullKey.isPartial) {
+                if (fullKey.isPartial) {
+                    annotationHelper.annotateResolved(fullKey)
+                }
+                else if (!allEqual && config.partialTranslationInspectionEnabled) {
                     annotationHelper.annotatePartiallyTranslated(fullKey, references)
                 } else {
                     if (mostResolvedReference.element?.isLeaf() ?: false) {

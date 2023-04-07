@@ -17,8 +17,7 @@ class KeyParser(private val tokenizer: Tokenizer) {
     fun parse(
         rawKey: RawKey,
         emptyNamespace: Boolean = false,
-        firstComponentNamespace: Boolean = false,
-        keyPrefix: RawKey? = null
+        firstComponentNamespace: Boolean = false
     ): FullKey? {
         val startState = if (emptyNamespace) {
             if (firstComponentNamespace) {
@@ -33,8 +32,13 @@ class KeyParser(private val tokenizer: Tokenizer) {
         val (source, tokenized) = tokenizer.tokenize(rawKey.keyElements)
         return tokenized
             .fold(startState) { state, token -> state.next(token) }
-            .fullKey()?.let {
-                (ns, key) -> FullKey(source, ns, key, rawKey.arguments, listOf(), null)
+            .compositeKey()?.let {
+                (ns, key) ->
+                    val (keyPrefixSource, keyPrefixTokenized) = tokenizer.tokenize(rawKey.keyPrefix)
+                    val keyPrefixCompositeKey = keyPrefixTokenized.fold<Token,State>(Start(null)) {
+                        state, token -> state.next(token)
+                    }.compositeKey()
+                    FullKey(source, ns, key, rawKey.arguments, keyPrefixCompositeKey?.key ?: listOf(), keyPrefixSource, rawKey.isPartial)
             }
     }
 }
@@ -51,7 +55,7 @@ private interface State {
     /**
      * Get current parsed key
      */
-    fun fullKey(): CompositeKey? = null
+    fun compositeKey(): CompositeKey? = null
 }
 
 /**
@@ -72,7 +76,7 @@ private class Start(private val init: Literal?, private val nsSeparator: Separat
             token is Literal -> Start(init?.merge(token) ?: token, nsSeparator)
             else -> Error("Invalid ns separator position (0)") // Never get here
         }
-    override fun fullKey(): CompositeKey? = init?.let {CompositeKey(null, listOf(it))}
+    override fun compositeKey(): CompositeKey? = init?.let {CompositeKey(null, listOf(it))}
 }
 
 /**
@@ -84,7 +88,7 @@ private class WaitingLiteral(private val file: Literal?, val key: List<Literal>)
             is Literal -> WaitingLiteralOrSeparator(file, key + token)
             else -> Error("Invalid token $token")
         }
-    override fun fullKey(): CompositeKey = CompositeKey(file, key + Literal("", 0))
+    override fun compositeKey(): CompositeKey = CompositeKey(file, key + Literal("", 0))
 }
 
 /**
@@ -97,5 +101,5 @@ private class WaitingLiteralOrSeparator(val file: Literal?, val key: List<Litera
             is KeySeparator -> WaitingLiteral(file, key)
             else -> Error("Invalid token $token")
         }
-    override fun fullKey(): CompositeKey = CompositeKey(file, key)
+    override fun compositeKey(): CompositeKey = CompositeKey(file, key)
 }

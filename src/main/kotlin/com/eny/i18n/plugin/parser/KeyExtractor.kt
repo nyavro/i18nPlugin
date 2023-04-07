@@ -3,7 +3,12 @@ package com.eny.i18n.plugin.parser
 import com.eny.i18n.plugin.utils.KeyElement
 import com.intellij.psi.PsiElement
 
-data class RawKey(val keyElements: List<KeyElement>, val arguments: List<String> = emptyList())
+data class RawKey(
+    val keyElements: List<KeyElement>,
+    val arguments: List<String> = emptyList(),
+    val keyPrefix: List<KeyElement> = emptyList(),
+    val isPartial: Boolean = false
+)
 
 /**
  * Extractor of i18n key from PsiElement

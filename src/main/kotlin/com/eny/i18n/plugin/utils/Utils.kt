@@ -78,3 +78,6 @@ fun <T, A> Collection<T>.foldWhileAccum(accum: A, block: (A, T) -> A?): A? {
     }
     return acc
 }
+
+fun <T> Array<T>.safeGet(index: Int): T? = if(index < this.size && index >= 0) this.get(index) else null
+
